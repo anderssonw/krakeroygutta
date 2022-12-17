@@ -7,6 +7,7 @@
 	<iframe
 		class="barisVideo"
 		playsinline
+		autoplay
 		loop
 		title="baris"
 		width="420"
