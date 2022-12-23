@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+	let test = 2;
 </script>
 
 <main class="contentContainer">

@@ -1,8 +1,13 @@
+<script lang="ts">
+	let test = 2;
+</script>
+
 <nav class="navBar">
 	<a href="/">Hjem</a>
 	<a href="/fantasy">Fantasy</a>
 </nav>
 <p class="importantMessage">Jørgen er fet</p>
+
 <slot />
 
 <style>
