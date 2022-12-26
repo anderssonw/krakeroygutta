@@ -1,5 +1,5 @@
 import type { Database } from '$lib/types/database.types';
-import * as db from '$lib/server/db';
+import * as db from '$lib/supabase';
 import type { Player } from '$lib/types/Player';
 import type { PageServerLoad } from './$types';
 
