@@ -2,6 +2,7 @@
 	import { supabase } from '$lib/supabase';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	onMount(() => {
 		const {
@@ -19,26 +20,36 @@
 <ul class="navBar">
 	<li><a href="/">Hjem</a></li>
 	<li><a href="/fantasy">Fantasy</a></li>
-	<li><a href="/login">Log Inn</a></li>
-	<li><a href="/profile">Profile</a></li>
+	{#if !$page.data.session}
+		<li><a href="/login">Logg Inn</a></li>
+	{:else}
+		<li><a href="/profile">Profil</a></li>
+	{/if}
 </ul>
 <p class="importantMessage">Jørgen er fet</p>
 
-<slot />
+<div class="content">
+	<slot />
+</div>
 
 <style>
+	.content {
+		max-width: 400px;
+		margin: 0 auto;
+	}
 	.navBar {
 		display: grid;
-		grid-template-columns: 1fr repeat(3, auto) 1fr;
+		grid-template-columns: 1fr repeat(2, auto) 1fr;
 		grid-column-gap: 5px;
 		justify-items: center;
 		list-style: none;
+		padding: 0;
 	}
 
 	li:nth-child(1) {
 		grid-column-start: 2;
 	}
-	li:nth-child(4) {
+	li:nth-child(3) {
 		margin-left: auto;
 	}
 

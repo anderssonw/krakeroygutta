@@ -49,7 +49,6 @@
 
 <style>
 	.content {
-		padding: 0 16vh 0 16vh;
 		text-align: center;
 	}
 

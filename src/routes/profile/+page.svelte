@@ -1,25 +1,23 @@
 <script lang="ts">
-	interface Cell {
-		cellNumber: number;
-		prisoners: string[];
-	}
-	const cells: Cell[] = [];
+	import { page } from '$app/stores';
+	import { supabase } from '$lib/supabase';
 
-	for (let i = 0; i < 7; i++) {
-		for (let j = 0; j < 3; j++) {
-			cells.push({
-				cellNumber: Number(i + 1 + '0' + j),
-				prisoners: []
-			});
+	const logOut = async () => {
+		try {
+			await supabase.auth.signOut();
+		} catch (error) {
+			console.log(error);
 		}
-	}
-
-	console.log(cells);
+	};
 </script>
 
 <main class="content">
-	<h1>Test</h1>
-	<p>{cells}</p>
+	{#if $page.data.session}
+		{$page.data.session.user.email}
+		<button on:click={logOut}>Logg ut</button>
+	{:else}
+		<p>ur not logged in dummy</p>
+	{/if}
 </main>
 
 <style>
