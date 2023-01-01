@@ -1,54 +1,18 @@
 <script lang="ts">
-	let form: FormProps = {
-		teamName: '',
-		playerChoices: []
-	};
+	import FantasyTeamForm from '$lib/components/FantasyTeamForm.svelte';
 
 	import type { Player } from '$lib/types/Player';
+	import type { ActionData } from './$types';
 
-	/** @type {import('./$types').PageData["data"]} */
+	/** @type {import('./$types').PageData["players"]} */
 	export let data;
 
-	let players: Player[] = data.data;
+	/** @type {import('./$types').ActionData} */
+	export let form: ActionData;
 
-	interface FormProps {
-		teamName: string;
-		playerChoices: Player[];
-	}
+	let players: Player[] = data.players;
 
 	const budget = 17500;
-
-	$: notChosenPlayers = (extraPlayer: Player) => {
-		let newPlayers = players.filter((player) => {
-			{
-				let playerIfExists = form.playerChoices.find(
-					(chosenPlayer) => chosenPlayer.playerName == player.playerName
-				);
-
-				if (playerIfExists) return false;
-
-				return true;
-			}
-		});
-
-		if (extraPlayer) newPlayers.push(extraPlayer);
-
-		return newPlayers;
-	};
-
-	$: restBudget = () => {
-		let total = 0;
-		form.playerChoices
-			.filter((player) => player.playerName)
-			.forEach((player) => {
-				total += player.price;
-			});
-		return budget - total;
-	};
-
-	async function submitForm() {
-		console.log(form);
-	}
 </script>
 
 <main class="content">
@@ -74,25 +38,12 @@
 		</table>
 
 		<p>Totalbudsjett: {budget}</p>
-		<p>Gjenværende budsjett: {restBudget()}</p>
-		<form class="form" on:submit|preventDefault={submitForm}>
-			<label for="teamName">Lagnavn</label>
-			<input type="text" name="teamName" bind:value={form.teamName} />
-			{#each [...Array(4).keys()] as index}
-				<label for={'player-' + index}>Spillervalg {index + 1}</label>
-				<select
-					name={'player-' + index}
-					id={'player-' + index}
-					bind:value={form.playerChoices[index]}
-				>
-					<option value selected default disabled>Velg Spiller</option>
-					{#each notChosenPlayers(form.playerChoices[index]) as player}
-						<option value={player}>{player.playerName}</option>
-					{/each}
-				</select>
-			{/each}
-			<button type="submit">Send Inn</button>
-		</form>
+
+		{#if form?.success}
+			<p>Gratulerer, du har sendt inn laget ditt!</p>
+		{:else}
+			<FantasyTeamForm {players} {form} {budget} />
+		{/if}
 	{/if}
 </main>
 
@@ -105,11 +56,5 @@
 	.playerTable {
 		display: flex;
 		justify-content: center;
-	}
-
-	.form {
-		display: flex;
-		flex-direction: column;
-		padding: 0 16vh 0 16vh;
 	}
 </style>

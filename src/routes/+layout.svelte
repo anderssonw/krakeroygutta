@@ -16,21 +16,36 @@
 	});
 </script>
 
-<nav class="navBar">
-	<a href="/">Hjem</a>
-	<a href="/fantasy">Fantasy</a>
-	<a href="/login">Log Inn</a>
-</nav>
+<ul class="navBar">
+	<li><a href="/">Hjem</a></li>
+	<li><a href="/fantasy">Fantasy</a></li>
+	<li><a href="/login">Log Inn</a></li>
+	<li><a href="/profile">Profile</a></li>
+</ul>
 <p class="importantMessage">Jørgen er fet</p>
 
 <slot />
 
 <style>
 	.navBar {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
+		display: grid;
+		grid-template-columns: 1fr repeat(3, auto) 1fr;
+		grid-column-gap: 5px;
+		justify-items: center;
+		list-style: none;
 	}
+
+	li:nth-child(1) {
+		grid-column-start: 2;
+	}
+	li:nth-child(4) {
+		margin-left: auto;
+	}
+
+	a {
+		text-decoration: none;
+	}
+
 	.importantMessage {
 		position: fixed;
 		bottom: 0;

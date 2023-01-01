@@ -9,6 +9,29 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      fantasy_teams: {
+        Row: {
+          captain_id: number
+          created_at: string | null
+          id: number
+          name: string | null
+          player_ids: number[]
+        }
+        Insert: {
+          captain_id: number
+          created_at?: string | null
+          id?: number
+          name?: string | null
+          player_ids: number[]
+        }
+        Update: {
+          captain_id?: number
+          created_at?: string | null
+          id?: number
+          name?: string | null
+          player_ids?: number[]
+        }
+      }
       players: {
         Row: {
           created_at: string
