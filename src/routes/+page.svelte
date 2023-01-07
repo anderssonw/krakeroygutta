@@ -7,9 +7,6 @@
 	<h2>Spell og ha're gøy</h2>
 	<iframe
 		class="barisVideo"
-		playsinline
-		autoplay
-		loop
 		title="baris"
 		width="420"
 		height="315"

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import FantasyTeamForm from '$lib/components/FantasyTeamForm.svelte';
+	import PlayerCard from '$lib/components/PlayerCard.svelte';
+	import { page } from '$app/stores';
 
 	import type { Player } from '$lib/types/Player';
 	import type { ActionData } from './$types';
@@ -24,26 +26,25 @@
 			reglene som brukes hos vår hovedkonkurrent, Fantasy Premier League. Deadline: kl 12 lørdag
 			17.12. Vinneren vil kåres senere på samme dag. Lykke til og god jul!
 		</p>
-		<table class="playerTable">
-			<thead>
-				<th>Spiller</th>
-				<th>Pris</th>
-				{#each players.sort((a, b) => b.price - a.price) as player}
-					<tr>
-						<td> {player.playerName} </td>
-						<td> {player.price} </td>
-					</tr>
-				{/each}
-			</thead>
-		</table>
+		<div class="container">
+			{#each players.sort((a, b) => b.price - a.price) as player}
+				<PlayerCard price={player.price} name={player.playerName} />
+			{/each}
+		</div>
 
 		<p>Totalbudsjett: {budget}</p>
 
-		{#if form?.success}
-			<p>Gratulerer, du har sendt inn laget ditt!</p>
+		{#if $page.data.session}
+			{#if form?.success}
+				<p>Gratulerer, du har sendt inn laget ditt!</p>
+			{:else}
+				<FantasyTeamForm {players} {form} {budget} />
+			{/if}
 		{:else}
-			<FantasyTeamForm {players} {form} {budget} />
+			<p>Du må logge inn for å sende inn et lag.</p>
 		{/if}
+	{:else}
+		<p>Laster..</p>
 	{/if}
 </main>
 
@@ -52,8 +53,22 @@
 		text-align: center;
 	}
 
-	.playerTable {
-		display: flex;
+	.container {
+		display: grid;
+		grid-template-columns: repeat(6, 1fr);
+		grid-gap: 1rem;
 		justify-content: center;
+		justify-items: center;
+		row-gap: 1em;
+	}
+
+	@media (max-width: 768px) {
+		.container {
+			grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+			display: grid;
+			grid-gap: 1rem;
+			justify-content: center;
+			justify-items: center;
+		}
 	}
 </style>

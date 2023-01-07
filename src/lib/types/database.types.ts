@@ -13,6 +13,7 @@ export interface Database {
         Row: {
           captain_id: number
           created_at: string | null
+          created_by_id: string | null
           id: number
           name: string | null
           player_ids: number[]
@@ -20,6 +21,7 @@ export interface Database {
         Insert: {
           captain_id: number
           created_at?: string | null
+          created_by_id?: string | null
           id?: number
           name?: string | null
           player_ids: number[]
@@ -27,6 +29,7 @@ export interface Database {
         Update: {
           captain_id?: number
           created_at?: string | null
+          created_by_id?: string | null
           id?: number
           name?: string | null
           player_ids?: number[]

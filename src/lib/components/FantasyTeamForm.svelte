@@ -18,9 +18,9 @@
 	};
 
 	let team: FantasyTeam = {
-		name: form?.data.name || '',
-		playerIds: form?.data.playerIds || [],
-		captainId: form?.data.captainId || -1
+		name: form?.data?.name || '',
+		playerIds: form?.data?.playerIds || [],
+		captainId: form?.data?.captainId || -1
 	};
 
 	$: notChosenPlayers = (extraPlayerNum: number) => {
@@ -55,7 +55,7 @@
 	{#each [...Array(4).keys()] as index}
 		<label for={'player-' + index}>Spillervalg {index + 1}</label>
 		<select name={'player-' + index} id={'player-' + index} bind:value={team.playerIds[index]}>
-			<option value selected default disabled>Velg Spiller</option>
+			<option value selected disabled>Velg Spiller</option>
 			{#each notChosenPlayers(team.playerIds[index]) as player}
 				<option value={player.id}>{player.playerName}</option>
 			{/each}
@@ -64,7 +64,7 @@
 	{#if form?.missingPlayers}<p class="error">Du må velge alle spillere</p>{/if}
 	<label for="captain">Lagkaptein</label>
 	<select name="captain" bind:value={team.captainId}>
-		<option value selected default disabled>Velg Spiller</option>
+		<option value selected disabled>Velg Spiller</option>
 		{#each team.playerIds.map((player) => findPlayer(player)) as player}
 			{#if player}
 				<option value={player.id}>{player.playerName}</option>

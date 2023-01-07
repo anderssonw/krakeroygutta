@@ -34,7 +34,7 @@
 
 <style>
 	.content {
-		max-width: 400px;
+		max-width: 900px;
 		margin: 0 auto;
 	}
 	.navBar {

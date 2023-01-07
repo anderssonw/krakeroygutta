@@ -4,6 +4,7 @@ import type { Player } from '$lib/types/Player';
 import type { Actions, PageServerLoad } from './$types';
 import type { FantasyTeam } from '$lib/types/FantasyTeam';
 import { fail } from '@sveltejs/kit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
 export const load: PageServerLoad<{ players: Player[] } | { players: undefined }> = async () => {
 	const data = (await db.supabase.from('players').select()).data;
@@ -27,7 +28,14 @@ export const load: PageServerLoad<{ players: Player[] } | { players: undefined }
 
 /** @type {import('./$types').Actions} */
 export const actions: Actions = {
-	register: async ({ request }) => {
+	register: async (event) => {
+		const { request } = event;
+		const { session, supabaseClient } = await getSupabase(event);
+		if (!session) {
+			// the user is not signed in
+			return fail(403, { message: 'Unauthorized' });
+		}
+
 		const formData = await request.formData();
 
 		const data: FantasyTeam = {
@@ -56,10 +64,11 @@ export const actions: Actions = {
 		const teamToDBFormat: Database['public']['Tables']['fantasy_teams']['Insert'] = {
 			name: data.name,
 			captain_id: data.captainId,
-			player_ids: data.playerIds.sort()
+			player_ids: data.playerIds.sort(),
+			created_by_id: session.user.id
 		};
 
-		const insert = await db.supabase.from('fantasy_teams').insert(teamToDBFormat);
+		const insert = await supabaseClient.from('fantasy_teams').insert(teamToDBFormat);
 
 		if (insert.error) {
 			console.log(insert.error);
