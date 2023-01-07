@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { supabase } from '$lib/supabase';
 
 	interface userFormProps {
@@ -40,6 +41,7 @@
 				options: { data: { username: form.username } }
 			});
 			if (error) throw error;
+			goto('/');
 		} catch (error) {
 			if (error instanceof Error) {
 				serverError = error.message;

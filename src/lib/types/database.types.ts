@@ -12,26 +12,26 @@ export interface Database {
       fantasy_teams: {
         Row: {
           captain_id: number
-          created_at: string | null
+          created_at: string
           created_by_id: string | null
           id: number
-          name: string | null
+          name: string
           player_ids: number[]
         }
         Insert: {
           captain_id: number
-          created_at?: string | null
+          created_at?: string
           created_by_id?: string | null
           id?: number
-          name?: string | null
+          name: string
           player_ids: number[]
         }
         Update: {
           captain_id?: number
-          created_at?: string | null
+          created_at?: string
           created_by_id?: string | null
           id?: number
-          name?: string | null
+          name?: string
           player_ids?: number[]
         }
       }

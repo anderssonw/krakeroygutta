@@ -1,18 +1,21 @@
 <script lang="ts">
 	import FantasyTeamForm from '$lib/components/FantasyTeamForm.svelte';
+	import FantasyTeamView from '$lib/components/FantasyTeamView.svelte';
 	import PlayerCard from '$lib/components/PlayerCard.svelte';
 	import { page } from '$app/stores';
 
 	import type { Player } from '$lib/types/Player';
 	import type { ActionData } from './$types';
+	import type { FantasyTeam } from '$lib/types/FantasyTeam';
 
-	/** @type {import('./$types').PageData["players"]} */
+	/** @type {import('./$types').PageData[]} */
 	export let data;
 
 	/** @type {import('./$types').ActionData} */
 	export let form: ActionData;
 
 	let players: Player[] = data.players;
+	let team: FantasyTeam = data.team;
 
 	const budget = 17500;
 </script>
@@ -32,11 +35,11 @@
 			{/each}
 		</div>
 
-		<p>Totalbudsjett: {budget}</p>
-
 		{#if $page.data.session}
 			{#if form?.success}
 				<p>Gratulerer, du har sendt inn laget ditt!</p>
+			{:else if team}
+				<FantasyTeamView {players} {team} />
 			{:else}
 				<FantasyTeamForm {players} {form} {budget} />
 			{/if}

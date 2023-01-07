@@ -6,24 +6,47 @@ import type { FantasyTeam } from '$lib/types/FantasyTeam';
 import { fail } from '@sveltejs/kit';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
-export const load: PageServerLoad<{ players: Player[] } | { players: undefined }> = async () => {
-	const data = (await db.supabase.from('players').select()).data;
+export const load: PageServerLoad<{ players: Player[]; team: FantasyTeam | null }> = async (
+	event
+) => {
+	const { session, supabaseClient } = await getSupabase(event);
+	const playerQuery = await supabaseClient.from('players').select();
 	let players: Player[] = [];
 
-	if (data == null) {
-		return {};
+	if (playerQuery.data != null) {
+		playerQuery.data.forEach((d: Database['public']['Tables']['players']['Row']) =>
+			players.push({
+				id: d.id,
+				createdAt: d.created_at,
+				playerName: d.player_name,
+				price: d.price
+			})
+		);
 	}
 
-	data.map((d: Database['public']['Tables']['players']['Row']) =>
-		players.push({
-			id: d.id,
-			createdAt: d.created_at,
-			playerName: d.player_name,
-			price: d.price
-		})
-	);
+	if (!session) return { players, team: null };
 
-	return { players };
+	const teamQuery = await db.supabase
+		.from('fantasy_teams')
+		.select()
+		.eq('created_by_id', session?.user.id);
+
+	let team: FantasyTeam | null = null;
+
+	if (teamQuery.data != null) {
+		let tempTeam: Database['public']['Tables']['fantasy_teams']['Row'] = teamQuery.data[0];
+
+		if (tempTeam) {
+			team = {
+				id: tempTeam.id,
+				name: tempTeam.name,
+				captainId: tempTeam.captain_id,
+				playerIds: tempTeam.player_ids
+			};
+		}
+	}
+
+	return { players, team };
 };
 
 /** @type {import('./$types').Actions} */

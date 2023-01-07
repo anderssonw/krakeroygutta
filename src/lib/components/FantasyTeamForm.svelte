@@ -46,9 +46,25 @@
 	const findPlayer = (id: number) => {
 		return players.find((player) => player.id == id);
 	};
+
+	const niceTryGuys: string[] = [
+		'Nice try guy',
+		'Lær deg matte a tulling!',
+		'Bra forsøk, Magnus',
+		'Iddiot!',
+		'Gratulerer, du har vunnet en iPhone 15!'
+	];
+
+	const handleEvilClick = (
+		event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
+	): any => {
+		let randInt = Math.floor(Math.random() * niceTryGuys.length);
+		alert(niceTryGuys[randInt]);
+	};
 </script>
 
 <form class="form" method="POST" action="?/register">
+	<p>Totalbudsjett: {budget}</p>
 	<label for="name">Lagnavn</label>
 	<input type="text" name="name" bind:value={team.name} />
 	{#if form?.missingName}<p class="error">Du må velge et lagnavn</p>{/if}
@@ -73,8 +89,8 @@
 	</select>
 	{#if form?.missingCaptain}<p class="error">Du må velge en lagkaptein</p>{/if}
 	<p>Gjenværende budsjett: {restBudget()}</p>
-	{#if restBudget() <= 0}
-		<button type="submit" disabled>Send Inn</button>
+	{#if restBudget() < 0}
+		<button type="button" on:click={handleEvilClick} disabled>Send Inn</button>
 	{:else}
 		<button type="submit">Send Inn</button>
 	{/if}
