@@ -55,6 +55,23 @@ export interface Database {
           price?: number
         }
       }
+      users: {
+        Row: {
+          id: string
+          is_admin: boolean
+          username: string
+        }
+        Insert: {
+          id: string
+          is_admin?: boolean
+          username: string
+        }
+        Update: {
+          id?: string
+          is_admin?: boolean
+          username?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never

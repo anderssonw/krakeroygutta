@@ -18,6 +18,7 @@
 </script>
 
 <ul class="navBar">
+	<li><a href="/admin">Admin</a></li>
 	<li><a href="/">Hjem</a></li>
 	<li><a href="/fantasy">Fantasy</a></li>
 	{#if !$page.data.session}
@@ -46,10 +47,14 @@
 		padding: 0;
 	}
 
-	li:nth-child(1) {
+	/* li:nth-child(1) {
 		grid-column-start: 2;
+	}*/
+
+	li:first-child {
+		margin-right: auto;
 	}
-	li:nth-child(3) {
+	li:last-child {
 		margin-left: auto;
 	}
 
