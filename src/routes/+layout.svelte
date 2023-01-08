@@ -3,6 +3,10 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import type { User } from '$lib/types/User';
+	/** @type {import('./$types').PageData} */
+	export let data;
+	let user: User = data.user;
 
 	onMount(() => {
 		const {
@@ -18,7 +22,11 @@
 </script>
 
 <ul class="navBar">
-	<li><a href="/admin">Admin</a></li>
+	{#if user?.isAdmin}
+		<li><a href="/admin">Adminpanel</a></li>
+	{:else}
+		<li />
+	{/if}
 	<li><a href="/">Hjem</a></li>
 	<li><a href="/fantasy">Fantasy</a></li>
 	{#if !$page.data.session}
