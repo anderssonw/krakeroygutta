@@ -3,8 +3,8 @@
     import { supabase } from '$lib/supabase';
     import { invalidate } from '$app/navigation';
     import { onMount } from 'svelte';
-    import { page } from '$app/stores';
     import type { User } from '$lib/types/User';
+	import Navbar from "$lib/components/index/Navbar.svelte";
     /** @type {import('./$types').PageData} */
     export let data;
     let user: User = data.user;
@@ -22,20 +22,7 @@
 	});
 </script>
 
-<ul class="navBar">
-	{#if user?.isAdmin}
-		<li><a href="/admin">Adminpanel</a></li>
-	{:else}
-		<li></li>
-	{/if}
-	<!-- <li><a href="/">Hjem</a></li> -->
-	<!-- <li><a href="/fantasy">Fantasy</a></li> -->
-	{#if !$page.data.session}
-		<li><a href="/login">Logg Inn</a></li>
-	{:else}
-		<li><a href="/profile">Profil</a></li>
-	{/if}
-</ul>
+<Navbar />
 
 <slot></slot>
 
