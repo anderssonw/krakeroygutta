@@ -1,0 +1,22 @@
+[
+    {
+        "TeamID": 1,
+        "SeasonID": 1,
+        "Name": "Team Red",
+        "PlayerIDs": [1, 2, 3, 4],
+        "Games": 0,
+        "Win": 0,
+        "Draw": 0,
+        "Loss": 0
+    },
+    {
+        "TeamID": 2,
+        "SeasonID": 1,
+        "Name": "Team Green",
+        "PlayerIDs": [5, 6, 7, 8],
+        "Games": 0,
+        "Win": 0,
+        "Draw": 0,
+        "Loss": 0
+    }
+]

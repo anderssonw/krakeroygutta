@@ -1,25 +1,26 @@
 <script>
     import { page } from '$app/stores';
-    import { supabase } from '$lib/supabase';
-    import { goto } from '$app/navigation';
-
-    const logOut = async () => {
-		try {
-			await supabase.auth.signOut();
-			goto('/login');
-		} catch (error) {
-			console.log(error);
-		}
-	};
 </script>
 
-<div
-  class="bg-gradient-to-b from-black/75 h-20 md:h-32 flex justify-end items-center px-8 md:px-20"
->
-    <a href="/register"> <h2> Registrer deg </h2> </a>
-    {#if $page.data.session}
-        <button on:click={logOut}> <h2> Logg ut </h2> </button>
-    {:else}
-        <a href="/login"> <h2> Logg inn </h2> </a>
-    {/if}
-</div>
+{#if $page.data.session}
+    <div class="bg-gradient-to-b from-black/75 h-20 tablet:h-24 laptop:h-28 flex justify-around items-center sticky top-0 z-50">
+        <div class="w-80 flex justify-around items-center">
+            <a href="/"> <h4> Sesong </h4> </a>
+            <a href="/fantasy"> <h4> Mitt lag </h4> </a>
+        </div>
+        <div class="w-24">
+            <a href="/">
+                <img src="HeaderLogoSmall.png" alt="logo" />
+            </a>
+        </div>
+        <div class="w-80 flex justify-around items-center">
+            <a href="/profile"> <h4> Profil </h4> </a>
+        </div>
+    </div>
+{:else}
+    <div class="bg-gradient-to-b from-black/75 h-20 tablet:h-24 laptop:h-28 flex justify-around tablet:justify-end items-center px-8 sm:px-20">
+        <a href="/"> <h4> Hjem </h4> </a>
+        <a href="/register"> <h4> Registrer deg </h4> </a>
+        <a href="/login"> <h4> Logg inn </h4> </a>
+    </div>
+{/if}

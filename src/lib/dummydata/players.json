@@ -1,0 +1,26 @@
+[
+    {
+        "PlayerID": 1,
+        "Name": "Elias Gauslaa",
+        "Price": 1000,
+        "Picture": "Placeholder.png"
+    },
+    {
+        "PlayerID": 2,
+        "Name": "Ask Kase",
+        "Price": 2000,
+        "Picture": "Placeholder.png"
+    },
+    {
+        "PlayerID": 3,
+        "Name": "William Anderson",
+        "Price": 3000,
+        "Picture": "Placeholder.png"
+    },
+    {
+        "PlayerID": 4,
+        "Name": "Magnus Gulbrandsen",
+        "Price": 7000,
+        "Picture": "Placeholder.png"
+    }
+]

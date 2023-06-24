@@ -1,19 +1,16 @@
 <script lang="ts">
 	import "../app.postcss";
     import { supabase } from '$lib/supabase';
-    import { invalidate } from '$app/navigation';
+    import { invalidateAll } from '$app/navigation';
     import { onMount } from 'svelte';
-    import type { User } from '$lib/types/User';
 	import Navbar from "$lib/components/index/Navbar.svelte";
-    /** @type {import('./$types').PageData} */
-    export let data;
-    let user: User = data.user;
+	import Footer from "$lib/components/index/Footer.svelte";
 
     onMount(() => {
 		const {
 			data: { subscription }
 		} = supabase.auth.onAuthStateChange(() => {
-			invalidate('supabase:auth');
+			invalidateAll();
 		});
 
 		return () => {
@@ -25,4 +22,6 @@
 <Navbar />
 
 <slot></slot>
+
+<Footer/>
 

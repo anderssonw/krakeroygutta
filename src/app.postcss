@@ -1,9 +1,13 @@
+/* HOW TO USE */
+/* https://tailwindcss.com/docs/adding-custom-styles */
+
 /* Write your global styles here, in PostCSS syntax */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Variables to be used by THEME CONFIG for the base color theme */
+/* MIGHT REMOVE AND ADD DIRECTLY */
 :root {
   --base-color-light: #5a5a5a;
   --base-color-default: #3e3e3e;
@@ -14,38 +18,96 @@
   --text-color-dark: #d8d8d8;
 }
 
-/* Change the default font size of each element based on the screen size */
+/* Adjustmets to default text size and color */
 @layer base {
-  h1 {
-    @apply text-h1-base;
-  }
-  h2 {
-    @apply text-h2-base;
-  }
-  h3 {
-    @apply text-h3-base;
+  /* Make sure the default color for all text is the light secondary color */
+  body {
+    @apply text-secondary-color-light;
   }
 
-  @screen sm {
+  /* Override detault input to use the same color color palette as the background */
+  input {
+    @apply bg-secondary-color-light;
+    @apply text-primary-color-dark;
+  }
+
+  /* Override detault link to use a different hover color */
+  a {
+    @apply hover:text-primary-color-light;
+  }
+
+  /* Define text size for the most commonly used text fields */
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
+  h5 {
+    @apply text-base;
+  }
+  p, input, ol, ul, div {
+    @apply text-sm;
+  }
+
+  /* Screen sizes  */
+  @screen tablet {
     h1 {
-      @apply text-h1-sm;
+      @apply text-4xl;
     }
     h2 {
-      @apply text-h2-sm;
+      @apply text-3xl;
     }
     h3 {
-      @apply text-h3-sm;
+      @apply text-2xl;
+    }
+    h4 {
+      @apply text-xl;
+    }
+    h5 {
+      @apply text-lg;
+    }
+    p, input, ol, ul, div {
+      @apply text-base;
     }
   }
-  @screen lg {
+
+  @screen laptop {
     h1 {
-      @apply text-h1-lg;
+      @apply text-5xl;
     }
     h2 {
-      @apply text-h2-lg;
+      @apply text-4xl;
     }
     h3 {
-      @apply text-h3-lg;
+      @apply text-3xl;
     }
+    h4 {
+      @apply text-2xl;
+    }
+    h5 {
+      @apply text-xl;
+    }
+    p, input, ol, ul, div {
+      @apply text-lg;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply bg-primary-color-light hover:bg-primary-color text-secondary-color font-bold py-2 px-4 rounded-lg hover:cursor-pointer;
+  }
+  .input {
+    @apply block p-2.5 rounded-lg;
+  }
+  .structure {
+    @apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
   }
 }

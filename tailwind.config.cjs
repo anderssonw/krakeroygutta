@@ -3,30 +3,25 @@ const config = {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 
 	theme: {
+
+		// Use 'tablet' and 'laptop' instead of 'sm' and 'lg'
+		screens: {
+			'tablet': '768px',
+			'laptop': '1024px',
+		},
+
+		// Set primary/secondary color classes to be applied for all elements
 		extend: {
-			fontSize: {
-				"h1-base": "28px", // 2*default
-				"h1-sm": "30px", // 2*default
-				"h1-lg": "32px", // 2*default
-		
-				"h2-base": "21px", // 1.5*default
-				"h2-sm": "22px", // 1.5*default
-				"h2-lg": "24px", // 1.5*default
-		
-				"h3-base": "12px", // Default readability
-				"h3-sm": "16px", // Default readability
-				"h3-lg": "20px", // Default readability
-			},
 			colors: {
 				"primary-color": {
-				light: "var(--base-color-light)",
-				DEFAULT: "var(--base-color-default)",
-				dark: "var(--base-color-dark)",
+					light: "#5a5a5a",
+					DEFAULT: "#3e3e3e",
+					dark: "#282828",
 				},
 				"secondary-color": {
-				light: "var(--text-color-light)",
-				DEFAULT: "var(--text-color-default)",
-				dark: "var(--text-color-dark)",
+					light: "#f0f0f0",
+					DEFAULT: "#e8e8e8",
+					dark: "#d8d8d8",
 				}
 			},
 		},

@@ -1,0 +1,9 @@
+{
+    "UserID": 1,
+    "Email": "magnus-kil@live.no",
+    "Password": "12erg66",
+    "Name": "Magnus Gulbrandsen",
+    "IsAdmin": false,
+    "PlayerIDs": [1],
+    "Currency": 9000
+}

@@ -1,62 +1,62 @@
 <script>
-	import { goto } from '$app/navigation';
 	import KrakeroyKommune from '$lib/shared/krakeroyKommune.svelte';
 	import LargeLogo from '$lib/shared/largeLogo.svelte';
+	import ContentFooter from './ContentFooter.svelte';
 </script>
 
-<div class="container mx-auto max-w-screen-lg flex flex-col items-center justify-center space-y-4 sm:space-y-8 lg:space-y-10">
+<div class="structure">
 	<LargeLogo />
 
-	<div class="relative w-[80%] sm:w-[60%]">
+	<div class="relative w-[80%] tablet:w-[60%]">
 		<KrakeroyKommune />
 
 		<div
-		class="absolute w-4/5 top-[10%] left-[10%] flex flex-col space-y-2 sm:space-y-6 lg:space-y-10"
+		class="absolute w-4/5 top-[10%] left-[10%] flex flex-col space-y-2 tablet:space-y-6 laptop:space-y-10"
 		>
-			<h2 class="font-bold text-center">Velkommen til Fantasy Futsal!</h2>
-			<h3>
+			<h3 class="font-bold text-center">Velkommen til Fantasy Futsal!</h3>
+			<p>
 				Sesongen starter 1.desember og da vil du få muligheten til å bygge ditt
 				eget lag.
-			</h3>
-			<h3>
+			</p>
+			<p>
 				Den 24.desember 2023 braker det løs, både i Blomsterøyhallen og Casa
 				Bjerkholt. Du må derfor være ferdig med å bygge laget ditt innen den
 				tid.
-			</h3>
-			<h3 class="text-center pt-4 sm:pt-16 lg:pt-24">
+			</p>
+			<p class="text-center pt-4 tablet:pt-16 laptop:pt-24">
 				Masse lykke til med årets sesong!
-			</h3>
-			<h3 class="text-center">Spell og ha det gøy!</h3>
+			</p>
+			<p class="text-center">Spell og ha det gøy!</p>
 		</div>
 	</div>
 
-	<div class="relative w-[90%] sm:w-[60%]">
+	<div class="relative w-[90%] tablet:w-[60%]">
 		<img src="scroll.png" alt="scroll" />
 
 		<div
-		class="absolute w-3/5 top-[20%] left-[20%] flex flex-col space-y-4 sm:space-y-6 lg:space-y-8"
+		class="absolute w-3/5 top-[20%] left-[20%] flex flex-col space-y-4 tablet:space-y-6 laptop:space-y-8"
 		>
-			<h2 class="font-bold text-center text-amber-900">Regler</h2>
-			<h3 class="text-amber-900">
-				<ol class="list-decimal list-inside">
-					<li> Poengfordelingen lyder: 				
-						<ul class="list-disc list-inside pl-4">
-							<li> 3 poeng ved mål </li>
-							<li> 2 poeng ved assist </li>
-							<li> 1 poeng ved redning </li>
-						</ul> 
-					</li>
-					<li>
-						Kampens dommer velge å gi 1 - 3 poeng ved C-momenter (utenom Jørgen)
-					</li>
-					<li>
-						Det skal konsumeres en enhet per kamp
-					</li>
-					<li>
-						Jada jada ..
-					</li>
-				</ol>
-			</h3>
+			<h3 class="font-bold text-center text-amber-900">Regler</h3>
+			<ol class="list-decimal list-inside text-amber-900">
+				<li> Poengfordelingen lyder: 				
+					<ul class="list-disc list-inside pl-4">
+						<li> 3 poeng ved mål </li>
+						<li> 2 poeng ved assist </li>
+						<li> 1 poeng ved redning </li>
+					</ul> 
+				</li>
+				<li>
+					Kampens dommer velge å gi 1 - 3 poeng ved C-momenter (utenom Jørgen)
+				</li>
+				<li>
+					Det skal konsumeres en enhet per kamp
+				</li>
+				<li>
+					Jada jada ..
+				</li>
+			</ol>
 		</div>
 	</div>
 </div>
+
+<ContentFooter />

@@ -17,18 +17,11 @@
 
 	let loading = false;
 	let serverError = '';
-	let clientError = '';
 
 	const handleRegistration = async () => {
 		try {
 			serverError = '';
-			clientError = '';
 			loading = true;
-
-			if (!form.username) {
-				clientError = 'Vennligst oppgi brukernavn';
-				return;
-			}
 
 			const { error } = await supabase.auth.signUp({
 				email: form.email,
@@ -47,32 +40,32 @@
 	};
 </script>
 
-<div class="container mx-auto max-w-screen-lg flex flex-col items-center justify-center space-y-4 sm:space-y-8 lg:space-y-10">
+<div class="structure">
 	<LargeLogo />
 
-	<form class="w-1/2 lg:w-1/3" on:submit|preventDefault={handleRegistration}>
+	<form class="w-1/2 laptop:w-1/3" on:submit|preventDefault={handleRegistration}>
 		<div class="mb-6">
-			<label for="username" class="block mb-1"><h3>Brukernavn</h3></label>
-			<input type="text" id="username" class="block w-full p-2.5 rounded-lg text-primary-color" placeholder="Jørgen Kjekk Alfredsen" bind:value={form.username} required>
+			<label for="username" class="block mb-1"><h4>Brukernavn</h4></label>
+			<input type="text" id="username" class="input w-full" placeholder="Jørgen Kjekk Alfredsen" bind:value={form.username} required>
 		</div>
         <div class="mb-6">
-			<label for="email" class="block mb-1"><h3>Epost</h3></label>
-			<input type="email" id="email" class="block w-full p-2.5 rounded-lg text-primary-color" placeholder="næbb@næbbesen.no" bind:value={form.email} required>
+			<label for="email" class="block mb-1"><h4>Epost</h4></label>
+			<input type="email" id="email" class="input w-full" placeholder="næbb@næbbesen.no" bind:value={form.email} required>
 		</div> 
         <div class="mb-6">
-			<label for="password" class="block mb-1"><h3>Passord</h3></label>
-			<input type="password" id="password" class="block w-full p-2.5 rounded-lg text-primary-color" placeholder="" bind:value={form.password} required>
+			<label for="password" class="block mb-1"><h4>Passord</h4></label>
+			<input type="password" id="password" class="input w-full" placeholder="" bind:value={form.password} required>
 		</div> 
-		<div class="mb-6">
+		<div class="mb-6 flex justify-center">
 			<input
 				type="submit"
-				class="button rounded-lg w-full p-2.5 text-center bg-primary-color-light hover:bg-primary-color hover:cursor-pointer"
-				value={loading ? 'Laster' : 'Registrer'}
+				class="btn"
+				value={loading ? 'Laster' : 'Registrer bruker'}
 				disabled={loading}
 			/>
 		</div>
-		{#if serverError || clientError}
-			<p class="text-rose-600">Noe gikk galt: {serverError || clientError}</p>
+		{#if serverError}
+			<p class="text-rose-600">Noe gikk galt: {serverError}</p>
 		{/if}
 	</form>
 </div>

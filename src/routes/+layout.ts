@@ -1,14 +1,19 @@
 import type { LayoutLoad } from './$types';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import type { User } from '$lib/types/User';
 import type { Session } from '@supabase/supabase-js';
 import type { Database } from '$lib/types/database.types';
+import type { User } from '$lib/types/newTypes';
+import userJson from '$lib/dummydata/user.json';
 
 export const load: LayoutLoad<{ session: Session | null; user: User | null }> = async (event) => {
 	const { session } = await getSupabase(event);
 
 	let user: User | null = null;
 
+	const dbUser: User = userJson; // Change with fetch from database
+	user = dbUser;
+	
+	/*
 	if (session) {
 		const { supabaseClient } = await getSupabase(event);
 
@@ -23,6 +28,7 @@ export const load: LayoutLoad<{ session: Session | null; user: User | null }> = 
 			};
 		}
 	}
+	*/
 
 	return { session, user };
 };
