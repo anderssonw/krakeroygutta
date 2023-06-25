@@ -1,5 +1,7 @@
-<script>
+<script lang="ts">
     import { page } from '$app/stores';
+
+    export let isAdmin: boolean;
 </script>
 
 {#if $page.data.session}
@@ -14,6 +16,9 @@
             </a>
         </div>
         <div class="w-80 flex justify-around items-center">
+            {#if isAdmin}
+                <a href="/admin"> <h4> Admin </h4> </a>
+            {/if}
             <a href="/profile"> <h4> Profil </h4> </a>
         </div>
     </div>

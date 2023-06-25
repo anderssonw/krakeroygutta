@@ -3,7 +3,7 @@
     "Email": "magnus-kil@live.no",
     "Password": "12erg66",
     "Name": "Magnus Gulbrandsen",
-    "IsAdmin": false,
+    "IsAdmin": true,
     "PlayerIDs": [1],
     "Currency": 9000
 }

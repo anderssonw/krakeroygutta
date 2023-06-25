@@ -6,6 +6,11 @@
 	import Navbar from "$lib/components/index/Navbar.svelte";
 	import Footer from "$lib/components/index/Footer.svelte";
 
+	// Check admin access
+	import type { PageData } from './$types';
+	export let data: PageData;
+	$: ({ user } = data)
+
     onMount(() => {
 		const {
 			data: { subscription }
@@ -19,7 +24,7 @@
 	});
 </script>
 
-<Navbar />
+<Navbar isAdmin={user.IsAdmin} />
 
 <slot></slot>
 
