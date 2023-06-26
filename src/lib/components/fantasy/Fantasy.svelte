@@ -13,9 +13,9 @@
 
     let isLoadingPage: boolean = true;
     onMount(() => {
-        myPlayers = players.filter(player => user.PlayerIDs.includes(player.pid))
-        otherPlayers = players.filter(player => !user.PlayerIDs.includes(player.pid))
-        myCurrency = JSON.parse(JSON.stringify(user.Currency)); // Deep copy to not disturb db data (?)
+        myPlayers = players.filter(player => user.players.includes(player.pid))
+        otherPlayers = players.filter(player => !user.players.includes(player.pid))
+        myCurrency = JSON.parse(JSON.stringify(user.cash)); // Deep copy to not disturb db data (?)
 
 		isLoadingPage = false;
 	});

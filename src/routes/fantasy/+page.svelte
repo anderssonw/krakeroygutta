@@ -17,7 +17,7 @@
     });
 </script>
 
-{#if session}
+{#if session && user}
     <Fantasy players={players} user={user} />
 {:else}
     <div class="structure">

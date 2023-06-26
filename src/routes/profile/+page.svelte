@@ -28,7 +28,7 @@
 </script>
 
 {#if session}
-	{user.Email}
+	{user?.email}
 	<button on:click={logOut}>Logg ut</button>
 {:else}
     <div class="structure">

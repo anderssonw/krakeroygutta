@@ -24,7 +24,7 @@
 	});
 </script>
 
-<Navbar isAdmin={user.IsAdmin} />
+<Navbar isAdmin={user?.is_admin ?? false} />
 
 <slot></slot>
 

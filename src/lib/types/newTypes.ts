@@ -1,15 +1,5 @@
 // Interface to be stored elsewhere
 
-export interface User {
-	UserID: number;
-    Email: string,
-    Password: string,
-    Name: string,
-	IsAdmin: boolean;
-    PlayerIDs: number[];
-    Currency: number;
-}
-
 export interface Player {
     pid: number;
     name: string;
@@ -36,5 +26,20 @@ export interface Team {
     losses: number;
 }
 
+export interface UserDB {
+	id: number;
+    username: string;
+    is_admin: boolean,
+    cash: number,
+    players: string,
+	captain: number;
+}
 
-
+export interface User {
+    email: string,
+    username: string,
+	is_admin: boolean;
+    cash: number;
+    players: number[];
+    captain: number;
+}

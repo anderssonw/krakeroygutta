@@ -23,3 +23,13 @@ create table teams (
   draws int,
   losses int
 );
+
+create table users (
+  id uuid not null references auth.users on delete cascade,
+  is_admin boolean default false,
+  cash int default 20000,
+  players text default '',
+  captain int default -1,
+  username text,
+  PRIMARY key (id)
+);

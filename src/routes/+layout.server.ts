@@ -1,19 +1,33 @@
-import type { User } from '$lib/types/newTypes';
+import type { User, UserDB } from '$lib/types/newTypes';
 import type { LayoutServerLoad } from './$types';
-import { getServerSession, getSupabase } from '@supabase/auth-helpers-sveltekit';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import type { Session } from '@supabase/supabase-js';
-import userJson from '$lib/dummydata/user.json';
 
-// Since docs only gets session in server layout, rest in client layout
-// https://supabase.com/docs/guides/auth/auth-helpers/sveltekit
 
 export const load: LayoutServerLoad<{ session: Session | null; user: User | null }> = async (event) => {
-	let session = await getServerSession(event);
+	const { supabaseClient, session } = await getSupabase(event);
+
+	let authUser = await supabaseClient.auth.getUser();
 
 	let user: User | null = null;
 
-	const dbUser: User = userJson; // Change with fetch from database
-	user = dbUser;
+	if (session) {
+		const { supabaseClient } = await getSupabase(event);
+		const userQuery = await supabaseClient.from('users').select().eq("id", authUser.data.user?.id);
+
+		if (userQuery.data != null) {
+			let tempUser: UserDB = userQuery.data[0];
+			console.log(tempUser);
+			user = {
+				email: authUser.data.user?.email ?? "",
+				username: tempUser.username,
+				is_admin: tempUser.is_admin,
+				cash: tempUser.cash,
+				players: tempUser.players.split(",").map(Number),
+				captain: tempUser.captain
+			};
+		}
+	}
 
 	return { session, user };
 };
