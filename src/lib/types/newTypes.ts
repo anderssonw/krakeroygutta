@@ -1,31 +1,4 @@
 // Interface to be stored elsewhere
-export interface Season {
-    SeasonID: number;
-    Name: string,
-    StartDate: string,
-    EndDate: string
-}
-
-export interface Team {
-    TeamID: number;
-    SeasonID: number;
-    Name: string,
-    PlayerIDs: number[],
-    Games: number,
-    Win: number,
-    Draw: number,
-    Loss: number
-}
-
-export interface Player {
-    PlayerID: number,
-    Name: string,
-    Price: number,
-    Picture: string,
-    Goals: number,
-    Assist: number,
-    Clutch: number
-}
 
 export interface User {
 	UserID: number;
@@ -36,3 +9,32 @@ export interface User {
     PlayerIDs: number[];
     Currency: number;
 }
+
+export interface Player {
+    pid: number;
+    name: string;
+    price: number;
+    image: string;
+    goals: number;
+    assist: number;
+    clutch: number;
+}
+
+export interface Season {
+    sid: number;
+    name: string;
+    start_date: string;
+    end_date: string;
+}
+
+export interface Team {
+    tid: number;
+    sid: number;
+    name: string;
+    wins: number;
+    draws: number;
+    losses: number;
+}
+
+
+

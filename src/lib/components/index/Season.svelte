@@ -9,7 +9,7 @@
 <div class="structure">
     {#if season}
         <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-4">
-            <h2> { season.Name } </h2>
+            <h2> { season.name } </h2>
             <table class="table-auto w-full bg-primary-color">
                 <thead>
                     <tr>
@@ -25,11 +25,11 @@
                     {#each teams as team, i}
                     <tr>
                         <th>{(i+1)+"."}</th>
-                        <th>{team.Name}</th>
-                        <th>{team.Games}</th>
-                        <th>{team.Win}</th>
-                        <th>{team.Draw}</th>
-                        <th>{team.Loss}</th>
+                        <th>{team.name}</th>
+                        <th>{(team.wins+team.draws+team.losses)}</th>
+                        <th>{team.wins}</th>
+                        <th>{team.draws}</th>
+                        <th>{team.losses}</th>
                     </tr>
                     {/each}
                 </tbody>

@@ -1,14 +1,19 @@
 import type { PageServerLoad } from './$types';
 import type { Player } from '$lib/types/newTypes';
-import playersJson from '$lib/dummydata/players.json';
+import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
 export const load: PageServerLoad<{ player: Player | null; }> = async (event) => {
-    let players: Player[] = [];
-    const dbPlayers: Player[] = playersJson; // Change with fetch from database
+    let player: Player | null = null;
 
-    let player: Player | null;
-    let playerID: number = parseInt(event.params.slug);
-    player = dbPlayers.filter(p => p.PlayerID == playerID)[0];
+    // Get all players
+    const { supabaseClient } = await getSupabase(event);
+    const playerQuery = await supabaseClient.from('players').select().eq("pid", parseInt(event.params.slug));
+
+    // Map from db type to client type
+    if (playerQuery.data != null) {
+        const dbPlayer: Player = playerQuery.data[0];
+        player = dbPlayer;
+    }
 
     return { player: player }
 
