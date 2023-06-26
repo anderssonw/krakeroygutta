@@ -21,7 +21,10 @@ export interface Player {
     PlayerID: number,
     Name: string,
     Price: number,
-    Picture: string
+    Picture: string,
+    Goals: number,
+    Assist: number,
+    Clutch: number
 }
 
 export interface User {

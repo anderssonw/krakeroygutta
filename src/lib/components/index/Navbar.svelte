@@ -12,7 +12,7 @@
         </div>
         <div class="w-24">
             <a href="/">
-                <img src="HeaderLogoSmall.png" alt="logo" />
+                <img src="/HeaderLogoSmall.png" alt="logo" />
             </a>
         </div>
         <div class="w-80 flex justify-around items-center">

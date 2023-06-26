@@ -36,10 +36,10 @@
             </table>
             <div class="w-full bg-primary-color-light flex flex-row space-x-4">
                 <div class="h-40 bg-primary-color grow flex items-center justify-center">
-                    <h4> Players </h4> 
+                    <a href="/players"> <h4> Players </h4> </a>
                 </div>
                 <div class="h-40 bg-primary-color grow flex items-center justify-center">
-                    <h4> Teams </h4> 
+                    <a href="/teams"> <h4> Teams </h4> </a>
                 </div>
             </div>
         </div>
