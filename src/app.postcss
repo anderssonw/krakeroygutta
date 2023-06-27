@@ -22,7 +22,9 @@
 @layer base {
   /* Make sure the default color for all text is the light secondary color */
   body {
+    @apply bg-primary-color-dark;
     @apply text-secondary-color-light;
+    @apply min-h-screen;
   }
 
   /* Override detault input to use the same color color palette as the background */
@@ -110,10 +112,13 @@
   .structure {
     @apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
   }
+  .nav {
+    @apply bg-primary-color-nav h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-50;
+  }
+  .navbtn {
+    @apply transition-all duration-200 hover:scale-110;
+  }
   .player {
     @apply w-20 h-20 rounded-full bg-primary-color-light absolute overflow-hidden hover:scale-105 active:scale-100;
-  }
-  .card {
-    
   }
 }

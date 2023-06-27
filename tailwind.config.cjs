@@ -17,6 +17,7 @@ const config = {
 					light: "#5a5a5a",
 					DEFAULT: "#3e3e3e",
 					dark: "#282828",
+					nav: "#1a1a1a"
 				},
 				"secondary-color": {
 					light: "#f0f0f0",
@@ -24,6 +25,11 @@ const config = {
 					dark: "#d8d8d8",
 				}
 			},
+			height: {
+				'128': '32rem',
+				'160': '40rem',
+				'192': '48rem',
+			}
 		},
 	},
 		

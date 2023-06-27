@@ -7,21 +7,21 @@
 
 	// Get server data
 	export let data: PageData;
-    $: ({ session, user } = data)
+    $: ({ session, user, activeSeason, allSeasons } = data)
 
     // Protect route
     onMount(async () => {
         if (!session){
             goto("/login");
         }
-		if (!user.IsAdmin){
+		if (!user?.is_admin){
 			goto("/");
 		}
     });
 </script>
 
-{#if (session && user.IsAdmin)}
-	<Admin />
+{#if (session && user?.is_admin)}
+	<Admin activeSeason={activeSeason} allSeasons={allSeasons} />
 {:else}
     <div class="structure">
         <h2 class="text-center"> Redirecting .. <SpinnerIcon /> </h2>

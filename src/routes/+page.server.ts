@@ -1,7 +1,6 @@
 import type { Season, Team } from '$lib/types/newTypes';
 import type { PageServerLoad } from './$types';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import teamsJson from '$lib/dummydata/teams.json';
 
 export const load: PageServerLoad<{ season: Season | null; teams: Team[] }> = async (event) => {
     const { session, supabaseClient } = await getSupabase(event);
