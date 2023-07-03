@@ -17,7 +17,6 @@ const config = {
 					light: "#5a5a5a",
 					DEFAULT: "#3e3e3e",
 					dark: "#282828",
-					nav: "#1a1a1a"
 				},
 				"secondary-color": {
 					light: "#f0f0f0",
@@ -29,6 +28,11 @@ const config = {
 				'128': '32rem',
 				'160': '40rem',
 				'192': '48rem',
+			},
+			dropShadow: {
+				'bronze': "0 25px 25px rgb(184 115 51 / 0.15)",
+				'silver': "0 25px 25px rgb(192 192 192 / 0.15)",
+				'gold': "0 25px 25px rgb(255 215 0 / 0.15)",
 			}
 		},
 	},

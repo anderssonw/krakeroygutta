@@ -15,7 +15,6 @@ export const load: LayoutLoad<{ session: Session | null; user: User | null }> = 
 
 		if (userQuery.data != null) {
 			let tempUser: UserDB = userQuery.data[0];
-			console.log(tempUser);
 			user = {
 				email: authUser.data.user?.email ?? "",
 				username: tempUser.username,

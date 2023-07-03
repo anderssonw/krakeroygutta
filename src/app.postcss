@@ -16,6 +16,16 @@
   --text-color-light: #f0f0f0;
   --text-color-default: #e8e8e8;
   --text-color-dark: #d8d8d8;
+
+  font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
 }
 
 /* Adjustmets to default text size and color */
@@ -36,6 +46,7 @@
   /* Override detault link to use a different hover color */
   a {
     @apply hover:text-primary-color-light;
+    @apply p-6;
   }
 
   /* Define text size for the most commonly used text fields */
@@ -104,7 +115,7 @@
 
 @layer components {
   .btn {
-    @apply bg-primary-color-light hover:bg-primary-color text-secondary-color font-bold py-2 px-4 rounded-lg hover:cursor-pointer;
+    @apply bg-secondary-color-light hover:bg-secondary-color-dark text-primary-color-dark font-bold py-2 px-4 rounded-lg hover:cursor-pointer;
   }
   .input {
     @apply block p-2.5 rounded-lg;
@@ -113,7 +124,7 @@
     @apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
   }
   .nav {
-    @apply bg-primary-color-nav h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-50;
+    @apply bg-primary-color h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-50;
   }
   .navbtn {
     @apply transition-all duration-200 hover:scale-110;

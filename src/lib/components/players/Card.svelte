@@ -1,40 +1,27 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
     import type { Player } from "$lib/types/newTypes";
+	import { onMount } from "svelte";
     export let player: Player;
+
+    let card_type: string = "bronze";
+    onMount(() => {
+        if (player.price > 4000 && player.price < 5000) {
+            card_type = "silver";
+        }
+        if (player.price >= 5000) {
+            card_type = "gold";
+        }
+	});
 </script>
 
-<div class="relative w-60 h-64 bg-secondary-color rounded-lg shadow-lg hover:scale-105 active:scale-100 flex flex-col items-center" on:mouseup={() => goto(`/players/${player.pid}`)}>
-    <div class=" relative w-full h-32 bg-secondary-color-dark rounded-lg overflow-hidden">
-        <div class="h-26 w-32 absolute bottom-0 left-1/2 -translate-x-1/2">
-            <img src="/profile/{player.image}" alt="head" />
-        </div>
+<div class="relative w-60 hover:scale-105 active:scale-100 flex flex-col items-center group hover:cursor-pointer" on:mouseup={() => goto(`/players/${player.pid}`)}>
+    <img src="{card_type}.png" alt="gold" class="group-hover:drop-shadow-{card_type}" />
+    <div class="h-26 w-32 absolute top-[21.36%] right-[10%]">
+        <img src="/profile/placeholder.png" alt="head" />
     </div>
-    <p class="text-primary-color text-center">
-        { player.name }
-    </p>
-    <div class="w-2/3 flex flex-row justify-between">
-        <p class="text-primary-color text-center">
-            Goals
-        </p>
-        <p class="text-primary-color text-center">
-            { player.goals }
-        </p>
-    </div>
-    <div class="w-2/3 flex flex-row justify-between">
-        <p class="text-primary-color text-center">
-            Assist
-        </p>
-        <p class="text-primary-color text-center">
-            { player.assist }
-        </p>
-    </div>
-    <div class="w-2/3 flex flex-row justify-between">
-        <p class="text-primary-color text-center">
-            Clutch
-        </p>
-        <p class="text-primary-color text-center">
-            { player.clutch }
-        </p>
+    <div class="w-full absolute top-[55%]">
+        <h4 class="text-center text-primary-color">{player.name}</h4>
+        <h5 class="text-center text-primary-color">{player.price}</h5>
     </div>
 </div>

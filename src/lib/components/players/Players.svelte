@@ -5,10 +5,10 @@
 </script>
 
 <div class="structure">
-    <h2> Players </h2>
+    <h2> Spillere </h2>
     <div class="w-full flex flex-row flex-wrap gap-4 justify-center">
-        {#each players as player}
-            <Card player={player} />
-        {/each}
-    </div>
+    {#each players as player}
+        <Card player={player} />
+    {/each}
+</div>
 </div>

@@ -24,9 +24,8 @@
 {#if $page.data.session}
     <div class="nav flex items-center {hideNavbar}">
         <a href="/">
-            <div class="w-20 flex flex-row">
-                <img src="HeaderLogoSmall.png" alt="trophy" />
-                <h1>FF</h1>
+            <div class="w-28 flex flex-row">
+                <img src="/LogoLightSmall.png" alt="trophy" />
             </div>
         </a>
         <div class="w-full flex flex-row justify-end">
@@ -47,12 +46,6 @@
     </div>
 {:else}
     <div class="nav flex items-center {hideNavbar}">
-        <a href="/">
-            <div class="w-20 flex flex-row">
-                <img src="HeaderLogoSmall.png" alt="trophy" />
-                <h1>FF</h1>
-            </div>
-        </a>
         <div class="w-full flex flex-row justify-end">
             <div class="space-y-2 tablet:hidden">
                 <div class="w-8 h-0.5 bg-secondary-color-light"></div>

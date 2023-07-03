@@ -1,10 +1,33 @@
 <script lang="ts">
-	import PlayerBtn from '$lib/shared/playerBtn.svelte';
+	import { goto } from '$app/navigation';
     import type { Season, Team } from '$lib/types/newTypes';
 
     // Get specifics, can be used in script
     export let season: Season | null;
     export let teams: Team[];
+
+    let userTeams = [
+        {
+            username: "StratosKosepose",
+            points: 80
+        },
+        {
+            username: "HDMatrix",
+            points: 75
+        },
+        {
+            username: "Xirxem",
+            points: 69
+        },
+        {
+            username: "BezoumnyJeezny",
+            points: 60
+        },
+        {
+            username: "F0restDude13",
+            points: 58
+        }
+    ]
 </script>
 
 
@@ -15,9 +38,9 @@
         </video>
     </div>
     {#if season}
-        <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-4">
+        <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-12">
             <h2> { season.name } </h2>
-            <table class="table-auto w-full bg-primary-color">
+            <table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-lg">
                 <thead>
                     <tr>
                         <th>Pos</th>
@@ -41,25 +64,43 @@
                     {/each}
                 </tbody>
             </table>
-            <div class="w-full bg-primary-color-light flex flex-row space-x-4">
-                <div class="h-40 grow flex items-center justify-center">
-                    <a href="/players"> <h4> Players </h4> </a>
+            <div class="w-full flex flex-row space-x-4">
+                <div class="w-80 flex flex-col items-center grow group hover:cursor-pointer" on:mouseup={() => goto("/players")}>
+                    <img src="/players.png" alt="players" class="w-3/4 mb-2 group-hover:scale-105 group-active:scale-100" />
+                    <button class="btn w-1/2 group-hover:scale-105 group-active:scale-100">Spillere</button>
                 </div>
-                <div class="h-40 bg-primary-color grow flex items-center justify-center">
-                    <a href="/teams"> <h4> Teams </h4> </a>
+                <div class="w-80 flex flex-col items-center grow group hover:cursor-pointer" on:mouseup={() => goto("/teams")}>
+                    <img src="/teams.png" alt="players" class="w-3/4 mb-2 group-hover:scale-105 group-active:scale-100" />
+                    <button class="btn w-1/2 group-hover:scale-105 group-active:scale-100">Lag</button>
                 </div>
             </div>
         </div>
     {:else}
         <h2> No active season </h2>
     {/if}
+</div>
 
-
-    <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-4">
-        <h2> Tidligere sesonger </h2>
-        <div class="w-full h-40 bg-primary-color-light flex items-center justify-center"> 
-            <h4> Ex: Winter 2021 </h4> 
-        </div>
+<div class="w-full bg-primary-color flex flex-col items-center justify-center">
+    <h2> Fantasy Standings </h2>
+    <div class="container max-w-screen-laptop">
+        <table class="table-fixed w-full">
+            <thead>
+                <tr>
+                    <th>Posisjon</th>
+                    <th>Bruker</th>
+                    <th>Poeng</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each userTeams as team, i}
+                <tr>
+                    <th>{(i+1)+"."}</th>
+                    <th>{team.username}</th>
+                    <th>{team.points}</th>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
     </div>
 </div>
 
