@@ -43,6 +43,8 @@
 <div class="structure">
 	<LargeLogo />
 
+	<h2> Registrering </h2>
+
 	<form class="w-1/2 laptop:w-1/3" on:submit|preventDefault={handleRegistration}>
 		<div class="mb-6">
 			<label for="username" class="block mb-1"><h4>Brukernavn</h4></label>

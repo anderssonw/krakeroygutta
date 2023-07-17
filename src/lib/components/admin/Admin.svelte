@@ -4,6 +4,11 @@
     export let activeSeason: Season | null;
     export let allSeasons: Season[];
 
+    console.log(allSeasons);
+    console.log(activeSeason);
+
+    let activeSearch: boolean = false;
+
     let showSeasons: boolean = false;
     let showTeams: boolean = false;
 </script>
@@ -27,8 +32,15 @@
     {#if showSeasons}
         <div class="w-full bg-primary-color text-center">
             <h3> Eksisterende sesonger </h3>
-            Vinter 2021 (UTLØPT) <br/>
-            Vinter 2022 (AKTIV) <br/>
+            {#each allSeasons as season}
+                <p> 
+                    {season.name}
+                    {#if season.sid == activeSeason?.sid}
+                        (Aktiv)
+                    {/if}
+                </p>
+            {/each}
+
             <h3> Legg til ny sesong </h3>
             <div class="flex flex-col items-center justify-center">
                 Name:
@@ -72,9 +84,13 @@
         </div>
     {/if}
 
-    <div class="relative">
-        <div class="w-20 h-20 bg-primary-color-light origin-bottom-left absolute top-0"></div>
-        <button class="btn">DROPDOWN</button>
+    <div class="w-full flex flex-col items-center"> 
+        <button class="btn">Velg spiller</button>
+        {#if activeSearch}
+            <div class="w-1/2 h-20 bg-primary-color-light">
+                <div class="w-full h-10 bg-secondary-color-light hover:bg-secondary-color-dark"> Magnus Gulbrandsen </div>
+            </div>
+        {/if}
     </div>
     
 

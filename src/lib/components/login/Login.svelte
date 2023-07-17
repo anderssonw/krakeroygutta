@@ -28,6 +28,8 @@
 <div class="structure">
 	<LargeLogo />
 
+	<h2> Innlogging </h2>
+
 	<form class="w-1/2 laptop:w-1/3" on:submit|preventDefault={handleLogin}>
         <div class="mb-6">
 			<label for="email" class="block mb-1"><h4>Epost</h4></label>

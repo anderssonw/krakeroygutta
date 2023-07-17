@@ -10,5 +10,5 @@
     {#each players as player}
         <Card player={player} />
     {/each}
-</div>
+    </div>
 </div>

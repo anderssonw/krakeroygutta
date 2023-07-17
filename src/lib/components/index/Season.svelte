@@ -38,7 +38,7 @@
         </video>
     </div>
     {#if season}
-        <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-12">
+        <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-12 pb-12">
             <h2> { season.name } </h2>
             <table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-lg">
                 <thead>
@@ -64,7 +64,7 @@
                     {/each}
                 </tbody>
             </table>
-            <div class="w-full flex flex-row space-x-4">
+            <div class="w-full flex flex-row flex-wrap tablet:flex-nowrap space-x-4">
                 <div class="w-80 flex flex-col items-center grow group hover:cursor-pointer" on:mouseup={() => goto("/players")}>
                     <img src="/players.png" alt="players" class="w-3/4 mb-2 group-hover:scale-105 group-active:scale-100" />
                     <button class="btn w-1/2 group-hover:scale-105 group-active:scale-100">Spillere</button>
@@ -80,7 +80,7 @@
     {/if}
 </div>
 
-<div class="w-full bg-primary-color flex flex-col items-center justify-center">
+<div class="relative w-full bg-primary-color flex flex-col items-center justify-center pb-60">
     <h2> Fantasy Standings </h2>
     <div class="container max-w-screen-laptop">
         <table class="table-fixed w-full">
@@ -102,6 +102,7 @@
             </tbody>
         </table>
     </div>
+    <img src="/sertpng.png" alt="sert" class="w-1/3 absolute bottom-0 opacity-20" />
 </div>
 
 <style>

@@ -17,7 +17,7 @@
 		let divRect = animatedPitch.getBoundingClientRect();
 		let newPitchInView = isInViewport(divRect);
 		if (newPitchInView != curPitchInView) {
-		curPitchInView = newPitchInView;
+			curPitchInView = newPitchInView;
 		}
 	});
 	let y = 0;

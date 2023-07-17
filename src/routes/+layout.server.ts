@@ -21,9 +21,7 @@ export const load: LayoutServerLoad<{ session: Session | null; user: User | null
 				email: authUser.data.user?.email ?? "",
 				username: tempUser.username,
 				is_admin: tempUser.is_admin,
-				cash: tempUser.cash,
-				players: tempUser.players.split(",").map(Number),
-				captain: tempUser.captain
+				cash: tempUser.cash
 			};
 		}
 	}

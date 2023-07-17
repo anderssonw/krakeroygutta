@@ -40,6 +40,11 @@ export interface User {
     username: string,
 	is_admin: boolean;
     cash: number;
-    players: number[];
-    captain: number;
+}
+
+export interface FantasyForm {
+    team: Player[],
+    money: number,
+    captain: number,
+    selectedCard: number,
 }

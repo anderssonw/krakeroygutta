@@ -1,123 +1,68 @@
 <script lang="ts">
 	import SpinnerIcon from "$lib/shared/spinnerIcon.svelte";
-    import type { Player, User } from "$lib/types/newTypes";
+    import type { FantasyForm, Player, User } from "$lib/types/newTypes";
 	import { onMount } from "svelte";
+
+	import TabletCard from "$lib/components/fantasy/TabletCard.svelte";
+	import MobileCard from "./MobileCard.svelte";
+	import SelectCardModal from "./SelectCardModal.svelte";
 
     export let players: Player[];
     export let user: User;
 
-    let myPlayers: Player[] = [];
-    let otherPlayers: Player[] = [];
-    let myCurrency: number;
-    let myCaptain: number = -1;
+    // Initialize a form to be edited
+    let fantasyForm: FantasyForm = {
+        team: [{} as Player, {} as Player, {} as Player, {} as Player],
+        money: -1,
+        captain: -1,
+        selectedCard: -1,
+    }
+    $: hasCardSelected = (fantasyForm.selectedCard >= 0) ? true : false;
 
+    /* TODO: List of players updated based on USER selection and ALL available */
+
+    // Fill up form with data from the server
     let isLoadingPage: boolean = true;
     onMount(() => {
-        myPlayers = players.filter(player => user.players.includes(player.pid))
-        otherPlayers = players.filter(player => !user.players.includes(player.pid))
-        myCurrency = JSON.parse(JSON.stringify(user.cash)); // Deep copy to not disturb db data (?)
-
+        let myPlayers = players.filter(player => user.players.includes(player.pid))
+        for (var i = 0; i < myPlayers.length; i++) {
+            fantasyForm.team[i] = myPlayers[i];
+        }
+        fantasyForm.money = JSON.parse(JSON.stringify(user.cash));
+        fantasyForm.captain = JSON.parse(JSON.stringify(user.captain));
 		isLoadingPage = false;
 	});
 
-
-    function buyPlayer(player: Player){
-        // Check currency
-        if (myCurrency >= player.price) {
-            // Remove currency
-            myCurrency -= player.price;
-
-            // Add to my players
-            myPlayers.push(player);
-            myPlayers = myPlayers;
-
-            // Remove from other players
-            otherPlayers = otherPlayers.filter(p => p.pid != player.pid);
-        } else {
-            /* TODO: Handle it better */
-            alert("Not enough money")
-        }
-    }
-    function sellPlayer(player: Player){
-        // Add currency
-        myCurrency += player.price;
-
-        // Add to my players
-        otherPlayers.push(player);
-        otherPlayers = otherPlayers;
-
-        // Remove from other players
-        myPlayers = myPlayers.filter(p => p.pid != player.pid);
-    }
-
-    function selectCaptain(idx: number) {
-        if (myPlayers[idx]){
-            if (myCaptain == idx){
-                myCaptain = -1;
-            } else {
-                myCaptain = idx;
-            }
-        }
+    function checkStatus() {
+        console.log(fantasyForm);
     }
 </script>
+
+<SelectCardModal players={players} bind:fantasyForm={fantasyForm} bind:hasCardSelected={hasCardSelected} />
+
 
 <div class="structure">
     {#if isLoadingPage}
         <SpinnerIcon />
     {:else}
-        <h2> Mitt fantasy </h2>
-        <h3> My currency: {myCurrency} </h3>
-        <div class="w-full bg-primary-color flex flex-col tablet:flex-row">
-            <div class="relative w-full tablet:w-1/2">
-                <img src="Field.png" alt="field" />
-                <div class="player bottom-24 left-1/2 -translate-x-1/2" on:mouseup={() => selectCaptain(0)}>
-                    {#if myPlayers[0]}
-                        <img src="/profile/{myPlayers[0].image}" alt="head" class="z-10">
-                    {/if}
-                    {#if myCaptain == 0}
-                        <div class="absolute top-6 w-full bg-yellow-500 opacity-90 h-5 z-20 text-center text-sm"> CAP</div>
-                    {/if}
-                </div>
-                <div class="player top-1/2 left-16 -translate-y-1/2" on:mouseup={() => selectCaptain(1)}>
-                    {#if myPlayers[1]}
-                        <img src="/profile/{myPlayers[1].image}" alt="head" class="z-10">
-                    {/if}
-                    {#if myCaptain == 1}
-                        <div class="absolute top-6 w-full bg-yellow-500 opacity-90 h-5 z-20 text-center text-sm"> CAP</div>
-                    {/if}
-                </div>
-                <div class="player top-1/2 right-16 -translate-y-1/2" on:mouseup={() => selectCaptain(2)}>
-                    {#if myPlayers[2]}
-                        <img src="/profile/{myPlayers[2].image}" alt="head" class="z-10">
-                    {/if}
-                    {#if myCaptain == 2}
-                        <div class="absolute top-6 w-full bg-yellow-500 opacity-90 h-5 z-20 text-center text-sm"> CAP</div>
-                    {/if}
-                </div>
-                <div class="player top-24 left-1/2 -translate-x-1/2" on:mouseup={() => selectCaptain(3)}>
-                    {#if myPlayers[3]}
-                        <img src="/profile/{myPlayers[3].image}" alt="head" class="z-10">
-                    {/if}
-                    {#if myCaptain == 3}
-                        <div class="absolute top-6 w-full bg-yellow-500 opacity-90 h-5 z-20 text-center text-sm"> CAP</div>
-                    {/if}
-                </div>
-            </div>
-            <div class="w-full tablet:w-1/2">
-                <ol>
-                    {#each players as player}
-                        <li>
-                            {player.name} {player.price},- 
-                            {#if myPlayers.some(p => p.pid == player.pid)}
-                                <button class="btn" on:click={() => sellPlayer(player)}>SELL</button>
-                            {:else}
-                                <button class="btn" on:click={() => buyPlayer(player)}>BUY</button>
-                            {/if}
-                        </li>
-                    {/each}
-                </ol>
-            </div>
+        <h2> Mitt fantasy lag </h2>
+        <h3> Penger: {fantasyForm.money} </h3>
+        <div class="relative w-full hidden tablet:block">
+            <img src="/Field.png" alt="field"/>
+            {#each fantasyForm.team as player, idx}
+                <TabletCard 
+                    player={player}
+                    position={idx} 
+                    bind:fantasyForm={fantasyForm} />
+            {/each}
         </div>
-        <button class="btn"> SAVE </button>
+        <div class="relative w-full bg-primary-color block tablet:hidden">
+            <!--
+            {#each myTeam as player, idx}
+                <MobileCard player={player} position={idx} bind:isSelectingPlayer={isSelectingPlayer} bind:playerIndex={playerIndex} />
+            {/each}
+            -->
+        </div>
+        <button class="btn" on:click={() => checkStatus()}> SAVE </button>
     {/if}
 </div>

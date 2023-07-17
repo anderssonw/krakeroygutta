@@ -6,6 +6,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: #282828;
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
+    border-radius: 5px;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 /* Variables to be used by THEME CONFIG for the base color theme */
 /* MIGHT REMOVE AND ADD DIRECTLY */
 :root {
@@ -124,12 +145,24 @@
     @apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
   }
   .nav {
-    @apply bg-primary-color h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-50;
+    @apply bg-primary-color h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-40;
   }
   .navbtn {
     @apply transition-all duration-200 hover:scale-110;
   }
-  .player {
-    @apply w-20 h-20 rounded-full bg-primary-color-light absolute overflow-hidden hover:scale-105 active:scale-100;
+
+  @screen tablet {
+    .player-0 {
+      @apply absolute bottom-5 tablet:bottom-10 left-1/2 -translate-x-1/2;
+    }
+    .player-1 {
+      @apply absolute top-1/2 left-20 tablet:left-48 -translate-y-2/3;
+    }
+    .player-2 {
+      @apply absolute top-1/2 right-20 tablet:right-48 -translate-y-2/3;
+    }
+    .player-3 {
+      @apply absolute top-0 left-1/2 -translate-x-1/2;
+    }
   }
 }
