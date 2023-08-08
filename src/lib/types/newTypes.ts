@@ -1,13 +1,17 @@
 // Interface to be stored elsewhere
 
+
+
+/* ------ GENERAL ------ */
 export interface Player {
     pid: number;
     name: string;
     price: number;
     image: string;
-    goals: number;
-    assist: number;
-    clutch: number;
+    attack: number;
+    defence: number;
+    physical: number;
+    morale: number;
 }
 
 export interface Season {
@@ -21,30 +25,63 @@ export interface Team {
     tid: number;
     sid: number;
     name: string;
+    color: string;
+    players: number[];
     wins: number;
     draws: number;
     losses: number;
 }
 
-export interface UserDB {
-	id: number;
-    username: string;
-    is_admin: boolean,
-    cash: number,
-    players: string,
-	captain: number;
+export interface Fantasy {
+    fid: number;
+    uid: string;
+    sid: number;
+    players: number[];
+    captain: number;
 }
 
-export interface User {
-    email: string,
-    username: string,
+export interface UserDB {
+	uid: string;
+    is_admin: boolean;
+    cash: number;
+}
+
+export interface UserClient {
+    email: string;
 	is_admin: boolean;
     cash: number;
 }
 
+/* ------ FANTASY PAGE ------ */
 export interface FantasyForm {
-    team: Player[],
-    money: number,
-    captain: number,
-    selectedCard: number,
+    team: Player[];
+    money: number;
+    captain: number;
+    selectedCard: number;
+}
+
+export interface FantasyStanding {
+    username: string;
+    players: number[];
+}
+
+/* ------ ADMIN PAGE ------ */
+export interface CreateSeason {
+    name: string;
+    start_date: string;
+    end_date: string;
+}
+export interface CreateTeam {
+    sid: number;
+    name: string;
+    color: string;
+    players: number[];
+}
+export interface DropdownOption {
+    id: number;
+    name: string;
+}
+export interface TeamColor {
+    tid: number;
+    name: string;
 }

@@ -1,34 +1,39 @@
-import type { Season, Team } from '$lib/types/newTypes';
+import type { Player, Season, Team } from '$lib/types/newTypes';
 import type { PageServerLoad } from './$types';
 import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
-export const load: PageServerLoad<{ activeSeason: Season | null; allSeasons: Season[]; }> = async (event) => {
+export const load: PageServerLoad<{ allSeasons: Season[]; allPlayers: Player[]; allTeams: Team[]; }> = async (event) => {
     const { session, supabaseClient } = await getSupabase(event);
 
-    let activeSeason: Season | null = null;
     let allSeasons: Season[] = []
+    let allPlayers: Player[] = []
+    let allTeams: Team[] = []
 
     if (session) {
         const seasonsQuery = await supabaseClient.from('seasons').select();
-
-        // Find active season
-        const today: Date = new Date();
         if (seasonsQuery.data != null) {
             seasonsQuery.data.forEach((d: Season) => {
-                const seasonStart: Date = new Date(d.start_date);
-                const seasonEnd: Date = new Date(d.end_date);
-
-                // Today is between start and end of the season => ongoing season
-                if (today > seasonStart && today < seasonEnd) {
-                    activeSeason = d;
-                }
-
                 allSeasons.push(d);
             });
         }
 
-        return { activeSeason: activeSeason, allSeasons: allSeasons }
+        
+        const playersQuery = await supabaseClient.from('players').select();
+        if (playersQuery.data != null) {
+            playersQuery.data.forEach((d: Player) => {
+                allPlayers.push(d);
+            });
+        }
+        
+        const teamsQuery = await supabaseClient.from('teams').select();
+        if (teamsQuery.data != null) {
+            teamsQuery.data.forEach((d: Team) => {
+                allTeams.push(d);
+            });
+        }
+
+        return { allSeasons: allSeasons, allPlayers: allPlayers, allTeams: allTeams }
     }
 
-    return { activeSeason: activeSeason, allSeasons: allSeasons }
+    return { allSeasons: allSeasons, allPlayers: allPlayers, allTeams: allTeams }
 }

@@ -6,13 +6,11 @@
 	interface userFormProps {
 		email: string;
 		password: string;
-		username: string;
 	}
 
 	let form: userFormProps = {
 		email: '',
 		password: '',
-		username: ''
 	};
 
 	let loading = false;
@@ -25,8 +23,7 @@
 
 			const { error } = await supabase.auth.signUp({
 				email: form.email,
-				password: form.password,
-				options: { data: { username: form.username } }
+				password: form.password
 			});
 			if (error) throw error;
 			goto('/');
@@ -46,10 +43,6 @@
 	<h2> Registrering </h2>
 
 	<form class="w-1/2 laptop:w-1/3" on:submit|preventDefault={handleRegistration}>
-		<div class="mb-6">
-			<label for="username" class="block mb-1"><h4>Brukernavn</h4></label>
-			<input type="text" id="username" class="input w-full" placeholder="Jørgen Kjekk Alfredsen" bind:value={form.username} required>
-		</div>
         <div class="mb-6">
 			<label for="email" class="block mb-1"><h4>Epost</h4></label>
 			<input type="email" id="email" class="input w-full" placeholder="næbb@næbbesen.no" bind:value={form.email} required>
