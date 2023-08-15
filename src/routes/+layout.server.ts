@@ -4,13 +4,13 @@ import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import type { Session } from '@supabase/supabase-js';
 
 
-export const load: LayoutServerLoad<{ session: Session | null; user: UserClient | null }> = async (event) => {
+export const load: LayoutServerLoad<{ session: Session | null; user: UserClient | null; activeSeason: Season; }> = async (event) => {
 	const { supabaseClient, session } = await getSupabase(event);
 
 	let authUser = await supabaseClient.auth.getUser();
 
 	let user: UserClient | null = null;
-	let activeSeason: Season | null = null; // Central across several pages
+	let activeSeason: Season = {} as Season; // Central across several pages
 
 	if (session) {
 		// Update user
@@ -18,13 +18,14 @@ export const load: LayoutServerLoad<{ session: Session | null; user: UserClient 
 		if (userQuery.data != null) {
 			let tempUser: UserDB = userQuery.data[0];
 			user = {
+				uid: tempUser.uid,
 				email: authUser.data.user?.email ?? "",
-				is_admin: tempUser.is_admin,
-				cash: tempUser.cash
+				is_admin: tempUser.is_admin
 			};
 		}
 
 		// Update season
+		
         const seasonsQuery = await supabaseClient.from('seasons').select();
         const today: Date = new Date();
         if (seasonsQuery.data != null) {
@@ -38,7 +39,8 @@ export const load: LayoutServerLoad<{ session: Session | null; user: UserClient 
                 }
             });
         }
+		
 	}
 
-	return { session, user };
+	return { session, user, activeSeason };
 };

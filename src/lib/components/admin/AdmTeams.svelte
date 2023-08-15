@@ -16,7 +16,7 @@
         {tid: 4, name: "neutral"}
     ]
 
-    let showTeams: boolean = true;
+    let showTeams: boolean = false;
     let teamSeason: DropdownOption = {} as DropdownOption;
     let teamName: string = "";
 	let teamColor: DropdownOption = {} as DropdownOption;

@@ -1,14 +1,26 @@
+<script lang="ts">
+	import Teams from "$lib/components/teams/Teams.svelte";
+    import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
-<script>
-    let clickChange = false;
-    $: selectionVisible = `transition-all duration-1000 ${
-		clickChange ? "bg-black/20 hidden" : "bg-black/100 block"
-	}`;
+        // Get server data
+	export let data: PageData;
+    $: ({ session, teams, players } = data)
+
+        // Protect route
+        onMount(async () => {
+        if (!session){
+            goto("/login")
+        }
+    });
 </script>
 
-<div class="structure">
-    <h2>Teams</h2>
-    <div class="w-96 h-96 {selectionVisible}">
+{#if session}
+    <Teams teams={teams} players={players} />
+{:else}
+    <div class="structure">
+        <h2 class="text-center"> Redirecting .. <SpinnerIcon /> </h2>
     </div>
-    <button class="btn" on:click={() => clickChange = !clickChange}> CHANGE </button>
-</div>
+{/if}

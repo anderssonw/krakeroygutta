@@ -1,68 +1,119 @@
 <script lang="ts">
 	import SpinnerIcon from "$lib/shared/spinnerIcon.svelte";
-    import type { FantasyForm, Player, User } from "$lib/types/newTypes";
+    import type { CreateFantasy, Fantasy, FantasyForm, Player, Season, UserClient } from "$lib/types/newTypes";
+	import CardSmall from "../fantasy/CardSmall.svelte";
+	import SelectCardModal from "./SelectCardModal.svelte";
+    import { supabase } from "$lib/supabase";
 	import { onMount } from "svelte";
 
-	import TabletCard from "$lib/components/fantasy/TabletCard.svelte";
-	import MobileCard from "./MobileCard.svelte";
-	import SelectCardModal from "./SelectCardModal.svelte";
-
+    export let user: UserClient;
+    export let activeSeason: Season;
     export let players: Player[];
-    export let user: User;
+    export let fantasy: Fantasy | null;
+
+    console.log(activeSeason);
+    console.log(fantasy);
+
+    const fantasyStartCash: number = 20000;
 
     // Initialize a form to be edited
     let fantasyForm: FantasyForm = {
         team: [{} as Player, {} as Player, {} as Player, {} as Player],
-        money: -1,
+        cash: fantasyStartCash,
         captain: -1,
         selectedCard: -1,
     }
     $: hasCardSelected = (fantasyForm.selectedCard >= 0) ? true : false;
 
     /* TODO: List of players updated based on USER selection and ALL available */
-
-    // Fill up form with data from the server
-    let isLoadingPage: boolean = true;
+    
+    let isLoadingPage: boolean = false;
     onMount(() => {
-        let myPlayers = players.filter(player => user.players.includes(player.pid))
-        for (var i = 0; i < myPlayers.length; i++) {
-            fantasyForm.team[i] = myPlayers[i];
+        if (fantasy) {
+            let myPlayers = players.filter(player => fantasy?.players.includes(player.pid))
+            for (var i = 0; i < myPlayers.length; i++) {
+                fantasyForm.team[i] = myPlayers[i];
+            }
+            fantasyForm.cash = JSON.parse(JSON.stringify(fantasy?.cash));
+            fantasyForm.captain = JSON.parse(JSON.stringify(fantasy?.captain));
         }
-        fantasyForm.money = JSON.parse(JSON.stringify(user.cash));
-        fantasyForm.captain = JSON.parse(JSON.stringify(user.captain));
-		isLoadingPage = false;
+        isLoadingPage = false;
 	});
+    
 
-    function checkStatus() {
-        console.log(fantasyForm);
+    let loading = false;
+    const handleFantasyCreation = async () => {
+        // Start loading to show processing
+        loading = true;
+
+        // Check errors
+        if (!fantasyForm.team.every((p: Player) => p.pid)) {
+            alert("Select 4 players before saving");
+            loading = false;
+        }
+        else if (fantasyForm.captain == -1) {
+            alert("Select a captain before saving");
+            loading = false;
+        } else {
+            try {
+                // Create new season
+                let newFantasy: CreateFantasy = {
+                    uid: user.uid,
+                    sid: activeSeason.sid,
+                    team_name: "SkulleChippa FC",
+                    players: fantasyForm.team.map((p: Player) => p.pid),
+                    captain: fantasyForm.captain,
+                    cash: fantasyForm.cash
+                }
+                const { error } = await supabase.from('usersfantasy').insert(newFantasy);
+
+                if (error) {
+                    alert(error.message);
+                } else {
+                    alert("Fantasy team created!");
+                    location.reload();
+                }
+            } finally {
+                loading = false;
+            }
+        }
     }
 </script>
 
-<SelectCardModal players={players} bind:fantasyForm={fantasyForm} bind:hasCardSelected={hasCardSelected} />
 
+<SelectCardModal players={players} bind:fantasyForm={fantasyForm} bind:hasCardSelected={hasCardSelected} />
 
 <div class="structure">
     {#if isLoadingPage}
         <SpinnerIcon />
     {:else}
-        <h2> Mitt fantasy lag </h2>
-        <h3> Penger: {fantasyForm.money} </h3>
-        <div class="relative w-full hidden tablet:block">
-            <img src="/Field.png" alt="field"/>
-            {#each fantasyForm.team as player, idx}
-                <TabletCard 
-                    player={player}
-                    position={idx} 
-                    bind:fantasyForm={fantasyForm} />
-            {/each}
-        </div>
-        <div class="relative w-full bg-primary-color block tablet:hidden">
-            <!--
-            {#each myTeam as player, idx}
-                <MobileCard player={player} position={idx} bind:isSelectingPlayer={isSelectingPlayer} bind:playerIndex={playerIndex} />
-            {/each}
-            -->
-        </div>
-        <button class="btn" on:click={() => checkStatus()}> SAVE </button>
+        {#if !activeSeason.sid}
+            <h2> Currently no active season </h2>
+        {:else}
+            <h2> Mitt fantasy lag </h2>
+            <h3> Penger: {fantasyForm.cash} </h3>
+            <button class="btn" on:click={() => handleFantasyCreation()}> SAVE </button>
+
+            <div class="relative flex flex-wrap w-full">
+                
+                <img src="/fantasy/Field.png" alt="field" />
+
+
+                {#each fantasyForm.team as player, idx}
+                    <div class="absolute player-{idx}">
+                        <CardSmall player={player} position={idx} bind:fantasyForm={fantasyForm} />
+                    </div>
+                {/each}
+                
+            </div>
+            
+            <div class="relative w-full bg-primary-color block tablet:hidden">
+                <!--
+                {#each myTeam as player, idx}
+                    <MobileCard player={player} position={idx} bind:isSelectingPlayer={isSelectingPlayer} bind:playerIndex={playerIndex} />
+                {/each}
+                -->
+            </div>
+        {/if}
     {/if}
 </div>

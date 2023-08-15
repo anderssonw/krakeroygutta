@@ -41,7 +41,6 @@ create table teams (
 create table users (
   uid uuid not null references auth.users on delete cascade,
   is_admin boolean default false,
-  cash int default 20000,
   PRIMARY key (uid)
 );
 
@@ -50,6 +49,7 @@ create table usersFantasy (
   uid uuid references public.users,
   sid bigint references public.seasons,
   team_name text,
-  players int[] default null,
-  captain int default null
+  players int[],
+  captain int,
+  cash int
 );

@@ -2,7 +2,7 @@
 
 
 
-/* ------ GENERAL ------ */
+/* ------ GENERAL - DATABASE ------ */
 export interface Player {
     pid: number;
     name: string;
@@ -36,33 +36,44 @@ export interface Fantasy {
     fid: number;
     uid: string;
     sid: number;
+    team_name: string;
     players: number[];
     captain: number;
+    cash: number;
 }
 
 export interface UserDB {
 	uid: string;
     is_admin: boolean;
-    cash: number;
 }
 
 export interface UserClient {
+    uid: string;
     email: string;
 	is_admin: boolean;
-    cash: number;
+}
+
+/* ------ SEASON PAGE ------ */
+export interface FantasyStanding {
+    team_name: string;
+    players: number[];
 }
 
 /* ------ FANTASY PAGE ------ */
 export interface FantasyForm {
     team: Player[];
-    money: number;
+    cash: number;
     captain: number;
     selectedCard: number;
 }
 
-export interface FantasyStanding {
-    username: string;
+export interface CreateFantasy {
+    uid: string;
+    sid: number;
+    team_name: string;
     players: number[];
+    captain: number;
+    cash: number;
 }
 
 /* ------ ADMIN PAGE ------ */

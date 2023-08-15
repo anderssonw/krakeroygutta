@@ -37,7 +37,17 @@ const config = {
 			},
 			fontSize: {
 				'2xs': ['0.6rem', {lineHeight: '0.8rem'}]
-			}
+			},
+
+			animation: {
+				fadeIn: 'fadeIn 0.5s linear',
+			},
+			keyframes: theme => ({
+				fadeIn: {
+					'0%': { opacity: '0%' },
+					'100%': { opacity: '100%' },
+				},
+			}),
 		},
 	},
 		

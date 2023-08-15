@@ -7,7 +7,7 @@
 
     // Get server data
 	export let data: PageData;
-    $: ({ session, players, user } = data)
+    $: ({ session, user, fantasy, players, activeSeason } = data)
 
     // Protect route
     onMount(async () => {
@@ -18,7 +18,7 @@
 </script>
 
 {#if session && user}
-    <Fantasy players={players} user={user} />
+    <Fantasy user={user} activeSeason={activeSeason} fantasy={fantasy} players={players} />
 {:else}
     <div class="structure">
         <h2 class="text-center"> Redirecting .. <SpinnerIcon /> </h2>

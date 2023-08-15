@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-    import type { FantasyStanding, Season, Team } from '$lib/types/newTypes';
+    import type { FantasyStanding, Season, Team, Player } from '$lib/types/newTypes';
 
     // Get specifics, can be used in script
-    export let season: Season | null;
+    export let activeSeason: Season;
     export let teams: Team[];
     export let fantasyTeams: FantasyStanding[];
+    export let players: Player[];
+
+    console.log(fantasyTeams);
+    console.log(players);
 
     let userTeams = [
         {
@@ -38,9 +42,9 @@
             <source src="jogabonito.mp4" type="video/mp4">
         </video>
     </div>
-    {#if season}
+    {#if activeSeason.sid}
         <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-12 pb-12">
-            <h2> { season.name } </h2>
+            <h2> { activeSeason.name } </h2>
             <table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-xl">
                 <thead>
                     <tr class="border-b-4 border-secondary-color-dark">
@@ -58,7 +62,7 @@
                         <th class="border-r-2 border-secondary-color">{(i+1)+"."}</th>
                         <th class="border-r-2 border-secondary-color flex-row items-center justify-center">
                             {team.name}
-                            <div class="inline-block w-3 h-3 bg-{team.color}-500"></div>
+                            <div class="inline-block w-3 h-3 bg-green-500"></div>
                         </th>
                         <th>{(team.wins+team.draws+team.losses)}</th>
                         <th>{team.wins}</th>
@@ -80,7 +84,7 @@
             </div>
         </div>
 
-        <!--
+       
         <div class="relative w-full bg-primary-color flex flex-col items-center space-y-12 justify-center pb-60 rounded-t-[25%]">
             <h2> Fantasy Standings </h2>
             <div class="container max-w-screen-laptop">
@@ -104,7 +108,7 @@
                 </table>
             </div>
         </div>
-        -->
+      
     {:else}
         <h2> No active season </h2>
     {/if}

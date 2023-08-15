@@ -19,11 +19,11 @@
 </script>
 
 <div class="fixed bottom-0 top-0 right-0 left-0 z-50 {selectionVisible} {backgroundChange}">
-    <div class="fixed top-20 right-20">
+    <div class="fixed top-20 right-20 hover:cursor-pointer">
         <h2 on:mouseup={() => fantasyForm.selectedCard = -1 }>X</h2>
     </div>
-    <div class="max-w-screen-laptop h-3/4 py-8 bg-primary-color-dark/50 rounded-lg fixed m-auto inset-x-0 inset-y-0 overflow-y-scroll">
-        <div class="w-full flex flex-row flex-wrap gap-4 justify-center {playerSlide}">
+    <div class="max-w-screen-laptop h-3/4 p-8 bg-primary-color-dark/50 rounded-lg fixed m-auto inset-x-0 inset-y-0 overflow-y-scroll">
+        <div class="w-full flex flex-row flex-wrap gap-8 justify-center {playerSlide}">
             {#each players as player}
                 <SelectCard player={player} bind:fantasyForm={fantasyForm} />
             {/each}
