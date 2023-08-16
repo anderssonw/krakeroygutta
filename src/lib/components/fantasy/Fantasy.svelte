@@ -11,21 +11,24 @@
     export let players: Player[];
     export let fantasy: Fantasy | null;
 
-    console.log(activeSeason);
-    console.log(fantasy);
+    /* TODO: */
+    // -> What happens if you sell captain?
+    // Show points for the fantasy season
+    // Display who is captain
+    // Mobile view
+    // Remove players from select modal if already selected to a position
 
     const fantasyStartCash: number = 20000;
 
     // Initialize a form to be edited
     let fantasyForm: FantasyForm = {
         team: [{} as Player, {} as Player, {} as Player, {} as Player],
+        team_name: "",
         cash: fantasyStartCash,
         captain: -1,
         selectedCard: -1,
     }
     $: hasCardSelected = (fantasyForm.selectedCard >= 0) ? true : false;
-
-    /* TODO: List of players updated based on USER selection and ALL available */
     
     let isLoadingPage: boolean = false;
     onMount(() => {
@@ -34,6 +37,7 @@
             for (var i = 0; i < myPlayers.length; i++) {
                 fantasyForm.team[i] = myPlayers[i];
             }
+            fantasyForm.team_name = JSON.parse(JSON.stringify(fantasy?.team_name))
             fantasyForm.cash = JSON.parse(JSON.stringify(fantasy?.cash));
             fantasyForm.captain = JSON.parse(JSON.stringify(fantasy?.captain));
         }
@@ -60,12 +64,12 @@
                 let newFantasy: CreateFantasy = {
                     uid: user.uid,
                     sid: activeSeason.sid,
-                    team_name: "SkulleChippa FC",
+                    team_name: fantasyForm.team_name,
                     players: fantasyForm.team.map((p: Player) => p.pid),
                     captain: fantasyForm.captain,
                     cash: fantasyForm.cash
                 }
-                const { error } = await supabase.from('usersfantasy').insert(newFantasy);
+                const { error } = await supabase.from('usersfantasy').upsert(newFantasy, {onConflict: 'uid, sid'});
 
                 if (error) {
                     alert(error.message);
@@ -91,10 +95,11 @@
             <h2> Currently no active season </h2>
         {:else}
             <h2> Mitt fantasy lag </h2>
+            <input class="input" type="text" placeholder="Team name" bind:value={fantasyForm.team_name}/>
             <h3> Penger: {fantasyForm.cash} </h3>
             <button class="btn" on:click={() => handleFantasyCreation()}> SAVE </button>
 
-            <div class="relative flex flex-wrap w-full">
+            <div class="relative flex flex-wrap w-full hidden tablet:block">
                 
                 <img src="/fantasy/Field.png" alt="field" />
 

@@ -42,6 +42,17 @@ export interface Fantasy {
     cash: number;
 }
 
+export interface Stats {
+    stid: number;
+    pid: number;
+    sid: number;
+    goals: number;
+    assist: number;
+    wins: number;
+    clean_sheets: number;
+}
+
+
 export interface UserDB {
 	uid: string;
     is_admin: boolean;
@@ -58,10 +69,15 @@ export interface FantasyStanding {
     team_name: string;
     players: number[];
 }
+export interface PlayerPoints {
+    pid: number;
+    points: number;
+}
 
 /* ------ FANTASY PAGE ------ */
 export interface FantasyForm {
     team: Player[];
+    team_name: string;
     cash: number;
     captain: number;
     selectedCard: number;
@@ -87,6 +103,11 @@ export interface CreateTeam {
     name: string;
     color: string;
     players: number[];
+}
+export interface CreateGoal {
+    pid: number;
+    sid: number;
+    goals: number;
 }
 export interface DropdownOption {
     id: number;

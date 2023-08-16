@@ -5,12 +5,12 @@
 	// Get data from server if logged in
 	import type { PageData } from './$types';
 	export let data: PageData;
-	$: ({ session, activeSeason, teams, fantasyTeams, players } = data)
+	$: ({ session, activeSeason, teams, fantasyTeams, playerPoints } = data)
 </script>
 
 
 {#if session}
-	<Season activeSeason={activeSeason} teams={teams} fantasyTeams={fantasyTeams} players={players} />
+	<Season activeSeason={activeSeason} teams={teams} fantasyTeams={fantasyTeams} playerPoints={playerPoints} />
 {:else}
 	<Content/>
 {/if}

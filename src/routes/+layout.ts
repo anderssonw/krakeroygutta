@@ -23,21 +23,14 @@ export const load: LayoutLoad<{ session: Session | null; user: UserClient | null
 			};
 		}
 
-		
 		// Update season
-        const seasonsQuery = await supabaseClient.from('seasons').select();
-        const today: Date = new Date();
-        if (seasonsQuery.data != null) {
-            seasonsQuery.data.forEach((d: Season) => {
-                const seasonStart: Date = new Date(d.start_date);
-                const seasonEnd: Date = new Date(d.end_date);
-
-                // Today is between start and end of the season => ongoing season
-                if (today > seasonStart && today < seasonEnd) {
-                    activeSeason = d;
-                }
-            });
-        }
+		const today: Date = new Date();
+		const seasonsQuery = await supabaseClient.from('seasons').select('*')
+			.lt('start_date', (today).toLocaleString())
+			.gt('end_date', (today).toLocaleString())
+		if (seasonsQuery.data != null) {
+			activeSeason = seasonsQuery.data[0];
+		}
 		
     }
 

@@ -10,10 +10,8 @@ export const load: PageServerLoad<{ fantasy: Fantasy | null; players: Player[] }
     let fantasy: Fantasy | null = null;
     let players: Player[] = [];
 
-    // Get SID as a part of the select query
-
     // Get fantasy info
-	const fantasyQuery = await supabaseClient.from('usersfantasy').select().eq("uid", user?.uid).eq("sid", activeSeason?.sid);
+	const fantasyQuery = await supabaseClient.from('usersfantasy').select().eq("uid", user?.uid).eq("sid", activeSeason.sid);
     // Map from db type to client type
     if (fantasyQuery.data != null) {
         if (fantasyQuery.data.length > 0) {

@@ -14,7 +14,7 @@ export const load: LayoutServerLoad<{ session: Session | null; user: UserClient 
 
 	if (session) {
 		// Update user
-		const userQuery = await supabaseClient.from('users').select().eq("uid", authUser.data.user?.id);
+		const userQuery = await supabaseClient.from('users').select('*').eq("uid", authUser.data.user?.id);
 		if (userQuery.data != null) {
 			let tempUser: UserDB = userQuery.data[0];
 			user = {
@@ -25,21 +25,13 @@ export const load: LayoutServerLoad<{ session: Session | null; user: UserClient 
 		}
 
 		// Update season
-		
-        const seasonsQuery = await supabaseClient.from('seasons').select();
-        const today: Date = new Date();
-        if (seasonsQuery.data != null) {
-            seasonsQuery.data.forEach((d: Season) => {
-                const seasonStart: Date = new Date(d.start_date);
-                const seasonEnd: Date = new Date(d.end_date);
-
-                // Today is between start and end of the season => ongoing season
-                if (today > seasonStart && today < seasonEnd) {
-                    activeSeason = d;
-                }
-            });
-        }
-		
+		const today: Date = new Date();
+		const seasonsQuery = await supabaseClient.from('seasons').select('*')
+			.lt('start_date', (today).toLocaleString())
+			.gt('end_date', (today).toLocaleString())
+		if (seasonsQuery.data != null) {
+			activeSeason = seasonsQuery.data[0];
+		}
 	}
 
 	return { session, user, activeSeason };

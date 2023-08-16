@@ -1,38 +1,27 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-    import type { FantasyStanding, Season, Team, Player } from '$lib/types/newTypes';
+    import type { FantasyStanding, Season, Team, PlayerPoints } from '$lib/types/newTypes';
+
+    /* TODO: */
+    // Update visuals (background, video, player/team buttons, tables)
+    // Get color for teams to work (might need client loading?, use await?)
 
     // Get specifics, can be used in script
     export let activeSeason: Season;
     export let teams: Team[];
     export let fantasyTeams: FantasyStanding[];
-    export let players: Player[];
+    export let playerPoints: PlayerPoints[];
 
-    console.log(fantasyTeams);
-    console.log(players);
-
-    let userTeams = [
-        {
-            username: "StratosKosepose",
-            points: 80
-        },
-        {
-            username: "HDMatrix",
-            points: 75
-        },
-        {
-            username: "Xirxem",
-            points: 69
-        },
-        {
-            username: "BezoumnyJeezny",
-            points: 60
-        },
-        {
-            username: "F0restDude13",
-            points: 58
-        }
-    ]
+    function mergePoints(teams: FantasyStanding, players: PlayerPoints[]): number {
+        let points: number = 0;
+        teams.players.forEach((pid: number) => {
+            let playerWithPoints = players.find((player: PlayerPoints) => player.pid == pid);
+            if (playerWithPoints) {
+                points += playerWithPoints.points;
+            }
+        });
+        return points;
+    }
 </script>
 
 
@@ -62,7 +51,7 @@
                         <th class="border-r-2 border-secondary-color">{(i+1)+"."}</th>
                         <th class="border-r-2 border-secondary-color flex-row items-center justify-center">
                             {team.name}
-                            <div class="inline-block w-3 h-3 bg-green-500"></div>
+                            <div class="inline-block w-3 h-3 bg-{team.color}-500"></div>
                         </th>
                         <th>{(team.wins+team.draws+team.losses)}</th>
                         <th>{team.wins}</th>
@@ -92,16 +81,16 @@
                     <thead>
                         <tr>
                             <th>Posisjon</th>
-                            <th>Bruker</th>
+                            <th>Lag</th>
                             <th>Poeng</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {#each userTeams as team, i}
+                        {#each fantasyTeams as team, i}
                         <tr>
                             <th>{(i+1)+"."}</th>
-                            <th>{team.username}</th>
-                            <th>{team.points}</th>
+                            <th>{team.team_name}</th>
+                            <th>{mergePoints(team, playerPoints)}</th>
                         </tr>
                         {/each}
                     </tbody>

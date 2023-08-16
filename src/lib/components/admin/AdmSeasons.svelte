@@ -2,7 +2,7 @@
 	import { supabase } from "$lib/supabase";
     import type { CreateSeason, Season } from "$lib/types/newTypes";
 
-    export let activeSeason: Season | null;
+    export let activeSeason: Season;
     export let allSeasons: Season[];
 
     let showSeasons: boolean = false;
@@ -97,15 +97,15 @@
         <form class="flex flex-col items-center justify-center" on:submit|preventDefault={handleSeasonCreation}>
             <div class="mb-6">
                 <label for="seasonName" class="block mb-1"><h4>Sesong navn:</h4></label>
-                <input type="text" id="seasonName" class="input" placeholder="Vinter 2024" bind:value={seasonName}>
+                <input type="text" id="seasonName" class="input" placeholder="Vinter 2024" bind:value={seasonName} required>
             </div>
             <div class="mb-6">
                 <label for="seasonStart" class="block mb-1"><h4>Start tid:</h4></label>
-                <input type="text" id="seasonStart" class="input" placeholder="YYYY-MM-DD hh:mm:ss" bind:value={seasonStart}>
+                <input type="text" id="seasonStart" class="input" placeholder="YYYY-MM-DD hh:mm:ss" bind:value={seasonStart} required>
             </div> 
             <div class="mb-6">
                 <label for="seasonEnd" class="block mb-1"><h4>Slutt tid:</h4></label>
-                <input type="text" id="seasonEnd" class="input" placeholder="YYYY-MM-DD hh:mm:ss" bind:value={seasonEnd}>
+                <input type="text" id="seasonEnd" class="input" placeholder="YYYY-MM-DD hh:mm:ss" bind:value={seasonEnd} required> 
             </div>
             <div class="mb-6 flex justify-center">
                 <input 
