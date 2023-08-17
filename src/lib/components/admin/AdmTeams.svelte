@@ -1,17 +1,12 @@
 <script lang="ts">
     import { supabase } from "$lib/supabase";
-	import DropdownMenu from "$lib/shared/dropdownMenu.svelte";
+	import DropdownMenu from "$lib/components/admin/dropdownMenu.svelte";
 	import type { CreateTeam, DropdownOption, Player, Season, Team, TeamColor } from "$lib/types/newTypes";
 
     export let activeSeason: Season | null;
     export let allSeasons: Season[];
     export let allPlayers: Player[];
     export let allTeams: Team[];
-
-    /* TODO: */
-    // -> Make sure fields are filled in
-    // -> Only have x amount of players on team
-    // -> Edit team (combination of sid and color is unique)
 
     // Based on tailwind colors
     let allColors: TeamColor[] = [

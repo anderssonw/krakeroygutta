@@ -11,13 +11,6 @@
     export let players: Player[];
     export let fantasy: Fantasy | null;
 
-    /* TODO: */
-    // -> What happens if you sell captain?
-    // Show points for the fantasy season
-    // Display who is captain
-    // Mobile view
-    // Remove players from select modal if already selected to a position
-
     const fantasyStartCash: number = 20000;
 
     // Initialize a form to be edited
@@ -111,11 +104,7 @@
             </div>
             
             <div class="relative w-full bg-primary-color block tablet:hidden">
-                <!--
-                {#each myTeam as player, idx}
-                    <MobileCard player={player} position={idx} bind:isSelectingPlayer={isSelectingPlayer} bind:playerIndex={playerIndex} />
-                {/each}
-                -->
+
             </div>
         {:else}
             <h2> Currently no active season </h2>

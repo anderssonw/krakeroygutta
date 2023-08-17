@@ -6,8 +6,6 @@
     export let allPlayers: Player[];
     export let allStats: Stats[];
 
-    console.log(allStats);
-
     let showPoints: boolean = false;
 
     let loading = false;
