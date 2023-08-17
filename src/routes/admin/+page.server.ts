@@ -27,14 +27,14 @@ export const load: PageServerLoad<{ allSeasons: Season[]; allPlayers: Player[]; 
             });
         }
         
-        const teamsQuery = await supabaseClient.from('teams').select().eq('sid', activeSeason.sid);;
+        const teamsQuery = await supabaseClient.from('teams').select().eq('sid', activeSeason?.sid);;
         if (teamsQuery.data != null) {
             teamsQuery.data.forEach((d: Team) => {
                 allTeams.push(d);
             });
         }
 
-        const statsQuery = await supabaseClient.from('playersstats').select().eq('sid', activeSeason.sid);
+        const statsQuery = await supabaseClient.from('playersstats').select().eq('sid', activeSeason?.sid);
         if (statsQuery.data != null) {
             statsQuery.data.forEach((d: Stats) => {
                 allStats.push(d);

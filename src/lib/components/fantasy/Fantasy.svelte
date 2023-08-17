@@ -7,7 +7,7 @@
 	import { onMount } from "svelte";
 
     export let user: UserClient;
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let players: Player[];
     export let fantasy: Fantasy | null;
 
@@ -63,7 +63,7 @@
                 // Create new season
                 let newFantasy: CreateFantasy = {
                     uid: user.uid,
-                    sid: activeSeason.sid,
+                    sid: activeSeason?.sid ?? 0,
                     team_name: fantasyForm.team_name,
                     players: fantasyForm.team.map((p: Player) => p.pid),
                     captain: fantasyForm.captain,
@@ -91,9 +91,7 @@
     {#if isLoadingPage}
         <SpinnerIcon />
     {:else}
-        {#if !activeSeason.sid}
-            <h2> Currently no active season </h2>
-        {:else}
+        {#if activeSeason}
             <h2> Mitt fantasy lag </h2>
             <input class="input" type="text" placeholder="Team name" bind:value={fantasyForm.team_name}/>
             <h3> Penger: {fantasyForm.cash} </h3>
@@ -119,6 +117,8 @@
                 {/each}
                 -->
             </div>
+        {:else}
+            <h2> Currently no active season </h2>
         {/if}
     {/if}
 </div>

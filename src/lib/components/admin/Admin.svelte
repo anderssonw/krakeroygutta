@@ -4,7 +4,7 @@
 	import AdmSeasons from "./AdmSeasons.svelte";
 	import AdmTeams from "./AdmTeams.svelte";
 
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let allSeasons: Season[];
     export let allPlayers: Player[];
     export let allTeams: Team[];

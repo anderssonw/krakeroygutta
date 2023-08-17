@@ -3,7 +3,7 @@
 	import DropdownMenu from "$lib/shared/dropdownMenu.svelte";
 	import type { CreateTeam, DropdownOption, Player, Season, Team, TeamColor } from "$lib/types/newTypes";
 
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let allSeasons: Season[];
     export let allPlayers: Player[];
     export let allTeams: Team[];

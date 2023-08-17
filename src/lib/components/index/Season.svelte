@@ -7,7 +7,7 @@
     // Get color for teams to work (might need client loading?, use await?)
 
     // Get specifics, can be used in script
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let teams: Team[];
     export let fantasyTeams: FantasyStanding[];
     export let playerPoints: PlayerPoints[];
@@ -31,7 +31,7 @@
             <source src="jogabonito.mp4" type="video/mp4">
         </video>
     </div>
-    {#if activeSeason.sid}
+    {#if activeSeason}
         <div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-12 pb-12">
             <h2> { activeSeason.name } </h2>
             <table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-xl">

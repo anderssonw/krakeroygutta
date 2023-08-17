@@ -2,9 +2,11 @@
     import { supabase } from "$lib/supabase";
     import type { Season, Player, CreateGoal, Stats } from "$lib/types/newTypes";
 
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let allPlayers: Player[];
     export let allStats: Stats[];
+
+    console.log(allStats);
 
     let showPoints: boolean = false;
 
@@ -13,14 +15,15 @@
         loading = true;
 
         // Get current stats
-        let playerStats: Stats[] = allStats.filter((stats: Stats) => stats.pid == pid && stats.sid == activeSeason.sid);
-        let curGoals = playerStats[0].goals;
+        let playerStats: Stats[] = allStats.filter((stats: Stats) => stats.pid == pid && stats.sid == activeSeason?.sid);
+        let curGoals: number = 0
+        if (playerStats.length > 0) curGoals = playerStats[0].goals;
 
         try {
             // Create new season
             let newGoal: CreateGoal = {
                 pid: pid,
-                sid: activeSeason.sid,
+                sid: activeSeason?.sid ?? 0,
                 goals: curGoals+1
             }
             

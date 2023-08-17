@@ -3,13 +3,13 @@ import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 import type { Session } from '@supabase/supabase-js';
 import type { Season, UserClient, UserDB } from '$lib/types/newTypes';
 
-export const load: LayoutLoad<{ session: Session | null; user: UserClient | null; activeSeason: Season; }> = async (event) => {
+export const load: LayoutLoad<{ session: Session | null; user: UserClient | null; activeSeason: Season | null; }> = async (event) => {
 	const { session, supabaseClient } = await getSupabase(event);
 
 	let authUser = await supabaseClient.auth.getUser();
 
 	let user: UserClient | null = null;
-	let activeSeason: Season = {} as Season; // Central across several pages
+	let activeSeason: Season | null = null; // Central across several pages
 
 	if (session) {
 		// Update user
