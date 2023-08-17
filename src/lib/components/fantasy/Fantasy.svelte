@@ -7,16 +7,9 @@
 	import { onMount } from "svelte";
 
     export let user: UserClient;
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let players: Player[];
     export let fantasy: Fantasy | null;
-
-    /* TODO: */
-    // -> What happens if you sell captain?
-    // Show points for the fantasy season
-    // Display who is captain
-    // Mobile view
-    // Remove players from select modal if already selected to a position
 
     const fantasyStartCash: number = 20000;
 
@@ -63,7 +56,7 @@
                 // Create new season
                 let newFantasy: CreateFantasy = {
                     uid: user.uid,
-                    sid: activeSeason.sid,
+                    sid: activeSeason?.sid ?? 0,
                     team_name: fantasyForm.team_name,
                     players: fantasyForm.team.map((p: Player) => p.pid),
                     captain: fantasyForm.captain,
@@ -91,9 +84,7 @@
     {#if isLoadingPage}
         <SpinnerIcon />
     {:else}
-        {#if !activeSeason.sid}
-            <h2> Currently no active season </h2>
-        {:else}
+        {#if activeSeason}
             <h2> Mitt fantasy lag </h2>
             <input class="input" type="text" placeholder="Team name" bind:value={fantasyForm.team_name}/>
             <h3> Penger: {fantasyForm.cash} </h3>
@@ -113,12 +104,10 @@
             </div>
             
             <div class="relative w-full bg-primary-color block tablet:hidden">
-                <!--
-                {#each myTeam as player, idx}
-                    <MobileCard player={player} position={idx} bind:isSelectingPlayer={isSelectingPlayer} bind:playerIndex={playerIndex} />
-                {/each}
-                -->
+
             </div>
+        {:else}
+            <h2> Currently no active season </h2>
         {/if}
     {/if}
 </div>

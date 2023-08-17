@@ -2,7 +2,7 @@
 	import { supabase } from "$lib/supabase";
     import type { CreateSeason, Season } from "$lib/types/newTypes";
 
-    export let activeSeason: Season;
+    export let activeSeason: Season | null;
     export let allSeasons: Season[];
 
     let showSeasons: boolean = false;

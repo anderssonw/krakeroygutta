@@ -1,5 +1,5 @@
 <script lang="ts">
-	import KrakeroyKommune from '$lib/shared/krakeroyKommune.svelte';
+	import KrakeroyKommune from '$lib/components/index/krakeroyKommune.svelte';
 	import LargeLogo from '$lib/shared/largeLogo.svelte';
 	import { afterUpdate } from 'svelte';
 	import ContentFooter from './ContentFooter.svelte';
