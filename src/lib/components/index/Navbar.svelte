@@ -5,6 +5,8 @@
 
 	export let isAdmin: boolean;
 
+	console.log($page.data);
+
 	let oldY = 0;
 	let newY = oldY;
 	let scrolling = false;

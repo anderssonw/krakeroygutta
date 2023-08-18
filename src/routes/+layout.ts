@@ -1,6 +1,7 @@
 import type { LayoutLoad } from './$types';
 import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit';
 import type { Database } from '$lib/types/database.generated.types';
+import type { Tables } from '$lib/types/database.helper.types';
 
 export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 	depends('supabase:auth');
@@ -12,9 +13,21 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 		serverSession: data.session
 	});
 
+	let user: Tables<'users'> | null = null;
+
 	const {
 		data: { session }
 	} = await supabase.auth.getSession();
 
-	return { supabase, session };
+	if (session) {
+		const userQuery = await supabase.from('users').select();
+
+		console.log(userQuery.data);
+
+		if (userQuery.data != null) {
+			user = userQuery.data[0];
+		}
+	}
+
+	return { supabase, session, user };
 };

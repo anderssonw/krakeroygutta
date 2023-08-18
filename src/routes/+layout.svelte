@@ -10,10 +10,12 @@
 
 	$: ({ supabase, session, user } = data);
 
+	$: isAdmin = user?.is_admin ?? false;
+
 	onMount(() => {
 		const {
 			data: { subscription }
-		} = supabase.auth.onAuthStateChange((event, _session) => {
+		} = supabase.auth.onAuthStateChange((event: any, _session: { expires_at: any }) => {
 			if (_session?.expires_at !== session?.expires_at) {
 				invalidate('supabase:auth');
 			}
@@ -23,7 +25,7 @@
 	});
 </script>
 
-<Navbar isAdmin={user?.is_admin ?? false} />
+<Navbar {isAdmin} />
 
 <slot />
 

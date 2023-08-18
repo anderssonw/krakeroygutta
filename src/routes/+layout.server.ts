@@ -9,6 +9,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession },
 	if (userQuery.data != null) {
 		user = userQuery.data[0];
 	}
+
 	return {
 		user: user,
 		session: getSession()

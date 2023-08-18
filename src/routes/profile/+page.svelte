@@ -6,7 +6,7 @@
 
 	// Get server data
 	export let data: PageData;
-	$: ({ session, supabase } = data);
+	$: ({ session, supabase, user } = data);
 
 	// Protect route
 	onMount(async () => {
@@ -26,6 +26,7 @@
 </script>
 
 {#if session}
+	{JSON.stringify(user)}
 	<button on:click={logOut}>Logg ut</button>
 {:else}
 	<div class="structure">
