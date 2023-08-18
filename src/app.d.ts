@@ -5,17 +5,19 @@ import type { Database } from '$lib/types/database.generated.types';
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 
 // and what to do when importing types
-declare namespace App {
+declare global {
+	namespace App {
+		interface Locals {
+			supabase: SupabaseClient<Database>;
+			getSession(): Promise<Session | null>;
+		}
+		interface PageData {
+			session: Session | null;
+		}
+	}
 	// interface Error {}
-	// interface Locals {}
 	// interface PageData {}
 	// interface Platform {}
-
-	interface Locals {
-		supabase: SupabaseClient<Database>;
-		getSession(): Promise<Session | null>;
-	}
-	interface PageData {
-		session: Session | null;
-	}
 }
+
+export {};

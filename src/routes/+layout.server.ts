@@ -1,42 +1,16 @@
-import type { Season, UserClient, UserDB } from '$lib/types/newTypes';
+import type { Tables } from '$lib/types/database.helper.types';
 import type { LayoutServerLoad } from './$types';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import type { Session } from '@supabase/supabase-js';
 
-export const load: LayoutServerLoad<{
-	session: Session | null;
-	user: UserClient | null;
-	activeSeason: Season | null;
-}> = async (event) => {
-	const { supabaseClient, session } = await getSupabase(event);
+export const load: LayoutServerLoad = async ({ locals: { supabase, getSession }, params, cookies }) => {
+	const userQuery = await supabase.from('users').select();
 
-	let authUser = await supabaseClient.auth.getUser();
+	let user: Tables<'users'> | null = null;
 
-	let user: UserClient | null = null;
-	let activeSeason: Season | null = null; // Central across several pages
-
-	if (session) {
-		// Update user
-		const userQuery = await supabaseClient.from('users').select('*').eq('id', authUser.data.user?.id);
-		if (userQuery.data != null) {
-			let tempUser: UserDB = userQuery.data[0];
-			user = {
-				id: tempUser.id,
-				email: authUser.data.user?.email ?? '',
-				is_admin: tempUser.is_admin,
-				is_superadmin: tempUser.is_superadmin
-			};
-		}
-
-		// Update season
-		const today: Date = new Date();
-		const seasonsQuery = await supabaseClient.from('seasons').select('*');
-		//.lt('start_time', today.toLocaleString())
-		//.gt('end_time', today.toLocaleString());
-		if (seasonsQuery.data != null) {
-			activeSeason = seasonsQuery.data[0];
-		}
+	if (userQuery.data != null) {
+		user = userQuery.data[0];
 	}
-
-	return { session, user, activeSeason };
+	return {
+		user: user,
+		session: getSession()
+	};
 };

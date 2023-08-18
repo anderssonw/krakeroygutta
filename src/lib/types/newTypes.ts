@@ -1,42 +1,6 @@
 // Interface to be stored elsewhere
 
 /* ------ GENERAL - DATABASE ------ */
-export interface Player {
-	id: number;
-	name: string;
-	image: string;
-}
-
-export interface Season {
-	id: number;
-	name: string;
-	start_time: string;
-	deadline_time: string;
-	end_time: string;
-	starting_curency: number;
-}
-
-export interface Team {
-	id: number;
-	season_id: number;
-	name: string;
-	color: string;
-	player_ids: number[];
-}
-
-export interface Fantasy {
-	user_id: number;
-	season_id: number;
-	name: string;
-	player_ids: number[];
-	captain_id: number;
-}
-
-export interface UserDB {
-	id: string;
-	is_admin: boolean;
-	is_superadmin: boolean;
-}
 
 export interface UserClient {
 	id: string;
