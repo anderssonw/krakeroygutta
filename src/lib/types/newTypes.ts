@@ -14,9 +14,18 @@ export interface FantasyStanding {
 	team_name: string;
 	players: number[];
 }
-export interface PlayerPoints {
-	pid: number;
-	points: number;
+export interface PlayerStats {
+	player_id: number;
+	goals: number;
+	assists: number;
+	clutches: number;
+}
+
+export interface TeamStats {
+	team_id: number;
+	wins: number;
+	losses: number;
+	draws: number;
 }
 
 /* ------ FANTASY PAGE ------ */

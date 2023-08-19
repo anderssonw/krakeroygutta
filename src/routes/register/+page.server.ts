@@ -17,8 +17,6 @@ export const actions = {
 					supabaseErrorMessage: error.message
 				});
 			}
-
-			throw redirect(301, 'profile');
 		}
 
 		return fail(400);

@@ -70,7 +70,6 @@ create policy "Users are viewable by users who created them."
   using ( auth.uid() = id );
 
 
-
 CREATE UNIQUE INDEX fantasy_team_pkey ON public.fantasy_team USING btree (user_id, season_id);       
 
 CREATE UNIQUE INDEX matches_pkey ON public.matches USING btree (id);

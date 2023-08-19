@@ -22,8 +22,6 @@ export const load: LayoutLoad = async ({ fetch, data, depends }) => {
 	if (session) {
 		const userQuery = await supabase.from('users').select();
 
-		console.log(userQuery.data);
-
 		if (userQuery.data != null) {
 			user = userQuery.data[0];
 		}
