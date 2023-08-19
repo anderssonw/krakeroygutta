@@ -1,22 +1,10 @@
 import type { PageServerLoad } from './admin/$types';
 import { fail } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ locals: { supabase, getSession }, params, cookies }) => {
-	if (await getSession()) {
-		let todayTimeString = new Date().toDateString();
-
-		const { data: season, error: seasonError } = await supabase
-			.from('seasons')
-			.select()
-			.lt('start_time', todayTimeString)
-			.gt('end_time', todayTimeString)
-			.single();
-
-		if (seasonError) {
-			return fail(500, {
-				supabaseErrorMessage: seasonError.message
-			});
-		}
+export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
+	let { session, season } = await parent();
+	if (session) {
+		if (!season) return {};
 
 		const { data: teams, error: teamError } = await supabase.from('teams').select().eq('season_id', season.id);
 

@@ -28,6 +28,17 @@ export interface TeamStats {
 	draws: number;
 }
 
+export interface FullPlayer {
+	id: number;
+	name: string;
+	image: string;
+	attack: number;
+	defence: number;
+	morale: number;
+	physical: number;
+	price: number;
+}
+
 /* ------ FANTASY PAGE ------ */
 export interface FantasyForm {
 	team: Player[];

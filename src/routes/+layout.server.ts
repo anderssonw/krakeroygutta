@@ -1,17 +1,38 @@
-import type { Tables } from '$lib/types/database.helper.types';
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession }, params, cookies }) => {
-	const userQuery = await supabase.from('users').select();
+export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
+	const { data: user, error: userError } = await supabase.from('users').select().single();
 
-	let user: Tables<'users'> | null = null;
+	if (userError) {
+		return {
+			user: null,
+			season: null,
+			session: await getSession(),
+			supabaseErrorMessage: userError.message
+		};
+	}
 
-	if (userQuery.data != null) {
-		user = userQuery.data[0];
+	let todayTimeString = new Date().toDateString();
+
+	const { data: season, error: seasonError } = await supabase
+		.from('seasons')
+		.select()
+		.lt('start_time', todayTimeString)
+		.gt('end_time', todayTimeString)
+		.single();
+
+	if (seasonError) {
+		return {
+			user: user,
+			season: null,
+			session: getSession(),
+			supabaseErrorMessage: seasonError.message
+		};
 	}
 
 	return {
-		user: user,
+		user,
+		season,
 		session: getSession()
 	};
 };

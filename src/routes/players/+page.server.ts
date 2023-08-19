@@ -1,21 +1,20 @@
+import { fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { Player } from '$lib/types/newTypes';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
-export const load: PageServerLoad<{ players: Player[]; }> = async (event) => {
-    let players: Player[] = [];
+export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
+	let { season } = await parent();
 
-    // Get all players
-    const { supabaseClient } = await getSupabase(event);
-	const playersQuery = await supabaseClient.from('players').select();
+	const { data: players, error: playersError } = await supabase.from('players').select();
 
-    // Map from db type to client type
-    if (playersQuery.data != null) {
-		playersQuery.data.forEach((d: Player) =>
-			players.push(d)
-		);
+	if (playersError) {
+		// TODO
 	}
 
-    return { players: players }
+	const { data: playersSeasons, error: playersSeasonsError } = await supabase.from('players_seasons').select().eq('season_id', season?.id);
 
-}
+	if (playersSeasonsError) {
+		// TODO
+	}
+
+	return { players, playersSeasons };
+};
