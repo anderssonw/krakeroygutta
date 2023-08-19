@@ -4,6 +4,7 @@
 	import type { PageData } from './$types';
 	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 	import Player from '$lib/components/players/Player.svelte';
+	import { page } from '$app/stores';
 
 	// Get server data
 	export let data: PageData;
@@ -18,7 +19,11 @@
 </script>
 
 {#if session}
-	<Player {player} />
+	{#if player}
+		<Player {player} />
+	{:else}
+		<p>Fant ente spellern med id {$page.params.slug}</p>
+	{/if}
 {:else}
 	<div class="structure">
 		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
