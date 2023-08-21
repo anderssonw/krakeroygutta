@@ -36,23 +36,23 @@ export interface Database {
     Tables: {
       fantasy_team: {
         Row: {
-          captain_id: number | null
+          captain_id: number
+          id: number
           name: string
-          player_ids: number[] | null
           season_id: number
           user_id: string
         }
         Insert: {
-          captain_id?: number | null
+          captain_id?: number
+          id?: number
           name: string
-          player_ids?: number[] | null
           season_id: number
           user_id: string
         }
         Update: {
-          captain_id?: number | null
+          captain_id?: number
+          id?: number
           name?: string
-          player_ids?: number[] | null
           season_id?: number
           user_id?: string
         }
@@ -77,29 +77,60 @@ export interface Database {
           }
         ]
       }
+      fantasy_teams_players: {
+        Row: {
+          fantasy_team_id: number
+          id: number
+          player_id: number
+        }
+        Insert: {
+          fantasy_team_id: number
+          id?: number
+          player_id: number
+        }
+        Update: {
+          fantasy_team_id?: number
+          id?: number
+          player_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fantasy_teams_players_fantasy_team_id_fkey"
+            columns: ["fantasy_team_id"]
+            referencedRelation: "fantasy_team"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fantasy_teams_players_player_id_fkey"
+            columns: ["player_id"]
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       matches: {
         Row: {
-          assists_player_ids: number[] | null
-          clutches_player_ids: number[] | null
-          goals_player_ids: number[] | null
+          assists_player_ids: number[]
+          clutches_player_ids: number[]
+          goals_player_ids: number[]
           id: number
           season_id: number
           team_away_id: number
           team_home_id: number
         }
         Insert: {
-          assists_player_ids?: number[] | null
-          clutches_player_ids?: number[] | null
-          goals_player_ids?: number[] | null
+          assists_player_ids?: number[]
+          clutches_player_ids?: number[]
+          goals_player_ids?: number[]
           id?: number
           season_id: number
           team_away_id: number
           team_home_id: number
         }
         Update: {
-          assists_player_ids?: number[] | null
-          clutches_player_ids?: number[] | null
-          goals_player_ids?: number[] | null
+          assists_player_ids?: number[]
+          clutches_player_ids?: number[]
+          goals_player_ids?: number[]
           id?: number
           season_id?: number
           team_away_id?: number
@@ -129,17 +160,17 @@ export interface Database {
       players: {
         Row: {
           id: number
-          image: string | null
+          image: string
           name: string
         }
         Insert: {
           id?: number
-          image?: string | null
-          name: string
+          image?: string
+          name?: string
         }
         Update: {
           id?: number
-          image?: string | null
+          image?: string
           name?: string
         }
         Relationships: []
@@ -194,7 +225,7 @@ export interface Database {
           id: number
           name: string
           start_time: string
-          starting_currency: number | null
+          starting_currency: number
         }
         Insert: {
           deadline_time: string
@@ -202,7 +233,7 @@ export interface Database {
           id?: number
           name: string
           start_time: string
-          starting_currency?: number | null
+          starting_currency?: number
         }
         Update: {
           deadline_time?: string
@@ -210,27 +241,27 @@ export interface Database {
           id?: number
           name?: string
           start_time?: string
-          starting_currency?: number | null
+          starting_currency?: number
         }
         Relationships: []
       }
       teams: {
         Row: {
-          color: string | null
+          color: string
           id: number
           name: string
           player_ids: number[]
           season_id: number
         }
         Insert: {
-          color?: string | null
+          color?: string
           id?: number
           name: string
-          player_ids: number[]
+          player_ids?: number[]
           season_id: number
         }
         Update: {
-          color?: string | null
+          color?: string
           id?: number
           name?: string
           player_ids?: number[]

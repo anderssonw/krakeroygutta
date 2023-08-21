@@ -41,7 +41,7 @@ export interface FullPlayer {
 
 /* ------ FANTASY PAGE ------ */
 export interface FantasyForm {
-	team: Player[];
+	team: number[];
 	team_name: string;
 	cash: number;
 	captain: number;
