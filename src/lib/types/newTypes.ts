@@ -41,11 +41,10 @@ export interface FullPlayer {
 
 /* ------ FANTASY PAGE ------ */
 export interface FantasyForm {
-	team: number[];
-	team_name: string;
-	cash: number;
-	captain: number;
-	selectedCard: number;
+	players: (FullPlayer | null)[];
+	teamName: string;
+	captainId: number;
+	selectedCardPosition: number;
 }
 
 export interface CreateFantasy {

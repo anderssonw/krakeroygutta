@@ -36,21 +36,21 @@ export interface Database {
     Tables: {
       fantasy_team: {
         Row: {
-          captain_id: number
+          captain_id: number | null
           id: number
           name: string
           season_id: number
           user_id: string
         }
         Insert: {
-          captain_id?: number
+          captain_id?: number | null
           id?: number
           name: string
           season_id: number
           user_id: string
         }
         Update: {
-          captain_id?: number
+          captain_id?: number | null
           id?: number
           name?: string
           season_id?: number
