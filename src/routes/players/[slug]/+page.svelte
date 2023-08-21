@@ -22,7 +22,7 @@
 	{#if player}
 		<Player {player} />
 	{:else}
-		<p>Fant ente spellern med id {$page.params.slug}</p>
+		<p>Fant eeente spellern med id {$page.params.slug}</p>
 	{/if}
 {:else}
 	<div class="structure">
