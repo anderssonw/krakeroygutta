@@ -4,6 +4,7 @@
 	import { afterUpdate } from 'svelte';
 
 	export let player: FullPlayer;
+	export let isCaptain: boolean;
 
 	let cardType: string = 'bronze';
 
@@ -22,6 +23,12 @@
 {#if player}
 	<img src="/cards/{cardType}.png" alt="card" />
 
+	{#if isCaptain}
+		<div class="w-full absolute top-[6%] left-[25%]">
+			<p class="text-center text-red-700 text-xl">(C)</p>
+		</div>
+	{/if}
+
 	<div class="w-16 absolute top-[19%] right-[10%]">
 		<img src="/profile/placeholder.png" alt="head" />
 		<div class="absolute top-[86%] bg-gradient-to-t from-slate-950/25 to-transparent w-[100%] h-2" />
@@ -29,6 +36,7 @@
 	<div class="w-full absolute top-[5%] right-[25%]">
 		<p class="text-center text-primary-color text-3xl">50</p>
 	</div>
+
 	<div class="w-full absolute top-[51%]">
 		<p class="text-center text-primary-color text-xl">{player.name.split(' ')[1]}</p>
 	</div>

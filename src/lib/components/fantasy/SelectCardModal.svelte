@@ -5,7 +5,16 @@
 	export let players: FullPlayer[];
 	export let fantasyForm: FantasyForm;
 
-	$: hasCardSelected = fantasyForm.selectedCardPosition > 0 ? true : false;
+	const calculatePlayersToShow = (allPlayers: FullPlayer[], playersInForm: (FullPlayer | null)[]) => {
+		let playersInFormIds = playersInForm.map((player) => player?.id || -1);
+		return allPlayers.filter((player) => {
+			return !playersInFormIds.includes(player.id);
+		});
+	};
+
+	$: playersNotInForm = calculatePlayersToShow(players, fantasyForm.players);
+
+	$: hasCardSelected = fantasyForm.selectedCardPosition >= 0 ? true : false;
 
 	// Apply animation
 	$: selectionVisible = `transition-all duration-300 ${hasCardSelected ? 'block opacity-100' : 'invisible opacity-0'}`;
@@ -26,7 +35,7 @@
 		</div>
 		<div class="max-w-screen-laptop h-3/4 p-8 rounded-lg fixed m-auto inset-x-0 inset-y-0 overflow-y-scroll">
 			<div class="w-full flex flex-row flex-wrap gap-8 justify-center {playerSlide}">
-				{#each players as player}
+				{#each playersNotInForm as player}
 					<SelectCard {player} bind:fantasyForm />
 				{/each}
 			</div>

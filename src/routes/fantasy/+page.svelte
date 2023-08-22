@@ -25,7 +25,7 @@
 		teamName: fantasyTeam?.name || 'placeholder'
 	} satisfies FantasyForm;
 
-	$: currentCash = calculateCurrentCash();
+	$: currentCash = calculateCurrentCash(fantasyForm.players);
 
 	const fillFantasyFormPlayers = (currentPlayers: FullPlayer[] | undefined): (FullPlayer | null)[] => {
 		const maxPlayerCount = 4;
@@ -51,11 +51,11 @@
 		return formPlayers;
 	};
 
-	const calculateCurrentCash = () => {
+	const calculateCurrentCash = (players: (FullPlayer | null)[]) => {
 		if (season) {
 			return (
 				season?.starting_currency -
-				fantasyForm.players.reduce((accumulator, player) => {
+				players.reduce((accumulator, player) => {
 					if (!player) return accumulator;
 
 					return accumulator + player?.price;
@@ -68,7 +68,7 @@
 </script>
 
 {#if session && allPlayers && season}
-	<SelectCardModal {fantasyForm} players={allPlayers} />
+	<SelectCardModal bind:fantasyForm players={allPlayers} />
 
 	<div class="structure">
 		{#if season}
@@ -86,7 +86,7 @@
 								<img src="/cards/empty.png" alt="card" />
 							</div>
 						{:else}
-							<CardSmall {fantasyForm} {player} position={id} />
+							<CardSmall bind:fantasyForm {player} position={id} />
 						{/if}
 					</div>
 				{/each}
