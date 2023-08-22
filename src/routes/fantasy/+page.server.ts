@@ -1,6 +1,7 @@
 import { fail, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { FullPlayer } from '$lib/types/newTypes';
+import type { Tables } from '$lib/types/database.helper.types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	// Get layout info
@@ -82,26 +83,62 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 };
 
 export const actions = {
-	default: async ({ request, locals: { supabase } }) => {
+	default: async ({ request, locals: { supabase, getSession } }) => {
 		const formData = await request.formData();
-		const teamName = formData.get('teamName')?.toString();
-		const email = formData.get('email')?.toString();
-		const password = formData.get('password')?.toString();
 
-		if (email && password) {
-			const { error: error } = await supabase.auth.signUp({
-				email,
-				password
-			});
+		const name = String(formData.get('name'));
+		const currencyLeft = Number(formData.get('currencyLeft'));
+		const captainId = Number(formData.get('captainId'));
+		const playerIds = formData.getAll('playerIds').map((id) => parseInt(id.toString()));
 
-			if (error) {
-				return fail(500, {
-					supabaseErrorMessage: error.message
-				});
+		// TODO check currency, and add form validation
+
+		const session = await getSession();
+		if (session) {
+			let todayTimeString = new Date().toDateString();
+
+			const { data: season, error: seasonError } = await supabase
+				.from('seasons')
+				.select()
+				.lt('start_time', todayTimeString)
+				.gt('end_time', todayTimeString)
+				.single();
+
+			if (seasonError) {
+				return fail(500, { message: 'There is no active season. Server could not handle your request.' });
 			}
-		}
 
-		return fail(400);
+			// TODO change fantasy_team to use composite primary key, and change fantasy_teams_players to reference both. This way we don't have to
+			// check if the team exists and then insert, and this upsert should work just fine
+			const { data: fantasyTeam, error: fantasyTeamError } = await supabase
+				.from('fantasy_team')
+				.upsert({ name: name, season_id: season.id, captain_id: captainId, user_id: session.user.id }, { onConflict: 'season_id, user_id' })
+				.select()
+				.single();
+
+			if (fantasyTeamError) {
+				console.log(fantasyTeamError.message);
+				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
+			}
+
+			const { error: fantasyTeamsPlayersError } = await supabase.from('fantasy_teams_players').upsert(
+				playerIds.map((id) => {
+					return {
+						fantasy_team_id: fantasyTeam.id,
+						player_id: id
+					};
+				})
+			);
+
+			if (fantasyTeamsPlayersError) {
+				console.log(fantasyTeamsPlayersError.message);
+				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
+			}
+
+			return { success: true };
+		} else {
+			return fail(401);
+		}
 	}
 } satisfies Actions;
 

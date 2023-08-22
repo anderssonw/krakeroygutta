@@ -12,6 +12,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } 
 		};
 	}
 
+	// TODO make handler
 	let todayTimeString = new Date().toDateString();
 
 	const { data: season, error: seasonError } = await supabase

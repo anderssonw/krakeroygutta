@@ -26,6 +26,30 @@
 	} satisfies FantasyForm;
 
 	$: currentCash = calculateCurrentCash(fantasyForm.players);
+	$: playerIdsInForm = getPlayerIdsFromForm(fantasyForm.players);
+
+	const getPlayerIdsFromForm = (players: (FullPlayer | null)[]) => {
+		return players.map((player) => {
+			if (player) return player.id;
+
+			return -1;
+		});
+	};
+
+	const calculateCurrentCash = (players: (FullPlayer | null)[]) => {
+		if (season) {
+			return (
+				season?.starting_currency -
+				players.reduce((accumulator, player) => {
+					if (!player) return accumulator;
+
+					return accumulator + player?.price;
+				}, 0)
+			);
+		} else {
+			return -1;
+		}
+	};
 
 	const fillFantasyFormPlayers = (currentPlayers: FullPlayer[] | undefined): (FullPlayer | null)[] => {
 		const maxPlayerCount = 4;
@@ -50,53 +74,43 @@
 
 		return formPlayers;
 	};
-
-	const calculateCurrentCash = (players: (FullPlayer | null)[]) => {
-		if (season) {
-			return (
-				season?.starting_currency -
-				players.reduce((accumulator, player) => {
-					if (!player) return accumulator;
-
-					return accumulator + player?.price;
-				}, 0)
-			);
-		} else {
-			return -1;
-		}
-	};
 </script>
 
 {#if session && allPlayers && season}
 	<SelectCardModal bind:fantasyForm players={allPlayers} />
 
-	<div class="structure">
-		{#if season}
-			<h2>Mitt fantasy lag</h2>
-			<input class="input" type="text" placeholder="Team name" />
+	{#if season}
+		<form class="structure" method="POST">
+			<h2>Ditt Fantasylag</h2>
+			<input class="input" name="name" bind:value={fantasyForm.teamName} type="text" placeholder="Ditt Lagnavn" />
 			<h3>Penger: {currentCash}</h3>
-			<button class="btn" on:click={() => console.log(fantasyForm)}> SAVE </button>
+			<button class="btn"> Lagre Laget Ditt </button>
 
 			<div class="relative flex flex-wrap w-full hidden tablet:block">
 				<img src="/fantasy/Field.png" alt="field" />
-				{#each fantasyForm.players as player, id}
-					<div class="absolute player-{id}">
+				{#each fantasyForm.players as player, position}
+					<div class="absolute player-{position}">
 						{#if !player}
-							<div class="small-card" on:mouseup={() => (fantasyForm.selectedCardPosition = id)}>
+							<div class="small-card" on:mouseup={() => (fantasyForm.selectedCardPosition = position)}>
 								<img src="/cards/empty.png" alt="card" />
 							</div>
+							<input name="playerIds" value={-1} type="hidden" />
 						{:else}
-							<CardSmall bind:fantasyForm {player} position={id} />
+							<CardSmall bind:fantasyForm {player} {position} />
+							<input name="playerIds" bind:value={player.id} type="hidden" />
 						{/if}
 					</div>
 				{/each}
 			</div>
 
 			<div class="relative w-full bg-primary-color block tablet:hidden" />
-		{:else}
-			<h2>Currently no active season</h2>
-		{/if}
-	</div>
+
+			<input name="captainId" bind:value={fantasyForm.captainId} type="hidden" />
+			<input name="currencyLeft" bind:value={currentCash} type="hidden" />
+		</form>
+	{:else}
+		<h2>Currently no active season</h2>
+	{/if}
 {:else}
 	<div class="structure">
 		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>

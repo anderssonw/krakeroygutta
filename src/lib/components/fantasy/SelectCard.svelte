@@ -13,7 +13,7 @@
 <div class="w-1/4 flex-grow">
 	<div class="flex flex-row gap-2">
 		<div class="small-card" on:mouseup={() => buyPlayer(player)}>
-			<CardInfo {player} />
+			<CardInfo isCaptain={false} {player} />
 		</div>
 		<div>
 			<h5>Price: {player.price}</h5>
