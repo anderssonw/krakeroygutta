@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import type { DropdownOption } from "$lib/types/newTypes";
 
     export let option: string;
@@ -35,4 +35,4 @@
             {/each}
         </div>
     {/if}
-</div>
+</div> -->

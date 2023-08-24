@@ -96,9 +96,14 @@ export const actions = {
 		const captainId = Number(formData.get('captainId'));
 		const playerIds = formData.getAll('playerIds').map((id) => parseInt(id.toString()));
 
-		console.log('captain', captainId);
+		// gather errors
+		const errors: Record<string, string> = {};
 
-		// TODO check currency, and add form validation
+		if (!name || typeof name !== 'string') {
+			errors.name = 'Lagnavn er påkrevd';
+
+			return fail(400, { data: Object.fromEntries(formData), errors });
+		}
 
 		const session = await getSession();
 		if (session) {
@@ -113,6 +118,14 @@ export const actions = {
 
 			if (seasonError) {
 				return fail(500, { message: 'There is no active season. Server could not handle your request.' });
+			}
+
+			// Dette er egentlig en shitty måte å sjekke penger på, du kan sende inn hva som helst som currency left, burde kalkuleres ut i fra spillere
+			// men sjansen for at folk prøver å hacke backenden??? nåvel
+			if (season.starting_currency + currencyLeft < season.starting_currency) {
+				errors.currency = `Du kan ikke bruke mer enn ${season.starting_currency} penger`;
+
+				return fail(400, { data: Object.fromEntries(formData), errors });
 			}
 
 			const { error: fantasyTeamError } = await supabase

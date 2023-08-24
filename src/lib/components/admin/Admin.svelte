@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import type { Player, Season, Stats, Team } from "$lib/types/newTypes";
 	import AdmPoints from "./AdmPoints.svelte";
 	import AdmSeasons from "./AdmSeasons.svelte";
@@ -18,4 +18,4 @@
     <AdmTeams activeSeason={activeSeason} allSeasons={allSeasons} allPlayers={allPlayers} allTeams={allTeams} />
 
     <AdmPoints activeSeason={activeSeason} allPlayers={allPlayers} allStats={allStats} />
-</div>
+</div> -->

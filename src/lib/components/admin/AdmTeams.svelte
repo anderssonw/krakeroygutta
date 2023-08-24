@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import { supabase } from "$lib/supabase";
 	import DropdownMenu from "$lib/components/admin/dropdownMenu.svelte";
 	import type { CreateTeam, DropdownOption, Player, Season, Team, TeamColor } from "$lib/types/newTypes";
@@ -116,4 +116,4 @@
             </div>
         </form>
     </div>
-{/if}
+{/if} -->

@@ -1,25 +1,21 @@
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { Team, Player } from '$lib/types/newTypes';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
 
-export const load: PageServerLoad<{ teams: Team[]; players: Player[] }> = async (event) => {
-	let teams: Team[] = [];
-	let players: Player[] = [];
+export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
+	let { session, season } = await parent();
 
-	// Get all players
-	const { supabaseClient } = await getSupabase(event);
+	if (session) {
+		if (!season) return {};
 
-	// Teams
-	const teamsQuery = await supabaseClient.from('').select();
-	if (teamsQuery.data != null) {
-		teamsQuery.data.forEach((d: Team) => teams.push(d));
+		const { data: teams, error: teamError } = await supabase.from('teams').select().eq('season_id', season.id);
+		if (teamError) {
+			throw error(500, {
+				message: teamError.message
+			});
+		}
+
+		return { teams: teams, players: [] };
 	}
 
-	// Players ---> TODO: Merge with teams, get each player with info for each team
-	const playersQuery = await supabaseClient.from('players').select();
-	if (playersQuery.data != null) {
-		playersQuery.data.forEach((d: Player) => players.push(d));
-	}
-
-	return { teams: teams, players: players };
+	return { teams: [], players: [] };
 };

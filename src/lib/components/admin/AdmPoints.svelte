@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import { supabase } from "$lib/supabase";
     import type { Season, Player, CreateGoal, Stats } from "$lib/types/newTypes";
 
@@ -68,4 +68,4 @@
         {/each}
         </div>
     </div>
-{/if}
+{/if} -->

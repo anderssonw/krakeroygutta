@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 	import SelectCardModal from '$lib/components/fantasy/SelectCardModal.svelte';
 	import CardSmall from '$lib/components/fantasy/CardSmall.svelte';
@@ -10,6 +10,8 @@
 	// Get server data
 	export let data: PageData;
 	const { session, fantasyTeam, fantasyTeamPlayers, allPlayers, season } = data;
+
+	export let form: ActionData;
 
 	// Protect route
 	onMount(async () => {
@@ -74,6 +76,11 @@
 		<form class="structure" method="POST">
 			<h2>Ditt Fantasylag</h2>
 			<input class="input" name="name" bind:value={fantasyForm.teamName} type="text" placeholder="Ditt Lagnavn" />
+			{#if form?.errors}
+				{#each Object.values(form?.errors) as error}
+					<p class="text-red-700 pa-0 ma-0">{error}</p>
+				{/each}
+			{/if}
 			<h3>Penger: {currentCash}</h3>
 			<button class="btn"> Lagre Laget Ditt </button>
 
@@ -100,7 +107,7 @@
 			<input name="currencyLeft" bind:value={currentCash} type="hidden" />
 		</form>
 	{:else}
-		<h2>Currently no active season</h2>
+		<h2>Ingen aktiv sesong</h2>
 	{/if}
 {:else}
 	<div class="structure">
