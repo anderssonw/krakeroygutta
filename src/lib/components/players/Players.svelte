@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import CardLarge from './CardLarge.svelte';
 

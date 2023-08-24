@@ -1,5 +1,4 @@
 import type { PageServerLoad } from './$types';
-import type { FullPlayer } from '$lib/types/newTypes';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent, params }) => {
 	let { season } = await parent();

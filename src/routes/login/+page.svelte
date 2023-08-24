@@ -5,7 +5,7 @@
 
 	// Get server data
 	export let data: PageData;
-	$: ({ session, supabase, user } = data);
+	$: ({ supabase } = data);
 
 	let email: string;
 	let password: string;
