@@ -45,12 +45,6 @@ VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf');
 INSERT INTO fantasy_teams (user_id, season_id, name, captain_id)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Banter FC' , 4);
 
-INSERT INTO fantasy_teams_players (fantasy_team_id, player_id)
-VALUES (1, 1),
-       (1, 4),
-       (1, 7),
-       (1, 10);
-
 INSERT INTO matches (season_id, team_home_id, team_away_id, goals_player_ids, assists_player_ids, clutches_player_ids)
 VALUES (2, 1, 2, ARRAY[1, 2, 4], ARRAY[2, 1, 5], ARRAY[6]),
        (2, 2, 1, DEFAULT, DEFAULT, ARRAY[3, 5]),
