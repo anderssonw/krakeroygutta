@@ -7,23 +7,23 @@
 
 	// Get server data
 	export let data: PageData;
-    $: ({ session, user, activeSeason, allSeasons, allPlayers, allTeams, allStats } = data)
+	$: ({ session, user, activeSeason, allSeasons, allPlayers, allTeams, allStats } = data);
 
-    // Protect route
-    onMount(async () => {
-        if (!session){
-            goto("/login");
-        }
-		if (!user?.is_admin){
-			goto("/");
+	// Protect route
+	onMount(async () => {
+		if (!session) {
+			goto('/login');
 		}
-    });
+		if (!user?.is_admin) {
+			goto('/');
+		}
+	});
 </script>
 
-{#if (session && user?.is_admin)}
-	<Admin activeSeason={activeSeason} allSeasons={allSeasons} allPlayers={allPlayers} allTeams={allTeams} allStats={allStats} />
+{#if session && user?.is_admin}
+	<Admin {activeSeason} {allSeasons} {allPlayers} {allTeams} {allStats} />
 {:else}
-    <div class="structure">
-        <h2 class="text-center"> Redirecting .. <SpinnerIcon /> </h2>
-    </div>
+	<div class="structure">
+		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
+	</div>
 {/if}

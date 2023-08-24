@@ -19,13 +19,13 @@
 	// Get specifics, can be used in script
 	export let season: Tables<'seasons'>;
 	export let teams: Tables<'teams'>[];
-	export let fantasyTeams: Tables<'fantasy_team'>[];
+	export let fantasyTeams: Tables<'fantasy_teams'>[];
 	export let playerStats: PlayerStats[];
 	export let teamStats: TeamStats[];
 
 	$: mergedTeams = mergeTeamAndTeamStats(teams, teamStats);
 
-	function getTotalPointsForFantasyTeam(fantasyTeams: Tables<'fantasy_team'>, playerStats: PlayerStats[]): number {
+	function getTotalPointsForFantasyTeam(fantasyTeams: Tables<'fantasy_teams'>, playerStats: PlayerStats[]): number {
 		let points: number = 0;
 		fantasyTeams.player_ids?.forEach((id: number) => {
 			let playerStat = playerStats.find((playerPoint) => playerPoint.player_id == id);

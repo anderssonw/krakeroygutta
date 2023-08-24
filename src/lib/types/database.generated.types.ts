@@ -34,43 +34,40 @@ export interface Database {
   }
   public: {
     Tables: {
-      fantasy_team: {
+      fantasy_teams: {
         Row: {
           captain_id: number | null
-          id: number
           name: string
           season_id: number
           user_id: string
         }
         Insert: {
           captain_id?: number | null
-          id?: number
           name: string
           season_id: number
           user_id: string
         }
         Update: {
           captain_id?: number | null
-          id?: number
           name?: string
           season_id?: number
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "fantasy_team_captain_id_fkey"
+            foreignKeyName: "fantasy_teams_captain_id_fkey"
             columns: ["captain_id"]
             referencedRelation: "players"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fantasy_team_season_id_fkey"
+            foreignKeyName: "fantasy_teams_season_id_fkey"
             columns: ["season_id"]
             referencedRelation: "seasons"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fantasy_team_user_id_fkey"
+            foreignKeyName: "fantasy_teams_user_id_fkey"
             columns: ["user_id"]
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -79,31 +76,37 @@ export interface Database {
       }
       fantasy_teams_players: {
         Row: {
-          fantasy_team_id: number
-          id: number
           player_id: number
+          season_id: number
+          user_id: string
         }
         Insert: {
-          fantasy_team_id: number
-          id?: number
           player_id: number
+          season_id: number
+          user_id: string
         }
         Update: {
-          fantasy_team_id?: number
-          id?: number
           player_id?: number
+          season_id?: number
+          user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "fantasy_teams_players_fantasy_team_id_fkey"
-            columns: ["fantasy_team_id"]
-            referencedRelation: "fantasy_team"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "fantasy_teams_players_player_id_fkey"
             columns: ["player_id"]
             referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fantasy_teams_players_season_id_fkey"
+            columns: ["season_id"]
+            referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fantasy_teams_players_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
             referencedColumns: ["id"]
           }
         ]

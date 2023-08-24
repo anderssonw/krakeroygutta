@@ -26,15 +26,6 @@
 	} satisfies FantasyForm;
 
 	$: currentCash = calculateCurrentCash(fantasyForm.players);
-	$: playerIdsInForm = getPlayerIdsFromForm(fantasyForm.players);
-
-	const getPlayerIdsFromForm = (players: (FullPlayer | null)[]) => {
-		return players.map((player) => {
-			if (player) return player.id;
-
-			return -1;
-		});
-	};
 
 	const calculateCurrentCash = (players: (FullPlayer | null)[]) => {
 		if (season) {
@@ -51,7 +42,7 @@
 		}
 	};
 
-	const fillFantasyFormPlayers = (currentPlayers: FullPlayer[] | undefined): (FullPlayer | null)[] => {
+	const fillFantasyFormPlayers = (currentPlayers: FullPlayer[] | null): (FullPlayer | null)[] => {
 		const maxPlayerCount = 4;
 
 		let formPlayers: (FullPlayer | null)[] = [];
@@ -94,7 +85,7 @@
 							<div class="small-card" on:mouseup={() => (fantasyForm.selectedCardPosition = position)}>
 								<img src="/cards/empty.png" alt="card" />
 							</div>
-							<input name="playerIds" value={-1} type="hidden" />
+							<!-- <input name="playerIds" value={-1} type="hidden" /> -->
 						{:else}
 							<CardSmall bind:fantasyForm {player} {position} />
 							<input name="playerIds" bind:value={player.id} type="hidden" />

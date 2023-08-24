@@ -23,7 +23,7 @@
 <div class="small-card group">
 	<CardSmallInfo {isCaptain} {player} />
 
-	<div class="w-40 absolute left-[100%] hidden group-hover:block group-hover:animate-fadeIn z-100">
+	<div class="w-40 absolute left-full hidden group-hover:block group-hover:animate-fadeIn z-100">
 		<button type="button" class="btn w-full mb-1" on:click={() => sellPlayer()}>Selg spiller</button>
 		<button type="button" class="btn w-full mb-1" on:click={() => handleCaptainClick(player.id)}>Velg kaptein</button>
 		<a href="/players/{player.id}" target="_blank" rel="noreferrer" class="p-0">

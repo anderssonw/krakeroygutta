@@ -42,7 +42,7 @@ VALUES (1, 2),
 INSERT INTO auth.users (id)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf');
 
-INSERT INTO fantasy_team (user_id, season_id, name, captain_id)
+INSERT INTO fantasy_teams (user_id, season_id, name, captain_id)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Banter FC' , 4);
 
 INSERT INTO fantasy_teams_players (fantasy_team_id, player_id)
