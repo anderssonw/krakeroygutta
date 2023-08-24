@@ -1,11 +1,12 @@
 // src/hooks.server.ts
 import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
+import { NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_KEY } from '$env/static/public';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createSupabaseServerClient({
-		supabaseUrl: import.meta.env.VITE_PUBLIC_SUPABASE_URL,
-		supabaseKey: import.meta.env.VITE_PUBLIC_SUPABASE_KEY,
+		supabaseUrl: NEXT_PUBLIC_SUPABASE_URL,
+		supabaseKey: NEXT_PUBLIC_SUPABASE_KEY,
 		event
 	});
 
