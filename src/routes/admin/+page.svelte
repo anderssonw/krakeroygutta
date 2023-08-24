@@ -1,16 +1,28 @@
-<script lang="ts">
-	import type { User } from '$lib/types/User';
+<!-- <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import type { PageData } from './$types';
+	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
-	/** @type {import('./$types').PageData} */
-	export let data;
+	// Get server data
+	export let data: PageData;
+	// $: ({ session, user, allSeasons, allPlayers, allTeams, allStats } = data);
 
-	let user: User = data.user;
+	// Protect route
+	onMount(async () => {
+		if (!session) {
+			goto('/login');
+		}
+		if (!user?.is_admin) {
+			goto('/');
+		}
+	});
 </script>
 
-<main class="content">Skkrt</main>
-
-<style>
-	.content {
-		text-align: center;
-	}
-</style>
+{#if session && user?.is_admin}
+ <Admin {activeSeason} {allSeasons} {allPlayers} {allTeams} {allStats} /> -->
+<!-- {:else}
+	<div class="structure">
+		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
+	</div>
+{/if} -->

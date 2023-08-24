@@ -1,28 +1,20 @@
 import type { LayoutLoad } from './$types';
-import { getSupabase } from '@supabase/auth-helpers-sveltekit';
-import type { User } from '$lib/types/User';
-import type { Session } from '@supabase/supabase-js';
-import type { Database } from '$lib/types/database.types';
+import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit';
+import type { Database } from '$lib/types/database.generated.types';
 
-export const load: LayoutLoad<{ session: Session | null; user: User | null }> = async (event) => {
-	const { session } = await getSupabase(event);
+export const load: LayoutLoad = async ({ fetch, data, depends }) => {
+	depends('supabase:auth');
 
-	let user: User | null = null;
+	const supabase = createSupabaseLoadClient<Database>({
+		supabaseUrl: import.meta.env.VITE_PUBLIC_SUPABASE_URL,
+		supabaseKey: import.meta.env.VITE_PUBLIC_SUPABASE_KEY,
+		event: { fetch },
+		serverSession: data.session
+	});
 
-	if (session) {
-		const { supabaseClient } = await getSupabase(event);
+	const {
+		data: { session }
+	} = await supabase.auth.getSession();
 
-		const userQuery = await supabaseClient.from('users').select();
-
-		if (userQuery.data != null) {
-			let tempUser: Database['public']['Tables']['users']['Row'] = userQuery.data[0];
-			user = {
-				id: tempUser.id,
-				isAdmin: tempUser.is_admin,
-				username: tempUser.username
-			};
-		}
-	}
-
-	return { session, user };
+	return { supabase, session, user: data.user, season: data.season };
 };

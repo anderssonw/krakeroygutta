@@ -1,77 +1,116 @@
 <script lang="ts">
-	import FantasyTeamForm from '$lib/components/FantasyTeamForm.svelte';
-	import FantasyTeamView from '$lib/components/FantasyTeamView.svelte';
-	import PlayerCard from '$lib/components/PlayerCard.svelte';
-	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import type { ActionData, PageData } from './$types';
+	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
+	import SelectCardModal from '$lib/components/fantasy/SelectCardModal.svelte';
+	import CardSmall from '$lib/components/fantasy/CardSmall.svelte';
+	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
 
-	import type { Player } from '$lib/types/Player';
-	import type { ActionData } from './$types';
-	import type { FantasyTeam } from '$lib/types/FantasyTeam';
+	// Get server data
+	export let data: PageData;
+	const { session, fantasyTeam, fantasyTeamPlayers, allPlayers, season } = data;
 
-	/** @type {import('./$types').PageData[]} */
-	export let data;
-
-	/** @type {import('./$types').ActionData} */
 	export let form: ActionData;
 
-	let players: Player[] = data.players;
-	let team: FantasyTeam = data.team;
+	// Protect route
+	onMount(async () => {
+		if (!session) {
+			goto('/login');
+		}
+	});
 
-	const budget = 17500;
+	$: fantasyForm = {
+		captainId: fantasyTeam?.captain_id || -1,
+		selectedCardPosition: -1,
+		players: fillFantasyFormPlayers(fantasyTeamPlayers),
+		teamName: fantasyTeam?.name || 'placeholder'
+	} satisfies FantasyForm;
+
+	$: currentCash = calculateCurrentCash(fantasyForm.players);
+
+	const calculateCurrentCash = (players: (FullPlayer | null)[]) => {
+		if (season) {
+			return (
+				season?.starting_currency -
+				players.reduce((accumulator, player) => {
+					if (!player) return accumulator;
+
+					return accumulator + player?.price;
+				}, 0)
+			);
+		} else {
+			return -1;
+		}
+	};
+
+	const fillFantasyFormPlayers = (currentPlayers: FullPlayer[] | null): (FullPlayer | null)[] => {
+		const maxPlayerCount = 4;
+
+		let formPlayers: (FullPlayer | null)[] = [];
+
+		if (currentPlayers && currentPlayers.length > 0) {
+			let currentPlayerCount = currentPlayers.length;
+
+			formPlayers = formPlayers.concat(currentPlayers);
+
+			for (let i = 0; i < maxPlayerCount - currentPlayerCount; i++) {
+				formPlayers.push(null);
+			}
+
+			return formPlayers;
+		}
+
+		for (let i = 0; i < maxPlayerCount; i++) {
+			formPlayers.push(null);
+		}
+
+		return formPlayers;
+	};
 </script>
 
-<main class="content">
-	{#if players}
-		<h3>Velkommen til Fantasy!</h3>
-		<p>
-			Hei! Og velkommen til denne testen av Fantasy Julebord. På denne siden kan du sette opp fire
-			spillere til ditt Fantasy Julebord-lag. Poenggivning til spillerne vil i stor grad følge
-			reglene som brukes hos vår hovedkonkurrent, Fantasy Premier League. Deadline: kl 12 lørdag
-			17.12. Vinneren vil kåres senere på samme dag. Lykke til og god jul!
-		</p>
-		<div class="container">
-			{#each players.sort((a, b) => b.price - a.price) as player}
-				<PlayerCard price={player.price} name={player.playerName} />
-			{/each}
-		</div>
+{#if session && allPlayers && season}
+	<SelectCardModal bind:fantasyForm players={allPlayers} />
 
-		{#if $page.data.session}
-			{#if form?.success}
-				<p>Gratulerer, du har sendt inn laget ditt!</p>
-			{:else if team}
-				<FantasyTeamView {players} {team} />
-			{:else}
-				<FantasyTeamForm {players} {form} {budget} />
+	{#if season}
+		<form class="structure" method="POST">
+			<h2>Ditt Fantasylag</h2>
+			<input class="input" name="name" bind:value={fantasyForm.teamName} type="text" placeholder="Ditt Lagnavn" />
+			{#if form?.errors}
+				{#each Object.values(form?.errors) as error}
+					<p class="text-red-700 pa-0 ma-0">{error}</p>
+				{/each}
 			{/if}
-		{:else}
-			<p>Du må logge inn for å sende inn et lag.</p>
-		{/if}
+			<h3>Penger: {currentCash}</h3>
+			<button class="btn"> Lagre Laget Ditt </button>
+
+			<div class="relative flex flex-wrap w-full hidden tablet:block">
+				<img src="/fantasy/Field.png" alt="field" />
+				{#each fantasyForm.players as player, position}
+					<div class="absolute player-{position}">
+						{#if !player}
+							<div class="small-card" on:mouseup={() => (fantasyForm.selectedCardPosition = position)}>
+								<img src="/cards/empty.png" alt="card" />
+							</div>
+							<!-- <input name="playerIds" value={-1} type="hidden" /> -->
+						{:else}
+							<CardSmall bind:fantasyForm {player} {position} />
+							<input name="playerIds" bind:value={player.id} type="hidden" />
+						{/if}
+					</div>
+				{/each}
+			</div>
+
+			<div class="relative w-full bg-primary-color block tablet:hidden" />
+
+			<input name="captainId" bind:value={fantasyForm.captainId} type="hidden" />
+			<input name="currencyLeft" bind:value={currentCash} type="hidden" />
+		</form>
 	{:else}
-		<p>Laster..</p>
+		<h2>Ingen aktiv sesong</h2>
 	{/if}
-</main>
-
-<style>
-	.content {
-		text-align: center;
-	}
-
-	.container {
-		display: grid;
-		grid-template-columns: repeat(6, 1fr);
-		grid-gap: 1rem;
-		justify-content: center;
-		justify-items: center;
-		row-gap: 1em;
-	}
-
-	@media (max-width: 768px) {
-		.container {
-			grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
-			display: grid;
-			grid-gap: 1rem;
-			justify-content: center;
-			justify-items: center;
-		}
-	}
-</style>
+{:else}
+	<div class="structure">
+		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
+	</div>
+{/if}

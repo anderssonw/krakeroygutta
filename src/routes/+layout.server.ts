@@ -1,30 +1,39 @@
 import type { LayoutServerLoad } from './$types';
-import { getServerSession, getSupabase } from '@supabase/auth-helpers-sveltekit';
-import type { Database } from '$lib/types/database.types';
-import type { Session } from '@supabase/supabase-js';
-import type { User } from '$lib/types/User';
 
-export const load: LayoutServerLoad<{ session: Session | null; user: User | null }> = async (
-	event
-) => {
-	let session = await getServerSession(event);
+export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
+	const { data: user, error: userError } = await supabase.from('users').select().single();
 
-	let user: User | null = null;
-
-	if (session) {
-		const { supabaseClient } = await getSupabase(event);
-
-		const userQuery = await supabaseClient.from('users').select();
-
-		if (userQuery.data != null) {
-			let tempUser: Database['public']['Tables']['users']['Row'] = userQuery.data[0];
-			user = {
-				id: tempUser.id,
-				isAdmin: tempUser.is_admin,
-				username: tempUser.username
-			};
-		}
+	if (userError) {
+		return {
+			user: null,
+			season: null,
+			session: await getSession(),
+			supabaseErrorMessage: userError.message
+		};
 	}
 
-	return { session, user };
+	// TODO make handler
+	let todayTimeString = new Date().toDateString();
+
+	const { data: season, error: seasonError } = await supabase
+		.from('seasons')
+		.select()
+		.lt('start_time', todayTimeString)
+		.gt('end_time', todayTimeString)
+		.single();
+
+	if (seasonError) {
+		return {
+			user: user,
+			season: null,
+			session: getSession(),
+			supabaseErrorMessage: seasonError.message
+		};
+	}
+
+	return {
+		user,
+		season,
+		session: getSession()
+	};
 };

@@ -1,0 +1,179 @@
+/* HOW TO USE */
+/* https://tailwindcss.com/docs/adding-custom-styles */
+
+/* Write your global styles here, in PostCSS syntax */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: #282828;
+}
+  
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #5a5a5a;
+    border-radius: 5px;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Variables to be used by THEME CONFIG for the base color theme */
+/* MIGHT REMOVE AND ADD DIRECTLY */
+:root {
+  --base-color-light: #5a5a5a;
+  --base-color-default: #3e3e3e;
+  --base-color-dark: #282828;
+
+  --text-color-light: #f0f0f0;
+  --text-color-default: #e8e8e8;
+  --text-color-dark: #d8d8d8;
+
+  font-size: 16px;
+	line-height: 24px;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-text-size-adjust: 100%;
+}
+
+/* Adjustmets to default text size and color */
+@layer base {
+  /* Make sure the default color for all text is the light secondary color */
+  body {
+    @apply bg-primary-color-dark;
+    @apply text-secondary-color-light;
+    @apply min-h-screen;
+  }
+
+  /* Override detault input to use the same color color palette as the background */
+  input {
+    @apply bg-secondary-color-light;
+    @apply text-primary-color-dark;
+  }
+
+  /* Override table row height */
+  tr {
+    @apply h-12
+  }
+
+  /* Override detault link to use a different hover color */
+  a {
+    @apply hover:text-primary-color-light;
+    @apply p-6;
+  }
+
+  /* Define text size for the most commonly used text fields */
+  h1 {
+    @apply text-3xl;
+  }
+  h2 {
+    @apply text-2xl;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
+  h5 {
+    @apply text-base;
+  }
+  p, input, ol, ul, div {
+    @apply text-sm;
+  }
+
+  /* Screen sizes  */
+  @screen tablet {
+    h1 {
+      @apply text-4xl;
+    }
+    h2 {
+      @apply text-3xl;
+    }
+    h3 {
+      @apply text-2xl;
+    }
+    h4 {
+      @apply text-xl;
+    }
+    h5 {
+      @apply text-lg;
+    }
+    p, input, ol, ul, div {
+      @apply text-base;
+    }
+  }
+
+  @screen laptop {
+    h1 {
+      @apply text-5xl;
+    }
+    h2 {
+      @apply text-4xl;
+    }
+    h3 {
+      @apply text-3xl;
+    }
+    h4 {
+      @apply text-2xl;
+    }
+    h5 {
+      @apply text-xl;
+    }
+    p, input, ol, ul, div {
+      @apply text-lg;
+    }
+  }
+}
+
+@layer components {
+  .btn {
+    @apply bg-secondary-color-light hover:bg-secondary-color-dark text-primary-color-dark font-bold py-2 px-4 rounded-lg hover:cursor-pointer;
+  }
+  .input {
+    @apply block p-2.5 rounded-lg;
+  }
+  .structure {
+    @apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
+  }
+  .nav {
+    @apply bg-primary-color h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-40;
+  }
+  .navbtn {
+    @apply transition-all duration-200 hover:scale-110;
+  }
+  .small-card {
+    @apply relative w-28 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
+  }
+  .large-card {
+    @apply relative w-48 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
+  }
+
+  @screen tablet {
+    .player-0 {
+      @apply absolute bottom-5 tablet:bottom-10 left-1/2 -translate-x-1/2;
+    }
+    .player-1 {
+      @apply absolute top-1/2 left-20 tablet:left-48 -translate-y-2/3;
+    }
+    .player-2 {
+      @apply absolute top-1/2 right-20 tablet:right-48 -translate-y-2/3;
+    }
+    .player-3 {
+      @apply absolute top-0 left-1/2 -translate-x-1/2;
+    }
+  }
+}
