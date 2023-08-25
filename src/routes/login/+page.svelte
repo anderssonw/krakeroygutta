@@ -32,20 +32,23 @@
 <div class="structure">
 	<LargeLogo />
 
-	<h2>Innlogging</h2>
+	<h3>Innlogging</h3>
 
-	<form class="w-1/2 laptop:w-1/3" on:submit|preventDefault={handleLogin}>
-		<div class="mb-6">
-			<label for="email" class="block mb-1"><h4>Epost</h4></label>
-			<input type="email" id="email" class="input w-full" placeholder="næbb@næbbesen.no" bind:value={email} />
+	<form class="form" on:submit|preventDefault={handleLogin}>
+		<div class="form-structure">
+			<div class="w-full">
+				<label for="email" class="block mb-1"><h5>Epost</h5></label>
+				<input type="email" id="email" class="input w-full" placeholder="næbb@næbbesen.no" bind:value={email} />
+			</div>
+			<div class="w-full">
+				<label for="password" class="block mb-1"><h5>Passord</h5></label>
+				<input type="password" id="password" class="input w-full" placeholder="" bind:value={password} />
+			</div>
+			<div>
+				<input type="submit" class="btn" value={loading ? 'Laster' : 'Logg deg inn'} disabled={loading} />
+			</div>
 		</div>
-		<div class="mb-6">
-			<label for="password" class="block mb-1"><h4>Passord</h4></label>
-			<input type="password" id="password" class="input w-full" placeholder="" bind:value={password} />
-		</div>
-		<div class="mb-6 flex justify-center">
-			<input type="submit" class="btn" value={loading ? 'Laster' : 'Logg deg inn'} disabled={loading} />
-		</div>
+
 		{#if serverError}
 			<p class="text-rose-600">Noe gikk galt: {serverError}</p>
 		{/if}

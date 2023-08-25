@@ -28,12 +28,6 @@ const config = {
 				160: '40rem',
 				192: '48rem'
 			},
-			dropShadow: {
-				bronze: '0 25px 25px rgb(184 115 51 / 0.15)',
-				silver: '0 25px 25px rgb(192 192 192 / 0.15)',
-				gold: '0 25px 25px rgb(255 215 0 / 0.15)',
-				card: '0 30px 10px rgb(0 0 0 / 0.50)'
-			},
 			fontSize: {
 				'2xs': ['0.6rem', { lineHeight: '0.8rem' }]
 			},

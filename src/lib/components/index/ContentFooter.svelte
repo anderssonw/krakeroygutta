@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="flex flex-col items-center h-[100%] pt-12 laptop:pt-6 laptop:pt-0">
-			<h3>Hvem tar du med deg?</h3>
+			<h3 class="mb-2 tablet:mb-4">Hvem tar du med deg?</h3>
 			<button class="btn" on:click={() => goto("/register")}>
 				Kom i gang!
 			</button>
