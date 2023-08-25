@@ -17,18 +17,18 @@
 
     {#if $page.data.user}
         <div class="structure">
-            <a href="/" on:mouseup={() => showMobileNavbar = false}> <h5 class="navbtn text-primary-color-dark">Sesong</h5> </a>
-            <a href="/fantasy" on:mouseup={() => showMobileNavbar = false}> <h5 class="navbtn text-primary-color-dark">Mitt lag</h5> </a>
+            <a href="/" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Sesong</h1> </a>
+            <a href="/fantasy" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Mitt lag</h1> </a>
             {#if isAdmin}
-                <a href="/admin" on:mouseup={() => showMobileNavbar = false}> <h5 class="navbtn text-primary-color-dark">Admin</h5> </a>
+                <a href="/admin" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Admin</h1> </a>
             {/if}
-            <a href="/profile" on:mouseup={() => showMobileNavbar = false}> <h5 class="navbtn text-primary-color-dark">Profil</h5> </a>
+            <a href="/profile" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Profil</h1> </a>
         </div>
     {:else}
         <div class="structure">
-            <a href="/" on:mouseup={() => showMobileNavbar = false}> <h3 class="navbtn text-primary-color-dark">Hjem</h3> </a>
-            <a href="/login" on:mouseup={() => showMobileNavbar = false}> <h3 class="navbtn text-primary-color-dark">Logg inn</h3> </a>
-            <a href="/register" on:mouseup={() => showMobileNavbar = false}> <h3 class="navbtn text-primary-color-dark">Registrer deg</h3> </a>
+            <a href="/" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Hjem</h1> </a>
+            <a href="/login" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Logg inn</h1> </a>
+            <a href="/register" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Registrer deg</h1> </a>
         </div>
     {/if}
 </div>
