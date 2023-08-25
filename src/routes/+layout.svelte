@@ -8,6 +8,10 @@
 
 	export let data: LayoutData;
 
+	// Necessary for the navbar(mobile) modal
+	let showMobileNavbar: boolean = false;
+	$: screenHeight = `${showMobileNavbar ? 'h-screen overflow-y-hidden' : 'overflow-y-visible'}`;
+
 	$: ({ supabase, session, user } = data);
 
 	$: isAdmin = user?.is_admin ?? false;
@@ -25,8 +29,11 @@
 	});
 </script>
 
-<Navbar {isAdmin} />
 
-<slot />
+<div class="{screenHeight}">
+	<Navbar isAdmin={isAdmin} bind:showMobileNavbar={showMobileNavbar} />
 
-<Footer />
+	<slot />
+
+	<Footer />
+</div>

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { afterUpdate } from 'svelte';
+	import NavbarModal from './NavbarModal.svelte';
 
 	export let isAdmin: boolean;
+	export let showMobileNavbar: boolean;
 
 	let oldY = 0;
 	let newY = oldY;
@@ -27,9 +29,11 @@
 		</a>
 		<div class="w-full flex flex-row justify-end">
 			<div class="space-y-2 tablet:hidden">
-				<div class="w-8 h-0.5 bg-secondary-color-light" />
-				<div class="w-8 h-0.5 bg-secondary-color-light" />
-				<div class="w-8 h-0.5 bg-secondary-color-light" />
+				<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => showMobileNavbar = true}>
+					<div class="w-8 h-1 bg-secondary-color-light" />
+					<div class="w-8 h-1 bg-secondary-color-light" />
+					<div class="w-8 h-1 bg-secondary-color-light" />
+				</div>
 			</div>
 			<div class="hidden tablet:flex">
 				<a href="/"> <h5 class="navbtn">Sesong</h5> </a>
@@ -45,9 +49,11 @@
 	<div class="nav flex items-center {hideNavbar}">
 		<div class="w-full flex flex-row justify-end">
 			<div class="space-y-2 tablet:hidden">
-				<div class="w-8 h-0.5 bg-secondary-color-light" />
-				<div class="w-8 h-0.5 bg-secondary-color-light" />
-				<div class="w-8 h-0.5 bg-secondary-color-light" />
+				<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => showMobileNavbar = true}>
+					<div class="w-8 h-1 bg-secondary-color-light" />
+					<div class="w-8 h-1 bg-secondary-color-light" />
+					<div class="w-8 h-1 bg-secondary-color-light" />
+				</div>
 			</div>
 			<div class="hidden tablet:flex">
 				<a href="/"> <h5 class="navbtn">Hjem</h5> </a>
@@ -57,6 +63,8 @@
 		</div>
 	</div>
 {/if}
+
+<NavbarModal isAdmin={isAdmin} bind:showMobileNavbar={showMobileNavbar} />
 
 <!-- Applies afterUpdate since y updates on scrolling -->
 <svelte:window bind:scrollY={newY} />
