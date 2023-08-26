@@ -28,7 +28,7 @@
 
         <h3> Kamp 1 </h3>
 
-        <div class="w-full flex flex-col space-y-4 border-y-4 laptop:border-4 bg-primary-color border-secondary-color-light laptop:rounded-lg p-4">
+        <div class="w-full flex flex-col space-y-4 laptop:space-y-8 border-y-2 laptop:border-4 bg-primary-color border-secondary-color-light laptop:rounded-lg p-4">
 
             <div class="flex flex-row justify-around items-center">
                 <div class="w-20 tablet:w-24 laptop:w-32 h-20 tablet:h-24 laptop:h-32 bg-secondary-color"></div>
@@ -42,7 +42,7 @@
                 <h1> 1 </h1>
             </div>
             
-            <div class="flex flex-row justify-center items-center border-b-4">
+            <div class="flex flex-row justify-center items-center border-b-2 laptop:border-b-4">
                 <div class="w-5/12 p-2 text-center">
                     <h5> Magnus Gulbrandsen x2 </h5>
                     <h5> Hans Langvik </h5>
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-row justify-center items-center border-b-4">
+            <div class="flex flex-row justify-center items-center border-b-2 laptop:border-b-4">
                 <div class="w-5/12 p-2 text-center">
                     <h5> Hans Langvik x2 </h5>
                 </div>
