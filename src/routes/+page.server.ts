@@ -14,7 +14,15 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			});
 		}
 
-		const { data: fantasyTeams, error: fantasyTeamsError } = await supabase.from('fantasy_teams').select().eq('season_id', season.id);
+		const { data: fantasyTeams, error: fantasyTeamsError } = await supabase
+			.from('fantasy_teams')
+			.select(
+				`
+					*,
+					fantasy_teams_players(player_id)
+				`
+			)
+			.eq('season_id', season.id);
 
 		if (fantasyTeamsError) {
 			return fail(500, {
