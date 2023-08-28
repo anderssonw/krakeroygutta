@@ -21,7 +21,7 @@
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
-		"supabase": "^1.86.1",
+		"supabase": "^1.88.0",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.5.0",
 		"svelte-preprocess": "^5.0.3",
