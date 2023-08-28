@@ -1,32 +1,14 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import LargeLogo from '$lib/shared/largeLogo.svelte';
-	import type { PageData } from './$types';
+	import type { ActionData } from './$types';
 
-	// Get server data
-	export let data: PageData;
-	$: ({ supabase } = data);
+	export let form: ActionData;
 
 	let email: string;
 	let password: string;
 
 	let loading = false;
 	let serverError = '';
-
-	const handleLogin = async () => {
-		try {
-			loading = true;
-			const { error } = await supabase.auth.signInWithPassword({ email, password });
-			if (error) throw error;
-			goto('/');
-		} catch (error) {
-			if (error instanceof Error) {
-				serverError = error.message;
-			}
-		} finally {
-			loading = false;
-		}
-	};
 </script>
 
 <div class="structure">
@@ -34,23 +16,25 @@
 
 	<h3>Innlogging</h3>
 
-	<form class="form" on:submit|preventDefault={handleLogin}>
+	<form class="form" method="POST">
 		<div class="form-structure">
 			<div class="w-full">
 				<label for="email" class="block mb-1"><h5>Epost</h5></label>
-				<input type="email" id="email" class="input w-full" placeholder="næbb@næbbesen.no" bind:value={email} />
+				<input name="email" type="email" id="email" class="input w-full" placeholder="næbb@næbbesen.no" bind:value={email} required />
 			</div>
 			<div class="w-full">
 				<label for="password" class="block mb-1"><h5>Passord</h5></label>
-				<input type="password" id="password" class="input w-full" placeholder="" bind:value={password} />
+				<input name="password" type="password" id="password" class="input w-full" placeholder="" bind:value={password} required />
 			</div>
 			<div>
-				<input type="submit" class="btn" value={loading ? 'Laster' : 'Logg deg inn'} disabled={loading} />
+				<button class="btn">{loading ? 'Laster' : 'Logg deg inn'}</button>
 			</div>
 		</div>
 
-		{#if serverError}
-			<p class="text-rose-600">Noe gikk galt: {serverError}</p>
+		{#if form?.errors}
+			{#each Object.values(form?.errors) as error}
+				<p class="text-red-700 pa-0 ma-0">{error}</p>
+			{/each}
 		{/if}
 	</form>
 </div>
