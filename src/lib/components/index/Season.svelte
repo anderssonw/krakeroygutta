@@ -31,6 +31,14 @@
 
 	$: mergedTeams = mergeTeamAndTeamStats(teams, teamStats);
 
+	$: sortedFantasyTeams = sortFantasyTeams();
+
+	// this is lol, should probably store it in a variable or something and then use that,
+	// instead of calling getTotalPointsForFantasyTeam for sorting AND the points later
+	const sortFantasyTeams = () => {
+		return fantasyTeams.sort((a, b) => getTotalPointsForFantasyTeam(b, playerStats) - getTotalPointsForFantasyTeam(a, playerStats));
+	};
+
 	function getTotalPointsForFantasyTeam(fantasyTeam: FantasyTeamWithPlayers, playerStats: PlayerStats[]): number {
 		let points: number = 0;
 
@@ -134,7 +142,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each fantasyTeams as team, i}
+						{#each sortedFantasyTeams as team, i}
 							<tr>
 								<th>{i + 1 + '.'}</th>
 								<th>{team.name}</th>
