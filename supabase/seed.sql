@@ -61,7 +61,22 @@ VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf'),
 
 
 INSERT INTO fantasy_teams (user_id, season_id, name, captain_id)
-VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Banter FC' , 4);
+VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Skulle Chippa FC' , 1),
+       ('ec61970a-704a-4c92-8d54-1a3181175c91', 2, 'Jørgens Tubaer' , 2),
+       ('c43e4127-0ba4-4db4-b217-61898937542d', 2, 'PAD MAMAAAAAA' , 3);
+
+INSERT INTO fantasy_teams_players(fantasy_team_id, player_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 7),
+       (1, 8),
+       (2, 1),
+       (2, 2),
+       (2, 3),
+       (2, 4),
+       (3, 3),
+       (3, 10);
+
 
 INSERT INTO matches (season_id, team_home_id, team_away_id)
 VALUES (2, 1, 2),
