@@ -34,6 +34,68 @@ export interface Database {
   }
   public: {
     Tables: {
+      assists: {
+        Row: {
+          id: number
+          match_id: number
+          player_id: number
+        }
+        Insert: {
+          id?: number
+          match_id: number
+          player_id: number
+        }
+        Update: {
+          id?: number
+          match_id?: number
+          player_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assists_match_id_fkey"
+            columns: ["match_id"]
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assists_player_id_fkey"
+            columns: ["player_id"]
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      clutches: {
+        Row: {
+          id: number
+          match_id: number
+          player_id: number
+        }
+        Insert: {
+          id?: number
+          match_id: number
+          player_id: number
+        }
+        Update: {
+          id?: number
+          match_id?: number
+          player_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clutches_match_id_fkey"
+            columns: ["match_id"]
+            referencedRelation: "matches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clutches_player_id_fkey"
+            columns: ["player_id"]
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       fantasy_teams: {
         Row: {
           captain_id: number | null
@@ -105,29 +167,38 @@ export interface Database {
           }
         ]
       }
+      goals: {
+        Row: {
+          id: number
+          match_id: number
+          player_id: number
+        }
+        Insert: {
+          id?: number
+          match_id: number
+          player_id: number
+        }
+        Update: {
+          id?: number
+          match_id?: number
+          player_id?: number
+        }
+        Relationships: []
+      }
       matches: {
         Row: {
-          assists_player_ids: number[]
-          clutches_player_ids: number[]
-          goals_player_ids: number[]
           id: number
           season_id: number
           team_away_id: number
           team_home_id: number
         }
         Insert: {
-          assists_player_ids?: number[]
-          clutches_player_ids?: number[]
-          goals_player_ids?: number[]
           id?: number
           season_id: number
           team_away_id: number
           team_home_id: number
         }
         Update: {
-          assists_player_ids?: number[]
-          clutches_player_ids?: number[]
-          goals_player_ids?: number[]
           id?: number
           season_id?: number
           team_away_id?: number
@@ -247,21 +318,18 @@ export interface Database {
           color: string
           id: number
           name: string
-          player_ids: number[]
           season_id: number
         }
         Insert: {
           color?: string
           id?: number
           name: string
-          player_ids?: number[]
           season_id: number
         }
         Update: {
           color?: string
           id?: number
           name?: string
-          player_ids?: number[]
           season_id?: number
         }
         Relationships: [
@@ -269,6 +337,34 @@ export interface Database {
             foreignKeyName: "teams_season_id_fkey"
             columns: ["season_id"]
             referencedRelation: "seasons"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      teams_players: {
+        Row: {
+          player_id: number
+          team_id: number
+        }
+        Insert: {
+          player_id: number
+          team_id: number
+        }
+        Update: {
+          player_id?: number
+          team_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_players_player_id_fkey"
+            columns: ["player_id"]
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teams_players_team_id_fkey"
+            columns: ["team_id"]
+            referencedRelation: "teams"
             referencedColumns: ["id"]
           }
         ]
