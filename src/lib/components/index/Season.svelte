@@ -16,19 +16,26 @@
 	// Update visuals (background, video, player/team buttons, tables)
 	// Get color for teams to work (might need client loading?, use await?)
 
+	interface FantasyTeamWithPlayers extends Tables<'fantasy_teams'> {
+		fantasy_teams_players: {
+			player_id: number;
+		}[];
+	}
+
 	// Get specifics, can be used in script
 	export let season: Tables<'seasons'>;
 	export let teams: Tables<'teams'>[];
-	export let fantasyTeams: Tables<'fantasy_teams'>[];
+	export let fantasyTeams: FantasyTeamWithPlayers[];
 	export let playerStats: PlayerStats[];
 	export let teamStats: TeamStats[];
 
 	$: mergedTeams = mergeTeamAndTeamStats(teams, teamStats);
 
-	function getTotalPointsForFantasyTeam(fantasyTeams: Tables<'fantasy_teams'>, playerStats: PlayerStats[]): number {
+	function getTotalPointsForFantasyTeam(fantasyTeam: FantasyTeamWithPlayers, playerStats: PlayerStats[]): number {
 		let points: number = 0;
-		fantasyTeams.player_ids?.forEach((id: number) => {
-			let playerStat = playerStats.find((playerPoint) => playerPoint.player_id == id);
+
+		fantasyTeam.fantasy_teams_players.forEach((player) => {
+			let playerStat = playerStats.find((playerPoint) => playerPoint.player_id == player.player_id);
 
 			// ugly bugly
 			points += (playerStat?.assists || 0) + (playerStat?.clutches || 0) + (playerStat?.goals || 0);
