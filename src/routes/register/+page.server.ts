@@ -1,4 +1,4 @@
-import { fail, type Actions } from '@sveltejs/kit';
+import { fail, type Actions, redirect } from '@sveltejs/kit';
 
 export const actions = {
 	default: async ({ request, locals: { supabase } }) => {
@@ -17,6 +17,8 @@ export const actions = {
 					supabaseErrorMessage: error.message
 				});
 			}
+
+			throw redirect(303, '/');
 		}
 
 		return fail(400);
