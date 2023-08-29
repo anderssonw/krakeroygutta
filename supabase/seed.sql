@@ -24,20 +24,7 @@ VALUES ('Wiliam Andersson', 'placeholder.png'),
        ('Peder Eide', 'placeholder.png'),
        ('Magnus Gulbrandsen', 'placeholder.png');
 
-INSERT INTO teams_players(team_id, player_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (2, 5),
-       (2, 6),
-       (2, 7),
-       (2, 8),
-       (3, 9),
-       (3, 10),
-       (3, 11),
-       (3, 12),
-       (4, 13);
+
 
 INSERT INTO players_seasons (player_id, season_id)
 VALUES (1, 2),
@@ -78,22 +65,38 @@ VALUES (1, 1),
        (3, 10);
 
 
+INSERT INTO teams_players(team_id, player_id)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (2, 5),
+       (2, 6),
+       (2, 7),
+       (2, 8),
+       (3, 9),
+       (3, 10),
+       (3, 11),
+       (3, 12),
+       (4, 13);
+
 INSERT INTO matches (season_id, team_home_id, team_away_id)
 VALUES (2, 1, 2),
        (2, 2, 1),
        (2, 3, 4);
 
+
 INSERT INTO goals(match_id, player_id)
 VALUES (1, 1),
        (1, 2),
        (1, 4),
-       (3, 7);
+       (3, 9);
 
 INSERT INTO assists(match_id, player_id)
 VALUES (1, 2),
        (1, 1),
        (1, 5),
-       (3, 8);
+       (3, 10);
 
 INSERT INTO clutches(match_id, player_id)
 VALUES (1, 6),
