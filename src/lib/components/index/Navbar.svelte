@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import type { Tables } from '$lib/types/database.helper.types';
 	import { afterUpdate } from 'svelte';
 
-	export let isAdmin: boolean;
+	export let user: Tables<'users'> | null;
 
 	let oldY = 0;
 	let newY = oldY;
@@ -18,7 +18,7 @@
 	});
 </script>
 
-{#if $page.data.user}
+{#if user}
 	<div class="nav flex items-center {hideNavbar}">
 		<a href="/">
 			<div class="w-28 flex flex-row">
@@ -34,7 +34,7 @@
 			<div class="hidden tablet:flex">
 				<a href="/"> <h5 class="navbtn">Sesong</h5> </a>
 				<a href="/fantasy"> <h5 class="navbtn">Mitt lag</h5> </a>
-				{#if isAdmin}
+				{#if user.is_admin}
 					<a href="/admin"> <h5 class="navbtn">Admin</h5> </a>
 				{/if}
 				<a href="/profile"> <h5 class="navbtn">Profil</h5> </a>

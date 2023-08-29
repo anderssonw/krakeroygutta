@@ -8,15 +8,13 @@
 
 	export let data: LayoutData;
 
-	$: ({ supabase, session, user } = data);
-
-	$: isAdmin = user?.is_admin ?? false;
+	$: user = data.user;
 
 	onMount(() => {
 		const {
 			data: { subscription }
-		} = supabase.auth.onAuthStateChange((_event, _session) => {
-			if (_session?.expires_at !== session?.expires_at) {
+		} = data.supabase.auth.onAuthStateChange((_event, _session) => {
+			if (_session?.expires_at !== data.session?.expires_at) {
 				invalidate('supabase:auth');
 			}
 		});
@@ -25,7 +23,7 @@
 	});
 </script>
 
-<Navbar {isAdmin} />
+<Navbar bind:user />
 
 <slot />
 
