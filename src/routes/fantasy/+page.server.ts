@@ -68,8 +68,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				)
 			`
 		)
-		.eq('fantasy_teams_players.season_id', season?.id)
-		.eq('fantasy_teams_players.user_id', user?.id);
+		.eq('fantasy_teams_players.fantasy_team_id', fantasy.id);
 
 	if (fantasyTeamPlayersError) {
 		console.log('fantasyteamplerserror', fantasyTeamPlayersError);
@@ -128,23 +127,51 @@ export const actions = {
 				return fail(400, { data: Object.fromEntries(formData), errors });
 			}
 
-			const { error: fantasyTeamError } = await supabase
+			let fantasyTeamToInsert = {
+				name: name,
+				season_id: season.id,
+				captain_id: captainId > 0 ? captainId : null,
+				user_id: session.user.id
+			};
+
+			let { data: currentFantasyTeam, error: fantasyTeamError } = await supabase
 				.from('fantasy_teams')
-				.upsert(
-					{ name: name, season_id: season.id, captain_id: captainId > 0 ? captainId : null, user_id: session.user.id },
-					{ onConflict: 'season_id, user_id' }
-				);
+				.select('*')
+				.eq('season_id', season.id)
+				.eq('user_id', session.user.id)
+				.maybeSingle();
 
 			if (fantasyTeamError) {
-				console.log('fantasyteamerror', fantasyTeamError.message);
+				console.log('GetFantasyTeamError', fantasyTeamError.message);
 				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
 			}
 
-			const { error: deleteCurrentTeamError } = await supabase
-				.from('fantasy_teams_players')
-				.delete()
-				.eq('user_id', session.user.id)
-				.eq('season_id', season.id);
+			let fantasyTeamId = -1;
+
+			if (currentFantasyTeam && currentFantasyTeam.id) {
+				const { error: updateError } = await supabase.from('fantasy_teams').update(fantasyTeamToInsert).eq('id', currentFantasyTeam.id);
+
+				fantasyTeamError = updateError;
+
+				fantasyTeamId = currentFantasyTeam.id;
+			} else {
+				const { data: newFantasyTeam, error: insertError } = await supabase
+					.from('fantasy_teams')
+					.insert(fantasyTeamToInsert)
+					.select('id')
+					.single();
+
+				fantasyTeamError = insertError;
+
+				if (!insertError) fantasyTeamId = newFantasyTeam.id;
+			}
+
+			if (fantasyTeamError) {
+				console.log('InsertFantasyTeamError', fantasyTeamError.message);
+				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
+			}
+
+			const { error: deleteCurrentTeamError } = await supabase.from('fantasy_teams_players').delete().eq('fantasy_team_id', fantasyTeamId);
 
 			if (deleteCurrentTeamError) {
 				console.log('delete', deleteCurrentTeamError.message);
@@ -154,9 +181,8 @@ export const actions = {
 			const { error: fantasyTeamsPlayersError } = await supabase.from('fantasy_teams_players').upsert(
 				playerIds.map((id) => {
 					return {
-						user_id: session.user.id,
-						player_id: id,
-						season_id: season.id
+						fantasy_team_id: fantasyTeamId,
+						player_id: id
 					};
 				})
 			);

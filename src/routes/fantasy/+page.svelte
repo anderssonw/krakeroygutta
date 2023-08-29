@@ -24,7 +24,7 @@
 		captainId: fantasyTeam?.captain_id || -1,
 		selectedCardPosition: -1,
 		players: fillFantasyFormPlayers(fantasyTeamPlayers),
-		teamName: fantasyTeam?.name || 'placeholder'
+		teamName: fantasyTeam?.name || ''
 	} satisfies FantasyForm;
 
 	$: currentCash = calculateCurrentCash(fantasyForm.players);
