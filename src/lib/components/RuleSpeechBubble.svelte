@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let imageSrc: string;
 	export let text: string | string[];
+	export let mirror: boolean | undefined = undefined;
 
 	$: paragraphs = generateParagraphs();
 
@@ -11,6 +12,9 @@
 
 		return text;
 	};
+
+	const translateDirection = mirror ? 'translate-x-12 flex-row-reverse justify-items-end' : '-translate-x-12';
+	const mirroredTriangle = mirror ? '-scale-x-100' : '';
 </script>
 
 <div class="max-w-[50ch]">
@@ -19,9 +23,9 @@
 			<p class="text-primary-color-dark">{paragraph}</p>
 		{/each}
 	</div>
-	<div class="flex -translate-x-12">
-		<img class="-translate-y-6 max-w-[150px]" src={imageSrc} alt="En spelare" />
-		<div class="speech-triangle bg-slate-100 h-12 w-12" />
+	<div class={`flex ${translateDirection}`}>
+		<img class="-translate-y-6 max-w-[150px] justify-" src={imageSrc} alt="En spelare" />
+		<div class={`speech-triangle bg-slate-100 h-12 w-12  ${mirroredTriangle}`} />
 	</div>
 </div>
 
