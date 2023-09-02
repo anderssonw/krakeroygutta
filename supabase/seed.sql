@@ -1,6 +1,6 @@
 INSERT INTO seasons (name, start_time, deadline_time, end_time, starting_currency)
 VALUES ('Winter 2022', '2022-12-1 12:00:00', '2022-12-15 12:00:00', '2022-12-24 12:00:00', 25000),
-       ('Summer 2023', '2023-06-1 12:00:00', '2023-06-15 12:00:00', '2023-09-1 12:00:00', 25000),
+       ('Summer 2023', '2023-06-1 12:00:00', '2023-06-15 12:00:00', '2023-11-1 12:00:00', 25000),
        ('Winter 2023', '2023-12-1 12:00:00', '2023-12-15 12:00:00', '2023-12-24 12:00:00', 25000);
 
 INSERT INTO teams (season_id, name, color)
@@ -104,4 +104,10 @@ VALUES (1, 6),
        (2, 5),
        (3, 10),
        (3, 11);
-    
+
+INSERT INTO bets(user_id, season_id, bet, value)
+VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 100);
+
+INSERT INTO bets_against(owner, challenger)
+VALUES (1, 'ec61970a-704a-4c92-8d54-1a3181175c91'),
+       (1, 'c43e4127-0ba4-4db4-b217-61898937542d');

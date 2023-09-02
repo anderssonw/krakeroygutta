@@ -104,6 +104,7 @@
 </script>
 
 {#if session && season && teams && fantasyTeams}
+	<button on:click={() => console.log(matches)}>CLICK</button>
 	<Season {season} {teams} {fantasyTeams} playerStats={calculatePlayerStats()} teamStats={calculateTeamStats()} />
 {:else}
 	<Content />
