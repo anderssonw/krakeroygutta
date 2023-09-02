@@ -1,7 +1,7 @@
 
 // Protect routes 
 export const nonLoggedInRoutes = ['register', 'login']
-export const loggedInRoutes = ['fantasy', 'players', 'profile', 'teams'];
+export const loggedInRoutes = ['fantasy', 'players', 'profile', 'teams', 'matches'];
 export const adminRoutes = ['admin'];
 
 // Navbar routes

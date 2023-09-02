@@ -1,19 +1,10 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
 	// Get server data
 	export let data: PageData;
 	$: ({ session } = data);
-
-	// Protect route
-	onMount(async () => {
-		if (!session) {
-			goto('/login');
-		}
-	});
 
     /* Information to fetch: */
     /* Match statistics - goalscorers, assists and clutch (match score comes from this) */
