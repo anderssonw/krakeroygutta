@@ -36,3 +36,9 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+## Figma
+- NB! The pixel values are wrong for most frames compared to the actual website. En example is shown to the right in the yellow frame.
+- For new stuff, use values that you think fits. Generally try to reuse css from app.postcss such as 'structure' and 'form'
+- The non-logged in landing page and register/login forms should be reasonable examples.
+https://www.figma.com/file/bO4SfwyQ5ra30wpaj6HDHT/Fantasy-Football?type=design&node-id=0%3A1&mode=design&t=n6B6O8vYVqiJzpWC-1

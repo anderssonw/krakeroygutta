@@ -32,7 +32,7 @@
 			<KrakeroyKommune />
 
 			<div
-			class="absolute w-4/5 top-[10%] left-[10%] flex flex-col space-y-2 tablet:space-y-6 laptop:space-y-10"
+			class="absolute w-4/5 top-[6%] tablet:top-[10%] left-[10%] flex flex-col space-y-2 tablet:space-y-8 laptop:space-y-10"
 			>
 				<h3 class="font-bold text-center">Velkommen til Fantasy Futsal!</h3>
 				<p>
@@ -44,10 +44,7 @@
 					Bjerkholt. Du må derfor være ferdig med å bygge laget ditt innen den
 					tid.
 				</p>
-				<p class="text-center pt-4 tablet:pt-16 laptop:pt-24">
-					Masse lykke til med årets sesong!
-				</p>
-				<p class="text-center">Spell og ha det gøy!</p>
+				<h5 class="text-center pt-8 tablet:pt-24 laptop:pt-32">Spell og ha det gøy!</h5>
 			</div>
 		</div>
 

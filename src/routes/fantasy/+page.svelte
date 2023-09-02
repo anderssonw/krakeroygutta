@@ -1,30 +1,20 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import type { ActionData, PageData } from './$types';
-	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 	import SelectCardModal from '$lib/components/fantasy/SelectCardModal.svelte';
 	import CardSmall from '$lib/components/fantasy/CardSmall.svelte';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
 
 	// Get server data
 	export let data: PageData;
-	const { session, fantasyTeam, fantasyTeamPlayers, allPlayers, season } = data;
+	const { fantasyTeam, fantasyTeamPlayers, allPlayers, season } = data;
 
 	export let form: ActionData;
-
-	// Protect route
-	onMount(async () => {
-		if (!session) {
-			goto('/login');
-		}
-	});
 
 	$: fantasyForm = {
 		captainId: fantasyTeam?.captain_id || -1,
 		selectedCardPosition: -1,
 		players: fillFantasyFormPlayers(fantasyTeamPlayers),
-		teamName: fantasyTeam?.name || 'placeholder'
+		teamName: fantasyTeam?.name || ''
 	} satisfies FantasyForm;
 
 	$: currentCash = calculateCurrentCash(fantasyForm.players);
@@ -69,7 +59,7 @@
 	};
 </script>
 
-{#if session && allPlayers && season}
+{#if allPlayers && season}
 	<SelectCardModal bind:fantasyForm players={allPlayers} />
 
 	{#if season}
@@ -84,7 +74,7 @@
 			<h3>Penger: {currentCash}</h3>
 			<button class="btn"> Lagre Laget Ditt </button>
 
-			<div class="relative flex flex-wrap w-full hidden tablet:block">
+			<div class="relative flex flex-wrap w-full tablet:block">
 				<img src="/fantasy/Field.png" alt="field" />
 				{#each fantasyForm.players as player, position}
 					<div class="absolute player-{position}">
@@ -109,8 +99,4 @@
 	{:else}
 		<h2>Ingen aktiv sesong</h2>
 	{/if}
-{:else}
-	<div class="structure">
-		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
-	</div>
 {/if}

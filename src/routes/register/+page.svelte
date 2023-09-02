@@ -9,19 +9,21 @@
 <div class="structure">
 	<LargeLogo />
 
-	<h2>Registrering</h2>
+	<h3>Registrering</h3>
 
-	<form class="w-1/2 laptop:w-1/3" method="POST">
-		<div class="mb-6">
-			<label for="email" class="block mb-1"><h4>Epost</h4></label>
-			<input type="email" name="email" class="input w-full" placeholder="næbb@næbbesen.no" required />
-		</div>
-		<div class="mb-6">
-			<label for="password" class="block mb-1"><h4>Passord</h4></label>
-			<input type="password" name="password" class="input w-full" placeholder="" required />
-		</div>
-		<div class="mb-6 flex justify-center">
-			<input type="submit" class="btn" value={'Registrer'} />
+	<form class="form" method="POST">
+		<div class="form-structure">
+			<div class="w-full">
+				<label for="email" class="block mb-1"><h5>Epost</h5></label>
+				<input type="email" name="email" class="input" placeholder="næbb@næbbesen.no" required />
+			</div>
+			<div class="w-full">
+				<label for="password" class="block mb-1"><h5>Passord</h5></label>
+				<input type="password" name="password" class="input w-full" placeholder="" required />
+			</div>
+			<div>
+				<input type="submit" class="btn" value={'Registrer'} />
+			</div>
 		</div>
 	</form>
 
