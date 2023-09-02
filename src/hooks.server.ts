@@ -3,11 +3,7 @@ import { createSupabaseServerClient } from '@supabase/auth-helpers-sveltekit';
 import { NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 import { redirect, type Handle } from '@sveltejs/kit';
 import type { Tables } from '$lib/types/database.helper.types';
-import type { PostgrestError } from '@supabase/supabase-js';
-
-const loggedInRoutes = ['fantasy', 'players', 'profile', 'teams'];
-
-const adminRoutes = ['admin'];
+import { adminRoutes, loggedInRoutes } from '$lib/shared/routes';
 
 const isLoggedInRoute = (pathname: string): boolean => {
 	if (pathname.length == 0) return false;
