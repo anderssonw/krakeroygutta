@@ -11,7 +11,7 @@
 	// Necessary for the navbar(mobile) modal
 	let showMobileNavbar: boolean = false;
 	$: screenHeight = `${showMobileNavbar ? 'h-screen overflow-y-hidden' : 'overflow-y-visible'}`;
-	$: user = data.user;
+	$: ({ session, user } = data);
 
 	onMount(() => {
 		const {
@@ -27,7 +27,7 @@
 </script>
 
 <div class="{screenHeight}">
-	<Navbar bind:user bind:showMobileNavbar={showMobileNavbar} />
+	<Navbar session={session} bind:user bind:showMobileNavbar={showMobileNavbar} />
 
 	<slot />
 

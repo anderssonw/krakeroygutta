@@ -2,8 +2,20 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import { afterUpdate } from 'svelte';
 	import NavbarModal from './NavbarModal.svelte';
-
+	import type { Session } from '@supabase/supabase-js';
+	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
+	
+	export let session: Session | null;
 	export let user: Tables<'users'> | null;
+	export let showMobileNavbar: boolean;
+	
+
+	let routes: Route[] = getRoutes(session, user);
+	function getRoutes(session: Session | null, user: Tables<'users'> | null) {
+		let allRoutes: Route[] = (session ? navSessionRoutes : navNoSessionRoutes);
+		if (session && (user?.is_admin || user?.is_superadmin)) navAdminRoutes.map(r => allRoutes.push(r));
+		return allRoutes;
+	}
 
 	let oldY = 0;
 	let newY = oldY;
@@ -19,51 +31,29 @@
 	});
 </script>
 
-{#if user}
-	<div class="nav flex items-center {hideNavbar}">
-		<a href="/">
-			<div class="w-28 flex flex-row">
-				<img src="/LogoLightSmall.png" alt="trophy" />
-			</div>
-		</a>
-		<div class="w-full flex flex-row justify-end">
-			<div class="space-y-2 tablet:hidden">
-				<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => showMobileNavbar = true}>
-					<div class="w-8 h-1 bg-secondary-color-light" />
-					<div class="w-8 h-1 bg-secondary-color-light" />
-					<div class="w-8 h-1 bg-secondary-color-light" />
-				</div>
-			</div>
-			<div class="hidden tablet:flex">
-				<a href="/"> <h5 class="navbtn">Sesong</h5> </a>
-				<a href="/fantasy"> <h5 class="navbtn">Mitt lag</h5> </a>
-				{#if user.is_admin}
-					<a href="/admin"> <h5 class="navbtn">Admin</h5> </a>
-				{/if}
-				<a href="/profile"> <h5 class="navbtn">Profil</h5> </a>
+<div class="nav flex items-center {hideNavbar}">
+	<a href="/">
+		<div class="w-28 flex flex-row">
+			<img src="/LogoLightSmall.png" alt="trophy" />
+		</div>
+	</a>
+	<div class="w-full flex flex-row justify-end">
+		<div class="space-y-2 tablet:hidden">
+			<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => showMobileNavbar = true}>
+				<div class="w-8 h-1 bg-secondary-color-light" />
+				<div class="w-8 h-1 bg-secondary-color-light" />
+				<div class="w-8 h-1 bg-secondary-color-light" />
 			</div>
 		</div>
-	</div>
-{:else}
-	<div class="nav flex items-center {hideNavbar}">
-		<div class="w-full flex flex-row justify-end">
-			<div class="space-y-2 tablet:hidden">
-				<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => showMobileNavbar = true}>
-					<div class="w-8 h-1 bg-secondary-color-light" />
-					<div class="w-8 h-1 bg-secondary-color-light" />
-					<div class="w-8 h-1 bg-secondary-color-light" />
-				</div>
-			</div>
-			<div class="hidden tablet:flex">
-				<a href="/"> <h5 class="navbtn">Hjem</h5> </a>
-				<a href="/login"> <h5 class="navbtn">Logg inn</h5> </a>
-				<a href="/register"> <h5 class="navbtn">Registrer deg</h5> </a>
-			</div>
+		<div class="hidden tablet:flex">
+			{#each routes as route}
+				<a href="{route.route}"> <h5 class="navbtn"> {route.name} </h5> </a>
+			{/each}
 		</div>
 	</div>
-{/if}
+</div>
 
-<NavbarModal isAdmin={isAdmin} bind:showMobileNavbar={showMobileNavbar} />
+<NavbarModal routes={routes} bind:showMobileNavbar={showMobileNavbar} />
 
 <!-- Applies afterUpdate since y updates on scrolling -->
 <svelte:window bind:scrollY={newY} />

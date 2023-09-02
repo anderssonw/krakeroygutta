@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import type { Route } from '$lib/shared/routes';
 
-    export let isAdmin: boolean;
+    export let routes: Route[];
 	export let showMobileNavbar: boolean;
 
     $: navbarAnimation = `transition-all duration-500 ${showMobileNavbar ? 'translate-x-0' : '-translate-x-full'}`;
@@ -15,20 +16,9 @@
         </svg>
     </div>
 
-    {#if $page.data.user}
-        <div class="structure">
-            <a href="/" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Sesong</h1> </a>
-            <a href="/fantasy" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Mitt lag</h1> </a>
-            {#if isAdmin}
-                <a href="/admin" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Admin</h1> </a>
-            {/if}
-            <a href="/profile" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Profil</h1> </a>
-        </div>
-    {:else}
-        <div class="structure">
-            <a href="/" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Hjem</h1> </a>
-            <a href="/login" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Logg inn</h1> </a>
-            <a href="/register" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">Registrer deg</h1> </a>
-        </div>
-    {/if}
+    <div class="structure">
+        {#each routes as route}
+            <a href="{route.route}" on:mouseup={() => showMobileNavbar = false}> <h1 class="navbtn text-primary-color-dark">{route.name}</h1> </a>
+        {/each}
+    </div>
 </div>
