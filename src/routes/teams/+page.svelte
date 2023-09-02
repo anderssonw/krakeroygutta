@@ -1,22 +1,12 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
 	// Get server data
 	export let data: PageData;
-	$: ({ session, teams } = data);
-
-	// Protect route
-	onMount(async () => {
-		if (!session) {
-			goto('/login');
-		}
-	});
+	$: ({ teams } = data);
 </script>
 
-{#if session && teams}
+{#if teams}
 	<div class="structure">
 		<h2>Teams</h2>
 
@@ -42,9 +32,5 @@
 				</div>
 			</div>
 		{/each}
-	</div>
-{:else}
-	<div class="structure">
-		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
 	</div>
 {/if}

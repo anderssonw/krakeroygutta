@@ -26,7 +26,7 @@
 
 {#if player}
 	<div class="large-card group" on:mouseup={() => goto(`/players/${player.id}`)}>
-		<img src="/cards/{card_type}.png" alt="gold" class="group-hover:drop-shadow-{card_type}" />
+		<img src="/cards/{card_type}.png" alt="gold" />
 		<div class="w-28 absolute top-[18%] right-[8%]">
 			<img src="/profile/placeholder.png" alt="head" />
 			<div class="absolute top-[94%] bg-gradient-to-t from-slate-950/25 to-transparent w-[100%] h-2" />
