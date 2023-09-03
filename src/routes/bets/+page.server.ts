@@ -3,11 +3,22 @@ import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
 import type { TablesInsert } from '$lib/types/database.helper.types';
 
+interface User {
+    id: string;
+    nickname: string;
+}
+export interface Bet {
+    id: number;
+    bet: string;
+    value: number;
+    user: User | null;
+    challengers: User[];
+}
+
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { season } = await parent();
 
-    /* TODO; Swap admin with username */
-    /* TODO; User will return NULL with NON-VERIFIED USERS (fake users) */
+    // Trying to access non-verified(email) users using the foreign key relation returns NULL !
     const { data: bets, error: betsError } = await supabase
         .from('bets')
         .select(
@@ -27,14 +38,14 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
                 )
             `
         )
-        .eq('season_id', season?.id);
+        .eq('season_id', season?.id).returns<Bet[]>();
 
     // Handle FAKE users (since they return NULL without email verification)
     const better: string = '25f77d08-43a9-44b1-99fb-67597562bcaf'; // Seed data
     const challenger: string = 'ec61970a-704a-4c92-8d54-1a3181175c91'; // Seed data
     if (bets) {
         bets[0].user = { id: better, nickname: 'Fake pimp 1'};
-        bets[0].challengers[0].user = { id: challenger, nickname: 'Fake pimp 2'};
+        bets[0].challengers[0] = { id: challenger, nickname: 'Fake pimp 2'};
     }
 
     if (betsError) {

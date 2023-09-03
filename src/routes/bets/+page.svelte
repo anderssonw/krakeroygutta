@@ -5,6 +5,7 @@
 
 	// Get data from server if logged in
 	import type { PageData } from './$types';
+	import BetRow from '$lib/components/bets/BetRow.svelte';
 	export let data: PageData;
 
 	$: ({ user, bets } = data);
@@ -18,16 +19,9 @@
     function betExists() {
         return (bets?.filter(b => b.user?.id == user?.id).length > 0) ? true : false;
     }
-    function myBet(bet_id: string, user_id: string) {
-        return bet_id == user_id;
-    }
-
-    let bet: string;
-    let value: string;
 </script>
 
 <div class="structure">
-    <button on:click={() => console.log(bets)}>CLICK</button>
     <h1> Bets </h1>
     <RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
 
@@ -35,8 +29,8 @@
         <h3> Opprett ett veddemål </h3>
         <form class="form" method="POST">
             <div class="form-structure">
-                <TextField label="Veddemål" placeholder="Jeg vedder .." type="text" value={bet} />
-                <TextField label="Sats" placeholder="50" type="number" value={value} />
+                <TextField label="Veddemål" placeholder="Jeg vedder .." type="text" />
+                <TextField label="Sats" placeholder="50" type="number" />
                 <div>
                     <input type="submit" class="btn" value={'Send inn'} />
                 </div>
@@ -47,30 +41,7 @@
     <h3> Eksisterende veddemål </h3>
     <div class="w-full flex flex-col">
         {#each bets as bet}
-            <div class="flex flex-row">
-                <div class="w-5/12 bet">
-                    Veddemål: 				
-                    <ul class="list-disc list-inside pl-4">
-                        <li> {bet.bet} </li>
-                    </ul>
-                    Sats: 	
-                    <ul class="list-disc list-inside pl-4">
-                        <li> {bet.value} kr </li>
-                    </ul> 
-                    Eier: 				
-                    <ul class="list-disc list-inside pl-4">
-                        <li> {bet.user?.nickname} </li>
-                    </ul> 
-                </div>
-
-                <div class="w-7/12">
-                    {#each bet.challengers as challenger}
-                        <p>
-                            {challenger.user?.nickname}
-                        </p>
-                    {/each}
-                </div>
-            </div>
+            <BetRow bet={bet} user_id={user?.id ?? ''} />
         {/each}
     </div>
 </div>
