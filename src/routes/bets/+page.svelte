@@ -27,6 +27,7 @@
 </script>
 
 <div class="structure">
+    <button on:click={() => console.log(bets)}>CLICK</button>
     <h1> Bets </h1>
     <RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
 
@@ -65,7 +66,7 @@
                 <div class="w-7/12">
                     {#each bet.bets_against as bet_against}
                         <p>
-                            {bet_against.challenger}
+                            {bet_against.user_id}
                         </p>
                     {/each}
                 </div>

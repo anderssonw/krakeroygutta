@@ -1,25 +1,50 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
+import type { TablesInsert } from '$lib/types/database.helper.types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { season } = await parent();
 
+    /* TODO; Swap admin with username */
+    /* TODO; User will return NULL with NON-VERIFIED USERS (fake users) */
+    const { data: properQuery, error: test } = await supabase
+        .from('bets')
+        .select(
+            `
+                id,
+                bet,
+                value,
+                user:users(
+                    id,
+                    is_admin
+                ),
+                challengers:bets_against(
+                    users(
+                        id,
+                        is_admin
+                    )
+                )
+            `
+        )
+    console.log(properQuery);
+    
     const { data: bets, error: betsError } = await supabase
         .from('bets')
         .select(
             `
                 *,
-                bets_against(challenger)
+                bets_against(*)
             `
         )
         .eq('season_id', season?.id);
-    
+
     if (betsError) {
         throw error(500, {
             message: betsError.message
         });
     }
+    
 
     return {
         season,
@@ -50,12 +75,11 @@ export const actions = {
 				return fail(500, { message: 'There is no active season. Server could not handle your request.' });
 			}
 
-            // Can use Tables<'bets'> but it contains a id
-            const betForm = {
+            const betForm: TablesInsert<'bets'> = {
                 user_id: user.id,
                 season_id: season.id,
                 bet: bet,
-                value: value,
+                value: parseInt(value),
             }
 
             const { error: error } = await supabase.from('bets').insert(betForm);
