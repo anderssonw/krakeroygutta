@@ -12,6 +12,7 @@ declare global {
 			supabase: SupabaseClient<Database>;
 			getSession(): Promise<Session | null>;
 			getUser(): Promise<Tables<'users'> | null>;
+			getSeason(): Promise<Tables<'season'> | null>;
 		}
 		interface PageData {
 			session: Session | null;
