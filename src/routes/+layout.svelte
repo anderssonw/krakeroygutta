@@ -8,7 +8,10 @@
 
 	export let data: LayoutData;
 
-	$: user = data.user;
+	// Necessary for the navbar(mobile) modal
+	let showMobileNavbar: boolean = false;
+	$: screenHeight = `${showMobileNavbar ? 'h-screen overflow-y-hidden' : 'overflow-y-visible'}`;
+	$: ({ session, user } = data);
 
 	onMount(() => {
 		const {
@@ -23,8 +26,10 @@
 	});
 </script>
 
-<Navbar bind:user />
+<div class="{screenHeight}">
+	<Navbar session={session} bind:user bind:showMobileNavbar={showMobileNavbar} />
 
-<slot />
+	<slot />
 
-<Footer />
+	<Footer />
+</div>
