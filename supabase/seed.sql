@@ -106,10 +106,8 @@ VALUES (1, 6),
        (3, 11);
 
 INSERT INTO bets(user_id, season_id, bet, value)
-VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 100),
-       ('ec61970a-704a-4c92-8d54-1a3181175c91', 2, 'Jørgen får ingen assist', 50);
+VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 100);
 
 
 INSERT INTO bets_against(bet_id, user_id)
-VALUES (1, 'ec61970a-704a-4c92-8d54-1a3181175c91'),
-       (1, 'c43e4127-0ba4-4db4-b217-61898937542d');
+VALUES (1, 'ec61970a-704a-4c92-8d54-1a3181175c91');

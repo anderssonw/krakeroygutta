@@ -16,7 +16,7 @@
 	];
 
     function betExists() {
-        return (bets?.filter(b => b.user_id == user?.id).length > 0) ? true : false;
+        return (bets?.filter(b => b.user?.id == user?.id).length > 0) ? true : false;
     }
     function myBet(bet_id: string, user_id: string) {
         return bet_id == user_id;
@@ -59,14 +59,14 @@
                     </ul> 
                     Eier: 				
                     <ul class="list-disc list-inside pl-4">
-                        <li> {bet.user_id} </li>
+                        <li> {bet.user?.nickname} </li>
                     </ul> 
                 </div>
 
                 <div class="w-7/12">
-                    {#each bet.bets_against as bet_against}
+                    {#each bet.challengers as challenger}
                         <p>
-                            {bet_against.user_id}
+                            {challenger.user?.nickname}
                         </p>
                     {/each}
                 </div>
