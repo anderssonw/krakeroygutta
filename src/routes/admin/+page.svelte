@@ -1,28 +1,17 @@
-<!-- <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+<script lang="ts">
+	import AdmSeasons from '$lib/components/admin/AdmSeasons.svelte';
+	import AdmTeams from '$lib/components/admin/AdmTeams.svelte';
 	import type { PageData } from './$types';
-	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
 	// Get server data
 	export let data: PageData;
-	// $: ({ session, user, allSeasons, allPlayers, allTeams, allStats } = data);
-
-	// Protect route
-	onMount(async () => {
-		if (!session) {
-			goto('/login');
-		}
-		if (!user?.is_admin) {
-			goto('/');
-		}
-	});
+	const { user } = data;
 </script>
 
-{#if session && user?.is_admin}
- <Admin {activeSeason} {allSeasons} {allPlayers} {allTeams} {allStats} /> -->
-<!-- {:else}
-	<div class="structure">
-		<h2 class="text-center">Redirecting .. <SpinnerIcon /></h2>
-	</div>
-{/if} -->
+<div class="structure">
+	{#if user?.is_superadmin}
+		<AdmSeasons />
+		<AdmTeams />
+	{/if}
+
+</div>
