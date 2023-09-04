@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { PlayerStats, TeamStats } from '$lib/types/newTypes';
+	import SeasonButton from './SeasonButton.svelte';
 
 	interface MergedTeam {
 		name: string;
@@ -89,7 +90,7 @@
 		</video>
 	</div>
 	{#if season}
-		<div class="w-3/4 tablet:2/3 flex flex-col items-center space-y-12 pb-12">
+		<div class="w-[90%] tablet:2/3 flex flex-col items-center space-y-12 pb-12">
 			<h2>{season.name}</h2>
 			<table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-xl">
 				<thead>
@@ -118,15 +119,11 @@
 					{/each}
 				</tbody>
 			</table>
-			<div class="w-full flex flex-row flex-wrap tablet:flex-nowrap space-x-4">
-				<div class="w-80 flex flex-col items-center grow group hover:cursor-pointer" on:mouseup={() => goto('/players')}>
-					<img src="/Players.png" alt="players" class="w-3/4 mb-2 group-hover:scale-105 group-active:scale-100" />
-					<button class="btn w-1/2 group-hover:scale-105 group-active:scale-100">Spillere</button>
-				</div>
-				<div class="w-80 flex flex-col items-center grow group hover:cursor-pointer" on:mouseup={() => goto('/teams')}>
-					<img src="/teams.png" alt="players" class="w-3/4 mb-2 group-hover:scale-105 group-active:scale-100" />
-					<button class="btn w-1/2 group-hover:scale-105 group-active:scale-100">Lag</button>
-				</div>
+			<div class="w-full grid grid-cols-2 laptop:grid-cols-4 gap-4">
+				<SeasonButton image="players_btn.png" route="Players" />
+				<SeasonButton image="teams_btn.png" route="Teams" />
+				<SeasonButton image="matches_btn.png" route="Matches" />
+				<SeasonButton image="bets_btn.png" route="Bets" />
 			</div>
 		</div>
 

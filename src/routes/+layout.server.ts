@@ -1,39 +1,13 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals: { supabase, getSession } }) => {
-	const { data: user, error: userError } = await supabase.from('users').select().single();
-
-	if (userError) {
-		return {
-			user: null,
-			season: null,
-			session: await getSession(),
-			supabaseErrorMessage: userError.message
-		};
-	}
-
-	// TODO make handler
-	let todayTimeString = new Date().toDateString();
-
-	const { data: season, error: seasonError } = await supabase
-		.from('seasons')
-		.select()
-		.lt('start_time', todayTimeString)
-		.gt('end_time', todayTimeString)
-		.single();
-
-	if (seasonError) {
-		return {
-			user: user,
-			season: null,
-			session: getSession(),
-			supabaseErrorMessage: seasonError.message
-		};
-	}
+export const load: LayoutServerLoad = async ({ locals: { getSession, getUser, getSeason } }) => {
+	const session = await getSession();
+	const user = await getUser();
+	const season = await getSeason();
 
 	return {
-		user,
-		season,
-		session: getSession()
+		user: user,
+		season: season, // Need to fix Promise<unknown>
+		session: session
 	};
 };
