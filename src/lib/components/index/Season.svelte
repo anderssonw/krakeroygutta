@@ -119,7 +119,7 @@
 					{/each}
 				</tbody>
 			</table>
-			<div class="w-full flex flex-row flex-wrap gap-4">
+			<div class="w-full grid grid-cols-2 laptop:grid-cols-4 gap-4">
 				<SeasonButton image="players_btn.png" route="Players" />
 				<SeasonButton image="teams_btn.png" route="Teams" />
 				<SeasonButton image="matches_btn.png" route="Matches" />
