@@ -3,6 +3,8 @@ import type { PageServerLoad } from './$types';
 import { fail, type Actions } from '@sveltejs/kit';
 import type { TablesInsert } from '$lib/types/database.helper.types';
 
+// CUSTOM interface because we got 2nd relation keys
+// Or just handle plain users. instead?
 interface User {
     id: string;
     nickname: string;
@@ -11,8 +13,8 @@ export interface Bet {
     id: number;
     bet: string;
     value: number;
-    user: User | null;
-    challengers: User[];
+    user: User | null; // null because of non-verified users
+    challengers: any[]; // any because User is faulty due to non-verified users
 }
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
@@ -39,13 +41,13 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
             `
         )
         .eq('season_id', season?.id).returns<Bet[]>();
-
+    
     // Handle FAKE users (since they return NULL without email verification)
     const better: string = '25f77d08-43a9-44b1-99fb-67597562bcaf'; // Seed data
     const challenger: string = 'ec61970a-704a-4c92-8d54-1a3181175c91'; // Seed data
     if (bets) {
         bets[0].user = { id: better, nickname: 'Fake pimp 1'};
-        bets[0].challengers[0] = { id: challenger, nickname: 'Fake pimp 2'};
+        bets[0].challengers[0] = { user: { id: challenger, nickname: 'Fake pimp 2'} };
     }
 
     if (betsError) {
@@ -62,28 +64,19 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 };
 
 export const actions = {
-	default: async ({ request, locals: { supabase, getSession, getUser } }) => {
+	default: async ({ request, locals: { supabase, getSession, getUser, getSeason } }) => {
+        // Form data
 		const formData = await request.formData();
-
 		const bet = formData.get('Veddemål')?.toString();
 		const value = formData.get('Sats')?.toString();
 
+        // Server data (can we get from PAGE instead of re-loading?)
 		const session = await getSession();
         const user = await getUser();
-		if (session && user && bet && value) {
-            // This is also done in fantasy, should be reworked (?)
-			let todayTimeString = new Date().toDateString();
-			const { data: season, error: seasonError } = await supabase
-				.from('seasons')
-				.select()
-				.lt('start_time', todayTimeString)
-				.gt('end_time', todayTimeString)
-				.single();
+        const season = await getSeason();
 
-			if (seasonError) {
-				return fail(500, { message: 'There is no active season. Server could not handle your request.' });
-			}
-
+		if (session && user && season && bet && value) {
+            // Using a GENERIC INSERT where id is optional
             const betForm: TablesInsert<'bets'> = {
                 user_id: user.id,
                 season_id: season.id,
@@ -100,6 +93,7 @@ export const actions = {
 			}
         }
 
+        // Should not return true always
         return { success: true };
 	}
 } satisfies Actions;

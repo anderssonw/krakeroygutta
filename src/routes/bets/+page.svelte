@@ -8,7 +8,7 @@
 	import BetRow from '$lib/components/bets/BetRow.svelte';
 	export let data: PageData;
 
-	$: ({ user, bets } = data);
+	$: ({ user, bets, supabase } = data);
 
 	const speechBubbleText: string[] = [
 		'Her kan hver bruker legge ut 1 veddemål relatert til årets sesong.',
@@ -41,7 +41,7 @@
     <h3> Eksisterende veddemål </h3>
     <div class="w-full flex flex-col">
         {#each bets as bet}
-            <BetRow bet={bet} user_id={user?.id ?? ''} />
+            <BetRow bet={bet} user_id={user?.id ?? ''} supabase={supabase} />
         {/each}
     </div>
 </div>
