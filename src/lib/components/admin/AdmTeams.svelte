@@ -2,7 +2,6 @@
 	import AdminDropdown from "$lib/shared/AdminDropdown.svelte";
 	import TextField from "$lib/shared/TextField.svelte";
 	import type { DropdownOption } from "$lib/types/newTypes";
-	import Players from "../players/Players.svelte";
 	import DropdownMenu from "./dropdownMenu.svelte";
 
     let showTeams: boolean = false;
@@ -39,8 +38,8 @@
     <form class="form" method="POST">
         <div class="form-structure">
             <TextField header="Lag navn" label="teamName" type="text" placeholder="Gutta G" />
-            <DropdownMenu title={"Lag farge"} option={"farge"} options={dropdownOptions} bind:selectedOption={colorOption}/>
-            <DropdownMenu title={"Sesong"} option={"sesong"} options={dropdownOptions} bind:selectedOption={seasonOption}/>
+            <DropdownMenu header={"Lag farge"} option={"farge"} options={dropdownOptions} bind:selectedOption={colorOption}/>
+            <DropdownMenu header={"Sesong"} option={"sesong"} options={dropdownOptions} bind:selectedOption={seasonOption}/>
             <div class="w-full">
                 <div class="block mb-1"><h5>Spillere</h5></div>
                 <div class="grid grid-cols-2 gap-2">

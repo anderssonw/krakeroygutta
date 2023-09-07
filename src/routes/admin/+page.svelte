@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AdmMatches from '$lib/components/admin/AdmMatches.svelte';
 	import AdmSeasons from '$lib/components/admin/AdmSeasons.svelte';
 	import AdmTeams from '$lib/components/admin/AdmTeams.svelte';
 	import type { PageData } from './$types';
@@ -13,5 +14,5 @@
 		<AdmSeasons />
 		<AdmTeams />
 	{/if}
-
+	<AdmMatches />
 </div>
