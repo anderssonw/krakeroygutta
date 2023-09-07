@@ -45,3 +45,16 @@
 
 // 	return { allSeasons: allSeasons, allPlayers: allPlayers, allTeams: allTeams, allStats: allStats };
 // };
+
+import { fail, type Actions, error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+import type { FullPlayer } from '$lib/types/newTypes';
+
+export const actions = {
+	default: async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+        console.log(formData);
+        return { success: true };
+        return fail(401)
+	}
+} satisfies Actions;
