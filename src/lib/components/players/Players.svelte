@@ -1,15 +1,15 @@
 <script lang="ts">
+	import { CARD_SIZE } from '$lib/shared/cardEnum';
 	import type { FullPlayer } from '$lib/types/newTypes';
-	import CardLarge from './CardLarge.svelte';
+	import Card from '../cards/Card.svelte';
 
 	export let players: FullPlayer[];
 </script>
 
 <div class="structure">
-	<h2>Spillere</h2>
 	<div class="w-full flex flex-row flex-wrap gap-4 justify-center">
 		{#each players as player}
-			<CardLarge {player} />
+			<Card player={player} card_size={CARD_SIZE.SMALL} />
 		{/each}
 	</div>
 </div>
