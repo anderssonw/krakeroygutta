@@ -17,7 +17,9 @@
 </script>
 
 {#if mappedPlayers}
-	<div class="structure px-4">
+	<div class="structure">
+		<h1>Spillere</h1>
+		
 		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} />
 
 		<Players players={mappedPlayers} />
