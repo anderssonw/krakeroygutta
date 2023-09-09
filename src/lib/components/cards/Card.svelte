@@ -1,24 +1,15 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { CARD_SIZE } from '$lib/shared/cardEnum';
+	import { CARD_SIZE, calculatePlayerStatAverage, getPlayerCardType } from '$lib/shared/playerCardFunctions';
 	import type { FullPlayer } from '$lib/types/newTypes';
     
 	export let player: FullPlayer;
     export let card_size: CARD_SIZE;
 
-	$: playerStatAverage = calculatePlayerStatAverage();
-    $: cardType = getPlayerCardType();
+	$: playerStatAverage = calculatePlayerStatAverage(player);
+    $: cardType = getPlayerCardType(player, true);
     $: cardSizing = getCardSizing();
-
-	const calculatePlayerStatAverage = () => {
-		return Math.ceil((player.attack + player.defence + player.morale + player.physical) / 4);
-	};
-    const getPlayerCardType = () => {
-        let avgStats: number = calculatePlayerStatAverage();
-        if (avgStats > 70) return "gold-card";
-        if (avgStats > 40) return "silver-card";
-        return "bronze-card";
-    }
+	
     const getCardSizing = () => {
         let sizes = {
             width: sizeBasedReturn('w-60', 'w-40', 'w-28'),
@@ -41,7 +32,7 @@
 </script>
 
 {#if player}
-	<div class="clickable-card {cardType} {cardSizing.width} {cardSizing.height}">
+	<div class="clickable-card {cardType} {cardSizing.width} {cardSizing.height}" on:mouseup={() => goto(`/players/${player.id}`)}>
 
 		<div class="relative w-full h-[53.2%]">
 			<div class="{cardSizing.avg_stats} absolute top-[15%] left-[13%]">{playerStatAverage}</div>
@@ -52,7 +43,7 @@
 
 		<div class="relative w-full h-[46.8%]">
 			<div class="w-full flex flex-col {cardSizing.name_gap_y} items-center font-medium">
-				<div class="{cardSizing.name}">Last name</div>
+				<div class="{cardSizing.name}">{player.name.split(' ')[1]}</div>
 				<div class="{cardSizing.stats_width} grid grid-cols-2 {cardSizing.stat_gap_y} {cardSizing.gap_x} font-mono">
 					<div class="w-full flex flex-row justify-between">
 						<div class="{cardSizing.stats} font-bold">{player.attack}</div>
