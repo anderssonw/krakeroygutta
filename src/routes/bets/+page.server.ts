@@ -13,8 +13,8 @@ export interface Bet {
     id: number;
     bet: string;
     value: number;
-    user: User | null; // null because of non-verified users
-    challengers: any[]; // any because User is faulty due to non-verified users
+    user: User;
+    challengers: any[];
 }
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
@@ -40,16 +40,9 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
                 )
             `
         )
-        .eq('season_id', season?.id).returns<Bet[]>();
+        .eq('season_id', season?.id)
+        .returns<Bet[]>();
     
-    // Handle FAKE users (since they return NULL without email verification)
-    const better: string = '25f77d08-43a9-44b1-99fb-67597562bcaf'; // Seed data
-    const challenger: string = 'ec61970a-704a-4c92-8d54-1a3181175c91'; // Seed data
-    if (bets) {
-        bets[0].user = { id: better, nickname: 'Fake pimp 1'};
-        bets[0].challengers[0] = { user: { id: challenger, nickname: 'Fake pimp 2'} };
-    }
-
     if (betsError) {
         throw error(500, {
             message: betsError.message
@@ -58,7 +51,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
     
 
     return {
-        season,
         bets
     };
 };
@@ -67,18 +59,17 @@ export const actions = {
 	default: async ({ request, locals: { supabase, getSession, getUser, getSeason } }) => {
         // Form data
 		const formData = await request.formData();
-		const bet = formData.get('Veddemål')?.toString();
-		const value = formData.get('Sats')?.toString();
+		const bet = formData.get('bet')?.toString();
+		const value = formData.get('value')?.toString();
 
         // Server data (can we get from PAGE instead of re-loading?)
 		const session = await getSession();
-        const user = await getUser();
         const season = await getSeason();
 
-		if (session && user && season && bet && value) {
+		if (session && season && bet && value) {
             // Using a GENERIC INSERT where id is optional
             const betForm: TablesInsert<'bets'> = {
-                user_id: user.id,
+                user_id: session.user.id,
                 season_id: season.id,
                 bet: bet,
                 value: parseInt(value),
@@ -92,8 +83,7 @@ export const actions = {
 				});
 			}
         }
-
-        // Should not return true always
+        
         return { success: true };
 	}
 } satisfies Actions;

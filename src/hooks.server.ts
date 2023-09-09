@@ -42,7 +42,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 	};
 
 	event.locals.getUser = async (): Promise<Tables<'users'> | null> => {
-		const { data, error } = await event.locals.supabase.from('users').select().single();
+		// Get id from auth user
+		let authUserId;
+		await event.locals.supabase.auth.getUser()
+			.then(r => authUserId = r.data.user?.id);
+
+		// Get public user
+		const { data, error } = await event.locals.supabase.from('users')
+			.select('*')
+			.eq('id', authUserId)
+			.single();
 
 		if (error) return null;
 

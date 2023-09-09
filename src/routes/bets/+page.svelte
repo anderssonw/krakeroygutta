@@ -1,11 +1,11 @@
 <script lang="ts">
-	import RuleSpeechBubble from '$lib/components/RuleSpeechBubble.svelte';
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
-	import TextField from '$lib/shared/TextField.svelte';
+	import TextField from '$lib/components/common/TextField.svelte';
 
 	// Get data from server if logged in
 	import type { PageData } from './$types';
-	import BetRow from '$lib/components/bets/BetRow.svelte';
+	import Bet from '$lib/components/bets/Bet.svelte';
+	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 	export let data: PageData;
 
 	$: ({ user, bets, supabase } = data);
@@ -29,8 +29,8 @@
         <h3> Opprett ett veddemål </h3>
         <form class="form" method="POST">
             <div class="form-structure">
-                <TextField label="Veddemål" placeholder="Jeg vedder .." type="text" />
-                <TextField label="Sats" placeholder="50" type="number" />
+                <TextField header="Veddemål" label="bet" placeholder="Jeg vedder .." type="text" />
+                <TextField header="Sats" label="value" placeholder="50" type="number" />
                 <div>
                     <input type="submit" class="btn" value={'Send inn'} />
                 </div>
@@ -39,9 +39,9 @@
     {/if}
 
     <h3> Eksisterende veddemål </h3>
-    <div class="w-full flex flex-col">
+    <div class="w-full grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 place-items-center gap-y-16">
         {#each bets as bet}
-            <BetRow bet={bet} user_id={user?.id ?? ''} supabase={supabase} />
+            <Bet bet={bet} user_id={user?.id ?? ''} supabase={supabase} />
         {/each}
     </div>
 </div>

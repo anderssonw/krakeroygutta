@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import Players from '$lib/components/players/Players.svelte';
-	import RuleSpeechBubble from '$lib/components/RuleSpeechBubble.svelte';
 
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 
 	// Get server data
 	export let data: PageData;

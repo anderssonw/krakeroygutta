@@ -1,6 +1,6 @@
 <!-- <script lang="ts">
 	import { supabase } from "$lib/supabase";
-    import type { CreateSeason, Season } from "$lib/types/newTypes";
+    import type { CreateSea$lib/components/common/TextField.sveltees/newTypes";
 
     export let activeSeason: Season | null;
     export let allSeasons: Season[];

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import KrakeroyKommune from '$lib/components/index/krakeroyKommune.svelte';
-	import LargeLogo from '$lib/shared/largeLogo.svelte';
 	import { afterUpdate } from 'svelte';
 	import ContentFooter from './ContentFooter.svelte';
 	import { isInViewport } from '$lib/shared/isInView';
+	import LargeLogo from '../common/LargeLogo.svelte';
 
 	// Apply animation/movement as a tailwind class
 	let curPitchInView = false;
@@ -25,7 +25,7 @@
 
 <div class="w-full overflow-x-hidden">
 	
-	<div class="structure">
+	<div class="structure space-y-10">
 		<LargeLogo />
 
 		<div class="relative w-[80%] tablet:w-[60%]">
@@ -48,7 +48,7 @@
 			</div>
 		</div>
 
-		<div class="relative w-[80%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
+		<div class="relative w-[90%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
 			<img src="crown_top.png" alt="crown" />
 			<div>
 				<h3 class="text-center">Regler</h3>

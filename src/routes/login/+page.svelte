@@ -1,5 +1,5 @@
 <script lang="ts">
-	import LargeLogo from '$lib/shared/largeLogo.svelte';
+	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
 	import type { ActionData } from './$types';
 
 	export let form: ActionData;

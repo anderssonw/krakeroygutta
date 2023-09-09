@@ -3,7 +3,7 @@ create table "public"."bets" (
     "user_id" uuid not null,
     "season_id" bigint not null,
     "bet" character varying not null,
-    "value" integer
+    "value" integer not null
 );
 
 
@@ -13,6 +13,10 @@ create table "public"."bets_against" (
     "user_id" uuid not null
 );
 
+
+alter table "public"."users" add column "nickname" character varying not null default 'John Doe'::character varying;
+
+alter table "public"."users" disable row level security;
 
 CREATE UNIQUE INDEX bets_against_pkey ON public.bets_against USING btree (id);
 
@@ -30,7 +34,7 @@ alter table "public"."bets" add constraint "bets_user_id_fkey" FOREIGN KEY (user
 
 alter table "public"."bets" validate constraint "bets_user_id_fkey";
 
-alter table "public"."bets_against" add constraint "bets_against_bet_id_fkey" FOREIGN KEY (bet_id) REFERENCES bets(id) not valid;
+alter table "public"."bets_against" add constraint "bets_against_bet_id_fkey" FOREIGN KEY (bet_id) REFERENCES bets(id) ON DELETE CASCADE not valid;
 
 alter table "public"."bets_against" validate constraint "bets_against_bet_id_fkey";
 
