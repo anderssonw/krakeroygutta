@@ -143,6 +143,9 @@
 	.btn {
 		@apply bg-secondary-color-light hover:bg-secondary-color-dark text-primary-color-dark font-bold h-10 tablet:h-11 laptop:h-12 py-2 px-4 rounded-lg hover:cursor-pointer;
 	}
+	.btn-dark {
+		@apply bg-primary-color-light hover:bg-primary-color-dark text-secondary-color-dark font-bold h-10 tablet:h-11 laptop:h-12 py-2 px-4 rounded-lg hover:cursor-pointer;
+	}
 	.input {
 		@apply block h-10 tablet:h-11 laptop:h-12 py-2 px-4 rounded-lg w-full;
 	}
@@ -153,7 +156,7 @@
 		@apply flex flex-col space-y-2 tablet:space-y-4 laptop:space-y-6 items-center;
 	}
 	.structure {
-		@apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
+		@apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-6 tablet:space-y-8 laptop:space-y-10 my-12;
 	}
 	.nav {
 		@apply bg-primary-color h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-40;
@@ -171,6 +174,14 @@
 	}
 	.large-card {
 		@apply relative w-48 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
+	}
+
+	.bet {
+		@apply bg-secondary-color-light text-primary-color-dark p-2 tablet:p-4 mb-4 
+			rounded-tl-3xl rounded-tr-3xl rounded-br-3xl hover:cursor-pointer
+	}
+	.center {
+		@apply absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2;
 	}
 }
 

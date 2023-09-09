@@ -1,6 +1,6 @@
 <script lang="ts">
+	import SpinnerIcon from '$lib/components/common/spinnerIcon.svelte';
 	import type { PageData } from './$types';
-	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
 	// Get server data
 	export let data: PageData;

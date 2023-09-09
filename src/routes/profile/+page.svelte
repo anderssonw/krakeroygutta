@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import type { ActionData, PageData } from './$types';
-	import SpinnerIcon from '$lib/shared/spinnerIcon.svelte';
 
 	// Get server data
 	export let data: PageData;

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import IconStats from '$lib/shared/IconStats.svelte';
-import { getPlayerCardType } from '$lib/shared/playerCardFunctions';
+	import { getPlayerCardType } from '$lib/shared/playerCardFunctions';
 	import type { FullPlayer } from '$lib/types/newTypes';
+	import IconStats from '../common/IconStats.svelte';
 
 	export let player: FullPlayer | null;
 

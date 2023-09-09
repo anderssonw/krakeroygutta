@@ -1,6 +1,6 @@
 <!-- <script lang="ts">
     import { supabase } from "$lib/supabase";
-	import DropdownMenu from "$lib/components/admin/dropdownMenu.svelte";
+	import DropdownMenu fro$lib/components/common/TextField.sveltepdownMenu.svelte";
 	import type { CreateTeam, DropdownOption, Player, Season, Team, TeamColor } from "$lib/types/newTypes";
 
     export let activeSeason: Season | null;

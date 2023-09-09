@@ -7,7 +7,7 @@ export const load: LayoutServerLoad = async ({ locals: { getSession, getUser, ge
 
 	return {
 		user: user,
-		season: season, // Need to fix Promise<unknown>
+		season: season,
 		session: session
 	};
 };
