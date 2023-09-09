@@ -1,60 +1,73 @@
 <script lang="ts">
+	import IconStats from '$lib/shared/IconStats.svelte';
+import { getPlayerCardType } from '$lib/shared/playerCardFunctions';
 	import type { FullPlayer } from '$lib/types/newTypes';
-	import { onMount } from 'svelte';
+
 	export let player: FullPlayer | null;
 
-	let card_type: string = 'bronze';
-	onMount(() => {
-		if (player) {
-			if (player.price > 4000 && player.price < 5000) {
-				card_type = 'silver';
-			}
-			if (player.price >= 5000) {
-				card_type = 'gold';
-			}
-		}
-	});
+    $: cardBackType = getPlayerCardType(player, false);
 </script>
 
 <div class="structure">
-	<div class="relative w-full h-96 bg-primary-color">
-		<img src="/cards/{card_type}back.png" alt="bronze" class="w-full h-full object-cover" />
-		<div class="w-60 absolute bottom-0 left-1/2 -translate-x-1/2">
+	<div class="relative w-full h-64 tablet:h-80 laptop:h-96 {cardBackType}">
+		<div class="w-52 tablet:w-64 laptop:w-80 absolute bottom-0 left-1/2 -translate-x-1/2">
 			<img src="/profile/placeholder.png" alt="head" />
 		</div>
 	</div>
 
-	<div class="w-full flex flex-col items-center space-y-4 pb-12 border-b-4 border-secondary-light">
+	
+	<div class="w-full flex flex-col items-center 
+		space-y-2 tablet:space-y-4 laptop:space-y-6 
+		p-4 tablet:p-8 laptop:p-12 
+		border-y-4 laptop:border-4 border-secondary-light laptop:rounded-lg">
+
 		<h1>{player?.name}</h1>
-		<h2>Pris: {player?.price}</h2>
+		<h3>Pris: {player?.price}</h3>
+
+		<div class="w-2/3 flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6">
+			<div class="w-full flex flex-row border-b-2">
+				<h3 class="grow">Angrep</h3>
+				<h3 class="grow text-end">{player?.attack}</h3>
+			</div>
+			<div class="w-full flex flex-row border-b-2">
+				<h3 class="grow">Forsvar</h3>
+				<h3 class="grow text-end">{player?.defence}</h3>
+			</div>
+			<div class="w-full flex flex-row border-b-2">
+				<h3 class="grow">Fysikk</h3>
+				<h3 class="grow text-end">{player?.physical}</h3>
+			</div>
+			<div class="w-full flex flex-row border-b-2">
+				<h3 class="grow">Moral</h3>
+				<h3 class="grow text-end">{player?.morale}</h3>
+			</div>
+			<h3>Total: 50</h3>
+		</div>
 	</div>
 
-	<div class="w-full flex flex-col items-center space-y-4 pb-12 border-b-4 border-secondary-light">
-		<h2>Stats</h2>
-		<div class="w-full flex flex-row">
-			<h3 class="grow">Attack</h3>
-			<h3 class="grow text-end">{player?.attack}</h3>
+	<div class="w-full flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6 pb-12 border-b-4 border-secondary-light">
+		<h3>Summer 2023</h3>
+		<div class="grid grid-cols-3 w-full tablet:w-2/3 pb-2 border-b-2">
+			<IconStats amount={1} large={true} icon={'goal'} />
+			<IconStats amount={5} large={true} icon={'assist'} />
+			<IconStats amount={10} large={true} icon={'clutch'} />
 		</div>
-		<div class="w-full flex flex-row">
-			<h3 class="grow">Defence</h3>
-			<h3 class="grow text-end">{player?.defence}</h3>
+		<div class="grid grid-cols-2 w-full tablet:w-2/3">
+			<div class="flex flex-row justify-center">WINS (Reuse IconStats)</div>
+			<div class="flex flex-row justify-center">CLEAN SHEETS</div>
 		</div>
-		<div class="w-full flex flex-row">
-			<h3 class="grow">Physical</h3>
-			<h3 class="grow text-end">{player?.physical}</h3>
-		</div>
-		<div class="w-full flex flex-row">
-			<h3 class="grow">Morale</h3>
-			<h3 class="grow text-end">{player?.morale}</h3>
-		</div>
-		<h3>Overall: 50</h3>
 	</div>
 
-	<div class="w-full flex flex-col items-center space-y-4 pb-12 border-b-4 border-secondary-light">
-		<h2>Summer 2023</h2>
-		<div class="w-full flex flex-row">
-			<h3 class="grow">Wins</h3>
-			<h3 class="grow text-end">0</h3>
+	<div class="w-full flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6 pb-12 border-b-4 border-secondary-light">
+		<h3>Summer 2024</h3>
+		<div class="grid grid-cols-3 w-full tablet:w-2/3 pb-2 border-b-2">
+			<IconStats amount={1} large={true} icon={'goal'} />
+			<IconStats amount={5} large={true} icon={'assist'} />
+			<IconStats amount={10} large={true} icon={'clutch'} />
+		</div>
+		<div class="grid grid-cols-2 w-full tablet:w-2/3">
+			<div class="flex flex-row justify-center">WINS (Reuse IconStats)</div>
+			<div class="flex flex-row justify-center">CLEAN SHEETS</div>
 		</div>
 	</div>
 </div>

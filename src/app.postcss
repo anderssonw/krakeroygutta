@@ -161,22 +161,24 @@
 	.navbtn {
 		@apply transition-all duration-200 hover:scale-110;
 	}
+	.clickable-card {
+		@apply hover:cursor-pointer scale-100 hover:scale-105 active:scale-100 text-primary-color;
+	}
 
+	/* TODO: Remove */
 	.small-card {
 		@apply relative w-28 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
 	}
 	.large-card {
 		@apply relative w-48 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
 	}
+	
 	.bet {
 		@apply bg-secondary-color-light text-primary-color-dark p-2 tablet:p-4 mb-4 
 			rounded-tl-3xl rounded-tr-3xl rounded-br-3xl hover:cursor-pointer
 	}
 	.center {
 		@apply absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2;
-	}
-
-	@screen tablet {
 	}
 }
 
@@ -192,6 +194,25 @@
 .player-3 {
 	@apply absolute top-0 left-1/2 -translate-x-1/2;
 }
+.gold-card {
+	@apply bg-cover bg-[url('/cards/gold.png')];
+}
+.silver-card {
+	@apply bg-cover bg-[url('/cards/silver.png')];
+}
+.bronze-card {
+	@apply bg-cover bg-[url('/cards/bronze.png')];
+}
+.gold-back {
+	@apply bg-cover bg-[url('/cards/goldback.png')];
+}
+.silver-back {
+	@apply bg-cover bg-[url('/cards/silverback.png')];
+}
+.bronze-back {
+	@apply bg-cover bg-[url('/cards/bronzeback.png')];
+}
+
 
 /**** UTILITIES concerns all existing classes ****/
 @layer utilities {
