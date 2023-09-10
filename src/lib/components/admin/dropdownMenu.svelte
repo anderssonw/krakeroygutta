@@ -1,38 +1,43 @@
-<!-- <script lang="ts">
+<script lang="ts">
 	import type { DropdownOption } from "$lib/types/newTypes";
 
+    export let header: string;
     export let option: string;
-    export let options: any[];
+    export let options: DropdownOption[];
     export let selectedOption: DropdownOption;
 
     let showOptions: boolean = false;
-    const handleSelection = (option: any) => {
+    const handleSelection = (option: DropdownOption) => {
         selectedOption = {
-            id: option.pid ?? option.sid ?? option.tid,
+            id: option.id,
             name: option.name
         }
         showOptions = false;
     }
-    const removeSelection = (option: any) => {
+    const removeSelection = () => {
         selectedOption = {} as DropdownOption;
     }
 </script>
 
-<div class="relative">
-    
+<div class="relative w-full">
     {#if selectedOption.id}
-        {selectedOption.name} <button class="btn" on:click={removeSelection}>X</button>
+        <div class="block mb-1"><h5>{header}</h5></div>
+        <div class="flex flex-row items-center rounded-lg border-2 pl-4">
+            <p class="w-9/12">{selectedOption.name}</p>
+            <button class="btn w-3/12" on:click={removeSelection}>X</button>
+        </div>
     {:else}
-        <button type="button" class="btn" on:click={() => showOptions = !showOptions}>
-            Select {option}
+        <div class="block mb-1"><h5>{header}</h5></div>
+        <button type="button" class="btn w-full" on:click={() => showOptions = !showOptions}>
+            Velg {option}
         </button>
     {/if}
 
     {#if showOptions}
-        <div class="absolute top-12 bg-primary-color w-48 p-2 rounded-md z-10">
+        <div class="absolute bg-primary-color w-full p-2 rounded-md z-10">
             {#each options as opt}
-                <p class="rounded-sm hover:bg-primary-color-light hover:cursor-pointer" on:mouseup={() => handleSelection(opt)}>{opt.name}</p>
+                <h5 class="rounded-sm hover:bg-primary-color-light hover:cursor-pointer py-2 border-b-2" on:mouseup={() => handleSelection(opt)}>{opt.name}</h5>
             {/each}
         </div>
     {/if}
-</div> -->
+</div> 
