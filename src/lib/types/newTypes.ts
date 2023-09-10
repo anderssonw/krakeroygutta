@@ -16,6 +16,7 @@ export interface FantasyStanding {
 }
 export interface PlayerStats {
 	player_id: number;
+	name?: string;
 	goals: number;
 	assists: number;
 	clutches: number;
@@ -80,4 +81,16 @@ export interface DropdownOption {
 export interface TeamColor {
 	tid: number;
 	name: string;
+}
+
+/* MATCHES PAGE */
+export interface TeamDisplay {
+	color: string;
+	name: string;
+	players: PlayerStats[];
+}
+export interface MatchDisplay {
+	match_id: number;
+	home_team: TeamDisplay;
+	away_team: TeamDisplay;
 }
