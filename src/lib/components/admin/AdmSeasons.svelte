@@ -2,7 +2,7 @@
 	import AdminDropdown from "$lib/shared/AdminDropdown.svelte";
     import TextField from "$lib/shared/TextField.svelte";
 
-    let showSeasons: boolean = true;
+    let showSeasons: boolean = false;
 
 
 </script>

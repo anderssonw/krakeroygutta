@@ -3,7 +3,7 @@
 	import type { DropdownOption } from "$lib/types/newTypes";
 	import DropdownMenu from "./dropdownMenu.svelte";
 
-    let showMatches: boolean = true;
+    let showMatches: boolean = false;
 
     let dropdownOptions: DropdownOption[] = [
         {
