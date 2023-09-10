@@ -7,7 +7,7 @@
 
 	// Get server data
 	export let data: PageData;
-	$: ({ mappedPlayers } = data);
+	$: ({ mappedPlayers, season } = data);
 
 	const speechBubbleText: string[] = [
 		'Alle spillere er vurdert relativt til ferdighetene som befinner seg i gjengen.',
@@ -22,6 +22,6 @@
 		
 		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} />
 
-		<Players players={mappedPlayers} />
+		<Players players={mappedPlayers} season={season} />
 	</div>
 {/if}
