@@ -10,6 +10,7 @@
 </script>
 
 <div class="structure">
+	<h1> Administrasjon </h1>
 	{#if user?.is_superadmin}
 		<AdmSeasons />
 		<AdmTeams />

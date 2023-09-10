@@ -2,20 +2,17 @@
 	import AdminDropdown from "$lib/shared/AdminDropdown.svelte";
     import TextField from "$lib/shared/TextField.svelte";
 
-    export let activeSeason: Season | null;
-    export let allSeasons: Season[];
+    let showSeasons: boolean = true;
 
-    let showSeasons: boolean = false;
+
 </script>
-
-<h1> Administrasjon </h1>
 
 <AdminDropdown title={'sesonger'} bind:showContent={showSeasons} />
 
 {#if showSeasons}
         <h3> Legg til ny sesong </h3>
 
-        <form class="form" method="POST">
+        <form class="form" method="POST" action="?/createSeason">
             <div class="form-structure">
                 <TextField header="Sesong navn" label="seasonName" type="text" placeholder="Vinter 2024" />
                 <TextField header="Start tid" label="seasonStart" type="text" placeholder="YYYY-MM-DD hh:mm:ss" />
