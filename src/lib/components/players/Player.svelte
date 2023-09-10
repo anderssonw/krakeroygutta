@@ -53,21 +53,21 @@
 			<IconStats amount={10} large={true} icon={'clutch'} />
 		</div>
 		<div class="grid grid-cols-2 w-full tablet:w-2/3">
-			<div class="flex flex-row justify-center">WINS (Reuse IconStats)</div>
-			<div class="flex flex-row justify-center">CLEAN SHEETS</div>
+			<IconStats amount={1} large={true} icon={'win'} />
+			<IconStats amount={5} large={true} icon={'cleansheet'} />
 		</div>
 	</div>
 
 	<div class="w-full flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6 pb-12 border-b-4 border-secondary-light">
-		<h3>Summer 2024</h3>
+		<h3>Summer 2023</h3>
 		<div class="grid grid-cols-3 w-full tablet:w-2/3 pb-2 border-b-2">
 			<IconStats amount={1} large={true} icon={'goal'} />
 			<IconStats amount={5} large={true} icon={'assist'} />
 			<IconStats amount={10} large={true} icon={'clutch'} />
 		</div>
 		<div class="grid grid-cols-2 w-full tablet:w-2/3">
-			<div class="flex flex-row justify-center">WINS (Reuse IconStats)</div>
-			<div class="flex flex-row justify-center">CLEAN SHEETS</div>
+			<IconStats amount={1} large={true} icon={'win'} />
+			<IconStats amount={5} large={true} icon={'cleansheet'} />
 		</div>
 	</div>
 </div>
