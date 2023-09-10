@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import Players from '$lib/components/players/Players.svelte';
-	import RuleSpeechBubble from '$lib/components/RuleSpeechBubble.svelte';
 
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 
 	// Get server data
 	export let data: PageData;
-	$: ({ mappedPlayers } = data);
+	$: ({ mappedPlayers, season } = data);
 
 	const speechBubbleText: string[] = [
 		'Alle spillere er vurdert relativt til ferdighetene som befinner seg i gjengen.',
@@ -17,9 +17,11 @@
 </script>
 
 {#if mappedPlayers}
-	<div class="structure px-4">
+	<div class="structure">
+		<h1>Spillere</h1>
+		
 		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} />
 
-		<Players players={mappedPlayers} />
+		<Players players={mappedPlayers} season={season} />
 	</div>
 {/if}

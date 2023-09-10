@@ -1,15 +1,17 @@
 <script lang="ts">
+	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
+	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
-	import CardLarge from './CardLarge.svelte';
+	import Card from '../cards/Card.svelte';
 
 	export let players: FullPlayer[];
+	export let season: Tables<'seasons'> | null;
 </script>
 
 <div class="structure">
-	<h2>Spillere</h2>
 	<div class="w-full flex flex-row flex-wrap gap-4 justify-center">
 		{#each players as player}
-			<CardLarge {player} />
+			<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season} />
 		{/each}
 	</div>
 </div>

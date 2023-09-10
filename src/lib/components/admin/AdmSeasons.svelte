@@ -2,6 +2,9 @@
 	import AdminDropdown from "$lib/shared/AdminDropdown.svelte";
     import TextField from "$lib/shared/TextField.svelte";
 
+    export let activeSeason: Season | null;
+    export let allSeasons: Season[];
+
     let showSeasons: boolean = false;
 </script>
 

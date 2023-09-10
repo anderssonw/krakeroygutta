@@ -21,9 +21,14 @@ const config = {
 					light: '#f0f0f0',
 					DEFAULT: '#e8e8e8',
 					dark: '#d8d8d8'
-				}
+				},
+				'team-green': '#2E8B57',
+				'team-red': '#DC143C',
+				'team-white': '#FAF9F6',
+				'team-black': '#343434'
 			},
 			height: {
+				46: '11.5rem',
 				128: '32rem',
 				160: '40rem',
 				192: '48rem'

@@ -17,15 +17,17 @@
 	const mirroredTriangle = mirror ? '-scale-x-100' : '';
 </script>
 
-<div class="max-w-[50ch]">
-	<div class="bg-slate-100 rounded-3xl grid p-8 gap-2">
-		{#each paragraphs as paragraph}
-			<p class="text-primary-color-dark">{paragraph}</p>
-		{/each}
-	</div>
-	<div class={`flex ${translateDirection}`}>
-		<img class="-translate-y-6 max-w-[150px] justify-" src={imageSrc} alt="En spelare" />
-		<div class={`speech-triangle bg-slate-100 h-12 w-12  ${mirroredTriangle}`} />
+<div class="w-full flex justify-center border-b-4">
+	<div class="w-[70%] tablet:max-w-[50ch]">
+		<div class="translate-y-6 bg-secondary-color-light rounded-3xl grid p-8 gap-2">
+			{#each paragraphs as paragraph}
+				<p class="text-primary-color-dark">{paragraph}</p>
+			{/each}
+		</div>
+		<div class={`flex ${translateDirection}`}>
+			<img class="max-w-[150px] justify-" src={imageSrc} alt="En spelare" />
+			<div class={`translate-y-6 speech-triangle bg-secondary-color-light h-12 w-12  ${mirroredTriangle}`} />
+		</div>
 	</div>
 </div>
 

@@ -143,6 +143,9 @@
 	.btn {
 		@apply bg-secondary-color-light hover:bg-secondary-color-dark text-primary-color-dark font-bold h-10 tablet:h-11 laptop:h-12 py-2 px-4 rounded-lg hover:cursor-pointer;
 	}
+	.btn-dark {
+		@apply bg-primary-color-light hover:bg-primary-color-dark text-secondary-color-dark font-bold h-10 tablet:h-11 laptop:h-12 py-2 px-4 rounded-lg hover:cursor-pointer;
+	}
 	.input {
 		@apply block h-10 tablet:h-11 laptop:h-12 py-2 px-4 rounded-lg w-full;
 	}
@@ -153,7 +156,7 @@
 		@apply flex flex-col space-y-2 tablet:space-y-4 laptop:space-y-6 items-center;
 	}
 	.structure {
-		@apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-4 tablet:space-y-8 laptop:space-y-10 my-12;
+		@apply container mx-auto max-w-screen-laptop flex flex-col items-center justify-center space-y-6 tablet:space-y-8 laptop:space-y-10 my-12;
 	}
 	.nav {
 		@apply bg-primary-color h-20 tablet:h-24 laptop:h-28 border-b-2 border-secondary-color-light px-8 tablet:px-20 sticky top-0 z-40;
@@ -161,7 +164,11 @@
 	.navbtn {
 		@apply transition-all duration-200 hover:scale-110;
 	}
+	.clickable-card {
+		@apply hover:cursor-pointer scale-100 hover:scale-105 active:scale-100 text-primary-color;
+	}
 
+	/* TODO: Remove */
 	.small-card {
 		@apply relative w-28 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
 	}
@@ -169,10 +176,16 @@
 		@apply relative w-48 hover:scale-105 flex flex-col items-center hover:cursor-pointer;
 	}
 
-	@screen tablet {
+	.bet {
+		@apply bg-secondary-color-light text-primary-color-dark p-2 tablet:p-4 mb-4 
+			rounded-tl-3xl rounded-tr-3xl rounded-br-3xl hover:cursor-pointer
+	}
+	.center {
+		@apply absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2;
 	}
 }
 
+/* All of these are here because the css wont apply 'dynamically' otherwise */
 .player-0 {
 	@apply absolute bottom-5 tablet:bottom-10 left-1/2 -translate-x-1/2;
 }
@@ -185,6 +198,49 @@
 .player-3 {
 	@apply absolute top-0 left-1/2 -translate-x-1/2;
 }
+.gold-card {
+	@apply bg-cover bg-[url('/cards/gold.png')];
+}
+.silver-card {
+	@apply bg-cover bg-[url('/cards/silver.png')];
+}
+.bronze-card {
+	@apply bg-cover bg-[url('/cards/bronze.png')];
+}
+.gold-back {
+	@apply bg-cover bg-[url('/cards/goldback.png')];
+}
+.silver-back {
+	@apply bg-cover bg-[url('/cards/silverback.png')];
+}
+.bronze-back {
+	@apply bg-cover bg-[url('/cards/bronzeback.png')];
+}
+.svg-team-green {
+	@apply fill-team-green;
+}
+.svg-team-red {
+	@apply fill-team-red;
+}
+.svg-team-white {
+	@apply fill-team-white;
+}
+.svg-team-black {
+	@apply fill-team-black;
+}
+.div-team-green {
+	@apply bg-team-green;
+}
+.div-team-red {
+	@apply bg-team-red;
+}
+.div-team-white {
+	@apply bg-team-white;
+}
+.div-team-black {
+	@apply bg-team-black;
+}
+
 
 /**** UTILITIES concerns all existing classes ****/
 @layer utilities {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import RuleSpeechBubble from '$lib/components/RuleSpeechBubble.svelte';
 	import Content from '$lib/components/index/Content.svelte';
 	import Season from '$lib/components/index/Season.svelte';
 	import type { PlayerStats, TeamStats } from '$lib/types/newTypes';

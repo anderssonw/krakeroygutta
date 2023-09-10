@@ -1,6 +1,5 @@
 <script lang="ts">
-	import LargeLogo from '$lib/shared/largeLogo.svelte';
-
+	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
 	import type { ActionData } from './$types';
 
 	export let form: ActionData;
@@ -13,6 +12,10 @@
 
 	<form class="form" method="POST">
 		<div class="form-structure">
+			<div class="w-full">
+				<label for="nickname" class="block mb-1"><h5>Kallenavn</h5></label>
+				<input type="nickname" name="text" class="input" placeholder="Magnus VG" required />
+			</div>
 			<div class="w-full">
 				<label for="email" class="block mb-1"><h5>Epost</h5></label>
 				<input type="email" name="email" class="input" placeholder="næbb@næbbesen.no" required />

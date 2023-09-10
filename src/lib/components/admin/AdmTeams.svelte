@@ -2,7 +2,19 @@
 	import AdminDropdown from "$lib/shared/AdminDropdown.svelte";
 	import TextField from "$lib/shared/TextField.svelte";
 	import type { DropdownOption } from "$lib/types/newTypes";
-	import DropdownMenu from "./dropdownMenu.svelte";
+
+    export let activeSeason: Season | null;
+    export let allSeasons: Season[];
+    export let allPlayers: Player[];
+    export let allTeams: Team[];
+
+    // Based on tailwind colors
+    let allColors: TeamColor[] = [
+        {tid: 1, name: "red"},
+        {tid: 2, name: "green"},
+        {tid: 3, name: "blue"},
+        {tid: 4, name: "neutral"}
+    ]
 
     let showTeams: boolean = false;
 

@@ -6,11 +6,15 @@ export const actions = {
 		const email = formData.get('email')?.toString();
 		const password = formData.get('password')?.toString();
 
+		/* TODO: Use nickname */
+		const nickname = formData.get('nickname')?.toString();
+
 		if (email && password) {
 			const { error: error } = await supabase.auth.signUp({
 				email,
 				password
 			});
+			console.log(error);
 
 			if (error) {
 				return fail(500, {

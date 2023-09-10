@@ -90,9 +90,9 @@
 		</video>
 	</div>
 	{#if season}
-		<div class="w-[90%] tablet:2/3 flex flex-col items-center space-y-12 pb-12">
+		<div class="w-[90%] laptop:w-full tablet:2/3 flex flex-col items-center space-y-12 pb-12">
 			<h2>{season.name}</h2>
-			<table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-xl">
+			<table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-lg">
 				<thead>
 					<tr class="border-b-4 border-secondary-color-dark">
 						<th class="border-r-4 border-secondary-color-dark">Pos</th>
