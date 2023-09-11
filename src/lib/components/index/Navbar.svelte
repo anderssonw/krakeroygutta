@@ -4,6 +4,7 @@
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
+	import smallHeaderLogo from '$lib/assets/HeaderLogoSmall.png';
 	
 	export let session: Session | null;
 	export let user: Tables<'users'> | null;
@@ -34,7 +35,7 @@
 <div class="nav flex items-center {hideNavbar}">
 	<a href="/">
 		<div class="w-28 flex flex-row">
-			<img src="/LogoLightSmall.png" alt="trophy" />
+			<img src={smallHeaderLogo} alt="trophy" />
 		</div>
 	</a>
 	<div class="w-full flex flex-row justify-end">

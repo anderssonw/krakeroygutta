@@ -4,6 +4,7 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import TeamKit from '../common/TeamKit.svelte';
+	import placeholderImg from '$lib/assets/cards/Placeholder.png';
     
 	export let player: FullPlayer;
     export let card_size: CARD_SIZE;
@@ -47,7 +48,7 @@
 				{/if}
 			</div>
 			<div class="w-[50%] absolute bottom-0 right-[5%]">
-				<img src="/profile/placeholder.png" alt="head" />
+				<img src={placeholderImg} alt="head" />
 			</div>
 		</div>
 

@@ -2,6 +2,7 @@
 	import { getPlayerCardType } from '$lib/shared/playerCardFunctions';
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import IconStats from '../common/IconStats.svelte';
+	import placeholderImg from '$lib/assets/cards/Placeholder.png';
 
 	export let player: FullPlayer | null;
 
@@ -11,7 +12,7 @@
 <div class="structure">
 	<div class="relative w-full h-64 tablet:h-80 laptop:h-96 {cardBackType}">
 		<div class="w-52 tablet:w-64 laptop:w-80 absolute bottom-0 left-1/2 -translate-x-1/2">
-			<img src="/profile/placeholder.png" alt="head" />
+			<img src={placeholderImg} alt="head" />
 		</div>
 	</div>
 

@@ -3,6 +3,8 @@
 	import { page } from "$app/stores";
 	import { isInViewport } from "$lib/shared/isInView";
 	import { afterUpdate } from 'svelte';
+	import squadLeft from '$lib/assets/SquadLeft.png';
+	import squadRight from '$lib/assets/SquadRight.png';
 
 	// Apply animation/movement as a tailwind class
 	let curPitchInView = false;
@@ -28,7 +30,7 @@
 {#if !$page.data.session}
 	<div class="relative h-60 w-full mt-4 tablet:mt-20 laptop:mt-32" bind:this={animatedPitch}>
 		<div class="absolute left-0 bottom-0 w-40 tablet:w-2/6 {squadLeftAnimation}">
-			<img src="SquadLeft.png" alt="left squad" />
+			<img src={squadLeft} alt="left squad" />
 		</div>
 
 		<div class="flex flex-col items-center h-[100%] pt-12 laptop:pt-6 laptop:pt-0">
@@ -39,7 +41,7 @@
 		</div>
 
 		<div class="absolute right-0 bottom-0 w-40 tablet:w-2/6 {squadRightAnimation}">
-			<img src="SquadRight.png" alt="right squad" />
+			<img src={squadRight} alt="right squad" />
 		</div>
 	</div>
 {/if}

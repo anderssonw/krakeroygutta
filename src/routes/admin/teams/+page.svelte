@@ -1,24 +1,7 @@
 <script lang="ts">
-	import AdminDropdown from "$lib/shared/AdminDropdown.svelte";
-	import TextField from "$lib/shared/TextField.svelte";
-	import type { DropdownOption} from "$lib/types/newTypes";
-	import DropdownMenu from "./dropdownMenu.svelte";
-
-
-    /*
-    export let activeSeason: Season | null;
-    export let allSeasons: Season[];
-    export let allPlayers: Player[];
-    export let allTeams: Team[];
-
-    // Based on tailwind colors
-    let allColors: TeamColor[] = [
-        {tid: 1, name: "red"},
-        {tid: 2, name: "green"},
-        {tid: 3, name: "blue"},
-        {tid: 4, name: "neutral"}
-    ]
-    */
+	import DropdownMenu from "$lib/components/admin/dropdownMenu.svelte";
+	import TextField from "$lib/components/common/TextField.svelte";
+	import type { DropdownOption } from "$lib/types/newTypes";
 
     let showTeams: boolean = false;
 
@@ -46,9 +29,7 @@
     }
 </script>
 
-<AdminDropdown title={'lag'} bind:showContent={showTeams} />
-
-{#if showTeams}
+<div class="structure">
     <h3> Legg til nytt lag </h3>
 
     <form class="form" method="POST">
@@ -73,4 +54,4 @@
             </div>
         </div>
     </form>
-{/if}
+</div>

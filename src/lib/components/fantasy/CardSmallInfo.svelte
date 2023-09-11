@@ -1,33 +1,32 @@
 <script lang="ts">
 	import type { FullPlayer } from '$lib/types/newTypes';
-
-	import { afterUpdate } from 'svelte';
+	import goldCard from '$lib/assets/cards/gold.png';
+	import silverCard from '$lib/assets/cards/silver.png';
+	import bronzeCard from '$lib/assets/cards/gold.png';
+	import { getPlayerCardType } from '$lib/shared/playerCardFunctions';
+	import placeholderImg from '$lib/assets/cards/Placeholder.png';
 
 	export let player: FullPlayer;
 	export let isCaptain: boolean;
 
-	let cardType: string = 'bronze';
-
-	afterUpdate(() => {
-		if (player.id) {
-			if (player.price > 4000 && player.price < 5000) {
-				cardType = 'silver';
-			}
-			if (player.price >= 5000) {
-				cardType = 'gold';
-			}
-		}
-	});
+	$: cardType = getPlayerCardType(player, true);
 
 	let captainShadow = 'animate-captainDropShadowPulse';
+
+	function getImage(card: string) {
+		if (cardType == 'bronze-card') return bronzeCard;
+		if (cardType == 'silver-card') return silverCard;
+		if (cardType == 'gold-card') return goldCard;
+		return '';
+	}
 </script>
 
 {#if player}
 	<div class={isCaptain ? captainShadow : ''}>
-		<img src="/cards/{cardType}.png" alt="card" />
+		<img src={getImage(cardType)} alt="card" />
 
 		<div class="w-16 absolute top-[19%] right-[10%]">
-			<img src="/profile/placeholder.png" alt="head" />
+			<img src={placeholderImg} alt="head" />
 			<div class="absolute top-[86%] bg-gradient-to-t from-slate-950/25 to-transparent w-[100%] h-2" />
 		</div>
 		<div class="w-full absolute top-[5%] right-[25%]">

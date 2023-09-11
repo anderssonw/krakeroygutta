@@ -3,6 +3,7 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { PlayerStats, TeamStats } from '$lib/types/newTypes';
 	import SeasonButton from './SeasonButton.svelte';
+	import jogaVideo from '$lib/assets/jogabonito.mp4';
 
 	interface MergedTeam {
 		name: string;
@@ -86,7 +87,7 @@
 <div class="structure">
 	<div class="w-full h-[44vw] laptop:h-128">
 		<video width="100%" autoplay muted loop>
-			<source src="jogabonito.mp4" type="video/mp4" />
+			<source src={jogaVideo} type="video/mp4" />
 		</video>
 	</div>
 	{#if season}
@@ -120,10 +121,10 @@
 				</tbody>
 			</table>
 			<div class="w-full grid grid-cols-2 laptop:grid-cols-4 gap-4">
-				<SeasonButton image="players_btn.png" route="Players" />
-				<SeasonButton image="teams_btn.png" route="Teams" />
-				<SeasonButton image="matches_btn.png" route="Matches" />
-				<SeasonButton image="bets_btn.png" route="Bets" />
+				<SeasonButton image="players" route="Players" />
+				<SeasonButton image="teams" route="Teams" />
+				<SeasonButton image="matches" route="Matches" />
+				<SeasonButton image="bets" route="Bets" />
 			</div>
 		</div>
 
