@@ -3,6 +3,8 @@
 	import SelectCardModal from '$lib/components/fantasy/SelectCardModal.svelte';
 	import CardSmall from '$lib/components/fantasy/CardSmall.svelte';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
+	import futsalField from '$lib/assets/fantasy/Field.png';
+	import emptyCard from '$lib/assets/cards/empty.png';
 
 	// Get server data
 	export let data: PageData;
@@ -75,12 +77,12 @@
 			<button class="btn"> Lagre Laget Ditt </button>
 
 			<div class="relative flex flex-wrap w-full tablet:block">
-				<img src="/fantasy/Field.png" alt="field" />
+				<img src={futsalField} alt="field" />
 				{#each fantasyForm.players as player, position}
 					<div class="absolute player-{position}">
 						{#if !player}
 							<div class="small-card" on:mouseup={() => (fantasyForm.selectedCardPosition = position)}>
-								<img src="/cards/empty.png" alt="card" />
+								<img src={emptyCard} alt="card" />
 							</div>
 							<!-- <input name="playerIds" value={-1} type="hidden" /> -->
 						{:else}

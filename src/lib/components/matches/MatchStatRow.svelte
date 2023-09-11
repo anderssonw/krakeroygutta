@@ -1,5 +1,8 @@
 <script lang="ts">
 	import type { MatchDisplay, PlayerStats } from "$lib/types/newTypes";
+    import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
+    import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
+    import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
 
     export let match: MatchDisplay;
     export let stat_type: string;
@@ -9,7 +12,12 @@
         else if (stat_type == 'assist') return player_stats.assists;
         else return player_stats.clutches;
     }
-
+    function getImage(stat_type: string) {
+        if (stat_type == 'goal') return goalIcon;
+        if (stat_type == 'assist') return assistIcon;
+        if (stat_type == 'clutch') return clutchIcon;
+        return '';
+    }
 </script>
 
 <div class="flex flex-row justify-center items-center border-b-2 laptop:border-b-4">
@@ -22,7 +30,7 @@
     </div>
     <div class="w-2/12 flex justify-center">
         <div class="w-24">
-            <img src="/stat_icons/{stat_type}_icon.png" alt="{stat_type}"/>
+            <img src={getImage(stat_type)} alt="{stat_type}"/>
         </div>
     </div>
     <div class="w-5/12 p-2 text-center">

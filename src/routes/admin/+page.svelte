@@ -1,7 +1,5 @@
 <script lang="ts">
-	import AdmMatches from '$lib/components/admin/AdmMatches.svelte';
-	import AdmSeasons from '$lib/components/admin/AdmSeasons.svelte';
-	import AdmTeams from '$lib/components/admin/AdmTeams.svelte';
+	import { goto } from '$app/navigation';
 	import type { PageData } from './$types';
 
 	// Get server data
@@ -12,8 +10,8 @@
 <div class="structure">
 	<h1> Administrasjon </h1>
 	{#if user?.is_superadmin}
-		<AdmSeasons />
-		<AdmTeams />
+		<button class="btn" on:click={() => goto("/admin/seasons")}> Administrer sesonger </button>
+		<button class="btn" on:click={() => goto("/admin/teams")}> Administrer lag </button>
 	{/if}
-	<AdmMatches />
+	<button class="btn" on:click={() => goto("/admin/matches")}> Administrer kamper </button>
 </div>

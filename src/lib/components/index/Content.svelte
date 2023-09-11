@@ -4,6 +4,8 @@
 	import ContentFooter from './ContentFooter.svelte';
 	import { isInViewport } from '$lib/shared/isInView';
 	import LargeLogo from '../common/LargeLogo.svelte';
+	import crownTop from '$lib/assets/crown_top.png';
+	import crownBot from '$lib/assets/crown_bot.png';
 
 	// Apply animation/movement as a tailwind class
 	let curPitchInView = false;
@@ -49,7 +51,7 @@
 		</div>
 
 		<div class="relative w-[90%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
-			<img src="crown_top.png" alt="crown" />
+			<img src={crownTop} alt="crown" />
 			<div>
 				<h3 class="text-center">Regler</h3>
 				<ol class="list-decimal list-inside">
@@ -71,7 +73,7 @@
 					</li>
 				</ol>
 			</div>
-			<img src="crown_bot.png" alt="crown" />
+			<img src={crownBot} alt="crown" />
 		</div>
 	</div>
 

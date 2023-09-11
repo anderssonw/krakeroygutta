@@ -15,9 +15,6 @@
 				<h3 class="text-center">Team - {team.color}</h3>
 
 				<div class="flex flex-row">
-					<div class="w-1/2">
-						<img src="/red_team.png" alt="red team" />
-					</div>
 
 					<div class="w-1/2 flex flex-wrap">
 						<!-- TODO Get players here -->
