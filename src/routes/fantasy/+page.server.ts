@@ -28,7 +28,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 	// todo lol error
 	if (playersError) {
 		throw error(500, {
-			message: playersError.message
+			message: playersError.message,
+			devHelper: '/fantasy getting players with stats'
 		});
 	}
 
@@ -45,7 +46,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 	// todo lol error
 	if (fantasyError) {
 		throw error(500, {
-			message: fantasyError.message
+			message: fantasyError.message,
+			devHelper: '/fantasy getting fantasy team for user'
 		});
 	}
 
@@ -71,9 +73,9 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		.eq('fantasy_teams_players.fantasy_team_id', fantasy.id);
 
 	if (fantasyTeamPlayersError) {
-		console.log('fantasyteamplerserror', fantasyTeamPlayersError);
 		throw error(500, {
-			message: fantasyTeamPlayersError.message
+			message: fantasyTeamPlayersError.message,
+			devHelper: '/fantasy getting fantasy team players'
 		});
 	}
 
