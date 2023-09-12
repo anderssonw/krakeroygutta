@@ -1,49 +1,31 @@
-import { fail } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
+import type { MatchStatsQuery } from '$lib/types/newTypes';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { session, season } = await parent();
 	if (session) {
 		if (!season) return {};
 
-		const { data: matches, error: matchesError } = await supabase
-			.from('matches')
+		const { data: matchesStats, error: matchesStatsError } = await supabase
+			.from('matchstats_view')
 			.select(
 				`
-					*,
-					goals(player_id),
-					assists(player_id),
-					clutches(player_id)
+					*
 				`
 			)
-			.eq('season_id', season.id);
+			.eq('season_id', season.id)
+			.returns<MatchStatsQuery[]>();
 
-		if (matchesError) {
-			throw fail(500, {
-				message: matchesError.message
-			});
-		}
-
-		const { data: teams, error: teamsError } = await supabase
-			.from('teams')
-			.select(
-				`
-					*,
-					teams_players(
-						players(id, name)
-					)
-				`
-			)
-
-		if (teamsError) {
-			throw fail(500, {
-				message: teamsError.message
+		if (matchesStatsError) {
+			throw error(500, {
+				message: matchesStatsError.message
+				// devHelper: '/fantasy getting players with stats'
 			});
 		}
 
 		return {
-			matches,
-			teams
+			matchesStats
 		};
 	}
 

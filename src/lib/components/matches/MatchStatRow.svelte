@@ -1,13 +1,13 @@
 <script lang="ts">
-	import type { MatchDisplay, PlayerStats } from "$lib/types/newTypes";
+	import type { MatchStatsPlayer, MatchStatsQuery, PlayerStats } from "$lib/types/newTypes";
     import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
     import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
     import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
 
-    export let match: MatchDisplay;
+    export let match: MatchStatsQuery;
     export let stat_type: string;
 
-    function getStatType(stat_type: string, player_stats: PlayerStats) {
+    function getStatType(stat_type: string, player_stats: MatchStatsPlayer) {
         if (stat_type == 'goal') return player_stats.goals;
         else if (stat_type == 'assist') return player_stats.assists;
         else return player_stats.clutches;
