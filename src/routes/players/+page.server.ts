@@ -26,7 +26,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		)
 		.eq('season_id', season?.id);
 
-	// todo lol error
 	if (playersError) {
 		throw error(500, {
 			message: playersError.message,

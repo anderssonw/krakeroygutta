@@ -25,7 +25,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		)
 		.eq('players_seasons.season_id', season?.id);
 
-	// todo lol error
 	if (playersError) {
 		throw error(500, {
 			message: playersError.message,
@@ -43,7 +42,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		.eq('season_id', season?.id)
 		.maybeSingle();
 
-	// todo lol error
 	if (fantasyError) {
 		throw error(500, {
 			message: fantasyError.message,
