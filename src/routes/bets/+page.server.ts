@@ -31,11 +31,12 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
         .eq('season_id', season?.id)
         .returns<Bet[]>();
     
-    if (betsError) {
-        throw error(500, {
-            message: betsError.message
-        });
-    }
+        if (betsError) {
+            throw error(500, {
+                message: betsError.message,
+                devHelper: '/bets fetching bet information'
+            });
+        }
     
 
     return {
