@@ -83,20 +83,8 @@ export interface TeamColor {
 	name: string;
 }
 
-/* MATCHES PAGE */
-export interface TeamDisplay {
-	color: string;
-	name: string;
-	players: PlayerStats[];
-}
-export interface MatchDisplay {
-	match_id: number;
-	home_team: TeamDisplay;
-	away_team: TeamDisplay;
-}
 
-
-/* Match statistics types */
+/* MATCHES PAGE (GENERAL FOR ALL MATCH STATISTICS) */
 export interface MatchStatsPlayer {
 	id: number;
 	name: string;
@@ -115,4 +103,17 @@ export interface MatchStatsQuery {
 	season_id: number;
 	home_team: MatchStatsTeam;
 	away_team: MatchStatsTeam;
+}
+
+/* BETTING PAGE */
+export interface BetUser {
+    id: string;
+    nickname: string;
+}
+export interface Bet {
+    id: number;
+    bet: string;
+    value: number;
+    user: BetUser;
+    challengers: any[];
 }

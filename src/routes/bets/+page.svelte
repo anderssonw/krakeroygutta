@@ -1,14 +1,15 @@
 <script lang="ts">
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
 	import TextField from '$lib/components/common/TextField.svelte';
+	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
+	import type { Bet } from '$lib/types/newTypes';
+	import BetInfo from '$lib/components/bets/BetInfo.svelte';
 
 	// Get data from server if logged in
 	import type { PageData } from './$types';
-	import Bet from '$lib/components/bets/Bet.svelte';
-	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 	export let data: PageData;
 
-	$: ({ user, bets, supabase } = data);
+	$: ({ user, bets } = data);
 
 	const speechBubbleText: string[] = [
 		'Her kan hver bruker legge ut 1 veddemål relatert til årets sesong.',
@@ -19,6 +20,9 @@
     function betExists() {
         return (bets?.filter(b => b.user?.id == user?.id).length > 0) ? true : false;
     }
+    function placedBet(bet: Bet, user_id: string) {
+        return bet.challengers.filter(c => c.user.id == user_id).length > 0;
+    }
 </script>
 
 <div class="structure">
@@ -27,7 +31,7 @@
 
     {#if !betExists()}
         <h3> Opprett ett veddemål </h3>
-        <form class="form" method="POST">
+        <form class="form" method="POST" action="?/createBet">
             <div class="form-structure">
                 <TextField header="Veddemål" label="bet" placeholder="Jeg vedder .." type="text" />
                 <TextField header="Sats" label="value" placeholder="50" type="number" />
@@ -41,7 +45,22 @@
     <h3> Eksisterende veddemål </h3>
     <div class="w-full grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 place-items-center gap-y-16">
         {#each bets as bet}
-            <Bet bet={bet} user_id={user?.id ?? ''} supabase={supabase} />
+            <div class="w-80 h-full p-4 bg-secondary-color-light text-primary-color-dark drop-shadow-[0_15px_10px_rgba(0,0,0,0.75)]">
+                <BetInfo bet={bet} />
+                <form method="POST" class="flex justify-center">
+                    {#if bet.user?.id == user?.id }
+                        <button type="submit" class="btn-dark" formaction="?/removeBet">
+                            Fjern veddemål
+                        </button>
+                    {:else}
+                        <button type="submit" class="btn-dark" 
+                            formaction={placedBet(bet, user?.id ?? '') ? "?/removeBetAgainst" : "?/addBetAgainst"}>
+                            {placedBet(bet, user?.id ?? '') ? "Fjern utfordring" : "Utfordre"}
+                        </button>
+                    {/if}
+                    <input type="hidden" name="bet_id" bind:value={bet.id} />
+                </form>
+            </div>
         {/each}
     </div>
 </div>
