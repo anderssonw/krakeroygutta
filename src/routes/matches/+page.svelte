@@ -14,6 +14,8 @@
     }
 </script>
 
+<button on:click={() => console.log(matchesStats)}>CLICK</button>
+<!--
 <div class="structure">
     <h1> Kamper </h1>
 
@@ -52,3 +54,4 @@
     {/each}
 
 </div>
+-->
