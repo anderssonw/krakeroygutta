@@ -94,3 +94,25 @@ export interface MatchDisplay {
 	home_team: TeamDisplay;
 	away_team: TeamDisplay;
 }
+
+
+/* Match statistics types */
+export interface MatchStatsPlayer {
+	id: number;
+	name: string;
+	goals: number;
+	assists: number;
+	clutches: number;
+}
+export interface MatchStatsTeam {
+	id: number;
+	name: string;
+	color: string;
+	players: MatchStatsPlayer[];
+}
+export interface MatchStatsQuery {
+	match_id: number;
+	season_id: number;
+	home_team: MatchStatsTeam;
+	away_team: MatchStatsTeam;
+}
