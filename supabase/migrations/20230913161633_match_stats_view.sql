@@ -1,15 +1,3 @@
-CREATE INDEX at_index ON public.matches USING btree (team_away_id);
-
-CREATE INDEX ht_index ON public.matches USING btree (team_home_id);
-
-CREATE INDEX match_index ON public.matches USING btree (id);
-
-CREATE INDEX player_index ON public.players USING btree (id);
-
-CREATE INDEX team_index ON public.teams USING btree (id);
-
-CREATE INDEX tp_index ON public.teams_players USING btree (team_id, player_id);
-
 create or replace view "public"."matchstats_view" as  WITH home_team_cte AS (
          SELECT mat_1.id AS match_id,
             ht_1.id,
@@ -46,6 +34,7 @@ create or replace view "public"."matchstats_view" as  WITH home_team_cte AS (
           GROUP BY mat_1.id, at_1.id
         )
  SELECT mat.id AS match_id,
+    mat.season_id,
     jsonb_build_object('id', ht.id, 'name', ht.name, 'color', ht.color, 'players', ht.players) AS home_team,
     jsonb_build_object('id', at.id, 'name', at.name, 'color', at.color, 'players', at.players) AS away_team
    FROM ((matches mat
