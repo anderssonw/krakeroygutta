@@ -1,5 +1,6 @@
 import type { PageServerLoad } from './$types';
 import type { FullPlayer } from '$lib/types/newTypes';
+import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { season } = await parent();
@@ -25,9 +26,11 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		)
 		.eq('season_id', season?.id);
 
-	// todo lol error
 	if (playersError) {
-		return { players: [] };
+		throw error(500, {
+			message: playersError.message,
+			devHelper: 'players/ fetch all players with stats'
+		});
 	}
 
 	let mappedPlayers: FullPlayer[] = players.map((player) => {

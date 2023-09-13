@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent, params }) => {
@@ -26,9 +27,11 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		.eq('player_id', params.slug)
 		.single();
 
-	// todo lol error
 	if (playerError) {
-		return {};
+		throw error(500, {
+			message: playerError.message,
+			devHelper: 'players/[slug] fetch player with stats'
+		});
 	}
 
 	return {
