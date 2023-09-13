@@ -10,7 +10,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		const { data: teams, error: teamError } = await supabase.from('teams').select().eq('season_id', season.id);
 		if (teamError) {
 			throw error(500, {
-				message: teamError.message
+				message: teamError.message,
+				devHelper: '/teams fetching teams for a season'
 			});
 		}
 

@@ -3,6 +3,7 @@ import { error, fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { session, season } = await parent();
+
 	if (session) {
 		if (!season) return {};
 
