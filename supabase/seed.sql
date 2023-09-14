@@ -41,10 +41,10 @@ VALUES (1, 2),
        (12, 2),
        (13, 2);
 
-INSERT INTO auth.users (id)
-VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf'),
-       ('ec61970a-704a-4c92-8d54-1a3181175c91'),
-       ('c43e4127-0ba4-4db4-b217-61898937542d');
+INSERT INTO auth.users (id, raw_user_meta_data)
+VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', '{"nickname": "bing chilling"}'),
+       ('ec61970a-704a-4c92-8d54-1a3181175c91', '{"nickname": "chill bill"}'),
+       ('c43e4127-0ba4-4db4-b217-61898937542d', '{"nickname": "xue hue"}');
 
 
 INSERT INTO fantasy_teams (user_id, season_id, name, captain_id)
