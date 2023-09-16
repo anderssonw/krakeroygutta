@@ -101,13 +101,19 @@ export const actions = {
         
         throw redirect(302, '/bets');
 	},
-    removeBetAgainst: async ({ locals: { supabase, getSession, getSeason } }) => {
+    removeBetAgainst: async ({ request, locals: { supabase, getSession, getSeason } }) => {
+        // Form data
+		const formData = await request.formData();
+		const bet_id = formData.get('bet_id')?.toString();
+
         // Get from hooks
 		const session = await getSession();
         const season = await getSeason();
 
-		if (session && season) {
-            const { error: deleteError } = await supabase.from('bets_against').delete().eq('user_id', session.user.id);
+		if (session && season && bet_id) {
+            const { error: deleteError } = await supabase.from('bets_against').delete()
+                .eq('user_id', session.user.id)
+                .eq('bet_id', parseInt(bet_id));
 
 			if (deleteError) {
                 throw error(500, {
@@ -125,7 +131,9 @@ export const actions = {
         const season = await getSeason();
 
 		if (session && season) {
-            const { error: deleteError } = await supabase.from('bets').delete().eq('user_id', session.user.id);
+            const { error: deleteError } = await supabase.from('bets').delete()
+                .eq('user_id', session.user.id)
+                .eq('season_id', season.id);
 
 			if (deleteError) {
                 throw error(500, {
