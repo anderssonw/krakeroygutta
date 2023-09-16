@@ -27,8 +27,10 @@ const config = {
 				'team-white': '#FAF9F6',
 				'team-black': '#343434'
 			},
+			width: {
+				33: '8.15rem'
+			},
 			height: {
-				46: '11.5rem',
 				128: '32rem',
 				160: '40rem',
 				192: '48rem'
@@ -38,15 +40,9 @@ const config = {
 			},
 
 			animation: {
-				fadeIn: 'fadeIn 0.5s linear',
 				captainDropShadowPulse: 'captainDropShadowPulse 3s ease-in-out infinite'
 			},
 			keyframes: (theme) => ({
-				fadeIn: {
-					'0%': { opacity: '0%' },
-					'100%': { opacity: '100%' }
-				},
-
 				captainDropShadowPulse: {
 					'0%, 100%': { filter: 'drop-shadow(0 0 5px #FFD700)', transform: 'translateY(0)' },
 					'50%': { filter: 'drop-shadow(0 0 20px #FFD700)', transform: 'translateY(-4px)' }
