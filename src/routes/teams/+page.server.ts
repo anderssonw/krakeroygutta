@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		if (!season) return {};
 
 		const { data: fullTeams, error: fullTeamsError } = await supabase
-			.from('teamswithplayers_view')
+			.from('teams_with_players')
 			.select(
 				`
 					*

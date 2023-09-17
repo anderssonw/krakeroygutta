@@ -1,4 +1,4 @@
-create or replace view "public"."teamswithplayers_view" as  SELECT tea.season_id,
+create or replace view "public"."team_with_players" as  SELECT tea.season_id,
     tea.color,
     tea.name,
     jsonb_agg(jsonb_build_object('id', pla.id, 'name', pla.name, 'image', pla.image, 'attack', pls.attack, 'defence', pls.defence, 'physical', pls.physical, 'morale', pls.morale, 'price', pls.price)) AS players
