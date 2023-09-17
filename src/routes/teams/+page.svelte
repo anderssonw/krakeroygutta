@@ -1,11 +1,14 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import Card from '$lib/components/cards/Card.svelte';
+	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
+import type { PageData } from './$types';
 
 	// Get server data
 	export let data: PageData;
-	$: ({ teams } = data);
+	$: ({ teams, season } = data);
 </script>
 
+<button on:click={() => console.log(teams)}>CLICK</button>
 {#if teams}
 	<div class="structure">
 		<h2>Teams</h2>
@@ -13,6 +16,14 @@
 		{#each teams as team}
 			<div class="w-full bg-primary-color-light">
 				<h3 class="text-center">Team - {team.color}</h3>
+
+				<div class="grid grid-cols-2 gap-y-8">
+					{#each team.players as player}
+						<div class="flex justify-center">
+							<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season}/>
+						</div>
+					{/each}
+				</div>
 
 				<div class="flex flex-row">
 

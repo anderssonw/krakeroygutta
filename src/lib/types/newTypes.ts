@@ -117,3 +117,11 @@ export interface Bet {
     user: BetUser;
     challengers: any[];
 }
+
+/* TEAMS PAGE */
+export interface FullTeam {
+	season_id: number;
+	color: string;
+	name: string;
+	players: FullPlayer[];
+}

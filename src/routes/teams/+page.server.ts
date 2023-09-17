@@ -1,5 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import type { FullPlayer, FullTeam } from '$lib/types/newTypes';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { session, season } = await parent();
@@ -7,16 +8,25 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 	if (session) {
 		if (!season) return {};
 
-		const { data: teams, error: teamError } = await supabase.from('teams').select().eq('season_id', season.id);
-		if (teamError) {
+		const { data: fullTeams, error: fullTeamsError } = await supabase
+			.from('teamswithplayers_view')
+			.select(
+				`
+					*
+				`
+			)
+			.eq('season_id', season.id)
+			.returns<FullTeam[]>();
+
+		if (fullTeamsError) {
 			throw error(500, {
-				message: teamError.message,
+				message: fullTeamsError.message,
 				devHelper: '/teams fetching teams for a season'
 			});
 		}
 
-		return { teams: teams, players: [] };
+		return { teams: fullTeams };
 	}
 
-	return { teams: [], players: [] };
+	return { teams: [] };
 };
