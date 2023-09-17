@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { ActionData, PageData } from './$types';
 	import SelectCardModal from '$lib/components/fantasy/SelectCardModal.svelte';
-	import CardSmall from '$lib/components/fantasy/CardSmall.svelte';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
-	import futsalField from '$lib/assets/fantasy/Field.png';
-	import emptyCard from '$lib/assets/cards/empty.png';
+	import FantasyCard from '$lib/components/fantasy/FantasyCard.svelte';
+	import TextField from '$lib/components/common/TextField.svelte';
+	import FantasyCardMobile from '$lib/components/fantasy/FantasyCardMobile.svelte';
 
 	// Get server data
 	export let data: PageData;
@@ -62,36 +62,51 @@
 </script>
 
 {#if allPlayers && season}
-	<SelectCardModal bind:fantasyForm players={allPlayers} />
+	<SelectCardModal bind:fantasyForm={fantasyForm} players={allPlayers} season={season} />
 
 	{#if season}
 		<form class="structure" method="POST">
-			<h2>Ditt Fantasylag</h2>
-			<input class="input" name="name" bind:value={fantasyForm.teamName} type="text" placeholder="Ditt Lagnavn" />
-			{#if form?.errors}
-				{#each Object.values(form?.errors) as error}
-					<p class="text-red-700 pa-0 ma-0">{error}</p>
+			<h1>Ditt fantasylag</h1>
+			{#if form}
+				{#each form.formHints as hint}
+					<p>{hint}</p>
 				{/each}
 			{/if}
-			<h3>Penger: {currentCash}</h3>
-			<button class="btn"> Lagre Laget Ditt </button>
 
-			<div class="relative flex flex-wrap w-full tablet:block">
-				<img src={futsalField} alt="field" />
-				{#each fantasyForm.players as player, position}
-					<div class="absolute player-{position}">
-						{#if !player}
-							<div class="small-card" on:mouseup={() => (fantasyForm.selectedCardPosition = position)}>
-								<img src={emptyCard} alt="card" />
-							</div>
-							<!-- <input name="playerIds" value={-1} type="hidden" /> -->
-						{:else}
-							<CardSmall bind:fantasyForm {player} {position} />
-							<input name="playerIds" bind:value={player.id} type="hidden" />
-						{/if}
+			<div class="w-full flex flex-col space-y-4 tablet:flex-row justify-between items-center tablet:items-end px-8 tablet:px-0">
+				<div class="w-full tablet:w-1/3">
+					<div class="tablet:w-2/3">
+						<label for="teamName" class="block mb-1"><h5>Lag navn</h5></label>
+						<input name="teamName" type="text" id="teamName" class="input w-full" placeholder="Gutta krutt" value={fantasyForm.teamName} required />
 					</div>
+				</div>
+				<div class="w-full tablet:w-1/3 flex flex-col items-center"> 
+					<h1 class="text-yellow-500">{currentCash},-</h1> 
+				</div>
+				<div class="w-full tablet:w-1/3 flex justify-center tablet:justify-end">
+					<button class="btn w-2/3 bg-green-500"> Lagre laget </button>
+				</div>
+			</div>
+
+			<div class="relative w-full tablet:h-192 hidden tablet:block bg-primary-color-light">
+				{#each fantasyForm.players as player, position}
+					<FantasyCard bind:fantasyForm={fantasyForm} player={player} position={position} season={season} />
 				{/each}
 			</div>
+
+			<div class="relative w-full block tablet:hidden bg-primary-color-light py-8">
+				<div class="grid grid-cols-2 gap-y-8">
+				{#each fantasyForm.players as player, position}
+					<FantasyCardMobile bind:fantasyForm={fantasyForm} player={player} position={position} season={season} />
+				{/each}
+				</div>
+			</div>
+
+			{#each fantasyForm.players as player, position}
+				{#if player}
+					<input name="playerIds" bind:value={player.id} type="hidden" />
+				{/if}
+			{/each}
 
 			<div class="relative w-full bg-primary-color block tablet:hidden" />
 

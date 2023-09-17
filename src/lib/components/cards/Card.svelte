@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { CARD_SIZE, calculatePlayerStatAverage, getPlayerCardType } from '$lib/shared/playerCardFunctions';
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import TeamKit from '../common/TeamKit.svelte';
 	import placeholderImg from '$lib/assets/cards/Placeholder.png';
     
-	export let player: FullPlayer;
+	export let player: FullPlayer | null;
     export let card_size: CARD_SIZE;
 	export let season: Tables<'seasons'> | null;
 
@@ -16,16 +15,16 @@
 	
     const getCardSizing = () => {
         let sizes = {
-            width: sizeBasedReturn('w-60', 'w-40', 'w-28'),
-            height: sizeBasedReturn('h-96', 'h-64', 'h-46'),
+            width: sizeBasedReturn('w-60', 'w-40', 'w-33'),
+            height: sizeBasedReturn('h-96', 'h-64', 'h-52'),
             avg_stats: sizeBasedReturn('text-6xl', 'text-4xl', 'text-2xl'),
             name: sizeBasedReturn('text-3xl', 'text-xl', 'text-base'),
             stats: sizeBasedReturn('text-2xl', 'text-lg', 'text-sm'),
             stats_width: sizeBasedReturn('w-[72%]', 'w-[76%]', 'w-[80%]'),
-            name_gap_y: sizeBasedReturn('space-y-[6%]', 'space-y-[2%]', 'space-y-0'),
+            name_gap_y: sizeBasedReturn('space-y-[6%]', 'space-y-[2%]', 'space-y-[2%]'),
             stat_gap_y: sizeBasedReturn('space-y-[3%]', 'space-y-0', 'space-y-0'),
-            stat_gap_x: sizeBasedReturn('gap-x-8', 'gap-x-4', 'gap-x-2'),
-			header_gap_y: sizeBasedReturn('gap-y-2', 'gap-y-1', 'gap-y-0')
+            stat_gap_x: sizeBasedReturn('gap-x-8', 'gap-x-4', 'gap-x-4'),
+			header_gap_y: sizeBasedReturn('gap-y-2', 'gap-y-1', 'gap-y-0.5')
         }
         return sizes;
     }
@@ -37,7 +36,7 @@
 </script>
 
 {#if player}
-	<div class="clickable-card {cardType} {cardSizing.width} {cardSizing.height}" on:mouseup={() => goto(`/players/${player.id}`)}>
+	<div class="{cardType} {cardSizing.width} {cardSizing.height}">
 
 		<div class="relative w-full h-[53.2%]">
 			<div class="absolute top-[15%] left-[13%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
@@ -77,5 +76,6 @@
 		</div>
 	</div>
 {:else}
-	<p>No player :(</p>
+	<div class="{cardType} {cardSizing.width} {cardSizing.height}">
+	</div>
 {/if}

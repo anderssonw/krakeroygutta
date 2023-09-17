@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
@@ -11,7 +12,9 @@
 <div class="structure">
 	<div class="w-full flex flex-row flex-wrap gap-4 justify-center">
 		{#each players as player}
-			<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season} />
+			<div class="clickable-card" on:mouseup={() => goto(`/players/${player.id}`)}>
+				<Card player={player} card_size={CARD_SIZE.SMALL} season={season} />
+			</div>
 		{/each}
 	</div>
 </div>
