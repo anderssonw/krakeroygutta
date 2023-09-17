@@ -1,4 +1,4 @@
-import { fail, type Actions, error } from '@sveltejs/kit';
+import { fail, type Actions, error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { FullPlayer } from '$lib/types/newTypes';
 
@@ -87,44 +87,44 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 };
 
 export const actions = {
-	default: async ({ request, locals: { supabase, getSession } }) => {
+	default: async ({ request, locals: { supabase, getSession, getSeason } }) => {
 		const formData = await request.formData();
 
-		const name = String(formData.get('name'));
+		const name = String(formData.get('teamName'));
 		const currencyLeft = Number(formData.get('currencyLeft'));
 		const captainId = Number(formData.get('captainId'));
 		const playerIds = formData.getAll('playerIds').map((id) => parseInt(id.toString()));
 
-		// gather errors
-		const errors: Record<string, string> = {};
+		console.log(captainId);
+		console.log(playerIds);
+
+		let formHints: string[] = [];
+		let formIsValid: boolean = true;
 
 		if (!name || typeof name !== 'string') {
-			errors.name = 'Lagnavn er påkrevd';
-
-			return fail(400, { data: Object.fromEntries(formData), errors });
+			formHints.push('Lagnavn er påkrevn');
+			formIsValid = false;
+		}
+		if(playerIds.length > 0 && captainId < 0) {
+			formHints.push('Du må velge kaptein');
+			formIsValid = false;
 		}
 
 		const session = await getSession();
-		if (session) {
-			let todayTimeString = new Date().toDateString();
+		const season = await getSeason();
 
-			const { data: season, error: seasonError } = await supabase
-				.from('seasons')
-				.select()
-				.lt('start_time', todayTimeString)
-				.gt('end_time', todayTimeString)
-				.single();
-
-			if (seasonError) {
-				return fail(500, { message: 'There is no active season. Server could not handle your request.' });
-			}
-
+		if (session && season) {
 			// Dette er egentlig en shitty måte å sjekke penger på, du kan sende inn hva som helst som currency left, burde kalkuleres ut i fra spillere
 			// men sjansen for at folk prøver å hacke backenden??? nåvel
 			if (season.starting_currency + currencyLeft < season.starting_currency) {
-				errors.currency = `Du kan ikke bruke mer enn ${season.starting_currency} penger`;
+				formHints.push(`Du kan ikke bruke mer enn ${season.starting_currency} penger`);
+				formIsValid = false;
+			}
 
-				return fail(400, { data: Object.fromEntries(formData), errors });
+			if (!formIsValid) {
+				return fail(400, {
+					formHints
+				});
 			}
 
 			let fantasyTeamToInsert = {
@@ -142,8 +142,10 @@ export const actions = {
 				.maybeSingle();
 
 			if (fantasyTeamError) {
-				console.log('GetFantasyTeamError', fantasyTeamError.message);
-				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
+				throw error(500, {
+					message: fantasyTeamError.message,
+					devHelper: '/fantasy fetching current fantasy team'
+				});
 			}
 
 			let fantasyTeamId = -1;
@@ -151,7 +153,12 @@ export const actions = {
 			if (currentFantasyTeam && currentFantasyTeam.id) {
 				const { error: updateError } = await supabase.from('fantasy_teams').update(fantasyTeamToInsert).eq('id', currentFantasyTeam.id);
 
-				fantasyTeamError = updateError;
+				if (updateError) {
+					throw error(500, {
+						message: updateError.message,
+						devHelper: '/fantasy updating current fantasy team'
+					});
+				}
 
 				fantasyTeamId = currentFantasyTeam.id;
 			} else {
@@ -161,21 +168,24 @@ export const actions = {
 					.select('id')
 					.single();
 
-				fantasyTeamError = insertError;
+				if (insertError) {
+					throw error(500, {
+						message: insertError.message,
+						devHelper: '/fantasy inserting current fantasy team'
+					});
+				}
+
 
 				if (!insertError) fantasyTeamId = newFantasyTeam.id;
-			}
-
-			if (fantasyTeamError) {
-				console.log('InsertFantasyTeamError', fantasyTeamError.message);
-				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
 			}
 
 			const { error: deleteCurrentTeamError } = await supabase.from('fantasy_teams_players').delete().eq('fantasy_team_id', fantasyTeamId);
 
 			if (deleteCurrentTeamError) {
-				console.log('delete', deleteCurrentTeamError.message);
-				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
+				throw error(500, {
+					message: deleteCurrentTeamError.message,
+					devHelper: '/fantasy deleting fantasy team players'
+				});
 			}
 
 			const { error: fantasyTeamsPlayersError } = await supabase.from('fantasy_teams_players').upsert(
@@ -188,14 +198,14 @@ export const actions = {
 			);
 
 			if (fantasyTeamsPlayersError) {
-				console.log('playerserror', fantasyTeamsPlayersError.message);
-				return fail(500, { message: 'Something went wrong when updating/creating your fantasy team.' });
+				throw error(500, {
+					message: fantasyTeamsPlayersError.message,
+					devHelper: '/fantasy inserting/updating fantasy team players'
+				});
 			}
+		} 
 
-			return { success: true };
-		} else {
-			return fail(401);
-		}
+		throw redirect(303, '/fantasy');
 	}
 } satisfies Actions;
 

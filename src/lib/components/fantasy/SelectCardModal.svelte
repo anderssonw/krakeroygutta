@@ -1,9 +1,12 @@
 <script lang="ts">
+	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
+	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
-	import SelectCard from './SelectCard.svelte';
+	import Card from '../cards/Card.svelte';
 
 	export let players: FullPlayer[];
 	export let fantasyForm: FantasyForm;
+	export let season: Tables<'seasons'> | null;
 
 	const calculatePlayersToShow = (allPlayers: FullPlayer[], playersInForm: (FullPlayer | null)[]) => {
 		let playersInFormIds = playersInForm.map((player) => player?.id || -1);
@@ -12,35 +15,37 @@
 		});
 	};
 
+	function buyPlayer(player: FullPlayer) {
+		fantasyForm.players[fantasyForm.selectedCardPosition] = player;
+		fantasyForm.selectedCardPosition = -1;
+	}
+
 	$: playersNotInForm = calculatePlayersToShow(players, fantasyForm.players);
-
 	$: hasCardSelected = fantasyForm.selectedCardPosition >= 0 ? true : false;
-
-	// Apply animation
-	$: selectionVisible = `transition-all duration-300 ${hasCardSelected ? 'block opacity-100' : 'invisible opacity-0'}`;
-	$: backgroundChange = `transition-all duration-500 ${hasCardSelected ? 'bg-black/90' : 'bg-black/0'}`;
-	$: playerSlide = `transition-all duration-500 ${hasCardSelected ? 'translate-y-0' : 'translate-y-full'}`;
 </script>
 
 {#if hasCardSelected}
-	<div class="fixed bottom-0 top-0 right-0 left-0 z-50 {selectionVisible} {backgroundChange}">
+	<div class="fixed bottom-0 top-0 right-0 left-0 z-50 bg-black/90">
 		<div class="fixed top-20 right-20 hover:cursor-pointer">
-			<h2
+			<h3
 				on:mouseup={() => {
 					fantasyForm.selectedCardPosition = -1;
 				}}
 			>
 				X
-			</h2>
+			</h3>
 		</div>
-		<div class="max-w-screen-laptop h-3/4 p-8 rounded-lg fixed m-auto inset-x-0 inset-y-0 overflow-y-scroll">
-			<div class="w-full flex flex-row flex-wrap gap-8 justify-center {playerSlide}">
+		<div class="max-w-screen-laptop h-3/4 px-4 tablet:px-8 rounded-lg fixed m-auto inset-x-0 inset-y-0 overflow-y-scroll">
+			<div class="w-full flex flex-row flex-wrap gap-4 tablet:gap-8 justify-around tablet:justify-center">
 				{#each playersNotInForm as player}
-					<SelectCard {player} bind:fantasyForm />
+					<div class="clickable-card hidden tablet:block" on:mouseup={() => buyPlayer(player)}>
+						<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season} />
+					</div>
+					<div class="clickable-card block tablet:hidden" on:mouseup={() => buyPlayer(player)}>
+						<Card player={player} card_size={CARD_SIZE.SMALL} season={season} />
+					</div>
 				{/each}
 			</div>
 		</div>
 	</div>
-{:else}
-	<!-- else content here -->
 {/if}
