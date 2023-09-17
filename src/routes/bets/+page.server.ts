@@ -1,21 +1,9 @@
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { fail, type Actions } from '@sveltejs/kit';
+import type { Actions } from '@sveltejs/kit';
 import type { TablesInsert } from '$lib/types/database.helper.types';
+import type { Bet } from '$lib/types/newTypes';
 
-// CUSTOM interface because we got 2nd relation keys
-// Or just handle plain users. instead?
-interface User {
-    id: string;
-    nickname: string;
-}
-export interface Bet {
-    id: number;
-    bet: string;
-    value: number;
-    user: User;
-    challengers: any[];
-}
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { season } = await parent();
@@ -43,11 +31,12 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
         .eq('season_id', season?.id)
         .returns<Bet[]>();
     
-    if (betsError) {
-        throw error(500, {
-            message: betsError.message
-        });
-    }
+        if (betsError) {
+            throw error(500, {
+                message: betsError.message,
+                devHelper: '/bets fetching bet information'
+            });
+        }
     
 
     return {
@@ -56,18 +45,17 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 };
 
 export const actions = {
-	default: async ({ request, locals: { supabase, getSession, getUser, getSeason } }) => {
+	createBet: async ({ request, locals: { supabase, getSession, getSeason } }) => {
         // Form data
 		const formData = await request.formData();
 		const bet = formData.get('bet')?.toString();
 		const value = formData.get('value')?.toString();
 
-        // Server data (can we get from PAGE instead of re-loading?)
+        // Get from hooks
 		const session = await getSession();
         const season = await getSeason();
 
 		if (session && season && bet && value) {
-            // Using a GENERIC INSERT where id is optional
             const betForm: TablesInsert<'bets'> = {
                 user_id: session.user.id,
                 season_id: season.id,
@@ -75,15 +63,86 @@ export const actions = {
                 value: parseInt(value),
             }
 
-            const { error: error } = await supabase.from('bets').insert(betForm);
+            const { error: insertError } = await supabase.from('bets').insert(betForm);
 
-			if (error) {
-				return fail(500, {
-					supabaseErrorMessage: error.message
-				});
+			if (insertError) {
+                throw error(500, {
+                    message: insertError.message,
+                    devHelper: '/bets inserting a bet'
+                });
 			}
         }
         
-        return { success: true };
+        throw redirect(302, '/bets');
+	},
+    addBetAgainst: async ({ request, locals: { supabase, getSession, getSeason } }) => {
+        // Form data
+		const formData = await request.formData();
+		const bet_id = formData.get('bet_id')?.toString();
+
+        // Get from hooks
+		const session = await getSession();
+        const season = await getSeason();
+
+		if (session && season && bet_id) {
+            const betAgainstForm: TablesInsert<'bets_against'> = {
+                bet_id: parseInt(bet_id),
+                user_id: session.user.id,
+            }
+            const { error: insertError } = await supabase.from('bets_against').insert(betAgainstForm);
+
+			if (insertError) {
+                throw error(500, {
+                    message: insertError.message,
+                    devHelper: '/bets inserting a bet_against'
+                });
+			}
+        }
+        
+        throw redirect(302, '/bets');
+	},
+    removeBetAgainst: async ({ request, locals: { supabase, getSession, getSeason } }) => {
+        // Form data
+		const formData = await request.formData();
+		const bet_id = formData.get('bet_id')?.toString();
+
+        // Get from hooks
+		const session = await getSession();
+        const season = await getSeason();
+
+		if (session && season && bet_id) {
+            const { error: deleteError } = await supabase.from('bets_against').delete()
+                .eq('user_id', session.user.id)
+                .eq('bet_id', parseInt(bet_id));
+
+			if (deleteError) {
+                throw error(500, {
+                    message: deleteError.message,
+                    devHelper: '/bets deleting a bet_against'
+                });
+			}
+        }
+
+        throw redirect(302, '/bets');
+	},
+    removeBet: async ({ locals: { supabase, getSession, getSeason } }) => {
+        // Get from hooks
+		const session = await getSession();
+        const season = await getSeason();
+
+		if (session && season) {
+            const { error: deleteError } = await supabase.from('bets').delete()
+                .eq('user_id', session.user.id)
+                .eq('season_id', season.id);
+
+			if (deleteError) {
+                throw error(500, {
+                    message: deleteError.message,
+                    devHelper: '/bets deleting a bet'
+                });
+			}
+        }
+        
+        throw redirect(302, '/bets');
 	}
 } satisfies Actions;
