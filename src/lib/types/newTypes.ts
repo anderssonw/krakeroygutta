@@ -125,3 +125,34 @@ export interface FullTeam {
 	name: string;
 	players: FullPlayer[];
 }
+
+/* NEW MATCH QUERY */
+
+// match_with_teams view
+export interface MatchTeam {
+	id: number;
+	name: string;
+	color: string;
+	players: number[];
+}
+export interface MatchWithTeams {
+	match_id: number;
+	season_id: number;
+	home_team: MatchTeam;
+	away_team: MatchTeam;
+}
+
+// player_match_stats view
+export interface PlayerMatchStats {
+	match_id: number;
+	season_id: number;
+	player_id: number;
+	goals: number;
+	assists: number;
+	clutches: number;
+}
+
+// combined mapping
+export interface FullMatchStats {
+	
+}

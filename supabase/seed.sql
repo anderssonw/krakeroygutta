@@ -85,25 +85,10 @@ VALUES (2, 1, 2),
        (2, 2, 1),
        (2, 3, 4);
 
-
-INSERT INTO goals(match_id, player_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 4),
-       (3, 9);
-
-INSERT INTO assists(match_id, player_id)
-VALUES (1, 2),
-       (1, 1),
-       (1, 5),
-       (3, 10);
-
-INSERT INTO clutches(match_id, player_id)
-VALUES (1, 6),
-       (2, 3),
-       (2, 5),
-       (3, 10),
-       (3, 11);
+INSERT INTO matches_stats (match_id, player_id, goals, assists, clutches)
+VALUES (1, 1, 1, 1, 0),
+       (1, 2, 1, 0, 5),
+       (1, 6, 1, 0, 0);
 
 INSERT INTO bets(user_id, season_id, bet, value)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 100);
