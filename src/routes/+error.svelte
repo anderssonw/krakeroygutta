@@ -5,17 +5,23 @@
 </script>
 
 <div class="structure text-center">
-	<h1>Det ser ut som noe har gått galt!</h1>
+	{#if $page.error}
+		<h1>Det ser ut som noe har gått galt!</h1>
 
-	<h2>Feil kan alltid skje, så for å hjelpe oss gjøre siden bedre kan du ta skjermbilde av meldingen under Mads</h2>
+		{#if $page.error.message === 'Not Found'}
+			<RuleSpeechBubble mirror imageSrc={pirateMadsSrc} text="Ser ut som du har funnet deg på villspor, {$page.url} finnes ikke!" />
+		{:else}
+			<h2>Feil kan alltid skje, så for å hjelpe oss gjøre siden bedre kan du ta skjermbilde av meldingen under Mads</h2>
 
-	<RuleSpeechBubble
-		mirror
-		imageSrc={pirateMadsSrc}
-		text="Husk å være snill med Magnus og William, selv om ikke alt alltid går på skinner. Det kan være vanskelig å lage gode nettsider!"
-	/>
+			<RuleSpeechBubble
+				mirror
+				imageSrc={pirateMadsSrc}
+				text="Husk å være snill med Magnus og William, selv om ikke alt alltid går på skinner. Det kan være vanskelig å lage gode nettsider!"
+			/>
 
-	<h4>{$page.error?.devHelper}</h4>
+			<h4>{$page.error.devHelper}</h4>
 
-	<p>{$page.error?.message}</p>
+			<p>{$page.error.message}</p>
+		{/if}
+	{/if}
 </div>

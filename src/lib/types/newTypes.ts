@@ -22,11 +22,13 @@ export interface PlayerStats {
 	clutches: number;
 }
 
-export interface TeamStats {
+export interface TeamWithStats {
 	team_id: number;
 	wins: number;
 	losses: number;
 	draws: number;
+	color: string;
+	name: string;
 }
 
 export interface FullPlayer {
@@ -83,7 +85,6 @@ export interface TeamColor {
 	name: string;
 }
 
-
 /* MATCHES PAGE (GENERAL FOR ALL MATCH STATISTICS) */
 export interface MatchStatsPlayer {
 	id: number;
@@ -107,13 +108,13 @@ export interface MatchStatsQuery {
 
 /* BETTING PAGE */
 export interface BetUser {
-    id: string;
-    nickname: string;
+	id: string;
+	nickname: string;
 }
 export interface Bet {
-    id: number;
-    bet: string;
-    value: number;
-    user: BetUser;
-    challengers: any[];
+	id: number;
+	bet: string;
+	value: number;
+	user: BetUser;
+	challengers: any[];
 }
