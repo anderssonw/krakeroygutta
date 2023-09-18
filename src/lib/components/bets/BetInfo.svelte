@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Bet } from "$lib/types/newTypes";
+	import type { BetImproved } from "$lib/types/newTypes";
     import betLogo from '$lib/assets/bets/bet_logo.png';
 
-    export let bet: Bet;
+    export let bet: BetImproved;
 </script>
 
 <div class="flex flex-col items-center mb-8">
@@ -22,14 +22,14 @@
 <div class="py-4 grid grid-cols-2 gap-4">
     <div class="flex flex-col justify-end">
         <div class="border-b-2 border-primary-color-dark">
-            <p class="italic text-center"> {bet.user.nickname} </p>
+            <p class="italic text-center"> {bet.better?.name} </p>
         </div>
         <p class="text-sm font-bold text-center">Eier</p>
     </div>
     <div class="flex flex-col justify-end">
         <div class="border-b-2 border-primary-color-dark">
             {#each bet.challengers as challenger}
-                <p class="italic text-center"> {challenger.user.nickname} </p>
+                <p class="italic text-center"> {challenger?.name} </p>
             {/each}
         </div>
         <p class="text-sm font-bold text-center">Byder</p>

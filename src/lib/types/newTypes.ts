@@ -108,12 +108,20 @@ export interface MatchStatsQuery {
 /* BETTING PAGE */
 export interface BetUser {
     id: string;
-    nickname: string;
+    name: string;
 }
-export interface Bet {
+export interface BetImproved {
     id: number;
     bet: string;
     value: number;
-    user: BetUser;
-    challengers: any[];
+    better: BetUser;
+    challengers: BetUser[];
+}
+
+/* TEAMS PAGE */
+export interface FullTeam {
+	season_id: number;
+	color: string;
+	name: string;
+	players: FullPlayer[];
 }

@@ -13,7 +13,7 @@
 	<div class="w-full flex flex-row flex-wrap gap-4 justify-center">
 		{#each players as player}
 			<div class="clickable-card" on:mouseup={() => goto(`/players/${player.id}`)}>
-				<Card player={player} card_size={CARD_SIZE.SMALL} season={season} />
+				<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season} />
 			</div>
 		{/each}
 	</div>

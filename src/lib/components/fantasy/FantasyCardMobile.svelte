@@ -17,7 +17,7 @@
             <span class="border-2 rounded-lg px-6">0</span>
         </h3>
 
-        <div class="text-primary-color">
+        <div>
             <Card player={player} card_size={CARD_SIZE.SMALL} season={season}/>
         </div>
             

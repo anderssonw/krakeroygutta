@@ -2,45 +2,40 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { Actions } from '@sveltejs/kit';
 import type { TablesInsert } from '$lib/types/database.helper.types';
-import type { Bet } from '$lib/types/newTypes';
+import type { BetImproved } from '$lib/types/newTypes';
 
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	let { season } = await parent();
-
-    // Trying to access non-verified(email) users using the foreign key relation returns NULL !
-    const { data: bets, error: betsError } = await supabase
-        .from('bets')
+    
+    const { data: betsView, error: betsViewErrors } = await supabase
+        .from('bets_with_challengers')
         .select(
             `
-                id,
-                bet,
-                value,
-                user:users(
-                    id,
-                    nickname
-                ),
-                challengers:bets_against(
-                    user:users(
-                        id,
-                        nickname
-                    )
-                )
+                *
             `
         )
         .eq('season_id', season?.id)
-        .returns<Bet[]>();
+        .returns<BetImproved[]>();
+
+    if (betsViewErrors) {
+        throw error(500, {
+            message: betsViewErrors.message,
+            devHelper: '/bets fetching bet information'
+        });
+    }
     
-        if (betsError) {
-            throw error(500, {
-                message: betsError.message,
-                devHelper: '/bets fetching bet information'
-            });
-        }
-    
+    const filteredBets = betsView?.map(bet => {
+       if(!bet.challengers[0].id) {
+            bet.challengers = []
+            return bet;
+       } else {
+        return bet;
+       }
+    })
 
     return {
-        bets
+        bets: filteredBets
     };
 };
 
