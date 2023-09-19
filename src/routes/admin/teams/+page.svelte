@@ -1,57 +1,29 @@
 <script lang="ts">
-	import DropdownMenu from "$lib/components/admin/dropdownMenu.svelte";
-	import TextField from "$lib/components/common/TextField.svelte";
-	import type { DropdownOption } from "$lib/types/newTypes";
+	import TextField from '$lib/components/common/TextField.svelte';
+	import type { PageData } from './$types';
 
-    let showTeams: boolean = false;
+	// Get server data
+	export let data: PageData;
 
-    let dropdownOptions: DropdownOption[] = [
-        {
-            id: 1,
-            name: "Option 1"
-        },
-        {
-            id: 2,
-            name: "Option 2"
-        },
-    ]
-    let colorOption: DropdownOption = {} as DropdownOption;
-    let seasonOption: DropdownOption = {} as DropdownOption;
-    let players: string[] = []
-
-    function addPlayer() {
-        players.push("Magnus Gulbrandsen")
-        players = players;
-    }
-    function removePlayer() {
-        players.pop()
-        players = players;
-    }
+	$: ({ teams, seasonId } = data);
 </script>
 
 <div class="structure">
-    <h3> Legg til nytt lag </h3>
+	{#if teams}
+		{#each teams as team}
+			<p>{team.name}</p>
+		{/each}
+	{/if}
 
-    <form class="form" method="POST">
-        <div class="form-structure">
-            <TextField header="Lag navn" label="teamName" type="text" placeholder="Gutta G" />
-            <DropdownMenu header={"Lag farge"} option={"farge"} options={dropdownOptions} bind:selectedOption={colorOption}/>
-            <DropdownMenu header={"Sesong"} option={"sesong"} options={dropdownOptions} bind:selectedOption={seasonOption}/>
-            <div class="w-full">
-                <div class="block mb-1"><h5>Spillere</h5></div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button type="button" class="btn" on:click={addPlayer}> Legg til </button>
-                    <button type="button" class="btn" on:click={removePlayer}> Fjern </button>
-                </div>
-                {#each players as player}
-                    <div class="border-2 input mt-2">
-                        <p>{player}</p>
-                    </div>
-                {/each}
-            </div>
-            <div>
-                <input type="submit" class="btn" value={'Lag nytt lag'} />
-            </div>
-        </div>
-    </form>
+	{#if seasonId}
+		<h4>Legg til nytt lag</h4>
+
+		<form class="form" method="POST">
+			<div class="form-structure">
+				<TextField header="Lagnavn" label="teamName" type="text" placeholder="Gutta G" />
+				<TextField header="Lagfarge" label="teamColor" type="text" placeholder="Svart" />
+				<button type="submit" class="btn">Legg til</button>
+			</div>
+		</form>
+	{/if}
 </div>
