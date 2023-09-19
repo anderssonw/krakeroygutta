@@ -10,7 +10,8 @@
 	$: ({ matches, teamStats } = data);
 
     $: stats = mapTeamStats(matches ?? [], teamStats ?? [])
-    
+    $: showMore = new Array(stats.length).fill(false);
+
     function getGoalScore(team: MatchStatsTeam): number {
         return team.players?.reduce((a: number, b: MatchStatsPlayer) => a + b.goals, 0);
     }
@@ -19,37 +20,48 @@
 <div class="structure">
     <h1> Kamper </h1>
 
-    {#each stats as match}
+    {#each stats as match, idx}
 
         <h3> Kamp {match.match_id} </h3>
 
         <div class="w-full flex flex-col space-y-4 laptop:space-y-8 border-y-2 laptop:border-4 border-secondary-color-light laptop:rounded-lg p-4">
             
             <div class="flex flex-row justify-around items-center">
-                <div class="w-20 tablet:w-24 laptop:w-32 tablet:h-24 laptop:h-32">
-                    <div class="flex flex-col items-center">
+                <div class="flex flex-col items-center">
+                    <div class="w-20 tablet:w-24 laptop:w-32 tablet:h-24 laptop:h-32">
                         <TeamKit color={match.home_team.color} />
-                        <h3> {match.home_team.name} </h3>
                     </div>
+                    <h5> {match.home_team.name} </h5>
                 </div>
+
                 <h1> vs </h1>
-                <div class="w-20 tablet:w-24 laptop:w-32 tablet:h-24 laptop:h-32">
-                    <div class="flex flex-col items-center">
+
+                <div class="flex flex-col items-center">
+                    <div class="w-20 tablet:w-24 laptop:w-32 tablet:h-24 laptop:h-32">
                         <TeamKit color={match.away_team.color} />
-                        <h3> {match.away_team.name} </h3>
                     </div>
+                    <h5> {match.away_team.name} </h5>
                 </div>
-            </div>
-    
-            <div class="flex flex-row justify-center items-center space-x-12">
-                <h1> {getGoalScore(match.home_team)} </h1>
-                <h1> - </h1>
-                <h1> {getGoalScore(match.away_team)} </h1>
             </div>
 
-            <MatchStatRow match={match} stat_type="goal" />
-            <MatchStatRow match={match} stat_type="assist" />
-            <MatchStatRow match={match} stat_type="clutch" />
+            <div class="flex justify-center">
+                <button class="btn" on:click={() => showMore[idx] = !showMore[idx]}> Vis kamp info </button>
+            </div>
+    
+            {#if showMore[idx]}
+                <div>
+                    <div class="flex flex-row justify-center items-center space-x-12">
+                        <h1> {getGoalScore(match.home_team)} </h1>
+                        <h1> - </h1>
+                        <h1> {getGoalScore(match.away_team)} </h1>
+                    </div>
+                </div>
+
+                <MatchStatRow match={match} stat_type="goal" />
+                <MatchStatRow match={match} stat_type="assist" />
+                <MatchStatRow match={match} stat_type="clutch" />
+            {/if}
+
         </div>
 
     {/each}
