@@ -5,15 +5,11 @@
 	import type { PageData } from './$types';
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
 	import type { FantasyTeamFull, FantasyTeamWithPlayers, MatchStatsPlayer, MatchStatsQuery, TeamWithStats } from '$lib/types/newTypes';
-	import { getTeamStatsFromMatches, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
+	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 
 	export let data: PageData;
 	$: ({ session, season, teams, allMatches, teamStats, lazy} = data);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? [])
-
-	const getPointsFromTeamStats = (team: TeamWithStats) => {
-		return team.wins * 3 + team.draws;
-	};
 
 	// Helper function as this is done for both the home and away team,
 	const addPointsFromMatchToPlayerMap = (playerMap: number[], players: MatchStatsPlayer[]) => {

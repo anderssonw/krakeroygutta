@@ -73,3 +73,7 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 
     return teamStats;
 };
+
+export const getPointsFromTeamStats = (team: TeamWithStats) => {
+    return team.wins * 3 + team.draws;
+};
