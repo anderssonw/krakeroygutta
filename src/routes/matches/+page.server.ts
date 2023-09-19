@@ -1,33 +1,52 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
-import type { MatchStatsQuery } from '$lib/types/newTypes';
+import type { MatchStatsTeam } from '$lib/types/newTypes';
+import type { Tables } from '$lib/types/database.helper.types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
-	let { session, season } = await parent();
-	if (session) {
-		if (!season) return {};
+	let { season } = await parent();
 
-		const { data: matchesStats, error: matchesStatsError } = await supabase
-			.from('matchstats_view')
+	const fetchMatches = async () => {
+		const { data: matches, error: matchesError } = await supabase
+			.from('matches')
 			.select(
 				`
 					*
 				`
 			)
-			.eq('season_id', season.id)
-			.returns<MatchStatsQuery[]>();
+			.eq('season_id', season?.id)
+			.returns<Tables<'matches'>[]>();
 
-		if (matchesStatsError) {
+		if (matchesError) {
 			throw error(500, {
-				message: matchesStatsError.message,
-				devHelper: '/matches getting match statistics'
+				message: matchesError.message,
+				devHelper: '/matches getting matches'
 			});
 		}
 
-		return {
-			matchesStats
-		};
+		return matches;
 	}
 
-	return {};
+	const fetchTeamStats = async () => {
+		const { data: teamStats, error: teamStatsError } = await supabase
+			.from('team_with_stats')
+			.select(
+				`
+					*
+				`
+			)
+			.eq('season_id', season?.id)
+			.returns<MatchStatsTeam[]>();
+
+		if (teamStatsError) {
+			throw error(500, {
+				message: teamStatsError.message,
+				devHelper: '/matches getting matches'
+			});
+		}
+
+		return teamStats;
+	}
+
+	return { matches: fetchMatches(), teamStats: fetchTeamStats() };
 };

@@ -92,8 +92,17 @@ export interface MatchStatsPlayer {
 	assists: number;
 	clutches: number;
 }
+export interface TeamStatsQuery {
+	match_id: number;
+	season_id: number;
+	team_id: number;
+	name: string;
+	color: string;
+	players: MatchStatsPlayer[];
+}
 export interface MatchStatsTeam {
-	id: number;
+	match_id: number;
+	team_id: number;
 	name: string;
 	color: string;
 	players: MatchStatsPlayer[];
