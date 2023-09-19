@@ -22,11 +22,13 @@ export interface PlayerStats {
 	clutches: number;
 }
 
-export interface TeamStats {
+export interface TeamWithStats {
 	team_id: number;
 	wins: number;
 	losses: number;
 	draws: number;
+	color: string;
+	name: string;
 }
 
 export interface FullPlayer {
