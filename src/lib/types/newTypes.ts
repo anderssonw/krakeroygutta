@@ -1,5 +1,7 @@
 // Interface to be stored elsewhere
 
+import type { Tables } from "./database.helper.types";
+
 /* ------ GENERAL - DATABASE ------ */
 
 export interface UserClient {
@@ -138,4 +140,16 @@ export interface FullTeam {
 	color: string;
 	name: string;
 	players: FullPlayer[];
+}
+
+/* FANTASY / HOME PAGE */
+export interface FantasyTeamWithPlayers extends Tables<'fantasy_teams'> {
+	fantasy_teams_players: {
+		player_id: number;
+	}[];
+	points?: number;
+}
+
+export interface FantasyTeamFull extends FantasyTeamWithPlayers {
+	points: number;
 }

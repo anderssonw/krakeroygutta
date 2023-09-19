@@ -2,51 +2,62 @@ import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
 import type { MatchStatsTeam } from '$lib/types/newTypes';
 import type { Tables } from '$lib/types/database.helper.types';
+import type { Database } from '$lib/types/database.generated.types';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
-	let { season } = await parent();
+	let { session, season } = await parent();
 
-	const fetchMatches = async () => {
-		const { data: matches, error: matchesError } = await supabase
-			.from('matches')
-			.select(
-				`
-					*
-				`
-			)
-			.eq('season_id', season?.id)
-			.returns<Tables<'matches'>[]>();
+	if (session) {
+		if (!season) return {};
 
-		if (matchesError) {
-			throw error(500, {
-				message: matchesError.message,
-				devHelper: '/matches getting matches'
-			});
+		const getMatchesForSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
+			const { data: matches, error: matchesError } = await supabase
+				.from('matches')
+				.select(
+					`
+						*
+					`
+				)
+				.eq('season_id', season_id)
+				.returns<Tables<'matches'>[]>();
+
+			if (matchesError) {
+				throw error(500, {
+					message: matchesError.message,
+					devHelper: '/matches getting matches'
+				});
+			}
+
+			return matches;
 		}
 
-		return matches;
-	}
+		const getTeamStatsSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
+			const { data: teamStats, error: teamStatsError } = await supabase
+				.from('team_with_stats')
+				.select(
+					`
+						*
+					`
+				)
+				.eq('season_id', season_id)
+				.returns<MatchStatsTeam[]>();
 
-	const fetchTeamStats = async () => {
-		const { data: teamStats, error: teamStatsError } = await supabase
-			.from('team_with_stats')
-			.select(
-				`
-					*
-				`
-			)
-			.eq('season_id', season?.id)
-			.returns<MatchStatsTeam[]>();
+			if (teamStatsError) {
+				throw error(500, {
+					message: teamStatsError.message,
+					devHelper: '/team_with_stats getting team with player stats - view'
+				});
+			}
 
-		if (teamStatsError) {
-			throw error(500, {
-				message: teamStatsError.message,
-				devHelper: '/matches getting matches'
-			});
+			return teamStats;
 		}
 
-		return teamStats;
+		return { 
+			matches: getMatchesForSeason(season.id, supabase), 
+			teamStats: getTeamStatsSeason(season.id, supabase)
+		};
 	}
 
-	return { matches: fetchMatches(), teamStats: fetchTeamStats() };
+	return {};
 };
