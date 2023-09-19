@@ -58,11 +58,15 @@ export interface CreateFantasy {
 }
 
 /* ------ ADMIN PAGE ------ */
-export interface CreateSeason {
+export interface SeasonForm {
+	id?: number;
 	name: string;
-	start_date: string;
-	end_date: string;
+	startingCurrency: number;
+	startTime: string;
+	deadlineTime: string;
+	endTime: string;
 }
+
 export interface CreateTeam {
 	sid: number;
 	name: string;
@@ -82,7 +86,6 @@ export interface TeamColor {
 	tid: number;
 	name: string;
 }
-
 
 /* MATCHES PAGE (GENERAL FOR ALL MATCH STATISTICS) */
 export interface MatchStatsPlayer {
@@ -107,13 +110,13 @@ export interface MatchStatsQuery {
 
 /* BETTING PAGE */
 export interface BetUser {
-    id: string;
-    nickname: string;
+	id: string;
+	nickname: string;
 }
 export interface Bet {
-    id: number;
-    bet: string;
-    value: number;
-    user: BetUser;
-    challengers: any[];
+	id: number;
+	bet: string;
+	value: number;
+	user: BetUser;
+	challengers: any[];
 }

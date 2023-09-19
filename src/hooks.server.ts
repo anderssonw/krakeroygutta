@@ -43,19 +43,18 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.getUser = async (): Promise<Tables<'users'> | null> => {
 		// Get id from auth user
-		let authUserId;
-		await event.locals.supabase.auth.getUser()
-			.then(r => authUserId = r.data.user?.id);
+		let session = await event.locals.getSession();
 
-		// Get public user
-		const { data, error } = await event.locals.supabase.from('users')
-			.select('*')
-			.eq('id', authUserId)
-			.single();
+		if (session) {
+			// Get public user
+			const { data, error } = await event.locals.supabase.from('users').select('*').eq('id', session.user.id).single();
 
-		if (error) return null;
+			if (error) return null;
 
-		return data;
+			return data;
+		}
+
+		return null;
 	};
 
 	event.locals.getSeason = async (): Promise<Tables<'seasons'> | null> => {
@@ -70,7 +69,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (error) return null;
 
 		return data;
-	}
+	};
 
 	if (isLoggedInRoute(event.url.pathname)) {
 		const session = await event.locals.getSession();
