@@ -11,13 +11,13 @@
 	// Necessary for the navbar(mobile) modal
 	let showMobileNavbar: boolean = false;
 	$: screenHeight = `${showMobileNavbar ? 'h-screen overflow-y-hidden' : 'overflow-y-visible'}`;
-	$: ({ session, user } = data);
+	$: ({ session, supabase, user } = data);
 
 	onMount(() => {
 		const {
 			data: { subscription }
-		} = data.supabase.auth.onAuthStateChange((_event, _session) => {
-			if (_session?.expires_at !== data.session?.expires_at) {
+		} = supabase.auth.onAuthStateChange((event, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
 				invalidate('supabase:auth');
 			}
 		});
@@ -26,8 +26,8 @@
 	});
 </script>
 
-<div class="{screenHeight}">
-	<Navbar session={session} bind:user bind:showMobileNavbar={showMobileNavbar} />
+<div class={screenHeight}>
+	<Navbar bind:session bind:user bind:showMobileNavbar />
 
 	<slot />
 

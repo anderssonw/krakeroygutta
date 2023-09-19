@@ -5,16 +5,19 @@
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
 	import smallHeaderLogo from '$lib/assets/HeaderLogoSmall.png';
-	
+
 	export let session: Session | null;
 	export let user: Tables<'users'> | null;
 	export let showMobileNavbar: boolean;
-	
 
 	let routes: Route[] = getRoutes(session, user);
 	function getRoutes(session: Session | null, user: Tables<'users'> | null) {
-		let allRoutes: Route[] = (session ? navSessionRoutes : navNoSessionRoutes);
-		if (session && (user?.is_admin || user?.is_superadmin)) navAdminRoutes.map(r => allRoutes.push(r));
+		let allRoutes: Route[] = session ? navSessionRoutes : navNoSessionRoutes;
+
+		if (session && (user?.is_admin || user?.is_superadmin)) {
+			allRoutes = allRoutes.concat(navAdminRoutes);
+		}
+
 		return allRoutes;
 	}
 
@@ -40,7 +43,7 @@
 	</a>
 	<div class="w-full flex flex-row justify-end">
 		<div class="space-y-2 tablet:hidden">
-			<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => showMobileNavbar = true}>
+			<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => (showMobileNavbar = true)}>
 				<div class="w-8 h-1 bg-secondary-color-light" />
 				<div class="w-8 h-1 bg-secondary-color-light" />
 				<div class="w-8 h-1 bg-secondary-color-light" />
@@ -48,13 +51,13 @@
 		</div>
 		<div class="hidden tablet:flex">
 			{#each routes as route}
-				<a href="{route.route}"> <h5 class="navbtn"> {route.name} </h5> </a>
+				<a href={route.route}> <h5 class="navbtn">{route.name}</h5> </a>
 			{/each}
 		</div>
 	</div>
 </div>
 
-<NavbarModal routes={routes} bind:showMobileNavbar={showMobileNavbar} />
+<NavbarModal {routes} bind:showMobileNavbar />
 
 <!-- Applies afterUpdate since y updates on scrolling -->
 <svelte:window bind:scrollY={newY} />

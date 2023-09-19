@@ -1,19 +1,41 @@
-import { fail, type Actions } from '@sveltejs/kit';
-import type { TablesInsert } from '$lib/types/database.helper.types';
+import { fail, type Actions, error } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
+import type { TablesInsert, TablesUpdate } from '$lib/types/database.helper.types';
+
+export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
+	const { session, user } = await parent();
+
+	if (session && user?.is_superadmin) {
+		const { data: seasons, error: seasonsError } = await supabase.from('seasons').select();
+
+		if (seasonsError) {
+			throw error(500, {
+				message: seasonsError.message,
+				devHelper: '/admin/seasons getting seasons'
+			});
+		}
+
+		return { seasons };
+	}
+
+	return {};
+};
 
 export const actions = {
-	default: async ({ request, locals: { supabase } }) => {
+	create: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 
-        const seasonName = formData.get('seasonName')?.toString();
+		const seasonName = formData.get('seasonName')?.toString();
 		const seasonStart = formData.get('seasonStart')?.toString();
-        const seasonDeadline = formData.get('seasonDeadline')?.toString();
+		const seasonDeadline = formData.get('seasonDeadline')?.toString();
 		const seasonEnd = formData.get('seasonEnd')?.toString();
+		const startingCurrency = Number(formData.get('seasonStartingCurrency'));
 
-        // Check overlapping dates
-        let isOverlapDate: boolean = false;
-        // Do this via database constraints?
-        /*
+		console.log(seasonStart);
+		// Check overlapping dates
+		let isOverlapDate: boolean = false;
+		// Do this via database constraints?
+		/*
         const seasonsQuery = await supabase.from('seasons').select();
         if (seasonsQuery.data != null) {
             seasonsQuery.data.forEach((d: Season) => {
@@ -31,23 +53,76 @@ export const actions = {
         }
         */
 
-        if (seasonName && seasonStart && seasonDeadline && seasonEnd && !isOverlapDate) {
-            const seasonForm: TablesInsert<'seasons'> = {
-                name: seasonName,
-                start_time: seasonStart,
-                deadline_time: seasonDeadline,
-                end_time: seasonEnd
-            }
+		if (seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency && !isOverlapDate) {
+			const seasonForm: TablesInsert<'seasons'> = {
+				name: seasonName,
+				start_time: seasonStart,
+				deadline_time: seasonDeadline,
+				end_time: seasonEnd,
+				starting_currency: startingCurrency
+			};
 
-            const { error: error } = await supabase.from('seasons').insert(seasonForm);
+			const { error: insertError } = await supabase.from('seasons').insert(seasonForm);
 
-            if (error) {
-				return fail(500, {
-					supabaseErrorMessage: error.message
+			if (insertError) {
+				throw error(500, {
+					message: insertError.message,
+					devHelper: '/admin/seasons inserting season'
 				});
 			}
-        }
+		}
 
-        return { success: true };
+		return { success: true };
+	},
+
+	update: async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+
+		const seasonId = Number(formData.get('seasonId'));
+		const seasonName = formData.get('seasonName')?.toString();
+		const seasonStart = formData.get('seasonStart')?.toString();
+		const seasonDeadline = formData.get('seasonDeadline')?.toString();
+		const seasonEnd = formData.get('seasonEnd')?.toString();
+		const startingCurrency = Number(formData.get('seasonStartingCurrency'));
+
+		if (seasonId && seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency) {
+			const seasonForm: TablesUpdate<'seasons'> = {
+				name: seasonName,
+				start_time: seasonStart,
+				deadline_time: seasonDeadline,
+				end_time: seasonEnd,
+				starting_currency: startingCurrency
+			};
+
+			const { error: updateError } = await supabase.from('seasons').update(seasonForm).eq('id', seasonId);
+
+			if (updateError) {
+				throw error(500, {
+					message: updateError.message,
+					devHelper: '/admin/seasons updating season'
+				});
+			}
+		}
+
+		return { success: true };
+	},
+
+	delete: async ({ request, locals: { supabase } }) => {
+		const formData = await request.formData();
+
+		const seasonId = Number(formData.get('id'));
+
+		if (seasonId) {
+			const { error: deleteFail } = await supabase.from('seasons').delete().eq('id', seasonId);
+
+			if (deleteFail) {
+				throw error(500, {
+					message: deleteFail.message,
+					devHelper: '/admin/seasons deleting season'
+				});
+			}
+		}
+
+		return { success: true };
 	}
 } satisfies Actions;
