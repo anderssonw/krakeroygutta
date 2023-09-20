@@ -1,5 +1,7 @@
 // Interface to be stored elsewhere
 
+import type { Tables } from "./database.helper.types";
+
 /* ------ GENERAL - DATABASE ------ */
 
 export interface UserClient {
@@ -97,8 +99,17 @@ export interface MatchStatsPlayer {
 	assists: number;
 	clutches: number;
 }
+export interface TeamStatsQuery {
+	match_id: number;
+	season_id: number;
+	team_id: number;
+	name: string;
+	color: string;
+	players: MatchStatsPlayer[];
+}
 export interface MatchStatsTeam {
-	id: number;
+	match_id: number;
+	team_id: number;
 	name: string;
 	color: string;
 	players: MatchStatsPlayer[];
@@ -112,13 +123,33 @@ export interface MatchStatsQuery {
 
 /* BETTING PAGE */
 export interface BetUser {
-	id: string;
-	nickname: string;
+    id: string;
+    name: string;
 }
-export interface Bet {
-	id: number;
-	bet: string;
-	value: number;
-	user: BetUser;
-	challengers: any[];
+export interface BetImproved {
+    id: number;
+    bet: string;
+    value: number;
+    better: BetUser;
+    challengers: BetUser[];
+}
+
+/* TEAMS PAGE */
+export interface FullTeam {
+	season_id: number;
+	color: string;
+	name: string;
+	players: FullPlayer[];
+}
+
+/* FANTASY / HOME PAGE */
+export interface FantasyTeamWithPlayers extends Tables<'fantasy_teams'> {
+	fantasy_teams_players: {
+		player_id: number;
+	}[];
+	points?: number;
+}
+
+export interface FantasyTeamFull extends FantasyTeamWithPlayers {
+	points: number;
 }
