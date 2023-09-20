@@ -10,7 +10,7 @@
 
 	$: ({ seasons } = data);
 
-	$: seasonOption = {} as DropdownOption;
+	$: seasonOption = null as DropdownOption | null;
 
 	$: setSeasonURL(seasonOption);
 
@@ -26,9 +26,9 @@
 		}
 	});
 
-	const setSeasonURL = (seasonOption: DropdownOption) => {
+	const setSeasonURL = (seasonOption: DropdownOption | null) => {
 		// TODO this does not remove the query param when removing the seasonOption
-		if (seasonOption.id) {
+		if (seasonOption) {
 			let routeWithParam = `${$page.url.pathname}?season=${seasonOption.id}`;
 
 			goto(routeWithParam);
@@ -52,7 +52,7 @@
 	<div class="w-3/5">
 		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
 	</div>
-	{#if seasonOption.id}
+	{#if seasonOption}
 		<slot />
 	{/if}
 </div>

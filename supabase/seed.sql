@@ -7,7 +7,11 @@ INSERT INTO teams (season_id, name, color)
 VALUES (2, 'Røde Runkere', 'red'),
        (2, 'Blå Bavianer', 'blue'),
        (2, 'Hvite Hvalrosser', 'white'),
-       (2, 'Grønne Galinger', 'green');
+       (2, 'Grønne Galinger', 'green'),
+       (3, 'Røde Runkere', 'red'),
+       (3, 'Blå Bavianer', 'blue'),
+       (3, 'Hvite Hvalrosser', 'white'),
+       (3, 'Grønne Galinger', 'green');
 
 INSERT INTO players (name, image)
 VALUES ('Wiliam Andersson', 'placeholder.png'),
