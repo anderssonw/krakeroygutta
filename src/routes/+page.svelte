@@ -83,7 +83,7 @@
 							<th class="border-r-2 border-secondary-color">{i + 1 + '.'}</th>
 							<th class="border-r-2 border-secondary-color flex-row items-center justify-center">
 								{team.name}
-								<div class="inline-block w-3 h-3 bg-{team.color}-500" />
+								<div class="inline-block w-3 h-3 div-team-{team.color}" />
 							</th>
 							<th>{getPointsFromTeamStats(team)}</th>
 							<th>{team.wins}</th>
@@ -94,10 +94,10 @@
 				</tbody>
 			</table>
 			<div class="w-full grid grid-cols-2 laptop:grid-cols-4 gap-4">
-				<SeasonButton image="players" route="Players" />
-				<SeasonButton image="teams" route="Teams" />
-				<SeasonButton image="matches" route="Matches" />
-				<SeasonButton image="bets" route="Bets" />
+				<SeasonButton image="players" text="Spillere" />
+				<SeasonButton image="teams" text="Lag" />
+				<SeasonButton image="matches" text="Kamper" />
+				<SeasonButton image="bets" text="Veddemål" />
 			</div>
 
 			<div class="relative w-full bg-primary-color flex flex-col items-center space-y-12 justify-center pb-60 rounded-t-[25%]">

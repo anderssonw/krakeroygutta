@@ -31,6 +31,7 @@ export interface MatchStatsTeam {
 	name: string;
 	color: string;
 	players: MatchStatsPlayer[];
+	season_id: number;
 }
 export interface MatchStatsQuery {
 	match_id: number;
@@ -44,7 +45,7 @@ export interface BetUser {
     id: string;
     name: string;
 }
-export interface BetImproved {
+export interface Bet {
     id: number;
     bet: string;
     value: number;
@@ -98,7 +99,6 @@ export interface FantasyForm {
 	selectedCardPosition: number;
 }
 
-
 /* ALL PLAYERS CARDS */
 export interface FullPlayer {
 	player_id: number;
@@ -110,6 +110,15 @@ export interface FullPlayer {
 	physical: number;
 	price: number;
 	team_color: string;
-	team_id?: number;
-	season_id?: number;
+	team_id: number;
+	season_id: number;
+}
+
+/* PLAYER/ID PAGE*/
+export interface PlayerStats {
+	goals: number;
+	assists: number;
+	clutches: number;
+	wins: number;
+	clean_sheets: number;
 }

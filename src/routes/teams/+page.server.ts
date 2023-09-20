@@ -60,5 +60,4 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		}
 	}
 	return {};
-	// Map to FullTeam[]
 };
