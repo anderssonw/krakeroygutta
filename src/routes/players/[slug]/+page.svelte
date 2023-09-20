@@ -11,5 +11,5 @@
 {#if player}
 	<Player {player} />
 {:else}
-	<p>Fant eente spellern med id {$page.params.slug}</p>
+	<p>Fant ente spellern med id {$page.params.slug}</p>
 {/if}

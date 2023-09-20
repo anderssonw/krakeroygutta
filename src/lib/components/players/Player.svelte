@@ -4,7 +4,7 @@
 	import IconStats from '../common/IconStats.svelte';
 	import placeholderImg from '$lib/assets/cards/Placeholder.png';
 
-	export let player: FullPlayer | null;
+	export let player: FullPlayer;
 
     $: cardBackType = getPlayerCardType(player, false);
 </script>

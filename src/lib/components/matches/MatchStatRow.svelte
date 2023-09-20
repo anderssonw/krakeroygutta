@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { MatchStatsPlayer, MatchStatsQuery, PlayerStats } from "$lib/types/newTypes";
+	import type { MatchStatsPlayer, MatchStatsQuery } from "$lib/types/newTypes";
     import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
     import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
     import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';

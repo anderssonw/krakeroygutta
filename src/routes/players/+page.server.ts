@@ -1,50 +1,37 @@
 import type { PageServerLoad } from './$types';
 import type { FullPlayer } from '$lib/types/newTypes';
 import { error } from '@sveltejs/kit';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '$lib/types/database.generated.types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
-	let { season } = await parent();
+	let { session, season } = await parent();
 
-	// Todo make this as a function in supabase
-	const { data: players, error: playersError } = await supabase
-		.from('players_seasons')
-		.select(
-			`   
-				players(
-					name,
-					image
-				),
-				player_id,
-				season_id,
-				attack,
-				defence,
-				physical,
-				morale,
-				price
-			
-			`
-		)
-		.eq('season_id', season?.id);
+	if (session) {
+		if (!season) return {};
+	
+		const getPlayersForSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
+			const { data: players, error: playersError } = await supabase
+				.from('player_season_stats')
+				.select(
+					`   
+						*
+					`
+				)
+				.eq('season_id', season_id)
+				.returns<FullPlayer[]>()
 
-	if (playersError) {
-		throw error(500, {
-			message: playersError.message,
-			devHelper: 'players/ fetch all players with stats'
-		});
+			if (playersError) {
+				throw error(500, {
+					message: playersError.message,
+					devHelper: 'players/[slug] fetch player with stats'
+				});
+			}
+		
+			return players;
+		}
+
+		return {players: getPlayersForSeason(season.id, supabase) } 
 	}
-
-	let mappedPlayers: FullPlayer[] = players.map((player) => {
-		return {
-			id: player.player_id,
-			name: player.players?.name || 'placeholder',
-			image: player.players?.image || 'placeholder.png',
-			attack: player.attack,
-			defence: player.defence,
-			physical: player.physical,
-			morale: player.morale,
-			price: player.price
-		};
-	});
-
-	return { mappedPlayers };
+	return {};
 };

@@ -4,7 +4,7 @@
 	import jogaVideo from '$lib/assets/jogabonito.mp4';
 	import type { PageData } from './$types';
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
-	import type { FantasyTeamFull, FantasyTeamWithPlayers, MatchStatsPlayer, MatchStatsQuery, TeamWithStats } from '$lib/types/newTypes';
+	import type { FantasyTeamFull, FantasyTeamWithPlayers, MatchStatsPlayer, MatchStatsQuery } from '$lib/types/newTypes';
 	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 
 	export let data: PageData;

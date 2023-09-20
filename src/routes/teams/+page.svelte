@@ -4,10 +4,28 @@
 	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
 	import type { PageData } from './$types';
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import type { Tables } from '$lib/types/database.helper.types';
+	import type { FullPlayer, FullTeam } from '$lib/types/newTypes';
 
 	// Get server data
 	export let data: PageData;
-	$: ({ teams, season } = data);
+	$: ({ teams, players, season } = data);
+	$: fullTeams = mapToFullTeam(teams ?? [], players ?? []);
+
+	function mapToFullTeam(allTeams: Tables<'teams'>[], allPlayers: FullPlayer[]): FullTeam[] {
+		let fullTeams: FullTeam[] = [];
+		allTeams.map(team => {
+			let filterPlayers: FullPlayer[] = allPlayers.filter(player => ((player.team_id == team.id) && (player.season_id == team.season_id)))
+			let fullTeam: FullTeam = {
+				season_id: team.season_id,
+				color: team.color,
+				name: team.name,
+				players: filterPlayers
+			}
+			fullTeams.push(fullTeam);
+		})
+		return fullTeams;
+	}
 
 	const speechBubbleText: string[] = [
 		'Her finner du lagene til årets futsal turnering.',
@@ -16,12 +34,12 @@
 	];
 </script>
 
-{#if teams}
+{#if fullTeams}
 	<div class="structure">
 		<h1>Teams</h1>
 		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
 
-		{#each teams as team}
+		{#each fullTeams as team}
 			<div class="w-full py-8 border-4 rounded-lg">
 				<h3 class="text-center">Team - {team.color}</h3>
 
