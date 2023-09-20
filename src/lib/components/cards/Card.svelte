@@ -36,7 +36,7 @@
 </script>
 
 {#if player}
-	<div class="{cardType} {cardSizing.width} {cardSizing.height}">
+	<div class="{cardType} {cardSizing.width} {cardSizing.height} text-primary-color">
 
 		<div class="relative w-full h-[53.2%]">
 			<div class="absolute top-[15%] left-[13%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">

@@ -2,7 +2,7 @@
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
 	import TextField from '$lib/components/common/TextField.svelte';
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
-	import type { Bet } from '$lib/types/newTypes';
+	import type { BetImproved } from '$lib/types/newTypes';
 	import BetInfo from '$lib/components/bets/BetInfo.svelte';
 
 	// Get data from server if logged in
@@ -18,10 +18,10 @@
 	];
 
     function betExists() {
-        return (bets?.filter(b => b.user?.id == user?.id).length > 0) ? true : false;
+        return (bets?.filter(b => b.better?.id == user?.id).length > 0) ? true : false;
     }
-    function placedBet(bet: Bet, user_id: string) {
-        return bet.challengers.filter(c => c.user.id == user_id).length > 0;
+    function placedBet(bet: BetImproved, user_id: string) {
+        return bet.challengers.filter(c => c.id == user_id).length > 0;
     }
 </script>
 
@@ -48,7 +48,7 @@
             <div class="w-80 h-full p-4 bg-secondary-color-light text-primary-color-dark drop-shadow-[0_15px_10px_rgba(0,0,0,0.75)]">
                 <BetInfo bet={bet} />
                 <form method="POST" class="flex justify-center">
-                    {#if bet.user?.id == user?.id }
+                    {#if bet.better?.id == user?.id }
                         <button type="submit" class="btn-dark" formaction="?/removeBet">
                             Fjern veddemål
                         </button>

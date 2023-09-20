@@ -4,76 +4,12 @@
 	import jogaVideo from '$lib/assets/jogabonito.mp4';
 	import type { PageData } from './$types';
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
-	import type { MatchStatsPlayer, MatchStatsQuery, TeamWithStats } from '$lib/types/newTypes';
-	import type { Tables } from '$lib/types/database.helper.types';
+	import type { FantasyTeamFull, FantasyTeamWithPlayers, MatchStatsPlayer, MatchStatsQuery, TeamWithStats } from '$lib/types/newTypes';
+	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 
 	export let data: PageData;
-	$: ({ session, season, teams, matches, lazy } = data);
-
-	const getPointsFromTeamStats = (team: TeamWithStats) => {
-		return team.wins * 3 + team.draws;
-	};
-
-	const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: MatchStatsQuery[] | null | undefined): TeamWithStats[] => {
-		let teamStats: TeamWithStats[] = teams.map((team) => {
-			return {
-				team_id: team.id,
-				wins: 0,
-				losses: 0,
-				draws: 0,
-				color: team.color,
-				name: team.name
-			};
-		});
-
-		const getTeamStatsFromId = (team_id: number) => {
-			return teamStats.find((team) => team.team_id === team_id);
-		};
-
-		if (!matches) return [];
-
-		matches.forEach((match) => {
-			let homeTeamGoals = match.home_team.players.reduce((goalSum, player) => {
-				return goalSum + player.goals;
-			}, 0);
-
-			let awayTeamGoals = match.away_team.players.reduce((goalSum, player) => {
-				return goalSum + player.goals;
-			}, 0);
-
-			let homeTeamStats = getTeamStatsFromId(match.home_team.id);
-			let awayTeamStats = getTeamStatsFromId(match.away_team.id);
-
-			if (!homeTeamStats) return;
-			if (!awayTeamStats) return;
-
-			if (homeTeamGoals === awayTeamGoals) {
-				homeTeamStats.draws++;
-				awayTeamStats.draws++;
-			} else if (homeTeamGoals > awayTeamGoals) {
-				homeTeamStats.wins++;
-				awayTeamStats.losses++;
-			} else if (awayTeamGoals > homeTeamGoals) {
-				homeTeamStats.losses++;
-				awayTeamStats.wins++;
-			}
-
-			return;
-		});
-
-		return teamStats;
-	};
-
-	interface FantasyTeamWithPlayers extends Tables<'fantasy_teams'> {
-		fantasy_teams_players: {
-			player_id: number;
-		}[];
-		points?: number;
-	}
-
-	interface FantasyTeamFull extends FantasyTeamWithPlayers {
-		points: number;
-	}
+	$: ({ session, season, teams, allMatches, teamStats, lazy} = data);
+	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? [])
 
 	// Helper function as this is done for both the home and away team,
 	const addPointsFromMatchToPlayerMap = (playerMap: number[], players: MatchStatsPlayer[]) => {
