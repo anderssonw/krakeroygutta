@@ -66,7 +66,8 @@
 			</video>
 		</div>
 		{#if season && teams}
-			<table class="table-auto w-full bg-secondary-color-light text-primary-color-dark rounded-lg">
+			<h1>{season.name}</h1>
+			<table class="table-auto w-full bg-secondary-color-light text-primary-color-dark laptop:rounded-lg">
 				<thead>
 					<tr class="border-b-4 border-secondary-color-dark">
 						<th class="border-r-4 border-secondary-color-dark">Posisjon</th>
@@ -93,7 +94,7 @@
 					{/each}
 				</tbody>
 			</table>
-			<div class="w-full grid grid-cols-2 laptop:grid-cols-4 gap-4">
+			<div class="w-full px-6 laptop:px-0 grid grid-cols-2 laptop:grid-cols-4 gap-4">
 				<SeasonButton image="players" text="Spillere" />
 				<SeasonButton image="teams" text="Lag" />
 				<SeasonButton image="matches" text="Kamper" />
