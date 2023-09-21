@@ -29,7 +29,7 @@ const config = {
 				'team-blue': '#1434A4'
 			},
 			width: {
-				33: '8.15rem'
+				33: '8.06rem'
 			},
 			height: {
 				128: '32rem',
@@ -38,6 +38,9 @@ const config = {
 			},
 			fontSize: {
 				'2xs': ['0.6rem', { lineHeight: '0.8rem' }]
+			},
+			fontFamily: {
+				stats: ['Chivo Mono']
 			},
 
 			animation: {

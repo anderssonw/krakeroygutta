@@ -4,6 +4,7 @@
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import TeamKit from '../common/TeamKit.svelte';
 	import placeholderImg from '$lib/assets/cards/Placeholder.png';
+	import currencyImg from '$lib/assets/currency.png';
     
 	export let player: FullPlayer | null;
     export let card_size: CARD_SIZE;
@@ -17,14 +18,15 @@
         let sizes = {
             width: sizeBasedReturn('w-60', 'w-40', 'w-33'),
             height: sizeBasedReturn('h-96', 'h-64', 'h-52'),
-            avg_stats: sizeBasedReturn('text-6xl', 'text-4xl', 'text-2xl'),
+            avg_stats: sizeBasedReturn('text-6xl', 'text-4xl', 'text-3xl'),
             name: sizeBasedReturn('text-3xl', 'text-xl', 'text-base'),
-            stats: sizeBasedReturn('text-2xl', 'text-lg', 'text-sm'),
-            stats_width: sizeBasedReturn('w-[72%]', 'w-[76%]', 'w-[80%]'),
-            name_gap_y: sizeBasedReturn('space-y-[6%]', 'space-y-[2%]', 'space-y-[2%]'),
-            stat_gap_y: sizeBasedReturn('space-y-[3%]', 'space-y-0', 'space-y-0'),
-            stat_gap_x: sizeBasedReturn('gap-x-8', 'gap-x-4', 'gap-x-4'),
-			header_gap_y: sizeBasedReturn('gap-y-2', 'gap-y-1', 'gap-y-0.5')
+            stats_text: sizeBasedReturn('text-xl', 'text-base', 'text-xl'),
+			stats_value: sizeBasedReturn('text-2xl', 'text-lg', 'text-sm'),
+            stat_gap_y: sizeBasedReturn('space-y-[7%]', 'space-y-[5%]', 'space-y-[4%]'),
+            stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-2', 'gap-x-1.5'),
+			header_gap_y: sizeBasedReturn('gap-y-6', 'gap-y-3', 'gap-y-2'),
+			currency_size: sizeBasedReturn('w-4', 'w-3', 'w-2'),
+			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5')
         }
         return sizes;
     }
@@ -39,40 +41,53 @@
 	<div class="{cardType} {cardSizing.width} {cardSizing.height} text-primary-color">
 
 		<div class="relative w-full h-[53.2%]">
-			<div class="absolute top-[15%] left-[13%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
-				<div class="{cardSizing.avg_stats}">{playerStatAverage}</div>
+
+			<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
+				<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
 				{#if season}
 					<TeamKit color={player?.team_color} />
-					<div class="{cardSizing.stats}">5000,-</div>
 				{/if}
 			</div>
-			<div class="w-[50%] absolute bottom-0 right-[5%]">
+
+			<div class="w-[60%] absolute bottom-0 right-[5%] flex flex-col items-center">
 				<img src={placeholderImg} alt="head" />
 			</div>
 		</div>
 
 		<div class="relative w-full h-[46.8%]">
-			<div class="w-full flex flex-col {cardSizing.name_gap_y} items-center font-medium">
-				<div class="{cardSizing.name}">{player.name.split(' ')[1]}</div>
-				<div class="{cardSizing.stats_width} grid grid-cols-2 {cardSizing.stat_gap_y} {cardSizing.stat_gap_x} font-mono">
-					<div class="w-full flex flex-row justify-between">
-						<div class="{cardSizing.stats} font-bold">{player.attack}</div>
-						<div class="{cardSizing.stats}">ANG</div>
+			<div class="w-full flex flex-col items-center {cardSizing.stat_gap_y}">
+				<div class="{cardSizing.name} font-semibold">{player.name.split(' ')[1]}</div>
+
+				<div class="grid grid-cols-4 {cardSizing.stat_gap_x} font-stats">
+					<div class="flex flex-col items-center">
+						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> ANG </div>
+						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.attack}</div>
 					</div>
-					<div class="w-full flex flex-row justify-between">
-						<div class="{cardSizing.stats} font-bold">{player.physical}</div>
-						<div class="{cardSizing.stats}">FYS</div>
+					<div class="flex flex-col items-center">
+						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> FOR </div>
+						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.defence}</div>
 					</div>
-					<div class="w-full flex flex-row justify-between">
-						<div class="{cardSizing.stats} font-bold">{player.defence}</div>
-						<div class="{cardSizing.stats}">FOR</div>
+					<div class="flex flex-col items-center">
+						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> MOR </div>
+						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.morale}</div>
 					</div>
-					<div class="w-full flex flex-row justify-between">
-						<div class="{cardSizing.stats} font-bold">{player.morale}</div>
-						<div class="{cardSizing.stats}">MOR</div>
+					<div class="flex flex-col items-center">
+						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> FYS </div>
+						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.physical}</div>
 					</div>
 				</div>
 			</div>
+
+			{#if season}
+				<div class="flex flex-row items-center justify-center space-x-1 {cardSizing.currency_space_y}">
+					<div class="font-stats tracking-[-.05em] font-bold {cardSizing.stats_value}"> 
+						{player?.price} 
+					</div> 
+					<div class="{cardSizing.currency_size}">
+						<img src={currencyImg} alt="currency" />
+					</div>
+				</div>
+			{/if}
 		</div>
 	</div>
 {:else}
