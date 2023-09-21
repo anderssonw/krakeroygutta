@@ -4,6 +4,8 @@
 	import { mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 	import type { MatchStatsPlayer, MatchStatsTeam } from '$lib/types/newTypes';
 	import type { PageData } from './$types';
+    import ArrowDownIcon from 'virtual:icons/ph/arrow-fat-lines-down';
+    import ArrowUpIcon from 'virtual:icons/ph/arrow-fat-lines-up';
 
 	// Get server data
 	export let data: PageData;
@@ -21,10 +23,11 @@
     <h1> Kamper </h1>
 
     {#each stats as match, idx}
+        <div class="w-full flex flex-col space-y-4 laptop:space-y-8 border-y-2 laptop:border-4 border-secondary-color-light laptop:rounded-lg 
+            bg-primary-color hover:cursor-pointer p-4"
+            on:mouseup={() => showMore[idx] = !showMore[idx]}>
 
-        <h3> Kamp {match.match_id} </h3>
-
-        <div class="w-full flex flex-col space-y-4 laptop:space-y-8 border-y-2 laptop:border-4 border-secondary-color-light laptop:rounded-lg p-4">
+            <h3 class="text-center"> Kamp {match.match_id} </h3>
             
             <div class="flex flex-row justify-around items-center">
                 <div class="flex flex-col items-center">
@@ -34,7 +37,13 @@
                     <h5> {match.home_team.name} </h5>
                 </div>
 
-                <h1> vs </h1>
+                <div>
+                    <div class="flex flex-row justify-center items-center space-x-12">
+                        <h1> {getGoalScore(match.home_team)} </h1>
+                        <h1> - </h1>
+                        <h1> {getGoalScore(match.away_team)} </h1>
+                    </div>
+                </div>
 
                 <div class="flex flex-col items-center">
                     <div class="w-20 tablet:w-24 laptop:w-32 tablet:h-24 laptop:h-32">
@@ -44,24 +53,23 @@
                 </div>
             </div>
 
-            <div class="flex justify-center">
-                <button class="btn" on:click={() => showMore[idx] = !showMore[idx]}> Vis kamp info </button>
-            </div>
-    
-            {#if showMore[idx]}
-                <div>
-                    <div class="flex flex-row justify-center items-center space-x-12">
-                        <h1> {getGoalScore(match.home_team)} </h1>
-                        <h1> - </h1>
-                        <h1> {getGoalScore(match.away_team)} </h1>
+            {#if !showMore[idx]}
+                <div class="flex justify-center">
+                    <div class="flex flex-col items-center">
+                        <ArrowDownIcon font-size={50} />
                     </div>
                 </div>
-
+            {:else}
                 <MatchStatRow match={match} stat_type="goal" />
                 <MatchStatRow match={match} stat_type="assist" />
                 <MatchStatRow match={match} stat_type="clutch" />
-            {/if}
 
+                <div class="flex justify-center">
+                    <div class="flex flex-col items-center">
+                        <ArrowUpIcon font-size={50} />
+                    </div>
+                </div>
+            {/if}
         </div>
 
     {/each}
