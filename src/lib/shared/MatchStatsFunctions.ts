@@ -1,7 +1,7 @@
 import type { Tables } from "$lib/types/database.helper.types"
-import type { FullPlayer, MatchStatsQuery, MatchStatsTeam, PlayerStats, TeamWithStats } from "$lib/types/newTypes"
+import type { FullPlayer, MatchStatsQuery, MatchStatsTeam, MatchesWithSeasonName, PlayerStatsSeason, TeamWithStats } from "$lib/types/newTypes"
 
-export const mapTeamStats = (matches: Tables<'matches'>[], teamStats: MatchStatsTeam[]): MatchStatsQuery[] => {
+export const mapTeamStats = (matches: MatchesWithSeasonName[], teamStats: MatchStatsTeam[]): MatchStatsQuery[] => {
     if ((matches.length > 0) && (teamStats.length > 0)) {
         let matchStatsQueries: MatchStatsQuery[] = []
         matches.forEach(match => {
@@ -12,6 +12,7 @@ export const mapTeamStats = (matches: Tables<'matches'>[], teamStats: MatchStats
                 let matchStatsQuery: MatchStatsQuery = {
                     match_id: match.id,
                     season_id: match.season_id,
+                    season_name: match.season_name.name,
                     home_team: home_team,
                     away_team: away_team
                 }
@@ -78,12 +79,14 @@ export const getPointsFromTeamStats = (team: TeamWithStats) => {
     return team.wins * 3 + team.draws;
 };
 
-export function initSeasonMap(matches: MatchStatsQuery[]): Map<number, PlayerStats> {
-    let seasonMap: Map<number, PlayerStats> = new Map<number, PlayerStats>();
+function initSeasonMap(matches: MatchStatsQuery[]): Map<number, PlayerStatsSeason> {
+    let seasonMap: Map<number, PlayerStatsSeason> = new Map<number, PlayerStatsSeason>();
     
     matches.forEach(match => {
         if (!seasonMap.has(match.season_id)) {
-            let initPlayerStats: PlayerStats = {
+            let initPlayerStats: PlayerStatsSeason = {
+                season_id: match.season_id,
+                season_name: match.season_name,
                 goals: 0,
                 assists: 0,
                 clutches: 0,
@@ -97,9 +100,20 @@ export function initSeasonMap(matches: MatchStatsQuery[]): Map<number, PlayerSta
     return seasonMap;
 }
 
+function mapToSortedArray(seasonMap: Map<number, PlayerStatsSeason>): PlayerStatsSeason[] {
+    let seasonArray = Array.from(seasonMap)
+    let sortedArray = seasonArray.sort((a, b) => b[0] - a[0]);
 
-export function fillSeasonMapWithStatsForPlayer(matches: MatchStatsQuery[], playerVersions: FullPlayer[]): Map<number, PlayerStats> {
-    let seasonMap: Map<number, PlayerStats> = initSeasonMap(matches);
+    let sortedSeasonStats: PlayerStatsSeason[] = [];
+    sortedArray.forEach(sa => {
+        sortedSeasonStats.push(sa[1]) // 1 => the value in the original map
+    })
+
+    return sortedSeasonStats;
+}
+
+export function fillSeasonMapWithStatsForPlayer(matches: MatchStatsQuery[], playerVersions: FullPlayer[]): PlayerStatsSeason[] {
+    let seasonMap: Map<number, PlayerStatsSeason> = initSeasonMap(matches);
 
     for (const match of matches) {
         let curSeasonPlayer = playerVersions?.find(version => version.season_id == match.season_id);
@@ -163,5 +177,5 @@ export function fillSeasonMapWithStatsForPlayer(matches: MatchStatsQuery[], play
         seasonMap.set(match.season_id, updatedStats)
     }
     
-    return seasonMap;
+    return mapToSortedArray(seasonMap);
 }

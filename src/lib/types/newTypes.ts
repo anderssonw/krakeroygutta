@@ -36,8 +36,12 @@ export interface MatchStatsTeam {
 export interface MatchStatsQuery {
 	match_id: number;
 	season_id: number;
+	season_name: string;
 	home_team: MatchStatsTeam;
 	away_team: MatchStatsTeam;
+}
+export interface MatchesWithSeasonName extends Tables<'matches'> {
+	season_name: SeasonForm;
 }
 
 /* BETTING PAGE */
@@ -115,7 +119,9 @@ export interface FullPlayer {
 }
 
 /* PLAYER/ID PAGE*/
-export interface PlayerStats {
+export interface PlayerStatsSeason {
+	season_id: number;
+	season_name: string;
 	goals: number;
 	assists: number;
 	clutches: number;
