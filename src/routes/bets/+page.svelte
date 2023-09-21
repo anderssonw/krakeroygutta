@@ -2,7 +2,7 @@
 	import pirateMadsSrc from '$lib/assets/piratmads.png';
 	import TextField from '$lib/components/common/TextField.svelte';
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
-	import type { BetImproved } from '$lib/types/newTypes';
+	import type { Bet } from '$lib/types/newTypes';
 	import BetInfo from '$lib/components/bets/BetInfo.svelte';
 
 	// Get data from server if logged in
@@ -20,7 +20,7 @@
     function betExists() {
         return (bets?.filter(b => b.better?.id == user?.id).length > 0) ? true : false;
     }
-    function placedBet(bet: BetImproved, user_id: string) {
+    function placedBet(bet: Bet, user_id: string) {
         return bet.challengers.filter(c => c.id == user_id).length > 0;
     }
 </script>

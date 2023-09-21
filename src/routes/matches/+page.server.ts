@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from '../$types';
-import type { MatchStatsTeam } from '$lib/types/newTypes';
+import type { MatchStatsTeam, MatchesWithSeasonName } from '$lib/types/newTypes';
 import type { Tables } from '$lib/types/database.helper.types';
 import type { Database } from '$lib/types/database.generated.types';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -16,11 +16,12 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.from('matches')
 				.select(
 					`
-						*
+						*,
+						season_name:seasons(name)
 					`
 				)
 				.eq('season_id', season_id)
-				.returns<Tables<'matches'>[]>();
+				.returns<MatchesWithSeasonName[]>();
 
 			if (matchesError) {
 				throw error(500, {

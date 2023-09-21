@@ -9,9 +9,9 @@
 	export let season: Tables<'seasons'> | null;
 
 	const calculatePlayersToShow = (allPlayers: FullPlayer[], playersInForm: (FullPlayer | null)[]) => {
-		let playersInFormIds = playersInForm.map((player) => player?.id || -1);
+		let playersInFormIds = playersInForm.map((player) => player?.player_id || -1);
 		return allPlayers.filter((player) => {
-			return !playersInFormIds.includes(player.id);
+			return !playersInFormIds.includes(player.player_id);
 		});
 	};
 
