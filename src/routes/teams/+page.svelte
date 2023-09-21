@@ -40,8 +40,8 @@
 		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
 
 		{#each fullTeams as team}
-			<div class="w-full py-8 border-4 rounded-lg">
-				<h3 class="text-center">Team - {team.color}</h3>
+			<div class="w-full border-b-4 py-8 edge-team-{team.color}">
+				<h3 class="text-center mb-8">{team.name}</h3>
 
 				<div class="grid grid-cols-2 tablet:grid-cols-4 gap-y-8">
 					{#each team.players as player}
