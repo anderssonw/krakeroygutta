@@ -2,65 +2,6 @@
 
 import type { Tables } from "./database.helper.types";
 
-/* ------ GENERAL - DATABASE ------ */
-
-export interface UserClient {
-	id: string;
-	email: string;
-	is_admin: boolean;
-	is_superadmin: boolean;
-}
-
-/* ------ SEASON PAGE ------ */
-export interface FantasyStanding {
-	team_name: string;
-	players: number[];
-}
-export interface PlayerStats {
-	player_id: number;
-	name?: string;
-	goals: number;
-	assists: number;
-	clutches: number;
-}
-
-export interface TeamWithStats {
-	team_id: number;
-	wins: number;
-	losses: number;
-	draws: number;
-	color: string;
-	name: string;
-}
-
-export interface FullPlayer {
-	id: number;
-	name: string;
-	image: string;
-	attack: number;
-	defence: number;
-	morale: number;
-	physical: number;
-	price: number;
-}
-
-/* ------ FANTASY PAGE ------ */
-export interface FantasyForm {
-	players: (FullPlayer | null)[];
-	teamName: string;
-	captainId: number;
-	selectedCardPosition: number;
-}
-
-export interface CreateFantasy {
-	uid: string;
-	sid: number;
-	team_name: string;
-	players: number[];
-	captain: number;
-	cash: number;
-}
-
 /* ------ ADMIN PAGE ------ */
 export interface SeasonForm {
 	id?: number;
@@ -71,23 +12,8 @@ export interface SeasonForm {
 	endTime: string;
 }
 
-export interface CreateTeam {
-	sid: number;
-	name: string;
-	color: string;
-	players: number[];
-}
-export interface CreateGoal {
-	pid: number;
-	sid: number;
-	goals: number;
-}
 export interface DropdownOption {
 	id: number;
-	name: string;
-}
-export interface TeamColor {
-	tid: number;
 	name: string;
 }
 
@@ -99,26 +25,23 @@ export interface MatchStatsPlayer {
 	assists: number;
 	clutches: number;
 }
-export interface TeamStatsQuery {
-	match_id: number;
-	season_id: number;
-	team_id: number;
-	name: string;
-	color: string;
-	players: MatchStatsPlayer[];
-}
 export interface MatchStatsTeam {
 	match_id: number;
 	team_id: number;
 	name: string;
 	color: string;
 	players: MatchStatsPlayer[];
+	season_id: number;
 }
 export interface MatchStatsQuery {
 	match_id: number;
 	season_id: number;
+	season_name: string;
 	home_team: MatchStatsTeam;
 	away_team: MatchStatsTeam;
+}
+export interface MatchesWithSeasonName extends Tables<'matches'> {
+	season_name: SeasonForm;
 }
 
 /* BETTING PAGE */
@@ -126,7 +49,7 @@ export interface BetUser {
     id: string;
     name: string;
 }
-export interface BetImproved {
+export interface Bet {
     id: number;
     bet: string;
     value: number;
@@ -142,7 +65,17 @@ export interface FullTeam {
 	players: FullPlayer[];
 }
 
-/* FANTASY / HOME PAGE */
+/* SEASON HOME PAGE */
+export interface TeamWithStats {
+	team_id: number;
+	wins: number;
+	losses: number;
+	draws: number;
+	color: string;
+	name: string;
+}
+
+/* REVISIT WITH A VIEW? */
 export interface FantasyTeamWithPlayers extends Tables<'fantasy_teams'> {
 	fantasy_teams_players: {
 		player_id: number;
@@ -152,4 +85,46 @@ export interface FantasyTeamWithPlayers extends Tables<'fantasy_teams'> {
 
 export interface FantasyTeamFull extends FantasyTeamWithPlayers {
 	points: number;
+}
+
+/* FANTASY PAGE */
+export interface FantasyWithPlayers {
+	fantasy_team_id: number;
+	season_id: number;
+	user_id: string;
+	name: string;
+	captain_id: number;
+	player_ids: number[];
+}
+export interface FantasyForm {
+	players: (FullPlayer | null)[];
+	teamName: string;
+	captainId: number;
+	selectedCardPosition: number;
+}
+
+/* ALL PLAYERS CARDS */
+export interface FullPlayer {
+	player_id: number;
+	name: string;
+	image: string;
+	attack: number;
+	defence: number;
+	morale: number;
+	physical: number;
+	price: number;
+	team_color: string;
+	team_id: number;
+	season_id: number;
+}
+
+/* PLAYER/ID PAGE*/
+export interface PlayerStatsSeason {
+	season_id: number;
+	season_name: string;
+	goals: number;
+	assists: number;
+	clutches: number;
+	wins: number;
+	clean_sheets: number;
 }

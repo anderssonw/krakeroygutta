@@ -42,7 +42,7 @@
 			<div class="absolute top-[15%] left-[13%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
 				<div class="{cardSizing.avg_stats}">{playerStatAverage}</div>
 				{#if season}
-					<TeamKit color="green" />
+					<TeamKit color={player?.team_color} />
 					<div class="{cardSizing.stats}">5000,-</div>
 				{/if}
 			</div>

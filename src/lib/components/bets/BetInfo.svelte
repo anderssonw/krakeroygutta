@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { BetImproved } from "$lib/types/newTypes";
+	import type { Bet } from "$lib/types/newTypes";
     import betLogo from '$lib/assets/bets/bet_logo.png';
 
-    export let bet: BetImproved;
+    export let bet: Bet;
 </script>
 
 <div class="flex flex-col items-center mb-8">

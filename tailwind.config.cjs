@@ -25,7 +25,8 @@ const config = {
 				'team-green': '#2E8B57',
 				'team-red': '#DC143C',
 				'team-white': '#FAF9F6',
-				'team-black': '#343434'
+				'team-black': '#343434',
+				'team-blue': '#1434A4'
 			},
 			width: {
 				33: '8.15rem'

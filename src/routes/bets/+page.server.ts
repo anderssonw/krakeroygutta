@@ -2,7 +2,7 @@ import { error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { Actions } from '@sveltejs/kit';
 import type { TablesInsert } from '$lib/types/database.helper.types';
-import type { BetImproved } from '$lib/types/newTypes';
+import type { Bet } from '$lib/types/newTypes';
 
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
             `
         )
         .eq('season_id', season?.id)
-        .returns<BetImproved[]>();
+        .returns<Bet[]>();
 
     if (betsViewErrors) {
         throw error(500, {

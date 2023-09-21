@@ -3,19 +3,18 @@
 	import SelectCardModal from '$lib/components/fantasy/SelectCardModal.svelte';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
 	import FantasyCard from '$lib/components/fantasy/FantasyCard.svelte';
-	import TextField from '$lib/components/common/TextField.svelte';
 	import FantasyCardMobile from '$lib/components/fantasy/FantasyCardMobile.svelte';
 
 	// Get server data
 	export let data: PageData;
-	const { fantasyTeam, fantasyTeamPlayers, allPlayers, season } = data;
+	const { fantasyTeam, allPlayers, season } = data;
 
 	export let form: ActionData;
 
 	$: fantasyForm = {
 		captainId: fantasyTeam?.captain_id || -1,
 		selectedCardPosition: -1,
-		players: fillFantasyFormPlayers(fantasyTeamPlayers),
+		players: fillFantasyFormPlayers(allPlayers ?? [], fantasyTeam?.player_ids ?? []),
 		teamName: fantasyTeam?.name || ''
 	} satisfies FantasyForm;
 
@@ -36,7 +35,7 @@
 		}
 	};
 
-	const fillFantasyFormPlayers = (currentPlayers: FullPlayer[] | null): (FullPlayer | null)[] => {
+	const fillFantasyFormPlayers = (allPlayers: FullPlayer[], currentPlayers: number[]): (FullPlayer | null)[] => {
 		const maxPlayerCount = 4;
 
 		let formPlayers: (FullPlayer | null)[] = [];
@@ -44,17 +43,20 @@
 		if (currentPlayers && currentPlayers.length > 0) {
 			let currentPlayerCount = currentPlayers.length;
 
-			formPlayers = formPlayers.concat(currentPlayers);
+			currentPlayers.forEach(player_id => {
+				let mapPlayer = allPlayers.find(player => player.player_id == player_id);
+				if (mapPlayer) formPlayers.push(mapPlayer);
+			})
 
 			for (let i = 0; i < maxPlayerCount - currentPlayerCount; i++) {
 				formPlayers.push(null);
 			}
 
 			return formPlayers;
-		}
-
-		for (let i = 0; i < maxPlayerCount; i++) {
-			formPlayers.push(null);
+		} else {
+			for (let i = 0; i < maxPlayerCount; i++) {
+				formPlayers.push(null);
+			}
 		}
 
 		return formPlayers;
@@ -102,9 +104,9 @@
 				</div>
 			</div>
 
-			{#each fantasyForm.players as player, position}
+			{#each fantasyForm.players as player}
 				{#if player}
-					<input name="playerIds" bind:value={player.id} type="hidden" />
+					<input name="playerIds" bind:value={player.player_id} type="hidden" />
 				{/if}
 			{/each}
 
