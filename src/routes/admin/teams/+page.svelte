@@ -2,31 +2,23 @@
 	import { enhance } from '$app/forms';
 	import EditIcon from 'virtual:icons/mingcute/edit-line';
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
-	import PlusIcon from 'virtual:icons/typcn/plus';
-
-	import TextField from '$lib/components/common/TextField.svelte';
-	import type { PageData } from './$types';
+	import type { ActionData, PageData } from './$types';
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { Tables } from '$lib/types/database.helper.types';
-	import DropdownMenu from '$lib/components/admin/dropdownMenu.svelte';
+	import AdminTeamForm from '$lib/components/admin/AdminTeamForm.svelte';
+	import type { DropdownOption } from '$lib/types/newTypes';
 
 	// Get server data
 	export let data: PageData;
+	export let form: ActionData;
 
 	$: ({ teams, seasonId, players } = data);
 
-	interface SimplePlayer {
-		id: number;
-		name: string;
-	}
+	$: availablePlayers = getAvailablePlayers(playersInsert.concat(modalTeam.players), players ?? []);
 
-	$: availablePlayers = getAvailablePlayers(playersInsert, players ?? []);
+	$: playersInsert = [] as (DropdownOption | null)[];
 
-	$: playersInsert = [] as (SimplePlayer | null)[];
-
-	$: playerIdsInForm = getPlayerIdsToString(playersInsert);
-
-	const getAvailablePlayers = (chosenPlayers: (SimplePlayer | null)[], allPlayers: SimplePlayer[]) => {
+	const getAvailablePlayers = (chosenPlayers: (DropdownOption | null)[], allPlayers: DropdownOption[]) => {
 		if (!players) return [];
 
 		let playersOnTeams: number[] = [];
@@ -45,40 +37,48 @@
 		});
 	};
 
-	const getPlayerIdsToString = (playersInserted: (SimplePlayer | null)[]) => {
-		let playerIds: number[] = [];
-		playersInserted.forEach((player) => {
-			if (!player) return;
-
-			playerIds.push(player.id);
+	const getDropdownOptionsFromPlayerIds = (playerIds: number[]) => {
+		return playerIds.map((id) => {
+			let player = players?.find((p) => p.id == id);
+			if (!player) return null;
+			return {
+				id,
+				name: player?.name
+			};
 		});
-
-		console.log('playerids: ', playerIds.join(','));
-
-		return playerIds.join(',');
 	};
 
 	interface TeamForm {
 		id?: number;
+		seasonId: number;
 		name: string;
 		color: string;
-		players: number[];
+		players: (DropdownOption | null)[];
+	}
+
+	interface TeamWithPlayers extends Tables<'teams'> {
+		teams_players: {
+			player_id: number;
+		}[];
 	}
 
 	$: modalTeam = {
 		id: -1,
 		name: '',
 		color: '',
-		players: []
+		seasonId: -1,
+		players: [] as (DropdownOption | null)[]
 	} satisfies TeamForm;
 
-	const showTeamEditModal = (team: Tables<'teams'>): MouseEventHandler<HTMLButtonElement> | null | undefined => {
+	const showTeamEditModal = (team: TeamWithPlayers): MouseEventHandler<HTMLButtonElement> | null | undefined => {
 		const dialog = document.querySelector('dialog');
+		let options = getDropdownOptionsFromPlayerIds(team.teams_players.map((player) => player.player_id));
 		modalTeam = {
 			id: team.id,
+			seasonId: team.season_id,
 			name: team.name,
 			color: team.color,
-			players: []
+			players: options
 		} satisfies TeamForm;
 
 		dialog?.showModal();
@@ -130,10 +130,23 @@
 					</td>
 					<td>
 						<div class="flex flex-row justify-evenly">
-							<form method="POST" action="?/update">
+							<form
+								method="POST"
+								action="?/update"
+								use:enhance={({}) => {
+									closeTeamEditModal();
+								}}
+							>
 								<dialog id="edit-modal" class="p-6 rounded-lg drop-shadow-lg bg-primary-color-light text-secondary-color-dark">
 									<div class="flex flex-col items-center">
-										<p>This is the modal</p>
+										<AdminTeamForm
+											bind:availablePlayers
+											teamColor={team.color}
+											teamName={team.name}
+											teamId={team.id}
+											seasonId={Number(seasonId)}
+											playerIds={modalTeam.players}
+										/>
 										<button class="mt-2 btn bg-red-500 w-[50%]" type="button" on:click={closeTeamEditModal}>Avbryt</button>
 									</div>
 								</dialog>
@@ -163,48 +176,34 @@
 	{:else}
 		<p>Det ser ikke ut som det er noen lag på denne sesongen. Bruk formen under for å sette i gang!</p>
 	{/if}
+	{#if form?.teamDelete?.success}
+		<p class="text-green-400">Lag slettet</p>
+	{/if}
+	{#if form?.teamUpdate?.success}
+		<p class="text-green-400">Lag oppdatert</p>
+	{/if}
+	{#if form?.deletePlayers?.error}
+		<p class="text-red-400 max-w-[50ch]">{form.deletePlayers.error}</p>
+	{/if}
+	{#if form?.updatePlayers?.error}
+		<p class="text-red-400 max-w-[50ch]">{form.updatePlayers.error}</p>
+	{/if}
 
 	<h4>Legg til nytt lag</h4>
 
-	<form class="form" method="POST" action="?/create" use:enhance={({}) => {}}>
-		<div class="form-structure">
-			<TextField header="Lagnavn" label="name" type="text" placeholder="Gutta G" />
-			<TextField header="Lagfarge" label="color" type="text" placeholder="Svart" />
-			<div class="flex flex-col items-center w-full">
-				<p class="text-md">Spillere</p>
-				{#each playersInsert as player, i}
-					<div class="w-full my-2 flex flex-row items-center">
-						<DropdownMenu option={`spiller ${i + 1}`} bind:options={availablePlayers} bind:selectedOption={player} />
-						<button
-							class="p-2"
-							type="button"
-							on:click={() => {
-								playersInsert.splice(i, 1);
-								playersInsert = playersInsert;
-							}}
-						>
-							<DeleteIcon />
-						</button>
-					</div>
-				{/each}
-				<button
-					type="button"
-					class="mt-2 button w-6 h-6 rounded-full bg-green-700"
-					on:click={() => {
-						if (availablePlayers.length === 0) {
-							alert('Det er ikke flere ledige spillere');
-						} else {
-							playersInsert.push(null);
-							playersInsert = playersInsert;
-						}
-					}}
-				>
-					<PlusIcon class="mx-auto" />
-				</button>
-			</div>
-			<input hidden name="season_id" value={Number(seasonId)} />
-			<input hidden name="playerIds" value={playerIdsInForm} />
-			<button type="submit" class="btn">Legg til</button>
-		</div>
+	<form
+		class="form"
+		method="POST"
+		action="?/create"
+		use:enhance={({}) => {
+			playersInsert = [];
+		}}
+	>
+		<AdminTeamForm
+			bind:availablePlayers
+			seasonId={Number(seasonId)}
+			bind:playerIds={playersInsert}
+			formSubmitSuccess={form?.teamInsert?.success}
+		/>
 	</form>
 </div>
