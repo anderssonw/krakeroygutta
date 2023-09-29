@@ -39,7 +39,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 	if (!seasonIdParam) return {};
 
 	if (session && user?.is_superadmin) {
-		return { teams: getTeams(seasonIdParam), players: getPlayers(), seasonId: seasonIdParam };
+		return { teams: getTeams(seasonIdParam), players: getPlayers(), seasonId: Number(seasonIdParam) };
 	}
 
 	return {};
@@ -59,6 +59,8 @@ export const actions = {
 
 		try {
 			const res = teamSchema.parse(formData);
+
+			console.log(res);
 
 			let teamInsert: TablesInsert<'teams'> = {
 				name: res.name,
@@ -93,6 +95,15 @@ export const actions = {
 					});
 				}
 			}
+
+			return {
+				teamInsert: {
+					success: true,
+					data: {
+						season_id: res.season_id
+					}
+				}
+			};
 		} catch (err) {
 			if (err instanceof ZodError) {
 				const { fieldErrors: errors } = err.flatten();
@@ -107,12 +118,6 @@ export const actions = {
 				};
 			}
 		}
-
-		return {
-			teamInsert: {
-				success: true
-			}
-		};
 	},
 
 	update: async ({ request, locals: { supabase } }) => {

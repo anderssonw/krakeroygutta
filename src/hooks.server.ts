@@ -58,17 +58,23 @@ export const handle: Handle = async ({ event, resolve }) => {
 	};
 
 	event.locals.getSeason = async (): Promise<Tables<'seasons'> | null> => {
-		let todayTimeString = new Date().toDateString();
-		const { data, error } = await event.locals.supabase
-			.from('seasons')
-			.select()
-			.lt('start_time', todayTimeString)
-			.gt('end_time', todayTimeString)
-			.single();
+		let session = await event.locals.getSession();
 
-		if (error) return null;
+		if (session) {
+			let todayTimeString = new Date().toDateString();
+			const { data, error } = await event.locals.supabase
+				.from('seasons')
+				.select()
+				.lt('start_time', todayTimeString)
+				.gt('end_time', todayTimeString)
+				.single();
 
-		return data;
+			if (error) return null;
+
+			return data;
+		}
+
+		return null;
 	};
 
 	if (isLoggedInRoute(event.url.pathname)) {

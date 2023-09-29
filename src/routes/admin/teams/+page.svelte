@@ -8,11 +8,14 @@
 	import AdminTeamForm from '$lib/components/admin/AdminTeamForm.svelte';
 	import type { DropdownOption } from '$lib/types/newTypes';
 
+	import { page } from '$app/stores';
 	// Get server data
 	export let data: PageData;
 	export let form: ActionData;
 
-	$: ({ teams, seasonId, players } = data);
+	$: ({ teams, players } = data);
+
+	$: seasonId = Number($page.url.searchParams.get('season'));
 
 	$: availablePlayers = getAvailablePlayers(playersInsert.concat(modalTeam.players), players ?? []);
 
@@ -48,6 +51,16 @@
 		});
 	};
 
+	const formActionWithSeasonParam = (formAction: string) => {
+		let season = $page.url.searchParams.get('season');
+
+		if (season) {
+			return `${formAction}&season=${season}`;
+		}
+
+		return formAction;
+	};
+
 	interface TeamForm {
 		id?: number;
 		seasonId: number;
@@ -71,7 +84,7 @@
 	} satisfies TeamForm;
 
 	const showTeamEditModal = (team: TeamWithPlayers): MouseEventHandler<HTMLButtonElement> | null | undefined => {
-		const dialog = document.querySelector('dialog');
+		const dialog = document.querySelector(`dialog#edit-dialog-${team.id}`) as HTMLDialogElement;
 		let options = getDropdownOptionsFromPlayerIds(team.teams_players.map((player) => player.player_id));
 		modalTeam = {
 			id: team.id,
@@ -85,20 +98,22 @@
 		return;
 	};
 
-	const closeTeamEditModal = (): MouseEventHandler<HTMLButtonElement> | null | undefined => {
-		const dialog = document.querySelector('dialog');
+	const closeTeamEditModal = (id: number): MouseEventHandler<HTMLButtonElement> | null | undefined => {
+		const dialog = document.querySelector(`dialog#edit-dialog-${id}`) as HTMLDialogElement;
 		dialog?.close();
 		return;
 	};
 
-	const openTeamDeleteModal = (): MouseEventHandler<HTMLButtonElement> | null | undefined => {
-		const dialog = document.querySelector('dialog#delete-dialog') as HTMLDialogElement;
+	const openTeamDeleteModal = (id: number): MouseEventHandler<HTMLButtonElement> | null | undefined => {
+		const dialog = document.querySelector(`dialog#delete-dialog-${id}`) as HTMLDialogElement;
+
+		console.log(modalTeam);
 		dialog?.showModal();
 		return;
 	};
 
-	const closeTeamDeleteModal = (): MouseEventHandler<HTMLButtonElement> | null | undefined => {
-		const dialog = document.querySelector('dialog#delete-dialog') as HTMLDialogElement;
+	const closeTeamDeleteModal = (id: number): MouseEventHandler<HTMLButtonElement> | null | undefined => {
+		const dialog = document.querySelector(`dialog#delete-dialog-${id}`) as HTMLDialogElement;
 		dialog?.close();
 		return;
 	};
@@ -134,37 +149,48 @@
 								method="POST"
 								action="?/update"
 								use:enhance={({}) => {
-									closeTeamEditModal();
+									closeTeamEditModal(team.id);
 								}}
 							>
-								<dialog id="edit-modal" class="p-6 rounded-lg drop-shadow-lg bg-primary-color-light text-secondary-color-dark">
+								<dialog
+									id={`edit-dialog-${team.id}`}
+									class="p-6 rounded-lg drop-shadow-lg bg-primary-color-light text-secondary-color-dark"
+								>
 									<div class="flex flex-col items-center">
 										<AdminTeamForm
 											bind:availablePlayers
-											teamColor={team.color}
-											teamName={team.name}
-											teamId={team.id}
-											seasonId={Number(seasonId)}
-											playerIds={modalTeam.players}
+											bind:teamColor={team.color}
+											bind:teamName={team.name}
+											bind:teamId={team.id}
+											bind:seasonId
+											bind:playerIds={modalTeam.players}
 										/>
-										<button class="mt-2 btn bg-red-500 w-[50%]" type="button" on:click={closeTeamEditModal}>Avbryt</button>
+										<button class="mt-2 btn bg-red-500 w-[50%]" type="button" on:click={closeTeamEditModal(team.id)}>Avbryt</button>
 									</div>
 								</dialog>
-								<button type="button" on:click={showTeamEditModal(team)}>
+								<button
+									type="button"
+									on:click={() => {
+										showTeamEditModal(team);
+									}}
+								>
 									<EditIcon class="cursor-pointer" />
 								</button>
 							</form>
-							<form method="POST" action="?/delete" use:enhance={({}) => {}}>
-								<dialog id="delete-dialog" class="p-6 rounded-lg drop-shadow-lg bg-primary-color-light text-secondary-color-dark">
+							<form method="POST" action="?/delete" use:enhance>
+								<dialog
+									id={`delete-dialog-${team.id}`}
+									class="p-6 rounded-lg drop-shadow-lg bg-primary-color-light text-secondary-color-dark"
+								>
 									<div class="flex flex-col items-center">
-										<p>Er du sikker på at du vil slette laget med id {team.id}?</p>
-										<button class="mt-2 btn bg-green-500 w-[50%]" type="submit" on:click={closeTeamDeleteModal}>Ja</button>
-										<button class="mt-2 btn bg-red-500 w-[50%]" type="button" on:click={closeTeamDeleteModal}>Avbryt</button>
+										<p>Er du sikker på at du vil slette laget {team.name}?</p>
+										<button class="mt-2 btn bg-green-500 w-[50%]" type="submit" on:click={closeTeamDeleteModal(team.id)}>Ja</button>
+										<button class="mt-2 btn bg-red-500 w-[50%]" type="button" on:click={closeTeamDeleteModal(team.id)}>Avbryt</button>
 									</div>
 								</dialog>
 								<input type="hidden" name="teamId" value={team.id} />
 								<input type="hidden" name="seasonId" value={seasonId} />
-								<button type="button" on:click={openTeamDeleteModal}>
+								<button type="button" on:click={openTeamDeleteModal(team.id)}>
 									<DeleteIcon class="cursor-pointer" />
 								</button>
 							</form>
@@ -191,19 +217,7 @@
 
 	<h4>Legg til nytt lag</h4>
 
-	<form
-		class="form"
-		method="POST"
-		action="?/create"
-		use:enhance={({}) => {
-			playersInsert = [];
-		}}
-	>
-		<AdminTeamForm
-			bind:availablePlayers
-			seasonId={Number(seasonId)}
-			bind:playerIds={playersInsert}
-			formSubmitSuccess={form?.teamInsert?.success}
-		/>
+	<form class="form" method="POST" action="?/create">
+		<AdminTeamForm bind:availablePlayers bind:seasonId bind:playerIds={playersInsert} formSubmitSuccess={form?.teamInsert?.success} />
 	</form>
 </div>

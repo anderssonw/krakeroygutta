@@ -8,7 +8,7 @@
 
 	export let playerIds: (DropdownOption | null)[] = [];
 	export let availablePlayers: DropdownOption[];
-	export let seasonId: number;
+	export let seasonId: number | undefined = undefined;
 	export let teamId: number | undefined = undefined;
 	export let formSubmitSuccess: boolean = false;
 	export let teamName: string | undefined = undefined;
@@ -63,9 +63,9 @@
 			<PlusIcon class="mx-auto" />
 		</button>
 	</div>
-	<input hidden name="season_id" value={seasonId} />
-	<input hidden name="id" value={teamId} />
-	<input hidden name="players" value={playerIdsInForm} />
+	<input hidden type="number" name="season_id" bind:value={seasonId} />
+	<input hidden type="text" name="id" bind:value={teamId} />
+	<input hidden type="text" name="players" bind:value={playerIdsInForm} />
 	<button type="submit" class="btn bg-green-400">{teamId ? 'Oppdater' : 'Legg til'}</button>
 	{#if formSubmitSuccess}
 		<p class="text-green-400">Lag lagt til</p>
