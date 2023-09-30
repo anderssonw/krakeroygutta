@@ -80,7 +80,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (isLoggedInRoute(event.url.pathname)) {
 		const session = await event.locals.getSession();
 		if (!session) {
-			throw redirect(303, '/');
+			throw redirect(303, '/login');
 		}
 	}
 
