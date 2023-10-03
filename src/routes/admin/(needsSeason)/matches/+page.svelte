@@ -2,6 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import AdminTeamSelect from '$lib/components/admin/AdminTeamSelect.svelte';
+	import MatchStatRow from '$lib/components/matches/MatchStatRow.svelte';
 	import type { PageData, ActionData } from './$types';
 
 	export let form: ActionData;
@@ -48,6 +49,7 @@
 			<th>Hjemmelag</th>
 			<th>Score</th>
 			<th>Bortelag</th>
+			<th />
 		</tr>
 		{#await matches}
 			<p>Henter Kamper</p>
@@ -69,6 +71,9 @@
 						<td>
 							{match.team_away_id}
 						</td>
+						<td>
+							<a href={`${$page.url.pathname}/${match.id}`}>Go</a>
+						</td>
 					</tr>
 				{/each}
 			{/if}
@@ -78,7 +83,21 @@
 	</table>
 
 	<h4>Ny Kamp</h4>
-	<form class="flex flex-col" method="POST" use:enhance>
+	<form
+		class="flex flex-col"
+		method="POST"
+		use:enhance={() => {
+			return async ({ update }) => {
+				await update();
+				matchForm = {
+					teamAwayId: undefined,
+					teamHomeId: undefined
+				};
+
+				seasonId = Number($page.url.searchParams.get('season'));
+			};
+		}}
+	>
 		<AdminTeamSelect
 			id="teamHomeId"
 			label="Velg Hjemmelag"

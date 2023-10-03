@@ -22,7 +22,7 @@
 
 <label class="my-2" for={id}>{label}</label>
 <select class="rounded-md py-2 bg-inherit border-2" {id} name={id} bind:value>
-	<option {value}>Velg lag</option>
+	<option value={undefined}>Velg lag</option>
 	{#each teams as team}
 		<option value={team.id}>
 			{team.name}
