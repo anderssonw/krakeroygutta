@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
-	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import pirateMadsSrc from '$lib/assets/speechbubble/madsBubble2.png';
 </script>
 
 <div class="structure text-center">

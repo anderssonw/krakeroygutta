@@ -4,7 +4,7 @@
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
-	import smallHeaderLogo from '$lib/assets/HeaderLogoSmall.png';
+	import smallHeaderLogo from '$lib/assets/headerSmall.png';
 
 	export let session: Session | null;
 	export let user: Tables<'users'> | null;

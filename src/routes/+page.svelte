@@ -67,15 +67,15 @@
 		</div>
 		{#if season && teams}
 			<h1>{season.name}</h1>
-			<table class="table-auto w-full bg-secondary-color-light text-primary-color-dark laptop:rounded-lg">
+			<table class="table-fixed w-full bg-secondary-color-light text-primary-color-dark laptop:rounded-lg">
 				<thead>
-					<tr class="border-b-4 border-secondary-color-dark">
-						<th class="border-r-4 border-secondary-color-dark">Posisjon</th>
-						<th class="border-r-4 border-secondary-color-dark">Lag</th>
-						<th>Poeng</th>
-						<th>W</th>
-						<th>D</th>
-						<th>L</th>
+					<tr class="border-b-2 border-secondary-color-dark">
+						<th class="border-r-2 border-secondary-color-dark w-1/12 tablet:w-2/12">Pos.</th>
+						<th class="border-r-2 border-secondary-color-dark w-5/12 tablet:w-4/12">Lag</th>
+						<th class="border-r-2 border-secondary-color-dark w-3/12 tablet:w-3/12">Poeng</th>
+						<th class="w-1/12 tablet:w-1/12">S</th>
+						<th class="w-1/12 tablet:w-1/12">U</th>
+						<th class="w-1/12 tablet:w-1/12">T</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -86,7 +86,7 @@
 								{team.name}
 								<div class="inline-block w-3 h-3 div-team-{team.color}" />
 							</th>
-							<th>{getPointsFromTeamStats(team)}</th>
+							<th class="border-r-2 border-secondary-color">{getPointsFromTeamStats(team)}</th>
 							<th>{team.wins}</th>
 							<th>{team.draws}</th>
 							<th>{team.losses}</th>
@@ -100,60 +100,62 @@
 				<SeasonButton image="matches" text="Kamper" />
 				<SeasonButton image="bets" text="Veddemål" />
 			</div>
-
-			<div class="relative w-full bg-primary-color flex flex-col items-center space-y-12 justify-center pb-60 rounded-t-[25%]">
-				<h2>Fantasy Standings</h2>
-
-				{#await lazy?.fantasyTeams}
-					<div class="container max-w-screen-laptop animate-pulse">
-						<table class="table-fixed w-full">
-							<thead>
-								<tr>
-									<th />
-									<th />
-									<th />
-								</tr>
-							</thead>
-							<tbody>
-								{#each { length: 4 } as _}
-									<tr>
-										<th />
-										<th />
-										<th />
-									</tr>
-								{/each}
-							</tbody>
-						</table>
-					</div>
-				{:then fantasyTeams}
-					<div class="container max-w-screen-laptop">
-						<table class="table-fixed w-full">
-							<thead>
-								<tr>
-									<th>Posisjon</th>
-									<th>Lag</th>
-									<th>Poeng</th>
-								</tr>
-							</thead>
-							<tbody>
-								{#each getFantasyTeamsWithPoints(fantasyTeams ?? []) as team, i}
-									<tr>
-										<th>{i + 1 + '.'}</th>
-										<th>{team.name}</th>
-										<th>{team.points}</th>
-									</tr>
-								{/each}
-							</tbody>
-						</table>
-					</div>
-				{:catch error}
-					<p>Noe gikk galt under henting av Fantasy-lag</p>
-					<p>{error}</p>
-				{/await}
-			</div>
 		{:else}
 			<p>No season active</p>
 		{/if}
+	</div>
+
+	<div class="relative w-full bg-secondary-color-dark mt-32 tablet:mt-60 pb-20 text-green-900">
+		<div class="structure">
+			<h1 class="mt-12">Fantasy poeng</h1>
+
+			{#await lazy?.fantasyTeams}
+				<div class="container max-w-screen-laptop animate-pulse">
+					<table class="table-fixed w-full">
+						<thead>
+							<tr>
+								<th />
+								<th />
+								<th />
+							</tr>
+						</thead>
+						<tbody>
+							{#each { length: 4 } as _}
+								<tr>
+									<th />
+									<th />
+									<th />
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			{:then fantasyTeams}
+				<div class="container max-w-screen-laptop">
+					<table class="table-fixed w-full">
+						<thead>
+							<tr>
+								<th>Posisjon</th>
+								<th>Lag</th>
+								<th>Poeng</th>
+							</tr>
+						</thead>
+						<tbody>
+							{#each getFantasyTeamsWithPoints(fantasyTeams ?? []) as team, i}
+								<tr>
+									<th>{i + 1 + '.'}</th>
+									<th>{team.name}</th>
+									<th>{team.points}</th>
+								</tr>
+							{/each}
+						</tbody>
+					</table>
+				</div>
+			{:catch error}
+				<p>Noe gikk galt under henting av Fantasy-lag</p>
+				<p>{error}</p>
+			{/await}
+		</div>
 	</div>
 {:else}
 	<Content />
