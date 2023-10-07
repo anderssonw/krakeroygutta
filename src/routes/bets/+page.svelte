@@ -1,5 +1,5 @@
 <script lang="ts">
-	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import pirateMadsSrc from '$lib/assets/speechbubble/madsBubble2.png';
 	import TextField from '$lib/components/common/TextField.svelte';
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 	import type { Bet } from '$lib/types/newTypes';

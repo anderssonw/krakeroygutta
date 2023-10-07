@@ -2,7 +2,7 @@
 	import type { PageData } from './$types';
 	import Players from '$lib/components/players/Players.svelte';
 
-	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import madsHangLoose from '$lib/assets/speechbubble/madsBubble1.png';
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 
 	// Get server data
@@ -20,7 +20,7 @@
 	<div class="structure">
 		<h1>Spillere</h1>
 		
-		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} />
+		<RuleSpeechBubble imageSrc={madsHangLoose} text={speechBubbleText} mirror={true} />
 
 		<Players players={players} season={season} />
 	</div>

@@ -3,7 +3,7 @@
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
 	import type { PageData } from './$types';
-	import pirateMadsSrc from '$lib/assets/piratmads.png';
+	import madsIrishSrc from '$lib/assets/speechbubble/madsBubble3.png';
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer, FullTeam } from '$lib/types/newTypes';
 
@@ -37,7 +37,7 @@
 {#if fullTeams}
 	<div class="structure">
 		<h1>Teams</h1>
-		<RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
+		<RuleSpeechBubble imageSrc={madsIrishSrc} text={speechBubbleText} />
 
 		{#each fullTeams as team}
 			<div class="w-full border-b-4 py-8 edge-team-{team.color}">
