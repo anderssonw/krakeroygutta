@@ -4,6 +4,7 @@
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
 	import FantasyCard from '$lib/components/fantasy/FantasyCard.svelte';
 	import FantasyCardMobile from '$lib/components/fantasy/FantasyCardMobile.svelte';
+	import currencyImg from '$lib/assets/currency.png';
 
 	// Get server data
 	export let data: PageData;
@@ -82,21 +83,24 @@
 						<input name="teamName" type="text" id="teamName" class="input w-full" placeholder="Gutta krutt" value={fantasyForm.teamName} required />
 					</div>
 				</div>
-				<div class="w-full tablet:w-1/3 flex flex-col items-center"> 
-					<h1 class="text-yellow-500">{currentCash},-</h1> 
+				<div class="w-full tablet:w-1/3 flex flex-row justify-center items-center gap-2"> 
+					<h1 class="text-yellow-500">{currentCash}</h1>
+					<div class="w-6 tablet:w-6 laptop:w-8">
+						<img src={currencyImg} alt="currency" /> 
+					</div>
 				</div>
 				<div class="w-full tablet:w-1/3 flex justify-center tablet:justify-end">
 					<button class="btn w-2/3 bg-green-500"> Lagre laget </button>
 				</div>
 			</div>
 
-			<div class="relative w-full tablet:h-192 hidden tablet:block bg-primary-color-light">
+			<div class="relative w-full tablet:h-192 hidden tablet:block bg-cover bg-no-repeat bg-center bg-[url('$lib/assets/fantasy/fantasy_field_large.png')]">
 				{#each fantasyForm.players as player, position}
 					<FantasyCard bind:fantasyForm={fantasyForm} player={player} position={position} season={season} />
 				{/each}
 			</div>
 
-			<div class="relative w-full block tablet:hidden bg-primary-color-light py-8">
+			<div class="relative w-full block tablet:hidden py-8 bg-cover bg-no-repeat bg-center bg-[url('$lib/assets/fantasy/fantasy_field_small.png')]">
 				<div class="grid grid-cols-2 gap-y-8">
 				{#each fantasyForm.players as player, position}
 					<FantasyCardMobile bind:fantasyForm={fantasyForm} player={player} position={position} season={season} />

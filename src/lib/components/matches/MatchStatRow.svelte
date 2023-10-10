@@ -20,11 +20,11 @@
     }
 </script>
 
-<div class="flex flex-row justify-center items-center border-b-2 laptop:border-b-4">
+<div class="flex flex-row justify-center items-center {stat_type != 'clutch' ? 'border-b-2' : ''}">
     <div class="w-5/12 p-2 text-center">
         {#each match.home_team.players as ht_player}
             {#if getStatType(stat_type, ht_player) > 0}
-                <h5> {ht_player.name} x{getStatType(stat_type, ht_player)} </h5>
+                <p> {ht_player.name} x{getStatType(stat_type, ht_player)} </p>
             {/if}
         {/each}
     </div>
@@ -36,7 +36,7 @@
     <div class="w-5/12 p-2 text-center">
         {#each match.away_team.players as at_player}
             {#if getStatType(stat_type, at_player) > 0}
-                <h5> {at_player.name} x{getStatType(stat_type, at_player)} </h5>
+                <p> {at_player.name} x{getStatType(stat_type, at_player)} </p>
             {/if}
         {/each}
     </div>
