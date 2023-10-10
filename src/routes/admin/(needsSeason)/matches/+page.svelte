@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import AdminTeamSelect from '$lib/components/admin/AdminTeamSelect.svelte';
-	import MatchStatRow from '$lib/components/matches/MatchStatRow.svelte';
+	import MagnifierIcon from 'virtual:icons/ph/magnifying-glass-bold';
 	import type { PageData, ActionData } from './$types';
 
 	export let form: ActionData;
@@ -72,7 +72,9 @@
 							{match.team_away_id}
 						</td>
 						<td>
-							<a href={`${$page.url.pathname}/${match.id}`}>Go</a>
+							<a href={`${$page.url.pathname}/${match.id}`}>
+								<MagnifierIcon class="cursor-pointer" />
+							</a>
 						</td>
 					</tr>
 				{/each}
