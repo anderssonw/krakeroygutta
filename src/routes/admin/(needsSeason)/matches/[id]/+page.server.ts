@@ -1,39 +1,67 @@
 import type { TablesInsert } from '$lib/types/database.helper.types';
 import { error, type Actions, fail } from '@sveltejs/kit';
 import { ZodError, z } from 'zod';
-import type { PageServerLoad } from '../$types';
+import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }) => {
+export const load: PageServerLoad = async ({ locals: { supabase }, parent, params: { id } }) => {
 	const { session, user } = await parent();
 
-	const getMatches = async (seasonId: number) => {
-		const { data: matches, error: matchesError } = await supabase.from('matches').select().eq('season_id', seasonId);
+	const getMatch = async () => {
+		const { data: match, error: matchesError } = await supabase.from('matches').select().eq('id', id).single();
 
 		if (matchesError) {
+			console.log(matchesError);
 			throw error(500, {
 				message: matchesError.message,
 				devHelper: '/admin/matches getting matches'
 			});
 		}
 
-		return matches;
+		return match;
 	};
 
-	// const seasonId = url.searchParams.get('season');
+	const getRelevantPlayers = async (homeTeamId: number, awayTeamId: number) => {
+		const { data: players, error: matchesError } = await supabase
+			.from('teams_players')
+			.select(
+				`
+                players(
+                    id,
+                    name
+                )
+            `
+			)
+			.or(`team_id.eq.${homeTeamId},team_id.eq.${awayTeamId}`);
 
-	// if (session && seasonId) {
-	// 	if (!user?.is_admin && !user?.is_superadmin) {
-	// 		throw error(403, {
-	// 			message: 'Du har ikke rettigheter til å se denne siden'
-	// 		});
-	// 	}
+		if (matchesError) {
+			console.log(matchesError);
+			throw error(500, {
+				message: matchesError.message,
+				devHelper: '/admin/matches getting matches'
+			});
+		}
 
-	// 	return {
-	// 		lazy: {
-	// 			matches: getMatches(Number(seasonId))
-	// 		}
-	// 	};
-	// }
+		return players;
+	};
+
+	if (session) {
+		if (!user?.is_admin && !user?.is_superadmin) {
+			throw error(403, {
+				message: 'Du har ikke rettigheter til å se denne siden'
+			});
+		}
+
+		const match = await getMatch();
+		console.log(match);
+
+		const players = await getRelevantPlayers(match.team_home_id, match.team_away_id);
+		console.log(players);
+		return {
+			lazy: {
+				players: getRelevantPlayers(match.team_home_id, match.team_away_id)
+			}
+		};
+	}
 
 	// return {
 	// 	lazy: {

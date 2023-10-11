@@ -1,11 +1,14 @@
 <script lang="ts">
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
+	import ArrowLeftIcon from 'virtual:icons/ph/arrow-left';
 
 	import { enhance } from '$app/forms';
 	import type { MouseEventHandler } from 'svelte/elements';
+	import { goto } from '$app/navigation';
 
 	let match = {
 		id: 3,
+		seasonId: 2,
 		homeTeamName: 'Grå Grever',
 		homeTeamGoals: 2,
 		awayTeamName: 'Røde Raspere',
@@ -55,38 +58,21 @@
 </script>
 
 <div class="structure flex-col justify-evenly flex-wrap text-center">
+	<button class="flex items-center" type="button" on:click={() => goto(`/admin/matches?season=${match.seasonId}`)}>
+		<ArrowLeftIcon />
+		<p class="ml-2">Tilbake til kampoversikt</p>
+	</button>
 	<h2>Administrer kamp ID: {match.id}</h2>
 	<h3>{`${match.homeTeamName} ${match.homeTeamGoals} | ${match.awayTeamGoals} ${match.awayTeamName}`}</h3>
 
 	<div class="flex flex-row justify-around w-full flex-wrap p-6">
-		<div class="flex flex-col">
-			<p>Se-momenter</p>
-
-			{#each match.clutches as clutch}
-				<form action="?/delete-clutch" method="POST">
-					<input hidden id={`clutch_id_${clutch.id}`} name="clutch_id" value={clutch.id} />
-					<div class="flex flex-row justify-between border-t-2 py-4">
-						<!-- TODO Player name -->
-						<p>{`Spiller: ${clutch.player_id}`}</p>
-						<button>
-							<DeleteIcon class="cursor-pointer" />
-						</button>
-					</div>
-				</form>
-			{:else}
-				<p>Ingen Se-momenter denne kampen</p>
-			{/each}
-
-			<button type="button" class="btn mt-4" on:click={() => openDialogById('new-clutch')}>Nytt se-moment</button>
-		</div>
-
 		<div class="flex flex-col">
 			<p>Mål / Assist</p>
 			{#each { length: match.goals.length } as _, index}
 				<form action="?/delete-goal-assist" method="POST">
 					<input hidden id={`goal_id_${match.goals[index].id}`} name="goal_id" value={match.goals[index].id} />
 					<input hidden id={`assist_id_${match.assists[index].id}`} name="assist_id" value={match.assists[index].id} />
-					<div class="flex flex-row justify-between border-t-2 py-4">
+					<div class="flex flex-row justify-between border-t-2 py-2">
 						<!-- TODO Player name -->
 						<div class="text-left">
 							<p>{`Mål: ${match.goals[index].player_id}`}</p>
@@ -102,6 +88,27 @@
 				<p>Ingen Mål / Assist denne kampen</p>
 			{/each}
 			<button type="button" class="btn mt-4" on:click={() => openDialogById('new-goal')}>Nytt mål</button>
+		</div>
+
+		<div class="flex flex-col">
+			<p>Se-momenter</p>
+
+			{#each match.clutches as clutch}
+				<form action="?/delete-clutch" method="POST">
+					<input hidden id={`clutch_id_${clutch.id}`} name="clutch_id" value={clutch.id} />
+					<div class="flex flex-row justify-between border-t-2 py-2">
+						<!-- TODO Player name -->
+						<p>{`Spiller: ${clutch.player_id}`}</p>
+						<button>
+							<DeleteIcon class="cursor-pointer" />
+						</button>
+					</div>
+				</form>
+			{:else}
+				<p>Ingen Se-momenter denne kampen</p>
+			{/each}
+
+			<button type="button" class="btn mt-4" on:click={() => openDialogById('new-clutch')}>Nytt se-moment</button>
 		</div>
 	</div>
 
@@ -145,8 +152,8 @@
 				</select>
 			</label>
 
-			<button class="btn mt-4" on:click={() => closeDialogById('new-goal')}>Legg til</button>
-			<button type="button" class="btn mt-4" on:click={() => closeDialogById('new-goal')}> Lukk </button>
+			<button class="btn mt-4 bg-green-400" on:click={() => closeDialogById('new-goal')}>Legg til</button>
+			<button type="button" class="btn mt-4 bg-red-400" on:click={() => closeDialogById('new-goal')}> Lukk </button>
 		</form>
 	</dialog>
 </div>
