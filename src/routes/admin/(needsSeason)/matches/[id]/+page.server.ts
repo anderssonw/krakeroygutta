@@ -128,11 +128,15 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		};
 	}
 
-	// return {
-	// 	lazy: {
-	// 		matches: [] as Tables<'matches'>[]
-	// 	}
-	// };
+	return {
+		match: null,
+		players: null,
+		lazy: {
+			goals: [],
+			assists: [],
+			clutches: []
+		}
+	};
 };
 
 export const actions = {

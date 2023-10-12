@@ -7,22 +7,9 @@
 
 	export let form: ActionData;
 	export let data: PageData;
-	$: matches = data.lazy?.matches;
 
-	let teams = [
-		{
-			id: 1,
-			name: 'Grønne Galinger'
-		},
-		{
-			id: 2,
-			name: 'Blåe Bavianer'
-		},
-		{
-			id: 3,
-			name: 'Røde Runkere'
-		}
-	];
+	$: matches = data.lazy.matches;
+	$: teams = data.lazy.teams;
 
 	interface MatchForm {
 		teamHomeId: number | undefined;
@@ -44,32 +31,32 @@
 
 <div class="structure">
 	<table>
-		<tr>
-			<th>ID</th>
-			<th>Hjemmelag</th>
-			<th>Score</th>
-			<th>Bortelag</th>
-			<th />
-		</tr>
 		{#await matches}
 			<p>Henter Kamper</p>
 		{:then matches}
 			{#if matches.length === 0}
 				<p>Ingen Kamper for denne sesongen</p>
 			{:else}
+				<tr>
+					<th>ID</th>
+					<th>Hjemmelag</th>
+					<th>Score</th>
+					<th>Bortelag</th>
+					<th />
+				</tr>
 				{#each matches as match}
 					<tr>
 						<td>
 							{match.id}
 						</td>
 						<td>
-							{match.team_home_id}
+							{match.team_home?.name}
 						</td>
 						<td>
 							{`2-0`}
 						</td>
 						<td>
-							{match.team_away_id}
+							{match.team_away?.name}
 						</td>
 						<td>
 							<a href={`${$page.url.pathname}/${match.id}`}>
@@ -100,26 +87,32 @@
 			};
 		}}
 	>
-		<AdminTeamSelect
-			id="teamHomeId"
-			label="Velg Hjemmelag"
-			teams={getAvailableTeams(teams, matchForm.teamHomeId)}
-			bind:value={matchForm.teamHomeId}
-		/>
-		{#if form?.create?.errors['teamHomeId']}
-			<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
-		{/if}
-		<AdminTeamSelect
-			id="teamAwayId"
-			label="Velg Bortelag"
-			teams={getAvailableTeams(teams, matchForm.teamAwayId)}
-			bind:value={matchForm.teamAwayId}
-		/>
-		{#if form?.create?.errors['teamAwayId']}
-			<p class="text-red-400">{form.create.errors['teamAwayId']}</p>
-		{/if}
-		<input hidden name="seasonId" value={seasonId} />
+		{#await teams}
+			<p>Laster</p>
+		{:then teams}
+			<AdminTeamSelect
+				id="teamHomeId"
+				label="Velg Hjemmelag"
+				teams={getAvailableTeams(teams, matchForm.teamHomeId)}
+				bind:value={matchForm.teamHomeId}
+			/>
+			{#if form?.create?.errors['teamHomeId']}
+				<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
+			{/if}
+			<AdminTeamSelect
+				id="teamAwayId"
+				label="Velg Bortelag"
+				teams={getAvailableTeams(teams, matchForm.teamAwayId)}
+				bind:value={matchForm.teamAwayId}
+			/>
+			{#if form?.create?.errors['teamAwayId']}
+				<p class="text-red-400">{form.create.errors['teamAwayId']}</p>
+			{/if}
+			<input hidden name="seasonId" value={seasonId} />
 
-		<button class="btn bg-green-400">Opprett Kamp</button>
+			<button class="btn bg-green-400">Opprett Kamp</button>
+		{:catch error}
+			<p>Noe gikk galt</p>
+		{/await}
 	</form>
 </div>
