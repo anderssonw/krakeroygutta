@@ -7,7 +7,23 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 	const { session, user } = await parent();
 
 	const getMatch = async () => {
-		const { data: match, error: matchesError } = await supabase.from('matches').select().eq('id', id).single();
+		const { data: match, error: matchesError } = await supabase
+			.from('matches')
+			.select(
+				`
+                *,
+                team_home:teams!matches_team_home_id_fkey(
+                    name,
+                    color
+                ),
+                team_away:teams!matches_team_away_id_fkey(
+                    name,
+                    color
+                )
+            `
+			)
+			.eq('id', id)
+			.single();
 
 		if (matchesError) {
 			console.log(matchesError);
@@ -21,7 +37,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 	};
 
 	const getRelevantPlayers = async (homeTeamId: number, awayTeamId: number) => {
-		const { data: players, error: matchesError } = await supabase
+		const { data: players, error: playersError } = await supabase
 			.from('teams_players')
 			.select(
 				`
@@ -33,15 +49,57 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			)
 			.or(`team_id.eq.${homeTeamId},team_id.eq.${awayTeamId}`);
 
-		if (matchesError) {
-			console.log(matchesError);
+		if (playersError) {
+			console.log(playersError);
 			throw error(500, {
-				message: matchesError.message,
-				devHelper: '/admin/matches getting matches'
+				message: playersError.message,
+				devHelper: '/admin/matches getting players'
 			});
 		}
 
 		return players;
+	};
+
+	const getGoals = async (matchId: number) => {
+		const { data: goals, error: goalsError } = await supabase.from('goals').select().eq('match_id', matchId);
+
+		if (goalsError) {
+			console.log(goalsError);
+			throw error(500, {
+				message: goalsError.message,
+				devHelper: '/admin/matches getting goals'
+			});
+		}
+
+		return goals;
+	};
+
+	const getAssists = async (matchId: number) => {
+		const { data: assists, error: assistsError } = await supabase.from('assists').select().eq('match_id', matchId);
+
+		if (assistsError) {
+			console.log(assistsError);
+			throw error(500, {
+				message: assistsError.message,
+				devHelper: '/admin/matches getting assists'
+			});
+		}
+
+		return assists;
+	};
+
+	const getClutches = async (matchId: number) => {
+		const { data: clutches, error: clutchesError } = await supabase.from('clutches').select().eq('match_id', matchId);
+
+		if (clutchesError) {
+			console.log(clutchesError);
+			throw error(500, {
+				message: clutchesError.message,
+				devHelper: '/admin/matches getting clutches'
+			});
+		}
+
+		return clutches;
 	};
 
 	if (session) {
@@ -52,13 +110,20 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		}
 
 		const match = await getMatch();
-		console.log(match);
-
-		const players = await getRelevantPlayers(match.team_home_id, match.team_away_id);
-		console.log(players);
+		const playersRes = await getRelevantPlayers(match.team_home_id, match.team_away_id);
+		const players = playersRes.map((player) => {
+			return {
+				id: player.players?.id,
+				name: player.players?.name
+			};
+		});
 		return {
+			match,
+			players,
 			lazy: {
-				players: getRelevantPlayers(match.team_home_id, match.team_away_id)
+				goals: getGoals(match.id),
+				assists: getAssists(match.id),
+				clutches: getClutches(match.id)
 			}
 		};
 	}

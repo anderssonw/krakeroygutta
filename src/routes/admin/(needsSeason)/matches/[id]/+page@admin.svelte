@@ -5,8 +5,13 @@
 	import { enhance } from '$app/forms';
 	import type { MouseEventHandler } from 'svelte/elements';
 	import { goto } from '$app/navigation';
+	import type { PageData } from './$types';
 
-	let match = {
+	export let data: PageData;
+
+	$: ({ match, players, lazy } = data);
+
+	let matchTest = {
 		id: 3,
 		seasonId: 2,
 		homeTeamName: 'Grå Grever',
@@ -27,21 +32,6 @@
 		]
 	};
 
-	let availablePlayers = [
-		{
-			name: 'Navnesen',
-			id: 1
-		},
-		{
-			name: 'Brorsen',
-			id: 2
-		},
-		{
-			name: 'Kallesen',
-			id: 3
-		}
-	];
-
 	const openDialogById = (id: string): MouseEventHandler<HTMLButtonElement> | null | undefined => {
 		const dialog = document.getElementById(id) as HTMLDialogElement;
 		dialog.showModal();
@@ -58,25 +48,25 @@
 </script>
 
 <div class="structure flex-col justify-evenly flex-wrap text-center">
-	<button class="flex items-center" type="button" on:click={() => goto(`/admin/matches?season=${match.seasonId}`)}>
+	<button class="flex items-center" type="button" on:click={() => goto(`/admin/matches?season=${matchTest.seasonId}`)}>
 		<ArrowLeftIcon />
 		<p class="ml-2">Tilbake til kampoversikt</p>
 	</button>
-	<h2>Administrer kamp ID: {match.id}</h2>
-	<h3>{`${match.homeTeamName} ${match.homeTeamGoals} | ${match.awayTeamGoals} ${match.awayTeamName}`}</h3>
+	<h2>Administrer kamp ID: {match?.id}</h2>
+	<h3>{`${match?.team_home?.name} ${matchTest.homeTeamGoals} | ${matchTest.awayTeamGoals} ${match?.team_away?.name}`}</h3>
 
 	<div class="flex flex-row justify-around w-full flex-wrap p-6">
 		<div class="flex flex-col">
 			<p>Mål / Assist</p>
-			{#each { length: match.goals.length } as _, index}
+			{#each { length: matchTest.goals.length } as _, index}
 				<form action="?/delete-goal-assist" method="POST">
-					<input hidden id={`goal_id_${match.goals[index].id}`} name="goal_id" value={match.goals[index].id} />
-					<input hidden id={`assist_id_${match.assists[index].id}`} name="assist_id" value={match.assists[index].id} />
+					<input hidden id={`goal_id_${matchTest.goals[index].id}`} name="goal_id" value={matchTest.goals[index].id} />
+					<input hidden id={`assist_id_${matchTest.assists[index].id}`} name="assist_id" value={matchTest.assists[index].id} />
 					<div class="flex flex-row justify-between border-t-2 py-2">
 						<!-- TODO Player name -->
 						<div class="text-left">
-							<p>{`Mål: ${match.goals[index].player_id}`}</p>
-							<p>{`Assist: ${match.assists[index].player_id}`}</p>
+							<p>{`Mål: ${matchTest.goals[index].player_id}`}</p>
+							<p>{`Assist: ${matchTest.assists[index].player_id}`}</p>
 						</div>
 
 						<button>
@@ -93,20 +83,27 @@
 		<div class="flex flex-col">
 			<p>Se-momenter</p>
 
-			{#each match.clutches as clutch}
-				<form action="?/delete-clutch" method="POST">
-					<input hidden id={`clutch_id_${clutch.id}`} name="clutch_id" value={clutch.id} />
-					<div class="flex flex-row justify-between border-t-2 py-2">
-						<!-- TODO Player name -->
-						<p>{`Spiller: ${clutch.player_id}`}</p>
-						<button>
-							<DeleteIcon class="cursor-pointer" />
-						</button>
-					</div>
-				</form>
-			{:else}
-				<p>Ingen Se-momenter denne kampen</p>
-			{/each}
+			{#await lazy?.clutches}
+				<p>Laster</p>
+			{:then clutches}
+				{#if clutches}
+					{#each clutches as clutch}
+						<form action="?/delete-clutch" method="POST">
+							<input hidden id={`clutch_id_${clutch.id}`} name="clutch_id" value={clutch.id} />
+							<div class="flex flex-row justify-between border-t-2 py-2">
+								<p>{`Spiller: ${players?.find((player) => player.id === clutch.player_id)?.name}`}</p>
+								<button>
+									<DeleteIcon class="cursor-pointer" />
+								</button>
+							</div>
+						</form>
+					{:else}
+						<p>Ingen Se-momenter denne kampen</p>
+					{/each}
+				{/if}
+			{:catch error}
+				<p>Noe gikk galt</p>
+			{/await}
 
 			<button type="button" class="btn mt-4" on:click={() => openDialogById('new-clutch')}>Nytt se-moment</button>
 		</div>
@@ -119,9 +116,11 @@
 			<label class="mt-4" for="clutch">
 				Spiller
 				<select name="clutch" id="clutch">
-					{#each availablePlayers as player}
-						<option value={player.id}>{player.name}</option>
-					{/each}
+					{#if players}
+						{#each players as player}
+							<option value={player.id}>{player.name}</option>
+						{/each}
+					{/if}
 				</select>
 			</label>
 
@@ -137,18 +136,22 @@
 			<label class="mt-4" for="goal">
 				Mål
 				<select name="goal" id="goal">
-					{#each availablePlayers as player}
-						<option value={player.id}>{player.name}</option>
-					{/each}
+					{#if players}
+						{#each players as player}
+							<option value={player.id}>{player.name}</option>
+						{/each}
+					{/if}
 				</select>
 			</label>
 
 			<label for="assist">
 				Assist
 				<select class="border-2 rounded-sm" name="assist" id="assist">
-					{#each availablePlayers as player}
-						<option value={player.id}>{player.name}</option>
-					{/each}
+					{#if players}
+						{#each players as player}
+							<option value={player.id}>{player.name}</option>
+						{/each}
+					{/if}
 				</select>
 			</label>
 
