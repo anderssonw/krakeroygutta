@@ -8,7 +8,22 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 	const { session, user } = await parent();
 
 	const getMatches = async (seasonId: number) => {
-		const { data: matches, error: matchesError } = await supabase.from('matches').select().eq('season_id', seasonId);
+		const { data: matches, error: matchesError } = await supabase
+			.from('matches')
+			.select(
+				`
+				*,
+				team_home:teams!matches_team_home_id_fkey(
+                    name,
+                    color
+                ),
+                team_away:teams!matches_team_away_id_fkey(
+                    name,
+                    color
+                )
+				`
+			)
+			.eq('season_id', seasonId);
 
 		if (matchesError) {
 			throw error(500, {
@@ -18,6 +33,19 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 		}
 
 		return matches;
+	};
+
+	const getTeams = async (seasonId: number) => {
+		const { data: teams, error: teamsError } = await supabase.from('teams').select().eq('season_id', seasonId);
+
+		if (teamsError) {
+			throw error(500, {
+				message: teamsError.message,
+				devHelper: '/admin/matches getting teams'
+			});
+		}
+
+		return teams;
 	};
 
 	const seasonId = url.searchParams.get('season');
@@ -31,14 +59,16 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 
 		return {
 			lazy: {
-				matches: getMatches(Number(seasonId))
+				matches: getMatches(Number(seasonId)),
+				teams: getTeams(Number(seasonId))
 			}
 		};
 	}
 
 	return {
 		lazy: {
-			matches: [] as Tables<'matches'>[]
+			matches: [],
+			teams: []
 		}
 	};
 };

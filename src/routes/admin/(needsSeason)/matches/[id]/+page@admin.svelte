@@ -48,13 +48,13 @@
 </script>
 
 <div class="structure flex-col justify-evenly flex-wrap text-center">
-	<button class="flex items-center" type="button" on:click={() => goto(`/admin/matches?season=${matchTest.seasonId}`)}>
+	<button class="flex items-center" type="button" on:click={() => goto(`/admin/matches?season=${match?.season_id}`)}>
 		<ArrowLeftIcon />
 		<p class="ml-2">Tilbake til kampoversikt</p>
 	</button>
 	<h2>Administrer kamp ID: {match?.id}</h2>
 	<h3>{`${match?.team_home?.name} ${matchTest.homeTeamGoals} | ${matchTest.awayTeamGoals} ${match?.team_away?.name}`}</h3>
-
+	<!-- TODO FIX this for merged goal/assist -->
 	<div class="flex flex-row justify-around w-full flex-wrap p-6">
 		<div class="flex flex-col">
 			<p>Mål / Assist</p>
@@ -83,24 +83,22 @@
 		<div class="flex flex-col">
 			<p>Se-momenter</p>
 
-			{#await lazy?.clutches}
+			{#await lazy.clutches}
 				<p>Laster</p>
 			{:then clutches}
-				{#if clutches}
-					{#each clutches as clutch}
-						<form action="?/delete-clutch" method="POST">
-							<input hidden id={`clutch_id_${clutch.id}`} name="clutch_id" value={clutch.id} />
-							<div class="flex flex-row justify-between border-t-2 py-2">
-								<p>{`Spiller: ${players?.find((player) => player.id === clutch.player_id)?.name}`}</p>
-								<button>
-									<DeleteIcon class="cursor-pointer" />
-								</button>
-							</div>
-						</form>
-					{:else}
-						<p>Ingen Se-momenter denne kampen</p>
-					{/each}
-				{/if}
+				{#each clutches as clutch}
+					<form action="?/delete-clutch" method="POST">
+						<input hidden id={`clutch_id_${clutch.id}`} name="clutch_id" value={clutch.id} />
+						<div class="flex flex-row justify-between border-t-2 py-2">
+							<p>{`Spiller: ${players?.find((player) => player.id === clutch.player_id)?.name}`}</p>
+							<button>
+								<DeleteIcon class="cursor-pointer" />
+							</button>
+						</div>
+					</form>
+				{:else}
+					<p>Ingen Se-momenter denne kampen</p>
+				{/each}
 			{:catch error}
 				<p>Noe gikk galt</p>
 			{/await}
