@@ -7,6 +7,9 @@
 	import type { PageData } from './$types';
 	import DropdownMenu from '$lib/components/admin/dropdownMenu.svelte';
 	import type { Tables } from '$lib/types/database.helper.types';
+	import placeholderImg from '$lib/assets/cards/Placeholder.png';
+	import PlayerStatisticCard from '$lib/components/statistics/PlayerStatisticCard.svelte';
+	import PlayerStatisticCardGroup from '$lib/components/statistics/PlayerStatisticCardGroup.svelte';
 
 	export let data: PageData;
 	// All of this stuff is also in admin/layout, not sure how to copy it over effectively just letting it stay for now
@@ -158,82 +161,80 @@
 </script>
 
 <div class="structure">
-	<div class="w-3/5">
+	<div class="w-96">
 		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
 	</div>
 
 	{#if seasonOption}
 		<div class="flex flex-col">
-			<div class="flex flex-row">
+			<div class="flex flex-row flex-wrap">
 				{#await lazy.fantasyTeamPlayers}
 					<!-- promise is pending -->
 				{:then players}
-					<div>
-						<h3>Mest valgte spillere</h3>
-						{#each getMostSelectedPlayers(players) as player}
-							<div>
-								<p>
-									Antall valg: {player.selections}
-								</p>
-								<p>Spiller {player.player.name}</p>
-							</div>
+					<PlayerStatisticCardGroup title="Mest valgte spillere 😍🍆💦">
+						{#each getMostSelectedPlayers(players) as player, index}
+							<PlayerStatisticCard
+								playerName={player.player.name}
+								playerSubtitle={`Valgt ${player.selections} ${player.selections > 1 ? 'ganger' : 'gang'}`}
+								imgSrc={placeholderImg}
+								imgAlt={player.player.name}
+								position={index + 1}
+							/>
 						{/each}
-					</div>
-					<div>
-						<h3>Minst valgte spillere</h3>
-						{#each getLeastSelectedPlayers(players) as player}
-							<div>
-								<p>
-									Antall valg: {player.selections}
-								</p>
-								<p>Spiller {player.player.name}</p>
-							</div>
+					</PlayerStatisticCardGroup>
+					<PlayerStatisticCardGroup title="Minst valgte spillere 😩😰">
+						{#each getLeastSelectedPlayers(players) as player, index}
+							<PlayerStatisticCard
+								playerName={player.player.name}
+								playerSubtitle={`Valgt ${player.selections} ${player.selections === 1 ? 'gang' : 'ganger'}`}
+								imgSrc={placeholderImg}
+								imgAlt={player.player.name}
+								position={index + 10}
+							/>
 						{/each}
-					</div>
+					</PlayerStatisticCardGroup>
 				{/await}
 			</div>
-			<div class="flex flex-row">
+			<div class="flex flex-row flex-wrap">
 				{#await lazy.goals}
 					<p>Laster mål</p>
 				{:then goals}
-					<div>
-						<h3>Flest mål</h3>
+					<PlayerStatisticCardGroup title="Flest mål">
 						{#each getTopScorers(goals) as goal}
-							<div>
-								<p>
-									Antall mål: {goal.goals}
-								</p>
-								<p>Spiller {goal.player.name}</p>
-							</div>
+							<PlayerStatisticCard
+								playerName={goal.player.name}
+								playerSubtitle={`Scoret ${goal.goals} ${goal.goals === 1 ? 'gang' : 'ganger'}`}
+								imgSrc={placeholderImg}
+								imgAlt={goal.player.name}
+							/>
 						{/each}
-					</div>
-					<div>
-						<h3>Flest assists</h3>
+					</PlayerStatisticCardGroup>
+
+					<PlayerStatisticCardGroup title="Flest assists">
 						{#each getTopAssisters(goals) as goal}
-							<div>
-								<p>
-									Antall assists: {goal.assists}
-								</p>
-								<p>Spiller {goal.player.name}</p>
-							</div>
+							<PlayerStatisticCard
+								playerName={goal.player.name}
+								playerSubtitle={`Hadde ${goal.assists} ${goal.assists === 1 ? 'assist' : 'assister'}`}
+								imgSrc={placeholderImg}
+								imgAlt={goal.player.name}
+							/>
 						{/each}
-					</div>
+					</PlayerStatisticCardGroup>
 				{/await}
 
 				{#await lazy.clutches}
 					<p>Laster c-momenter</p>
 				{:then clutches}
-					<div>
-						<h3>Flest c-momenter</h3>
-						{#each getTopClutchers(clutches) as goal}
-							<div>
-								<p>
-									Antall c-momenter: {goal.clutches}
-								</p>
-								<p>Spiller {goal.player.name}</p>
-							</div>
+					<PlayerStatisticCardGroup title="Flest c-momenter">
+						{#each getTopClutchers(clutches) as clutch}
+							<PlayerStatisticCard
+								playerName={clutch.player.name}
+								playerSubtitle={`Hadde ${clutch.clutches} ${clutch.clutches === 1 ? 'c-moment' : 'c-momenter'}`}
+								imgSrc={placeholderImg}
+								imgAlt={clutch.player.name}
+							/>
 						{/each}
-					</div>
+					</PlayerStatisticCardGroup>
 				{/await}
 			</div>
 		</div>
