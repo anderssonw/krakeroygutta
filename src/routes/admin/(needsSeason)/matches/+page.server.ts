@@ -77,8 +77,6 @@ export const actions = {
 	default: async ({ request, locals: { supabase } }) => {
 		const formData = Object.fromEntries(await request.formData());
 
-		console.log(formData);
-
 		try {
 			const res = matchSchema.parse(formData);
 
