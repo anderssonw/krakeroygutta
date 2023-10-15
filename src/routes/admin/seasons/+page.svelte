@@ -9,6 +9,7 @@
 	import { enhance } from '$app/forms';
 	import type { MouseEventHandler } from 'svelte/elements';
 	import type { SeasonForm } from '$lib/types/newTypes';
+	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 
 	// Get server data
 	export let data: PageData;
@@ -71,6 +72,7 @@
 </script>
 
 <div class="structure">
+	<ReturnToRoute text="Tilbake til adminhovedside" route={`/admin`} />
 	<h3>Nåværende sesonger</h3>
 	<table class="w-full">
 		<tr class="text-left">

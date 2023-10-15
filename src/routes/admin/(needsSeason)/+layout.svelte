@@ -5,7 +5,9 @@
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+
 	import { browser } from '$app/environment';
+	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 
 	export let data: LayoutData;
 	$: ({ seasons } = data);
@@ -46,6 +48,7 @@
 </script>
 
 <div class="structure">
+	<ReturnToRoute text="Tilbake til hovedadminside" route="/admin" />
 	<div class="w-3/5">
 		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
 	</div>
