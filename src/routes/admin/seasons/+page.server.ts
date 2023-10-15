@@ -31,7 +31,6 @@ export const actions = {
 		const seasonEnd = formData.get('seasonEnd')?.toString();
 		const startingCurrency = Number(formData.get('seasonStartingCurrency'));
 
-		console.log(seasonStart);
 		// Check overlapping dates
 		let isOverlapDate: boolean = false;
 		// Do this via database constraints?

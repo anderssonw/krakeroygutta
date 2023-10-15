@@ -143,8 +143,6 @@ export const actions = {
 	'create-clutch': async ({ request, locals: { supabase }, params: { id } }) => {
 		const formData = Object.fromEntries(await request.formData());
 
-		console.log(formData);
-
 		if (!id) throw fail(401);
 
 		try {
@@ -186,8 +184,6 @@ export const actions = {
 	'delete-clutch': async ({ request, locals: { supabase } }) => {
 		const formData = Object.fromEntries(await request.formData());
 
-		console.log(formData);
-
 		try {
 			const res = clutchDeleteSchema.parse(formData);
 
@@ -221,8 +217,6 @@ export const actions = {
 
 	'create-goal-assist': async ({ request, locals: { supabase }, params: { id } }) => {
 		const formData = Object.fromEntries(await request.formData());
-
-		console.log(formData);
 
 		if (!id) throw fail(401);
 
@@ -275,8 +269,6 @@ export const actions = {
 
 	'delete-goal-assist': async ({ request, locals: { supabase } }) => {
 		const formData = Object.fromEntries(await request.formData());
-
-		console.log(formData);
 
 		try {
 			const res = goalAssistDeleteSchema.parse(formData);

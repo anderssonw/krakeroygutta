@@ -93,8 +93,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				});
 			}
 
-			console.log(JSON.stringify(fantasyTeams, null, '  '));
-
 			return fantasyTeams;
 		};
 
