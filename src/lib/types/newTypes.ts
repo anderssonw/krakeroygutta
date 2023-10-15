@@ -1,6 +1,6 @@
 // Interface to be stored elsewhere
 
-import type { Tables } from "./database.helper.types";
+import type { Tables } from './database.helper.types';
 
 /* ------ ADMIN PAGE ------ */
 export interface SeasonForm {
@@ -46,15 +46,15 @@ export interface MatchesWithSeasonName extends Tables<'matches'> {
 
 /* BETTING PAGE */
 export interface BetUser {
-    id: string;
-    name: string;
+	id: string;
+	name: string;
 }
 export interface Bet {
-    id: number;
-    bet: string;
-    value: number;
-    better: BetUser;
-    challengers: BetUser[];
+	id: number;
+	bet: string;
+	value: number;
+	better: BetUser;
+	challengers: BetUser[];
 }
 
 /* TEAMS PAGE */
@@ -116,6 +116,7 @@ export interface FullPlayer {
 	team_color: string;
 	team_id: number;
 	season_id: number;
+	points?: number;
 }
 
 /* PLAYER/ID PAGE*/

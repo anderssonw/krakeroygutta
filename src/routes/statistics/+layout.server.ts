@@ -10,7 +10,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase }, parent }) =
 		if (seasonsError) {
 			throw error(500, {
 				message: seasonsError.message,
-				devHelper: '/admin/seasons getting seasons'
+				devHelper: '/statistics getting seasons'
 			});
 		}
 
