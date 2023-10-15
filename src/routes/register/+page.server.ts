@@ -46,7 +46,10 @@ export const actions = {
 				});
 			}
 
-			throw redirect(303, '/');
+			return {
+				message:
+					'Du har nå registert deg. For å logge inn må du aktivere e-posten din. Du skal motta en e-post på den registrerte e-posten om kort tid med instrukser'
+			};
 		}
 
 		return fail(400, {
