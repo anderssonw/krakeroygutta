@@ -41,6 +41,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			.from('teams_players')
 			.select(
 				`
+				team_id,
                 players(
                     id,
                     name
@@ -74,20 +75,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		return goals;
 	};
 
-	const getAssists = async (matchId: number) => {
-		const { data: assists, error: assistsError } = await supabase.from('assists').select().eq('match_id', matchId);
-
-		if (assistsError) {
-			console.log(assistsError);
-			throw error(500, {
-				message: assistsError.message,
-				devHelper: '/admin/matches getting assists'
-			});
-		}
-
-		return assists;
-	};
-
 	const getClutches = async (matchId: number) => {
 		const { data: clutches, error: clutchesError } = await supabase.from('clutches').select().eq('match_id', matchId);
 
@@ -114,7 +101,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		const players = playersRes.map((player) => {
 			return {
 				id: player.players?.id,
-				name: player.players?.name
+				name: player.players?.name,
+				team_id: player.team_id
 			};
 		});
 		return {
@@ -122,7 +110,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			players,
 			lazy: {
 				goals: getGoals(match.id),
-				assists: getAssists(match.id),
 				clutches: getClutches(match.id)
 			}
 		};
@@ -133,7 +120,6 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		players: null,
 		lazy: {
 			goals: [],
-			assists: [],
 			clutches: []
 		}
 	};
@@ -215,7 +201,7 @@ export const actions = {
 		return {};
 	},
 
-	'create-goal-assist': async ({ request, locals: { supabase }, params: { id } }) => {
+	'create-goal': async ({ request, locals: { supabase }, params: { id } }) => {
 		const formData = Object.fromEntries(await request.formData());
 
 		if (!id) throw fail(401);
@@ -225,28 +211,16 @@ export const actions = {
 
 			let goalInsert: TablesInsert<'goals'> = {
 				match_id: Number(id),
-				player_id: Number(res.goal)
-			};
-
-			let assistInsert: TablesInsert<'assists'> = {
-				match_id: Number(id),
-				player_id: Number(res.assist)
+				goal_player_id: Number(res.goal),
+				assist_player_id: Number(res.assist)
 			};
 
 			const { error: goalInsertError } = await supabase.from('goals').insert(goalInsert);
-			const { error: assistInsertError } = await supabase.from('assists').insert(assistInsert);
 
 			if (goalInsertError) {
 				throw error(500, {
 					message: goalInsertError.message,
 					devHelper: '/admin/matches/[id] inserting goal'
-				});
-			}
-
-			if (assistInsertError) {
-				throw error(500, {
-					message: assistInsertError.message,
-					devHelper: '/admin/matches/[id] inserting assist'
 				});
 			}
 
@@ -267,26 +241,18 @@ export const actions = {
 		}
 	},
 
-	'delete-goal-assist': async ({ request, locals: { supabase } }) => {
+	'delete-goal': async ({ request, locals: { supabase } }) => {
 		const formData = Object.fromEntries(await request.formData());
 
 		try {
 			const res = goalAssistDeleteSchema.parse(formData);
 
 			const { error: goalDeleteError } = await supabase.from('goals').delete().eq('id', res.goal_id);
-			const { error: assistDeleteError } = await supabase.from('assists').delete().eq('id', res.assist_id);
 
 			if (goalDeleteError) {
 				throw error(500, {
 					message: goalDeleteError.message,
 					devHelper: '/admin/matches/[id] deleting goal'
-				});
-			}
-
-			if (assistDeleteError) {
-				throw error(500, {
-					message: assistDeleteError.message,
-					devHelper: '/admin/matches/[id] deleting assist'
 				});
 			}
 
@@ -316,8 +282,7 @@ const goalAssistInsertSchema = z.object({
 });
 
 const goalAssistDeleteSchema = z.object({
-	goal_id: z.preprocess(Number, z.number()),
-	assist_id: z.preprocess(Number, z.number())
+	goal_id: z.preprocess(Number, z.number())
 });
 
 const clutchInsertSchema = z.object({

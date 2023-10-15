@@ -30,50 +30,9 @@
 </script>
 
 <div class="structure">
-	<table>
-		{#await matches}
-			<p>Henter Kamper</p>
-		{:then matches}
-			{#if matches.length === 0}
-				<p>Ingen Kamper for denne sesongen</p>
-			{:else}
-				<tr>
-					<th>ID</th>
-					<th>Hjemmelag</th>
-					<th>Score</th>
-					<th>Bortelag</th>
-					<th />
-				</tr>
-				{#each matches as match}
-					<tr>
-						<td>
-							{match.id}
-						</td>
-						<td>
-							{match.team_home?.name}
-						</td>
-						<td>
-							{`2-0`}
-						</td>
-						<td>
-							{match.team_away?.name}
-						</td>
-						<td>
-							<a href={`${$page.url.pathname}/${match.id}`}>
-								<MagnifierIcon class="cursor-pointer" />
-							</a>
-						</td>
-					</tr>
-				{/each}
-			{/if}
-		{:catch error}
-			<p>Noe gikk galt!</p>
-		{/await}
-	</table>
-
 	<h4>Ny Kamp</h4>
 	<form
-		class="flex flex-col"
+		class="flex flex-col mt-0 pt-0"
 		method="POST"
 		use:enhance={() => {
 			return async ({ update }) => {
@@ -110,9 +69,47 @@
 			{/if}
 			<input hidden name="seasonId" value={seasonId} />
 
-			<button class="btn bg-green-400">Opprett Kamp</button>
+			<button class="btn bg-green-400 mt-4">Opprett Kamp</button>
 		{:catch error}
 			<p>Noe gikk galt</p>
 		{/await}
 	</form>
+	<table>
+		{#await matches}
+			<p>Henter Kamper</p>
+		{:then matches}
+			{#if matches.length === 0}
+				<p>Ingen Kamper for denne sesongen</p>
+			{:else}
+				<tr class="text-left">
+					<th class="px-4">ID</th>
+					<th class="px-4">Hjemmelag</th>
+					<th class="px-4">Bortelag</th>
+					<th class="px-4" />
+				</tr>
+				{#each matches.sort((a, b) => {
+					return a.id - b.id;
+				}) as match}
+					<tr>
+						<td class="px-4">
+							{match.id}
+						</td>
+						<td class="px-4">
+							{match.team_home?.name}
+						</td>
+						<td class="px-4">
+							{match.team_away?.name}
+						</td>
+						<td class="px-4">
+							<a href={`${$page.url.pathname}/${match.id}`}>
+								<MagnifierIcon class="cursor-pointer" />
+							</a>
+						</td>
+					</tr>
+				{/each}
+			{/if}
+		{:catch error}
+			<p>Noe gikk galt!</p>
+		{/await}
+	</table>
 </div>
