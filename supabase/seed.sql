@@ -58,22 +58,10 @@ VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', '{"nickname": "bing chilling"}')
 
 INSERT INTO fantasy_teams (user_id, season_id, name, captain_id)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Skulle Chippa FC' , 1),
-       ('ec61970a-704a-4c92-8d54-1a3181175c91', 2, 'Jørgens Tubaer' , 2),
-       ('c43e4127-0ba4-4db4-b217-61898937542d', 2, 'PAD MAMAAAAAA' , 3);
+       ('ec61970a-704a-4c92-8d54-1a3181175c91', 2, 'Jørgens Tubaer' , 5),
+       ('c43e4127-0ba4-4db4-b217-61898937542d', 2, 'PAD MAMAAAAAA' , 9);
 
 INSERT INTO fantasy_teams_players(fantasy_team_id, player_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 7),
-       (1, 8),
-       (2, 1),
-       (2, 2),
-       (2, 3),
-       (2, 4),
-       (3, 3),
-       (3, 10);
-
-INSERT INTO teams_players(team_id, player_id)
 VALUES (1, 1),
        (1, 2),
        (1, 3),
@@ -82,7 +70,13 @@ VALUES (1, 1),
        (2, 6),
        (2, 7),
        (2, 8),
-       (3, 1),
+       (3, 9),
+       (3, 10),
+       (3, 11),
+       (3, 12);
+
+INSERT INTO teams_players(team_id, player_id)
+VALUES (3, 1),
        (3, 2),
        (3, 3),
        (3, 4),
@@ -96,50 +90,22 @@ VALUES (1, 1),
        (5, 12);
 
 INSERT INTO matches (season_id, team_home_id, team_away_id)
+VALUES  (2, 3, 4),
+        (2, 4, 5),
+        (2, 3, 5);
+
+INSERT INTO goals(match_id, goal_player_id, assist_player_id)
 VALUES (1, 1, 2),
-       (1, 2, 1),
-       (1, 1, 2),
-       (1, 2, 1),
-       (2, 3, 4),
-       (2, 3, 5);
-
-INSERT INTO goals(match_id, player_id)
-VALUES (1, 1),
-       (1, 1),
-       (3, 1),
-       (3, 1),
-       (3, 1),
-       (5, 1);
-
-INSERT INTO assists(match_id, player_id)
-VALUES (1, 1),
-       (2, 1),
-       (2, 1),
-       (3, 1),
-       (4, 1),
-       (4, 1),
-       (6, 1),
-       (6, 1);
+       (1, 3, 4),
+       (2, 5, 6);
 
 INSERT INTO clutches(match_id, player_id)
 VALUES (1, 1),
-       (1, 1),
-       (1, 1),
-       (1, 1),
-       (2, 1),
-       (2, 1),
-       (2, 1),
-       (2, 1),
+       (1, 5),
+       (2, 5),
+       (2, 9),
        (3, 1),
-       (3, 1),
-       (3, 1),
-       (3, 1),
-       (3, 1),
-       (4, 1),
-       (4, 1),
-       (4, 1),
-       (5, 1),
-       (5, 1);
+       (3, 12);
 
 INSERT INTO bets(user_id, season_id, bet, value)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 100);
