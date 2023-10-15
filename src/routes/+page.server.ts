@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					devHelper: '/teams getting teams and players'
 				});
 			}
-		
+
 			return teams;
 		};
 
@@ -43,14 +43,14 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				)
 				.eq('season_id', season_id)
 				.returns<MatchesWithSeasonName[]>();
-			
+
 			if (matchesError) {
 				throw error(500, {
 					message: matchesError.message,
 					devHelper: '/matches getting matches'
 				});
 			}
-		
+
 			return matches;
 		};
 
@@ -71,7 +71,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					devHelper: '/team_with_stats getting team with player stats - view'
 				});
 			}
-		
+
 			return teamStats;
 		};
 
@@ -92,14 +92,15 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					devHelper: '/fantasy_teams getting fantasy team and players'
 				});
 			}
-		
+
+			console.log(JSON.stringify(fantasyTeams, null, '  '));
+
 			return fantasyTeams;
 		};
-		
 
 		return {
 			teams: getTeamsForSeason(season.id, supabase),
-			allMatches: getMatchesForSeason(season.id, supabase), 
+			allMatches: getMatchesForSeason(season.id, supabase),
 			teamStats: getTeamStatsSeason(season.id, supabase),
 			lazy: {
 				fantasyTeams: getFantasyTeamsForSeason(season.id, supabase)

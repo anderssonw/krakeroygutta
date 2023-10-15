@@ -8,17 +8,20 @@
 	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 
 	export let data: PageData;
-	$: ({ session, season, teams, allMatches, teamStats, lazy} = data);
-	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? [])
+	$: ({ session, season, teams, allMatches, teamStats, lazy } = data);
+	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 
-	// Helper function as this is done for both the home and away team,
+	// TODO Should check for clean sheet and victory and add those points too
 	const addPointsFromMatchToPlayerMap = (playerMap: number[], players: MatchStatsPlayer[]) => {
+		// TODO How many points should a goal be?
+		const goalPointFactor = 2;
+
 		players.forEach((player) => {
 			if (!playerMap[player.id]) {
 				playerMap[player.id] = 0;
 			}
 
-			playerMap[player.id] += player.goals + player.assists + player.clutches;
+			playerMap[player.id] += player.goals * goalPointFactor + player.assists + player.clutches;
 		});
 	};
 
