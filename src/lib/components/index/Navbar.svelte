@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type { Tables } from '$lib/types/database.helper.types';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, onDestroy, onMount } from 'svelte';
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
 	import smallHeaderLogo from '$lib/assets/headerSmall.png';
+
+	import HamburgerIcon from 'virtual:icons/mdi/hamburger-menu';
 
 	export let session: Session | null;
 	export let user: Tables<'users'> | null;
@@ -42,13 +44,13 @@
 		</div>
 	</a>
 	<div class="w-full flex flex-row justify-end">
+		<!-- Mobile Nav -->
 		<div class="space-y-2 tablet:hidden">
-			<div class="flex flex-col space-y-2 hover:cursor-pointer" on:mouseup={() => (showMobileNavbar = true)}>
-				<div class="w-8 h-1 bg-secondary-color-light" />
-				<div class="w-8 h-1 bg-secondary-color-light" />
-				<div class="w-8 h-1 bg-secondary-color-light" />
-			</div>
+			<button class="hover:cursor-pointer text-3xl" on:click={() => (showMobileNavbar = true)}>
+				<HamburgerIcon />
+			</button>
 		</div>
+		<!-- Else Nav -->
 		<div class="hidden tablet:flex">
 			{#each routes as route}
 				<a href={route.route}> <h5 class="navbtn">{route.name}</h5> </a>
