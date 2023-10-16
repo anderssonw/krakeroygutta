@@ -30,7 +30,7 @@
 	};
 </script>
 
-<div class="relative w-full">
+<div class="flex flex-col w-full">
 	{#if header}
 		<div class="block mb-1"><h5>{header}</h5></div>
 	{/if}
@@ -46,7 +46,7 @@
 	{/if}
 
 	{#if showOptions}
-		<div class="absolute bg-primary-color w-full p-2 rounded-md z-10 flex flex-col">
+		<div class="bg-primary-color w-full p-2 rounded-md flex flex-col">
 			{#each options as opt}
 				<button
 					class="rounded-sm hover:bg-primary-color-light hover:cursor-pointer py-2 border-b-2 rounded-b-none last:border-none"
