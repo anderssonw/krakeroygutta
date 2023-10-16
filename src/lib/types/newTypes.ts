@@ -44,6 +44,11 @@ export interface MatchesWithSeasonName extends Tables<'matches'> {
 	season_name: SeasonForm;
 }
 
+export interface PlayerWithStatCount {
+	name: string;
+	count: number;
+}
+
 /* BETTING PAGE */
 export interface BetUser {
 	id: string;
