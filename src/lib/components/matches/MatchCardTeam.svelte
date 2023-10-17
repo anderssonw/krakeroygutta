@@ -1,10 +1,7 @@
 <script lang="ts">
 	import type { MatchStatsTeam, PlayerWithStatCount } from '$lib/types/newTypes';
-
-	import MatchCardTeamHeader from './MatchCardTeamHeader.svelte';
 	import MatchCardTeamStatList from './MatchCardTeamStatList.svelte';
 
-	export let mirror: boolean = false;
 	export let team: MatchStatsTeam;
 
 	interface PlayerStats {
@@ -27,24 +24,23 @@
 	};
 </script>
 
-<div class="flex flex-col">
-	<MatchCardTeamHeader {team} {mirror} />
-	<div class="flex-flex-col">
+<div class="flex flex-col w-1/2 px-4 my-4">
+	<div class="flex-flex-col w-full">
 		<MatchCardTeamStatList
 			playerStats={getPlayerStatsFromTeam(team, 'goals')}
 			title="Antall mål"
 			noValDesc="Ingen spillere har scoret :("
 		/>
 	</div>
-	<div class="flex flex-row justify-between mt-4">
-		<div class="flex-flex-col w-2/5">
+	<div class="flex flex-col tablet:flex-row justify-between mt-4 flex-wrap gap-y-4">
+		<div class="flex-flex-col tablet:w-[45%]">
 			<MatchCardTeamStatList
 				playerStats={getPlayerStatsFromTeam(team, 'assists')}
 				title="Assists"
 				noValDesc="Ingen spillere har gitt assist :("
 			/>
 		</div>
-		<div class="flex-flex-col w-2/5">
+		<div class="flex-flex-col tablet:w-[45%]">
 			<MatchCardTeamStatList
 				playerStats={getPlayerStatsFromTeam(team, 'clutches')}
 				title="C-momenter"

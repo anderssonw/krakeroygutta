@@ -28,8 +28,6 @@
 			{/if}
 		{/each}
 	{:else}
-		<div class="flex flex-row font-light">
-			{noValDesc}
-		</div>
+		<p class="font-light max-w-[15ch]">{noValDesc}</p>
 	{/if}
 </div>
