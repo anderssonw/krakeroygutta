@@ -60,23 +60,23 @@
 
 				<div class="grid grid-cols-5 {cardSizing.stat_gap_x}">
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-test {cardSizing.stats_value}"> ANG </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> ANG </div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.attack}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-test {cardSizing.stats_value}"> FOR </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> FOR </div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.defence}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-test {cardSizing.stats_value}"> TEK </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> TEK </div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.skill}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-test {cardSizing.stats_value}"> MOR </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> MOR </div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.morale}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-test {cardSizing.stats_value}"> FYS </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> FYS </div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.physical}</div>
 					</div>
 				</div>

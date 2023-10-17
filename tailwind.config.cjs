@@ -41,7 +41,7 @@ const config = {
 			},
 			fontFamily: {
 				stats: ['Chivo Mono'],
-				test: ['Share Tech Mono']
+				slim: ['Share Tech Mono']
 			},
 
 			animation: {
