@@ -23,23 +23,54 @@
 
 		return `${homeGoals} - ${awayGoals}`;
 	};
+
+	function accordion(node: HTMLDivElement, isOpen: boolean) {
+		let initialHeight = node.offsetHeight;
+
+		// Høyden her blir feil hvis man endrer fra mobil-bredde til laptopbredde
+		node.style.height = isOpen ? 'fit-content' : '0';
+		node.style.overflow = 'hidden';
+		return {
+			update(isOpen: any) {
+				let animation = node.animate(
+					[
+						{
+							height: initialHeight + 'px',
+							overflow: 'hidden'
+						},
+						{
+							height: 0,
+							overflow: 'hidden'
+						}
+					],
+					{ duration: 300, fill: 'both', easing: 'ease-in-out' }
+				);
+				animation.pause();
+				if (!isOpen) {
+					animation.play();
+				} else {
+					animation.reverse();
+				}
+			}
+		};
+	}
 </script>
 
 <div class="flex flex-col items-center bg-team-white text-black rounded-lg mx-4">
-	<div class="flex flex-row p-6 flex-wrap justify-center">
-		{#if cardOpen}
-			<MatchCardTeam team={match.home_team} />
-
-			<MatchCardVersus {score} />
-
-			<MatchCardTeam team={match.away_team} mirror />
-		{:else}
+	<div class="flex flex-col p-6 flex-wrap justify-center">
+		<div class="flex flex-row flex-wrap justify-center">
 			<MatchCardTeamHeader team={match.home_team} />
 
 			<MatchCardVersus {score} />
 
 			<MatchCardTeamHeader team={match.away_team} mirror />
-		{/if}
+		</div>
+
+		<div class="flex flex-row flex-wrap justify-center" use:accordion={cardOpen}>
+			<MatchCardTeam team={match.home_team} />
+
+			<MatchCardTeam team={match.away_team} />
+		</div>
 	</div>
 
 	<button
