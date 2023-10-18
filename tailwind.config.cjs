@@ -40,7 +40,8 @@ const config = {
 				'2xs': ['0.6rem', { lineHeight: '0.8rem' }]
 			},
 			fontFamily: {
-				stats: ['Chivo Mono']
+				stats: ['Chivo Mono'],
+				slim: ['Share Tech Mono']
 			},
 
 			animation: {

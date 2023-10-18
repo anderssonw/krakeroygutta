@@ -117,6 +117,7 @@ export interface FullPlayer {
 	defence: number;
 	morale: number;
 	physical: number;
+	skill: number;
 	price: number;
 	team_color: string;
 	team_id: number;

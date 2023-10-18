@@ -34,6 +34,10 @@
 			<h3 class="grow text-end">{player?.defence}</h3>
 		</div>
 		<div class="w-full flex flex-row border-b-2">
+			<h3 class="grow">Teknikk</h3>
+			<h3 class="grow text-end">{player?.skill}</h3>
+		</div>
+		<div class="w-full flex flex-row border-b-2">
 			<h3 class="grow">Fysikk</h3>
 			<h3 class="grow text-end">{player?.physical}</h3>
 		</div>

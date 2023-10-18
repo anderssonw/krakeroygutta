@@ -23,7 +23,7 @@
             stats_text: sizeBasedReturn('text-xl', 'text-base', 'text-xl'),
 			stats_value: sizeBasedReturn('text-2xl', 'text-lg', 'text-sm'),
             stat_gap_y: sizeBasedReturn('space-y-[7%]', 'space-y-[5%]', 'space-y-[4%]'),
-            stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-2', 'gap-x-1.5'),
+            stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-1.5', 'gap-x-1'),
 			header_gap_y: sizeBasedReturn('gap-y-6', 'gap-y-3', 'gap-y-2'),
 			currency_size: sizeBasedReturn('w-4', 'w-3', 'w-2'),
 			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5')
@@ -58,22 +58,26 @@
 			<div class="w-full flex flex-col items-center {cardSizing.stat_gap_y}">
 				<div class="{cardSizing.name} font-semibold">{player.name.split(' ')[1]}</div>
 
-				<div class="grid grid-cols-4 {cardSizing.stat_gap_x} font-stats">
+				<div class="grid grid-cols-5 {cardSizing.stat_gap_x}">
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> ANG </div>
-						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.attack}</div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> ANG </div>
+						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.attack}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> FOR </div>
-						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.defence}</div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> FOR </div>
+						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.defence}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> MOR </div>
-						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.morale}</div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> TEK </div>
+						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.skill}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] {cardSizing.stats_value}"> FYS </div>
-						<div class="font-semibold leading-none tracking-[-.05em] {cardSizing.stats_value}">{player.physical}</div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> MOR </div>
+						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.morale}</div>
+					</div>
+					<div class="flex flex-col items-center">
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> FYS </div>
+						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.physical}</div>
 					</div>
 				</div>
 			</div>
