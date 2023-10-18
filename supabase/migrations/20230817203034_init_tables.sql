@@ -66,7 +66,8 @@ create table "public"."players_seasons" (
     "defence" integer not null default 50,
     "physical" integer not null default 50,
     "morale" integer not null default 50,
-    "price" bigint not null default '3000'::bigint
+    "price" bigint not null default '3000'::bigint,
+    "skill" integer not null default 50
 );
 
 
@@ -305,6 +306,7 @@ create or replace view "public"."player_season_stats" as  SELECT pla.id AS playe
     pls.defence,
     pls.physical,
     pls.morale,
+    pls.skill,
     pls.price,
     tea.color AS team_color,
     tea.id AS team_id
