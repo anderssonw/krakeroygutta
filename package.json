@@ -13,7 +13,7 @@
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.117",
-		"@playwright/test": "^1.28.1",
+		"@playwright/test": "^1.39.0",
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.25.0",
 		"@types/cookie": "^0.5.3",
