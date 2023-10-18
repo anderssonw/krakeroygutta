@@ -7,7 +7,7 @@ export enum CARD_SIZE {
 }
 
 export const calculatePlayerStatAverage = (player: FullPlayer | null) => {
-    if (player) return Math.ceil((player.attack + player.defence + player.morale + player.physical + player.skill) / 5);
+    if (player) return Math.round((player.attack + player.defence + player.morale + player.physical + player.skill) / 5);
     else return 0;
 };
 export const getPlayerCardType = (player: FullPlayer | null, card: boolean) => {

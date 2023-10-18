@@ -79,7 +79,8 @@ VALUES (1, 1),
        (3, 9),
        (3, 10),
        (3, 11),
-       (3, 12);
+       (3, 12),
+       (3, 13);
 
 INSERT INTO matches (season_id, team_home_id, team_away_id)
 VALUES  (2, 1, 2),
