@@ -1,27 +1,22 @@
 <script lang="ts">
 	import CloseIcon from 'virtual:icons/material-symbols/close';
 	import type { DropdownOption } from '$lib/types/newTypes';
-
 	/**
 	 * Header above input field, used as helper text
 	 */
 	export let header: string | undefined = undefined;
-
 	/**
 	 * The option that is being chosen. Only used to help user know what they are picking
 	 */
 	export let option: string;
-
 	/**
 	 * The different options to choose from
 	 */
 	export let options: DropdownOption[];
-
 	/**
 	 * The currently selected option
 	 */
 	export let selectedOption: DropdownOption | null;
-
 	let showOptions: boolean = false;
 	const handleSelection = (option: DropdownOption) => {
 		selectedOption = {
