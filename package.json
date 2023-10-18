@@ -16,13 +16,13 @@
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.1.0",
 		"@sveltejs/kit": "^1.25.0",
-		"@types/cookie": "^0.5.1",
+		"@types/cookie": "^0.5.3",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.29",
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
-		"supabase": "^1.93.0",
+		"supabase": "^1.106.1",
 		"svelte": "^4.2.0",
 		"svelte-check": "^3.5.1",
 		"svelte-preprocess": "^5.0.3",
@@ -34,7 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@supabase/auth-helpers-sveltekit": "^0.9.4",
+		"@supabase/auth-helpers-sveltekit": "^0.10.3",
 		"@supabase/supabase-js": "^2.33.2",
 		"zod": "^3.22.2"
 	}
