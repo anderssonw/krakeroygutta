@@ -3,14 +3,14 @@ VALUES ('Winter 2022', '2022-12-1 12:00:00', '2022-12-15 12:00:00', '2022-12-24 
        ('Summer 2023', '2023-06-1 12:00:00', '2023-06-15 12:00:00', '2023-11-1 12:00:00', 25000);
 
 INSERT INTO teams (season_id, name, color)
-VALUES (2, 'Røde Runkere', 'red'),
-       (2, 'Blå Bavianer', 'blue'),
-       (2, 'Grønne Galinger', 'green'),
-       (2, 'Hvite Hvalrosser', 'white'),
-       (3, 'Røde Runkere New', 'red'),
-       (3, 'Blå Bavianer New', 'blue'),
-       (3, 'Hvite Hvalrosser New', 'white'),
-       (3, 'Grønne Galinger New', 'green');
+VALUES (1, 'Røde Runkere', 'red'),
+       (1, 'Blå Bavianer', 'blue'),
+       (1, 'Grønne Galinger', 'green'),
+       (1, 'Hvite Hvalrosser', 'white'),
+       (2, 'Røde Runkere New', 'red'),
+       (2, 'Blå Bavianer New', 'blue'),
+       (2, 'Hvite Hvalrosser New', 'white'),
+       (2, 'Grønne Galinger New', 'green');
 
 INSERT INTO players (name, image)
 VALUES ('Wiliam Andersson', 'placeholder.png'),
