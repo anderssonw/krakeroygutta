@@ -1,6 +1,6 @@
 INSERT INTO seasons (name, start_time, deadline_time, end_time, starting_currency)
 VALUES ('Winter 2022', '2022-12-1 12:00:00', '2022-12-15 12:00:00', '2022-12-24 12:00:00', 25000),
-       ('Summer 2023', '2023-06-1 12:00:00', '2023-06-15 12:00:00', '2023-11-1 12:00:00', 25000);
+       ('Summer 2023', '2023-06-1 12:00:00', '2023-06-15 12:00:00', '2023-12-1 12:00:00', 25000);
 
 INSERT INTO teams (season_id, name, color)
 VALUES (1, 'Røde Runkere', 'red'),
@@ -13,19 +13,19 @@ VALUES (1, 'Røde Runkere', 'red'),
        (2, 'Grønne Galinger New', 'green');
 
 INSERT INTO players (name, image)
-VALUES ('Wiliam Andersson', 'placeholder.png'),
-       ('Ask Kase', 'placeholder.png'),
-       ('Elias Gauslaa', 'placeholder.png'),
-       ('Njard Kobberdal', 'placeholder.png'),
-       ('Herman Furuseth', 'placeholder.png'),
-       ('Jorgen Alfredsen', 'placeholder.png'),
-       ('Johan Bjerkholt', 'placeholder.png'),
-       ('Hans Langvik', 'placeholder.png'),
-       ('Mads Gjellebaek', 'placeholder.png'),
-       ('Alexander Hestengen', 'placeholder.png'),
-       ('Eirik Stormoen', 'placeholder.png'),
-       ('Peder Eide', 'placeholder.png'),
-       ('Magnus Gulbrandsen', 'placeholder.png');
+VALUES ('Wiliam Andersson', 'https://i.imgur.com/1ttlwn2.png'),
+       ('Ask Kase', 'https://i.imgur.com/DMH66kY.png'),
+       ('Elias Gauslaa', 'https://i.imgur.com/DMH66kY.png'),
+       ('Njard Kobberdal', 'https://i.imgur.com/DMH66kY.png'),
+       ('Herman Furuseth', 'https://i.imgur.com/6zBse6D.png'),
+       ('Jorgen Alfredsen', 'https://i.imgur.com/DMH66kY.png'),
+       ('Johan Bjerkholt', 'https://i.imgur.com/DMH66kY.png'),
+       ('Hans Langvik', 'https://i.imgur.com/JR2nkG3.png'),
+       ('Mads Gjellebaek', 'https://i.imgur.com/DMH66kY.png'),
+       ('Alexander Hestengen', 'https://i.imgur.com/DMH66kY.png'),
+       ('Eirik Stormoen', 'https://i.imgur.com/DMH66kY.png'),
+       ('Peder Eide', 'https://i.imgur.com/DMH66kY.png'),
+       ('Magnus Gulbrandsen', 'https://i.imgur.com/DMH66kY.png');
 
 INSERT INTO players_seasons (player_id, season_id, attack, defence, skill, morale, physical)
 VALUES (1, 2, 53, 61, 65, 70, 65),
@@ -68,24 +68,24 @@ VALUES (1, 1),
        (3, 12);
 
 INSERT INTO teams_players(team_id, player_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (2, 5),
-       (2, 6),
-       (2, 7),
-       (2, 8),
-       (3, 9),
-       (3, 10),
-       (3, 11),
-       (3, 12),
-       (3, 13);
+VALUES (5, 1),
+       (5, 2),
+       (5, 3),
+       (5, 4),
+       (6, 5),
+       (6, 6),
+       (6, 7),
+       (6, 8),
+       (7, 9),
+       (7, 10),
+       (7, 11),
+       (7, 12),
+       (8, 13);
 
 INSERT INTO matches (season_id, team_home_id, team_away_id)
-VALUES  (2, 1, 2),
-        (2, 2, 3),
-        (2, 1, 3);
+VALUES  (2, 5, 6),
+        (2, 6, 7),
+        (2, 5, 7);
 
 INSERT INTO goals(match_id, goal_player_id, assist_player_id)
 VALUES (1, 1, 2),

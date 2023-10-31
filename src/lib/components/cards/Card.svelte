@@ -3,45 +3,42 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import TeamKit from '../common/TeamKit.svelte';
-	import placeholderImg from '$lib/assets/cards/Placeholder.png';
 	import currencyImg from '$lib/assets/currency.png';
-    
+
 	export let player: FullPlayer | null;
-    export let card_size: CARD_SIZE;
+	export let card_size: CARD_SIZE;
 	export let season: Tables<'seasons'> | null;
 
 	$: playerStatAverage = calculatePlayerStatAverage(player);
-    $: cardType = getPlayerCardType(player, true);
-    $: cardSizing = getCardSizing();
-	
-    const getCardSizing = () => {
-        let sizes = {
-            width: sizeBasedReturn('w-60', 'w-40', 'w-33'),
-            height: sizeBasedReturn('h-96', 'h-64', 'h-52'),
-            avg_stats: sizeBasedReturn('text-6xl', 'text-4xl', 'text-3xl'),
-            name: sizeBasedReturn('text-3xl', 'text-xl', 'text-base'),
-            stats_text: sizeBasedReturn('text-xl', 'text-base', 'text-xl'),
+	$: cardType = getPlayerCardType(player, true);
+	$: cardSizing = getCardSizing();
+
+	const getCardSizing = () => {
+		let sizes = {
+			width: sizeBasedReturn('w-60', 'w-40', 'w-33'),
+			height: sizeBasedReturn('h-96', 'h-64', 'h-52'),
+			avg_stats: sizeBasedReturn('text-6xl', 'text-4xl', 'text-3xl'),
+			name: sizeBasedReturn('text-3xl', 'text-xl', 'text-base'),
+			stats_text: sizeBasedReturn('text-xl', 'text-base', 'text-xl'),
 			stats_value: sizeBasedReturn('text-2xl', 'text-lg', 'text-sm'),
-            stat_gap_y: sizeBasedReturn('space-y-[7%]', 'space-y-[5%]', 'space-y-[4%]'),
-            stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-1.5', 'gap-x-1'),
+			stat_gap_y: sizeBasedReturn('space-y-[7%]', 'space-y-[5%]', 'space-y-[4%]'),
+			stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-1.5', 'gap-x-1'),
 			header_gap_y: sizeBasedReturn('gap-y-6', 'gap-y-3', 'gap-y-2'),
 			currency_size: sizeBasedReturn('w-4', 'w-3', 'w-2'),
 			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5')
-        }
-        return sizes;
-    }
-    const sizeBasedReturn = (large_opt: any, medium_opt: any, small_opt: any) => {
-        if (card_size == CARD_SIZE.LARGE) return large_opt;
-        if (card_size == CARD_SIZE.MEDIUM) return medium_opt;
-        return small_opt;
-    }
+		};
+		return sizes;
+	};
+	const sizeBasedReturn = (large_opt: any, medium_opt: any, small_opt: any) => {
+		if (card_size == CARD_SIZE.LARGE) return large_opt;
+		if (card_size == CARD_SIZE.MEDIUM) return medium_opt;
+		return small_opt;
+	};
 </script>
 
 {#if player}
 	<div class="{cardType} {cardSizing.width} {cardSizing.height} text-primary-color">
-
 		<div class="relative w-full h-[53.2%]">
-
 			<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
 				<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
 				{#if season}
@@ -50,7 +47,7 @@
 			</div>
 
 			<div class="w-[60%] absolute bottom-0 right-[5%] flex flex-col items-center">
-				<img src={placeholderImg} alt="head" />
+				<img src={player.image} alt="head" />
 			</div>
 		</div>
 
@@ -60,23 +57,23 @@
 
 				<div class="grid grid-cols-5 {cardSizing.stat_gap_x}">
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> ANG </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}">ANG</div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.attack}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> FOR </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}">FOR</div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.defence}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> TEK </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}">TEK</div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.skill}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> MOR </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}">MOR</div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.morale}</div>
 					</div>
 					<div class="flex flex-col items-center">
-						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}"> FYS </div>
+						<div class="leading-none tracking-[-.1em] font-slim {cardSizing.stats_value}">FYS</div>
 						<div class="font-semibold leading-none tracking-[-.05em] font-stats {cardSizing.stats_value}">{player.physical}</div>
 					</div>
 				</div>
@@ -84,10 +81,10 @@
 
 			{#if season}
 				<div class="flex flex-row items-center justify-center space-x-1 {cardSizing.currency_space_y}">
-					<div class="font-stats tracking-[-.05em] font-bold {cardSizing.stats_value}"> 
-						{player?.price} 
-					</div> 
-					<div class="{cardSizing.currency_size}">
+					<div class="font-stats tracking-[-.05em] font-bold {cardSizing.stats_value}">
+						{player?.price}
+					</div>
+					<div class={cardSizing.currency_size}>
 						<img src={currencyImg} alt="currency" />
 					</div>
 				</div>
@@ -95,6 +92,5 @@
 		</div>
 	</div>
 {:else}
-	<div class="{cardType} {cardSizing.width} {cardSizing.height}">
-	</div>
+	<div class="{cardType} {cardSizing.width} {cardSizing.height}" />
 {/if}

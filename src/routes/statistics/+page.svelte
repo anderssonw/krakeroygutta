@@ -7,7 +7,7 @@
 	import type { PageData } from './$types';
 	import DropdownMenu from '$lib/components/admin/dropdownMenu.svelte';
 	import type { Tables } from '$lib/types/database.helper.types';
-	import placeholderImg from '$lib/assets/cards/Placeholder.png';
+
 	import PlayerStatisticCard from '$lib/components/statistics/PlayerStatisticCard.svelte';
 	import PlayerStatisticCardGroup from '$lib/components/statistics/PlayerStatisticCardGroup.svelte';
 
@@ -67,7 +67,8 @@
 				return {
 					goals: goals,
 					player: {
-						name: player?.name
+						name: player?.name,
+						image: player?.image
 					}
 				};
 			})
@@ -91,7 +92,8 @@
 				return {
 					assists: goals,
 					player: {
-						name: player?.name
+						name: player?.name,
+						image: player?.image
 					}
 				};
 			})
@@ -116,7 +118,8 @@
 				return {
 					clutches,
 					player: {
-						name: player?.name
+						name: player?.name,
+						image: player?.image
 					}
 				};
 			})
@@ -141,7 +144,8 @@
 			return {
 				selections,
 				player: {
-					name: player?.name
+					name: player?.name,
+					image: player?.image
 				}
 			};
 		});
@@ -176,7 +180,7 @@
 							<PlayerStatisticCard
 								playerName={player.player.name}
 								playerSubtitle={`Valgt ${player.selections} ${player.selections > 1 ? 'ganger' : 'gang'}`}
-								imgSrc={placeholderImg}
+								imgSrc={player.player.image}
 								imgAlt={player.player.name}
 								position={index + 1}
 							/>
@@ -187,7 +191,7 @@
 							<PlayerStatisticCard
 								playerName={player.player.name}
 								playerSubtitle={`Valgt ${player.selections} ${player.selections === 1 ? 'gang' : 'ganger'}`}
-								imgSrc={placeholderImg}
+								imgSrc={player.player.image}
 								imgAlt={player.player.name}
 								position={index + 10}
 							/>
@@ -204,7 +208,7 @@
 							<PlayerStatisticCard
 								playerName={goal.player.name}
 								playerSubtitle={`Scoret ${goal.goals} ${goal.goals === 1 ? 'gang' : 'ganger'}`}
-								imgSrc={placeholderImg}
+								imgSrc={goal.player.image}
 								imgAlt={goal.player.name}
 							/>
 						{/each}
@@ -215,7 +219,7 @@
 							<PlayerStatisticCard
 								playerName={goal.player.name}
 								playerSubtitle={`Hadde ${goal.assists} ${goal.assists === 1 ? 'assist' : 'assister'}`}
-								imgSrc={placeholderImg}
+								imgSrc={goal.player.image}
 								imgAlt={goal.player.name}
 							/>
 						{/each}
@@ -230,7 +234,7 @@
 							<PlayerStatisticCard
 								playerName={clutch.player.name}
 								playerSubtitle={`Hadde ${clutch.clutches} ${clutch.clutches === 1 ? 'c-moment' : 'c-momenter'}`}
-								imgSrc={placeholderImg}
+								imgSrc={clutch.player.image}
 								imgAlt={clutch.player.name}
 							/>
 						{/each}
