@@ -96,6 +96,13 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 export const getTotalPointsForPlayers = (matches: MatchStatsQuery[]) => {
 	let playerPointsMap: number[] = [];
 
+	const victoryPoints = 3;
+	const cleanSheetPoints = 1;
+
+	const goalPointFactor = 3;
+	const assistPointFactor = 2;
+	const clutchPointFactor = 1;
+
 	// Initialise all players in the playerPointsMap
 	matches.forEach((match) => {
 		match.home_team.players.concat(match.away_team.players).forEach((player) => {
@@ -113,29 +120,26 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[]) => {
 		// Victory
 		if (goals.homeTeamGoals > goals.awayTeamGoals) {
 			homeTeamPlayers.forEach((player) => {
-				playerPointsMap[player.id] += 3;
+				playerPointsMap[player.id] += victoryPoints;
 			});
 		} else if (goals.awayTeamGoals > goals.homeTeamGoals) {
 			awayTeamPlayers.forEach((player) => {
-				playerPointsMap[player.id] += 3;
+				playerPointsMap[player.id] += victoryPoints;
 			});
 		}
 
 		// Clean sheets
 		if (goals.awayTeamGoals === 0) {
 			homeTeamPlayers.forEach((player) => {
-				playerPointsMap[player.id] += 1;
+				playerPointsMap[player.id] += cleanSheetPoints;
 			});
 		}
 		if (goals.homeTeamGoals === 0) {
 			awayTeamPlayers.forEach((player) => {
-				playerPointsMap[player.id] += 1;
+				playerPointsMap[player.id] += cleanSheetPoints;
 			});
 		}
 
-		const goalPointFactor = 3;
-		const assistPointFactor = 2;
-		const clutchPointFactor = 1;
 		let allPlayersInMatch = homeTeamPlayers.concat(awayTeamPlayers);
 
 		allPlayersInMatch.forEach((player) => {
