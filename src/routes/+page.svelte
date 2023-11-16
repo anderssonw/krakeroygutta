@@ -87,7 +87,7 @@
 							<th class="border-r-2 border-secondary-color">{i + 1 + '.'}</th>
 							<th class="border-r-2 border-secondary-color flex-row items-center justify-center">
 								{team.name}
-								<div class="inline-block w-3 h-3 div-team-{team.color}" />
+								<div class="inline-block w-3 h-3 div-team-{team.color} drop-shadow-[0_0_1px_rgba(0,0,0,0.7)]" />
 							</th>
 							<th class="border-r-2 border-secondary-color">{getPointsFromTeamStats(team)}</th>
 							<th>{team.wins}</th>

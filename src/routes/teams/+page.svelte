@@ -14,16 +14,16 @@
 
 	function mapToFullTeam(allTeams: Tables<'teams'>[], allPlayers: FullPlayer[]): FullTeam[] {
 		let fullTeams: FullTeam[] = [];
-		allTeams.map(team => {
-			let filterPlayers: FullPlayer[] = allPlayers.filter(player => ((player.team_id == team.id) && (player.season_id == team.season_id)))
+		allTeams.map((team) => {
+			let filterPlayers: FullPlayer[] = allPlayers.filter((player) => player.team_id == team.id && player.season_id == team.season_id);
 			let fullTeam: FullTeam = {
 				season_id: team.season_id,
 				color: team.color,
 				name: team.name,
 				players: filterPlayers
-			}
+			};
 			fullTeams.push(fullTeam);
-		})
+		});
 		return fullTeams;
 	}
 
@@ -41,12 +41,12 @@
 
 		{#each fullTeams as team}
 			<div class="w-full border-b-4 py-8 edge-team-{team.color}">
-				<h3 class="text-center mb-8">{team.name}</h3>
+				<h2 class="text-center mb-8">{team.name}</h2>
 
-				<div class="grid grid-cols-2 tablet:grid-cols-4 gap-y-8">
+				<div class="flex flex-row justify-around flex-wrap">
 					{#each team.players as player}
 						<div class="flex justify-center">
-							<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season}/>
+							<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
 						</div>
 					{/each}
 				</div>

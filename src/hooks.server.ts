@@ -61,7 +61,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		let session = await event.locals.getSession();
 
 		if (session) {
-			let todayTimeString = new Date().toDateString();
+			let todayTimeString = new Date().toLocaleString();
 			const { data, error } = await event.locals.supabase
 				.from('seasons')
 				.select()

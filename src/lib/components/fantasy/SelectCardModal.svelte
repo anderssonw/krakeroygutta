@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
+	import { CARD_SIZE, calculatePlayerStatAverage } from '$lib/shared/playerCardFunctions';
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
 	import Card from '../cards/Card.svelte';
@@ -10,9 +10,11 @@
 
 	const calculatePlayersToShow = (allPlayers: FullPlayer[], playersInForm: (FullPlayer | null)[]) => {
 		let playersInFormIds = playersInForm.map((player) => player?.player_id || -1);
-		return allPlayers.filter((player) => {
-			return !playersInFormIds.includes(player.player_id);
-		});
+		return allPlayers
+			.filter((player) => {
+				return !playersInFormIds.includes(player.player_id);
+			})
+			.sort((a, b) => calculatePlayerStatAverage(b) - calculatePlayerStatAverage(a));
 	};
 
 	function buyPlayer(player: FullPlayer) {
@@ -39,10 +41,10 @@
 			<div class="w-full flex flex-row flex-wrap gap-4 tablet:gap-8 justify-around tablet:justify-center">
 				{#each playersNotInForm as player}
 					<div class="clickable-card hidden tablet:block" on:mouseup={() => buyPlayer(player)}>
-						<Card player={player} card_size={CARD_SIZE.MEDIUM} season={season} />
+						<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
 					</div>
 					<div class="clickable-card block tablet:hidden" on:mouseup={() => buyPlayer(player)}>
-						<Card player={player} card_size={CARD_SIZE.SMALL} season={season} />
+						<Card {player} card_size={CARD_SIZE.SMALL} {season} />
 					</div>
 				{/each}
 			</div>
