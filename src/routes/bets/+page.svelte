@@ -45,7 +45,7 @@
     <h3> Eksisterende veddemål </h3>
     <div class="w-full grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 place-items-center gap-y-16">
         {#each bets as bet}
-            <div class="w-80 h-full p-4 bg-secondary-color-light text-primary-color-dark drop-shadow-[0_15px_10px_rgba(0,0,0,0.75)]">
+            <div class="w-60 tablet:w-80 h-full p-4 bg-secondary-color-light text-primary-color-dark drop-shadow-[0_15px_10px_rgba(0,0,0,0.75)]">
                 <BetInfo bet={bet} />
                 <form method="POST" class="flex justify-center">
                     {#if bet.better?.id == user?.id }
