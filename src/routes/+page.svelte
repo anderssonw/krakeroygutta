@@ -62,23 +62,24 @@
 </script>
 
 {#if session}
-	<div class="structure">
-		<div class="w-full h-[44vw] laptop:h-128">
+	<div class="structure mb-16 tablet:mb-24 laptop:mb-32">
+		<div class="w-full h-[44vw] laptop:h-128 border-b-4">
 			<video class="relative scale-y-50 origin-top-left" width="100%" autoplay muted loop>
 				<source src={jogaVideo} type="video/mp4" />
 			</video>
 		</div>
 		{#if season && teams}
 			<h1>{season.name}</h1>
-			<table class="table-fixed w-full bg-secondary-color-light text-primary-color-dark laptop:rounded-lg">
+			<div class="w-full px-6 laptop:px-0">
+			<table class="table-fixed w-full bg-secondary-color-light text-primary-color-dark rounded-lg text-xs laptop:text-sm">
 				<thead>
 					<tr class="border-b-2 border-secondary-color-dark">
-						<th class="border-r-2 border-secondary-color-dark w-1/12 tablet:w-2/12">Pos.</th>
-						<th class="border-r-2 border-secondary-color-dark w-5/12 tablet:w-4/12">Lag</th>
-						<th class="border-r-2 border-secondary-color-dark w-3/12 tablet:w-3/12">Poeng</th>
-						<th class="w-1/12 tablet:w-1/12">S</th>
-						<th class="w-1/12 tablet:w-1/12">U</th>
-						<th class="w-1/12 tablet:w-1/12">T</th>
+						<th class="border-r-2 border-secondary-color-dark w-2/12">Pos.</th>
+						<th class="border-r-2 border-secondary-color-dark w-5/12">Lag</th>
+						<th class="border-r-2 border-secondary-color-dark w-2/12">Poeng</th>
+						<th class="w-1/12">S</th>
+						<th class="w-1/12">U</th>
+						<th class="w-1/12">T</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -97,6 +98,7 @@
 					{/each}
 				</tbody>
 			</table>
+		</div>
 			<div class="w-full px-6 laptop:px-0 grid grid-cols-2 laptop:grid-cols-4 gap-4">
 				<SeasonButton image="players" text="Spillere" />
 				<SeasonButton image="teams" text="Lag" />
