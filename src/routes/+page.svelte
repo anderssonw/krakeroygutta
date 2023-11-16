@@ -13,15 +13,15 @@
 
 	// TODO Should check for clean sheet and victory and add those points too
 	const addPointsFromMatchToPlayerMap = (playerMap: number[], players: MatchStatsPlayer[]) => {
-		// TODO How many points should a goal be?
-		const goalPointFactor = 2;
+		const goalPointFactor = 3;
+		const assistPointFactor = 2;
 
 		players.forEach((player) => {
 			if (!playerMap[player.id]) {
 				playerMap[player.id] = 0;
 			}
 
-			playerMap[player.id] += player.goals * goalPointFactor + player.assists + player.clutches;
+			playerMap[player.id] += player.goals * goalPointFactor + player.assists * assistPointFactor + player.clutches;
 		});
 	};
 
