@@ -1,44 +1,22 @@
 <script lang="ts">
-	// Get data from server if logged in
 	import Content from '$lib/components/index/Content.svelte';
 	import jogaVideo from '$lib/assets/jogabonito.mp4';
 	import type { PageData } from './$types';
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
-	import type { FantasyTeamFull, FantasyTeamWithPlayers, MatchStatsPlayer, MatchStatsQuery } from '$lib/types/newTypes';
-	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
+	import type { FantasyTeamFull, FantasyTeamWithPlayers } from '$lib/types/newTypes';
+	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats, getTotalPointsForPlayers } from '$lib/shared/MatchStatsFunctions';
 
 	export let data: PageData;
 	$: ({ session, season, teams, allMatches, teamStats, lazy } = data);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 
-	// TODO Should check for clean sheet and victory and add those points too
-	const addPointsFromMatchToPlayerMap = (playerMap: number[], players: MatchStatsPlayer[]) => {
-		const goalPointFactor = 3;
-		const assistPointFactor = 2;
-
-		players.forEach((player) => {
-			if (!playerMap[player.id]) {
-				playerMap[player.id] = 0;
-			}
-
-			playerMap[player.id] += player.goals * goalPointFactor + player.assists * assistPointFactor + player.clutches;
-		});
-	};
-
-	const getTotalPointsForPlayers = (matches: MatchStatsQuery[]) => {
-		let playerMap: number[] = [];
-
-		matches.forEach((match) => {
-			addPointsFromMatchToPlayerMap(playerMap, match.home_team.players);
-			addPointsFromMatchToPlayerMap(playerMap, match.away_team.players);
-		});
-
-		return playerMap;
-	};
-
 	// Not a huge fan of the typing, perhaps we should do something nicer here, idk
 	const getFantasyTeamsWithPoints = (fantasyTeams: FantasyTeamWithPlayers[]): FantasyTeamFull[] => {
-		if (!matches) return [];
+		if (matches.length === 0) {
+			return fantasyTeams.map((fantasyTeam) => {
+				return { ...fantasyTeam, points: 0 };
+			});
+		}
 
 		let playersWithPoints = getTotalPointsForPlayers(matches);
 

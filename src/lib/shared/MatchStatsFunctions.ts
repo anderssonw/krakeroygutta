@@ -32,6 +32,21 @@ export const mapTeamStats = (matches: MatchesWithSeasonName[], teamStats: MatchS
 	}
 };
 
+export const getGoalsForTeamsInMatch = (match: MatchStatsQuery) => {
+	let homeTeamGoals = match.home_team.players.reduce((goalSum, player) => {
+		return goalSum + player.goals;
+	}, 0);
+
+	let awayTeamGoals = match.away_team.players.reduce((goalSum, player) => {
+		return goalSum + player.goals;
+	}, 0);
+
+	return {
+		homeTeamGoals,
+		awayTeamGoals
+	};
+};
+
 export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: MatchStatsQuery[] | null | undefined): TeamWithStats[] => {
 	let teamStats: TeamWithStats[] = teams.map((team) => {
 		return {
@@ -53,13 +68,7 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 	// console.log(JSON.stringify(matches, null, ' '));
 
 	matches.forEach((match) => {
-		let homeTeamGoals = match.home_team.players.reduce((goalSum, player) => {
-			return goalSum + player.goals;
-		}, 0);
-
-		let awayTeamGoals = match.away_team.players.reduce((goalSum, player) => {
-			return goalSum + player.goals;
-		}, 0);
+		let goals = getGoalsForTeamsInMatch(match);
 
 		let homeTeamStats = getTeamStatsFromId(match.home_team.team_id);
 		let awayTeamStats = getTeamStatsFromId(match.away_team.team_id);
@@ -67,13 +76,13 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 		if (!homeTeamStats) return;
 		if (!awayTeamStats) return;
 
-		if (homeTeamGoals === awayTeamGoals) {
+		if (goals.homeTeamGoals === goals.awayTeamGoals) {
 			homeTeamStats.draws++;
 			awayTeamStats.draws++;
-		} else if (homeTeamGoals > awayTeamGoals) {
+		} else if (goals.homeTeamGoals > goals.awayTeamGoals) {
 			homeTeamStats.wins++;
 			awayTeamStats.losses++;
-		} else if (awayTeamGoals > homeTeamGoals) {
+		} else if (goals.awayTeamGoals > goals.homeTeamGoals) {
 			homeTeamStats.losses++;
 			awayTeamStats.wins++;
 		}
@@ -82,6 +91,60 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 	});
 
 	return teamStats;
+};
+
+export const getTotalPointsForPlayers = (matches: MatchStatsQuery[]) => {
+	let playerPointsMap: number[] = [];
+
+	// Initialise all players in the playerPointsMap
+	matches.forEach((match) => {
+		match.home_team.players.concat(match.away_team.players).forEach((player) => {
+			if (!playerPointsMap[player.id]) {
+				playerPointsMap[player.id] = 0;
+			}
+		});
+	});
+
+	matches.forEach((match) => {
+		let goals = getGoalsForTeamsInMatch(match);
+		let homeTeamPlayers = match.home_team.players;
+		let awayTeamPlayers = match.away_team.players;
+
+		// Victory
+		if (goals.homeTeamGoals > goals.awayTeamGoals) {
+			homeTeamPlayers.forEach((player) => {
+				playerPointsMap[player.id] += 3;
+			});
+		} else if (goals.awayTeamGoals > goals.homeTeamGoals) {
+			awayTeamPlayers.forEach((player) => {
+				playerPointsMap[player.id] += 3;
+			});
+		}
+
+		// Clean sheets
+		if (goals.awayTeamGoals === 0) {
+			homeTeamPlayers.forEach((player) => {
+				playerPointsMap[player.id] += 1;
+			});
+		}
+		if (goals.homeTeamGoals === 0) {
+			awayTeamPlayers.forEach((player) => {
+				playerPointsMap[player.id] += 1;
+			});
+		}
+
+		const goalPointFactor = 3;
+		const assistPointFactor = 2;
+		const clutchPointFactor = 1;
+		let allPlayersInMatch = homeTeamPlayers.concat(awayTeamPlayers);
+
+		allPlayersInMatch.forEach((player) => {
+			playerPointsMap[player.id] +=
+				player.goals * goalPointFactor + player.assists * assistPointFactor + player.clutches * clutchPointFactor;
+		});
+	});
+
+	return playerPointsMap;
 };
 
 export const getPointsFromTeamStats = (team: TeamWithStats) => {
