@@ -108,32 +108,34 @@
 		{/if}
 	</div>
 
-	<div class="flex flex-col items-center bg-slate-100 text-green-900 pt-4 pb-12">
-		<h1 class="mt-12 text-4xl font-bold">Fantasypoeng</h1>
+	{#if season}
+		<div class="flex flex-col items-center bg-slate-100 text-green-900 pt-4 pb-12">
+			<h1 class="mt-12 text-4xl font-bold">Fantasypoeng</h1>
 
-		{#await lazy?.fantasyTeams then fantasyTeams}
-			<table class="text-left w-3/4 tablet:w-2/3">
-				<tr class="border-b border-dashed border-b-green-900 font-light pb-4">
-					<td class="px-2">Posisjon</td>
-					<td class="px-2">Lag</td>
-					<td class="px-2">Poeng</td>
-				</tr>
-
-				<tr class="h-4" />
-
-				{#each getFantasyTeamsWithPoints(fantasyTeams ?? []) as team, i}
-					<tr class=" even:bg-green-100 odd:bg-green-50">
-						<td class="px-2">{i + 1 + '.'} plass</td>
-						<td class="px-2">{team.name}</td>
-						<td class="px-2">{team.points} poeng</td>
+			{#await lazy?.fantasyTeams then fantasyTeams}
+				<table class="text-left w-3/4 tablet:w-2/3">
+					<tr class="border-b border-dashed border-b-green-900 font-light pb-4">
+						<td class="px-2">Posisjon</td>
+						<td class="px-2">Lag</td>
+						<td class="px-2">Poeng</td>
 					</tr>
-				{/each}
-			</table>
-		{:catch error}
-			<p>Noe gikk galt under henting av Fantasy-lag</p>
-			<p>{error}</p>
-		{/await}
-	</div>
+
+					<tr class="h-4" />
+
+					{#each getFantasyTeamsWithPoints(fantasyTeams ?? []) as team, i}
+						<tr class=" even:bg-green-100 odd:bg-green-50">
+							<td class="px-2">{i + 1 + '.'} plass</td>
+							<td class="px-2">{team.name}</td>
+							<td class="px-2">{team.points} poeng</td>
+						</tr>
+					{/each}
+				</table>
+			{:catch error}
+				<p>Noe gikk galt under henting av Fantasy-lag</p>
+				<p>{error}</p>
+			{/await}
+		</div>
+	{/if}
 {:else}
 	<Content />
 {/if}
