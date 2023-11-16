@@ -3,6 +3,7 @@ import type { PageServerLoad } from './$types';
 import type { FantasyWithPlayers, FullPlayer } from '$lib/types/newTypes';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '$lib/types/database.generated.types';
+import { isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	// Get layout info
@@ -20,7 +21,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					`
 				)
 				.eq('season_id', season_id)
-				.returns<FullPlayer[]>()
+				.returns<FullPlayer[]>();
 
 			if (playersError) {
 				throw error(500, {
@@ -28,9 +29,9 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					devHelper: 'players/[slug] fetch player with stats'
 				});
 			}
-		
+
 			return players;
-		}
+		};
 
 		const getFantasyTeamForSeason = async (season_id: number, user_id: string, supabase: SupabaseClient<Database>) => {
 			const { data: fantasyTeams, error: fantasyTeamsError } = await supabase
@@ -52,13 +53,13 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				});
 			}
 
-			return fantasyTeams
-		}
+			return fantasyTeams;
+		};
 
 		return {
 			allPlayers: getPlayersForSeason(season.id, supabase),
-			fantasyTeam: getFantasyTeamForSeason(season.id, session.user.id, supabase),
-		}
+			fantasyTeam: getFantasyTeamForSeason(season.id, session.user.id, supabase)
+		};
 	}
 	return {};
 };
@@ -79,7 +80,7 @@ export const actions = {
 			formHints.push('Lagnavn er påkrevn');
 			formIsValid = false;
 		}
-		if(playerIds.length > 0 && captainId < 0) {
+		if (playerIds.length > 0 && captainId < 0) {
 			formHints.push('Du må velge kaptein');
 			formIsValid = false;
 		}
@@ -88,6 +89,10 @@ export const actions = {
 		const season = await getSeason();
 
 		if (session && season) {
+			if (isSeasonPastDeadline(season)) {
+				formHints.push('Sesongen er over, og du kan ikke lagre laget ditt lenger');
+				formIsValid = false;
+			}
 			// Dette er egentlig en shitty måte å sjekke penger på, du kan sende inn hva som helst som currency left, burde kalkuleres ut i fra spillere
 			// men sjansen for at folk prøver å hacke backenden??? nåvel
 			if (season.starting_currency + currencyLeft < season.starting_currency) {
@@ -149,7 +154,6 @@ export const actions = {
 					});
 				}
 
-
 				if (!insertError) fantasyTeamId = newFantasyTeam.id;
 			}
 
@@ -177,7 +181,7 @@ export const actions = {
 					devHelper: '/fantasy inserting/updating fantasy team players'
 				});
 			}
-		} 
+		}
 
 		throw redirect(303, '/fantasy');
 	}

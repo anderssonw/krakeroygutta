@@ -6,6 +6,7 @@
 	import FantasyCardMobile from '$lib/components/fantasy/FantasyCardMobile.svelte';
 	import currencyImg from '$lib/assets/currency.png';
 	import { enhance } from '$app/forms';
+	import { isSeasonActive, isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
 
 	// Get server data
 	export let data: PageData;
@@ -78,6 +79,10 @@
 				{/each}
 			{/if}
 
+			{#if isSeasonPastDeadline(season)}
+				<p>Deadlinen er nå forbi, så du vil ikke kunne redigere laget ditt</p>
+			{/if}
+
 			<div class="w-full flex flex-col space-y-4 tablet:flex-row justify-between items-center tablet:items-end px-8 tablet:px-0">
 				<div class="w-full tablet:w-1/3">
 					<div class="tablet:w-2/3">
@@ -86,10 +91,11 @@
 							name="teamName"
 							type="text"
 							id="teamName"
-							class="input w-full"
+							class={`input w-full ${isSeasonPastDeadline(season) ? 'cursor-not-allowed' : ''}`}
 							placeholder="Gutta krutt"
 							value={fantasyForm.teamName}
 							required
+							disabled={isSeasonPastDeadline(season)}
 						/>
 					</div>
 				</div>
@@ -100,7 +106,11 @@
 					</div>
 				</div>
 				<div class="w-full tablet:w-1/3 flex justify-center tablet:justify-end">
-					<button class="btn w-2/3 bg-green-500">Lagre laget</button>
+					<button
+						class={`font-bold py-2 px-4 rounded-md w-2/3 ${
+							isSeasonPastDeadline(season) ? 'cursor-not-allowed bg-secondary-color-dark' : 'bg-green-500'
+						}`}>Lagre laget</button
+					>
 				</div>
 			</div>
 
