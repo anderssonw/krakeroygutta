@@ -7,10 +7,13 @@
 	import currencyImg from '$lib/assets/currency.png';
 	import { enhance } from '$app/forms';
 	import { isSeasonActive, isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
+	import { getTotalPointsForPlayers, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 
 	// Get server data
 	export let data: PageData;
-	const { fantasyTeam, allPlayers, season } = data;
+	const { fantasyTeam, allPlayers, season, allMatches, teamStats } = data;
+	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
+	$: playersWithPoints = getTotalPointsForPlayers(matches);
 
 	export let form: ActionData;
 
@@ -118,7 +121,7 @@
 				class="relative w-full tablet:h-192 hidden tablet:block bg-cover bg-no-repeat bg-center bg-[url('$lib/assets/fantasy/fantasy_field_large.png')]"
 			>
 				{#each fantasyForm.players as player, position}
-					<FantasyCard bind:fantasyForm {player} {position} {season} />
+					<FantasyCard bind:fantasyForm {player} {position} {season} {playersWithPoints} />
 				{/each}
 			</div>
 
@@ -127,7 +130,7 @@
 			>
 				<div class="grid grid-cols-2 gap-y-8">
 					{#each fantasyForm.players as player, position}
-						<FantasyCardMobile bind:fantasyForm {player} {position} {season} />
+						<FantasyCardMobile bind:fantasyForm {player} {position} {season} {playersWithPoints}/>
 					{/each}
 				</div>
 			</div>

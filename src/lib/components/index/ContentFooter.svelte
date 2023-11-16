@@ -19,7 +19,7 @@
 	let animatedPitch: any;
 	afterUpdate(() => {
 		let divRect = animatedPitch.getBoundingClientRect();
-		let newPitchInView = isInViewport(divRect);
+		let newPitchInView = isInViewport(divRect, 200);
 		if (newPitchInView != curPitchInView) {
 		curPitchInView = newPitchInView;
 		}
@@ -28,12 +28,12 @@
 </script>
 
 {#if !$page.data.session}
-	<div class="relative h-60 w-full mt-4 tablet:mt-20 laptop:mt-32" bind:this={animatedPitch}>
+	<div class="relative h-60 w-full mt-4 tablet:mt-32 laptop:mt-60" bind:this={animatedPitch}>
 		<div class="absolute left-0 bottom-0 w-40 tablet:w-2/6 {squadLeftAnimation}">
 			<img src={squadLeft} alt="left squad" />
 		</div>
 
-		<div class="flex flex-col items-center h-[100%] pt-12 laptop:pt-6 laptop:pt-0">
+		<div class="flex flex-col items-center h-[100%] translate-y-0 tablet:-translate-y-4 laptop:-translate-y-12">
 			<h3 class="mb-2 tablet:mb-4">Hvem tar du med deg?</h3>
 			<button class="btn" on:click={() => goto("/register")}>
 				Kom i gang!

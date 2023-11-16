@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
 	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FantasyForm, FullPlayer } from '$lib/types/newTypes';
@@ -9,20 +10,40 @@
 	export let fantasyForm: FantasyForm;
 	export let position: number;
 	export let season: Tables<'seasons'> | null;
+	export let playersWithPoints: number[];
+
+	$: isCaptain = player?.player_id == fantasyForm.captainId;
+
+	const calculatePlayerPoints = (): number => {
+		if (player) {
+			let myPlayerPoints = playersWithPoints[player.player_id];
+			let isCaptainFactor = isCaptain ? 2 : 1;
+			return myPlayerPoints * isCaptainFactor;
+		}
+
+		return 0
+	};
 </script>
 
 {#if player}
 	<div class="flex flex-col items-center">
-		<h3 class="text-center text-secondary-color-light mb-2">
-			<span class="border-2 rounded-lg px-6">0</span>
-		</h3>
+		{#if season && isSeasonPastDeadline(season)}
+			<div class="mb-2 flex flex-col gap-1">
+				<p class="text-center">Poeng</p>
+				<h3 class="text-center text-secondary-color-light">
+					<span class="border-4 rounded-lg px-6 text-2xl font-semibold">{calculatePlayerPoints()}</span>
+				</h3>
+			</div>
+		{/if}
 
 		<div>
 			<Card {player} card_size={CARD_SIZE.SMALL} {season} />
 		</div>
 
 		<div class="flex flex-row space-x-2">
-			<FantasyCardButtons bind:fantasyForm {player} {position} />
+			{#if season}
+				<FantasyCardButtons bind:fantasyForm player={player} position={position} isSeasonPastDeadline={isSeasonPastDeadline(season)} />
+			{/if}
 		</div>
 	</div>
 {:else}

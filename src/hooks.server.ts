@@ -61,13 +61,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 		let session = await event.locals.getSession();
 
 		if (session) {
-			let todayTimeString = new Date().toLocaleString();
+			let todayDate = new Date().toLocaleString();
+
 			const { data, error } = await event.locals.supabase
-				.from('seasons')
-				.select()
-				.lt('start_time', todayTimeString)
-				.gt('end_time', todayTimeString)
-				.single();
+			.from('seasons')
+			.select()
+			.lt('start_time', todayDate)
+			.order('start_time', {ascending: false})
+			.limit(1)
+			.single();
 
 			if (error) return null;
 
