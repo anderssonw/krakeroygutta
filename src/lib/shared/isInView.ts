@@ -1,6 +1,6 @@
 // Function to check if the element is in view
-export function isInViewport(element: any) {
-    const extendBorder = 200; // Pixels to see image earlier / stay for longer
+export function isInViewport(element: any, extendBy: number) {
+    const extendBorder = extendBy; // Pixels to see image earlier / stay for longer
     return (
         element.top >= 0 - extendBorder &&
         element.left >= 0 &&
