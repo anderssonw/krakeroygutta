@@ -81,7 +81,7 @@
 			<div class="w-full flex flex-col space-y-4 tablet:flex-row justify-between items-center tablet:items-end px-8 tablet:px-0">
 				<div class="w-full tablet:w-1/3">
 					<div class="tablet:w-2/3">
-						<label for="teamName" class="block mb-1"><h5>Lag navn</h5></label>
+						<label for="teamName" class="block mb-1"><h5>Lagnavn</h5></label>
 						<input
 							name="teamName"
 							type="text"
@@ -100,7 +100,7 @@
 					</div>
 				</div>
 				<div class="w-full tablet:w-1/3 flex justify-center tablet:justify-end">
-					<button class="btn w-2/3 bg-green-500"> Lagre laget </button>
+					<button class="btn w-2/3 bg-green-500">Lagre laget</button>
 				</div>
 			</div>
 

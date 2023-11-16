@@ -25,7 +25,7 @@ VALUES ('Wiliam Andersson', 'https://i.imgur.com/1ttlwn2.png'),
        ('Alexander Hestengen', 'https://i.imgur.com/DMH66kY.png'),
        ('Eirik Stormoen', 'https://i.imgur.com/DMH66kY.png'),
        ('Peder Eide', 'https://i.imgur.com/DMH66kY.png'),
-       ('Magnus Gulbrandsen', 'https://i.imgur.com/DMH66kY.png');
+       ('Magnus Gulbrandsen', 'https://i.imgur.com/pdHYScX.png');
 
 INSERT INTO players_seasons (player_id, season_id, attack, defence, skill, morale, physical)
 VALUES (1, 2, 53, 61, 65, 70, 65),
