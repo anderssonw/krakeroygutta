@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Tables } from '$lib/types/database.helper.types';
-	import { afterUpdate, onDestroy, onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
@@ -23,6 +23,9 @@
 		return allRoutes;
 	}
 
+	let browserWidth = 0;
+	$: isMobile = browserWidth <= 766;
+
 	let oldY = 0;
 	let newY = oldY;
 	let scrolling = false;
@@ -37,9 +40,9 @@
 	});
 </script>
 
-<div class="nav flex items-center {hideNavbar}">
+<div class="nav flex items-center {isMobile ? "" : hideNavbar}">
 	<a href="/">
-		<div class="w-28 flex flex-row">
+		<div class="w-16 tablet:w-28 flex flex-row">
 			<img src={smallHeaderLogo} alt="trophy" />
 		</div>
 	</a>
@@ -62,4 +65,4 @@
 <NavbarModal {routes} bind:showMobileNavbar />
 
 <!-- Applies afterUpdate since y updates on scrolling -->
-<svelte:window bind:scrollY={newY} />
+<svelte:window bind:scrollY={newY} bind:outerWidth={browserWidth} />
