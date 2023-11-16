@@ -1,3 +1,4 @@
+import type { AuthError } from '@supabase/supabase-js';
 import { fail, type Actions, redirect, error } from '@sveltejs/kit';
 
 export const actions = {
@@ -28,7 +29,7 @@ export const actions = {
 		}
 
 		if (email && password && passwordIsGood && nickname) {
-			const { error: authError } = await supabase.auth.signUp({
+			const { data, error: error } = await supabase.auth.signUp({
 				email,
 				password,
 				options: {
@@ -38,10 +39,26 @@ export const actions = {
 				}
 			});
 
-			if (authError) {
-				console.log(authError);
-				throw error(500, {
-					message: authError.message,
+			let authError = null;
+
+			// User exists, but is fake. See https://supabase.com/docs/reference/javascript/auth-signup
+			if (data.user && data.user.identities && data.user.identities.length === 0) {
+				authError = {
+					name: 'AuthApiError',
+					message: 'User already exists'
+				};
+			} else if (error) {
+				authError = {
+					name: error.name,
+					message: error.message
+				};
+			}
+
+			if (authError != null) {
+				let msg = authError.message;
+
+				return fail(500, {
+					message: msg,
 					devHelper: '/register'
 				});
 			}
