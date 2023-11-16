@@ -1,6 +1,6 @@
 import { fail, type Actions, error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { FantasyWithPlayers, FullPlayer } from '$lib/types/newTypes';
+import type { FantasyWithPlayers, FullPlayer, MatchStatsTeam, MatchesWithSeasonName } from '$lib/types/newTypes';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '$lib/types/database.generated.types';
 import { isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
@@ -56,9 +56,54 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			return fantasyTeams;
 		};
 
+		const getTeamStatsSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
+			const { data: teamStats, error: teamStatsError } = await supabase
+				.from('team_with_stats')
+				.select(
+					`
+						*
+					`
+				)
+				.eq('season_id', season_id)
+				.returns<MatchStatsTeam[]>();
+
+			if (teamStatsError) {
+				throw error(500, {
+					message: teamStatsError.message,
+					devHelper: '/team_with_stats getting team with player stats - view'
+				});
+			}
+
+			return teamStats;
+		};
+
+		const getMatchesForSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
+			const { data: matches, error: matchesError } = await supabase
+				.from('matches')
+				.select(
+					`
+						*,
+						season_name:seasons(name)
+					`
+				)
+				.eq('season_id', season_id)
+				.returns<MatchesWithSeasonName[]>();
+
+			if (matchesError) {
+				throw error(500, {
+					message: matchesError.message,
+					devHelper: '/matches getting matches'
+				});
+			}
+
+			return matches;
+		};
+
 		return {
 			allPlayers: getPlayersForSeason(season.id, supabase),
-			fantasyTeam: getFantasyTeamForSeason(season.id, session.user.id, supabase)
+			fantasyTeam: getFantasyTeamForSeason(season.id, session.user.id, supabase),
+			allMatches: getMatchesForSeason(season.id, supabase),
+			teamStats: getTeamStatsSeason(season.id, supabase),
 		};
 	}
 	return {};
