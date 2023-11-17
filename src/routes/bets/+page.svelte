@@ -7,9 +7,10 @@
 
 	// Get data from server if logged in
 	import type { PageData } from './$types';
+	import { isSeasonPastDeadline, isSeasonPastEnd } from '$lib/shared/SeasonFunctions';
 	export let data: PageData;
 
-	$: ({ user, bets } = data);
+	$: ({ user, bets, season } = data);
 
 	const speechBubbleText: string[] = [
 		'Her kan hver bruker legge ut 1 veddemål relatert til årets sesong.',
@@ -29,7 +30,7 @@
     <h1> Bets </h1>
     <RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
 
-    {#if !betExists()}
+    {#if !betExists() && season && !isSeasonPastDeadline(season)}
         <h3> Opprett ett veddemål </h3>
         <form class="form" method="POST" action="?/createBet">
             <div class="form-structure">
@@ -47,6 +48,7 @@
         {#each bets as bet}
             <div class="w-60 tablet:w-80 h-full p-4 bg-secondary-color-light text-primary-color-dark drop-shadow-[0_15px_10px_rgba(0,0,0,0.75)]">
                 <BetInfo bet={bet} />
+                {#if season && !isSeasonPastEnd(season)}
                 <form method="POST" class="flex justify-center">
                     {#if bet.better?.id == user?.id }
                         <button type="submit" class="btn-dark" formaction="?/removeBet">
@@ -60,6 +62,7 @@
                     {/if}
                     <input type="hidden" name="bet_id" bind:value={bet.id} />
                 </form>
+                {/if}
             </div>
         {/each}
     </div>

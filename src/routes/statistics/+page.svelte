@@ -42,12 +42,19 @@
 	};
 	const getSeasonOptions = () => {
 		if (!seasons) return [];
-		return seasons?.map((season) => {
-			return {
-				name: season.name,
-				id: season.id
-			} satisfies DropdownOption;
+
+		let statsSeasons: DropdownOption[] = [];
+		seasons?.forEach((season) => {
+			if(new Date(season.end_time) < new Date()) {
+				let opt = {
+					name: season.name,
+					id: season.id
+				} satisfies DropdownOption;
+				statsSeasons.push(opt);
+			}
 		});
+
+		return statsSeasons
 	};
 
 	function getTopScorers(goals: Tables<'goals'>[]) {

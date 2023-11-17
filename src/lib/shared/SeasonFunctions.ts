@@ -21,3 +21,13 @@ export const isSeasonPastDeadline = (season: Tables<'seasons'>) => {
 
 	return false;
 };
+
+export const isSeasonPastEnd = (season: Tables<'seasons'>) => {
+	let todayTimeString = new Date().toISOString();
+
+	if (season.end_time < todayTimeString) {
+		return true;
+	}
+
+	return false;
+};
