@@ -45,7 +45,7 @@
 
 		let statsSeasons: DropdownOption[] = [];
 		seasons?.forEach((season) => {
-			if(new Date(season.end_time) < new Date()) {
+			if(new Date(season.deadline_time) < new Date()) {
 				let opt = {
 					name: season.name,
 					id: season.id
@@ -172,9 +172,15 @@
 </script>
 
 <div class="structure">
-	<div class="w-96">
-		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
-	</div>
+	{#if getSeasonOptions().length > 0}
+		<div class="w-96">
+			<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
+		</div>
+	{:else}
+		<div class="p-8 tablet:p-4 laptop:p-0">
+			<h5>Ingen statistikk tilgjengelig. Vent til en aktiv sesong er forbi.</h5>
+		</div>
+	{/if}
 
 	{#if seasonOption}
 		<div class="flex flex-col">

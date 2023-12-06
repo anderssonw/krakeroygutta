@@ -7,7 +7,7 @@
 
 	// Get data from server if logged in
 	import type { PageData } from './$types';
-	import { isSeasonPastDeadline, isSeasonPastEnd } from '$lib/shared/SeasonFunctions';
+	import { isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
 	export let data: PageData;
 
 	$: ({ user, bets, season } = data);
@@ -48,7 +48,7 @@
         {#each bets as bet}
             <div class="w-60 tablet:w-80 h-full p-4 bg-secondary-color-light text-primary-color-dark drop-shadow-[0_15px_10px_rgba(0,0,0,0.75)]">
                 <BetInfo bet={bet} />
-                {#if season && !isSeasonPastEnd(season)}
+                {#if season && !isSeasonPastDeadline(season)}
                 <form method="POST" class="flex justify-center">
                     {#if bet.better?.id == user?.id }
                         <button type="submit" class="btn-dark" formaction="?/removeBet">
