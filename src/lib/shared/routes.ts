@@ -6,45 +6,92 @@ export const adminRoutes = ['admin'];
 // Navbar routes
 export interface Route {
 	name: string;
-	route: string;
+	url: string;
 }
-export const navNoSessionRoutes: Route[] = [
+export interface MainRoute {
+	route: Route;
+	subRoute: Route[];
+}
+
+
+export const navNoSessionRoutes: MainRoute[] = [
 	{
-		name: 'Hjem',
-		route: '/'
+		route: {
+			name: 'Hjem',
+			url: '/',
+		},
+		subRoute: []
 	},
 	{
-		name: 'Logg inn',
-		route: '/login'
+		route: {
+			name: 'Logg inn',
+			url: '/login',
+		},
+		subRoute: []
 	},
 	{
-		name: 'Registrer deg',
-		route: '/register'
+		route: {
+			name: 'Registrer deg',
+			url: '/register',
+		},
+		subRoute: []
 	}
 ];
 
-export const navSessionRoutes: Route[] = [
+export const navSessionRoutes: MainRoute[] = [
 	{
-		name: 'Sesong',
-		route: '/'
+		route: {
+			name: 'Sesong',
+			url: '/',
+		},
+		subRoute: [
+			{
+				name: 'Spillere',
+				url: '/players',
+			},
+			{
+				name: 'Lag',
+				url: '/teams',
+			},
+			{
+				name: 'Kamper',
+				url: '/matches',
+			},
+			{
+				name: 'Veddemål',
+				url: '/bets',
+			}
+		]
 	},
 	{
-		name: 'Mitt Lag',
-		route: '/fantasy'
+		route: {
+			name: 'Mitt Lag',
+			url: '/fantasy',
+		},
+		subRoute: []
 	},
 	{
-		name: 'Profil',
-		route: '/profile'
+		route: {
+			name: 'Profil',
+			url: '/profile',
+		},
+		subRoute: []
 	},
 	{
-		name: 'Statistikk',
-		route: '/statistics'
+		route: {
+			name: 'Statistikk',
+			url: '/statistics',
+		},
+		subRoute: []
 	}
 ];
 
-export const navAdminRoutes: Route[] = [
+export const navAdminRoutes: MainRoute[] = [
 	{
-		name: 'Admin',
-		route: '/admin'
+		route: {
+			name: 'Admin',
+			url: '/admin',
+		},
+		subRoute: []
 	}
 ];
