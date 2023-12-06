@@ -39,18 +39,26 @@
 		<h1>Teams</h1>
 		<RuleSpeechBubble imageSrc={madsIrishSrc} text={speechBubbleText} />
 
-		{#each fullTeams as team}
-			<div class="w-full border-b-4 py-8 edge-team-{team.color}">
-				<h2 class="text-center mb-8">{team.name}</h2>
+		{#if fullTeams.length > 0}
+			{#each fullTeams as team}
+				<div class="w-full border-b-4 py-8 edge-team-{team.color}">
+					<h2 class="text-center mb-8">{team.name}</h2>
 
-				<div class="flex flex-row justify-around flex-wrap">
-					{#each team.players as player}
-						<div class="flex justify-center">
-							<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
-						</div>
-					{/each}
+					<div class="flex flex-row justify-around flex-wrap">
+						{#each team.players as player}
+							<div class="flex justify-center">
+								<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
+							</div>
+						{/each}
+					</div>
 				</div>
+			{/each}
+		{:else}
+			<div class="p-8 tablet:p-4 laptop:p-0">
+				<h5>Det er ikke blitt satt opp noen lag for årets sesong enda.</h5>
+				<h5>Fortvil ikke! Julebordskomiteen jobber iherdig med å sette opp rettferdige lag i skrivende stund.</h5>
 			</div>
-		{/each}
+		{/if}
+
 	</div>
 {/if}

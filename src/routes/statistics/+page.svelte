@@ -178,7 +178,7 @@
 		</div>
 	{:else}
 		<div class="p-8 tablet:p-4 laptop:p-0">
-			<h5>Ingen statistikk tilgjengelig. Vent til en aktiv sesong er forbi.</h5>
+			<h5>Ingen statistikk tilgjengelig. Vent til en aktiv sesong er over.</h5>
 		</div>
 	{/if}
 

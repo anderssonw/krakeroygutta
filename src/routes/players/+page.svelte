@@ -28,6 +28,14 @@
 		
 		<RuleSpeechBubble imageSrc={madsHangLoose} text={speechBubbleText} mirror={true} />
 
-		<Players players={sortPlayers(players)} season={season} />
+		{#if sortPlayers(players).length > 0}
+			<Players players={sortPlayers(players)} season={season} />
+		{:else}
+			<div class="p-8 tablet:p-4 laptop:p-0">
+				<h5>Spillere for denne sesongen er foreløpig ikke tildelt ett lag, og er derfor ikke tilgjengelige.</h5>
+				<h5>Spillerne vil være tilgjengelige så snart de rettferdige lagene er blitt satt opp av julebordskomiteen</h5>
+			</div>
+		{/if}
+
 	</div>
 {/if}
