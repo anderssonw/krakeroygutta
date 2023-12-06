@@ -13,7 +13,7 @@
 	export let text: string;
 </script>
 
-<button class="btn flex items-center" type="button" on:click={() => goto(route)}>
+<button class="btn flex items-center bg-yellow-200" type="button" on:click={() => goto(route)}>
 	<ArrowLeftIcon />
 	<p class="ml-2">{text}</p>
 </button>
