@@ -57,7 +57,7 @@
 						<div class="flex flex-row justify-between border-t-2 py-2">
 							<div class="text-left">
 								<p>{`Mål: ${players?.find((player) => player.id === goal.goal_player_id)?.name}`}</p>
-								<p>{`Assist: ${players?.find((player) => player.id === goal.assist_player_id)?.name}`}</p>
+								<p>{`Assist: ${players?.find((player) => player.id === goal.assist_player_id)?.name || 'Ingen assist'}`}</p>
 							</div>
 
 							<button>
@@ -141,6 +141,7 @@
 				Assist
 				<select class="border-2 rounded-sm" name="assist" id="assist">
 					{#if players}
+						<option value={-1}>Ingen assist</option>
 						{#each players as player}
 							<option value={player.id}>{player.name}</option>
 						{/each}
