@@ -79,18 +79,18 @@ export const navSessionRoutes: MainRoute[] = [
 	},
 	{
 		route: {
-			name: 'Profil',
-			url: '/profile',
+			name: 'Statistikk',
+			url: '/statistics',
 		},
 		subRoute: []
 	},
 	{
 		route: {
-			name: 'Statistikk',
-			url: '/statistics',
+			name: 'Profil',
+			url: '/profile',
 		},
 		subRoute: []
-	}
+	},
 ];
 
 export const navAdminRoutes: MainRoute[] = [

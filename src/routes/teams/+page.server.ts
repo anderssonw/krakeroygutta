@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { FullPlayer, FullTeam } from '$lib/types/newTypes';
+import type { FullPlayer, FullTeam, MatchStatsTeam, MatchesWithSeasonName } from '$lib/types/newTypes';
 import type { Tables } from '$lib/types/database.helper.types';
 import type { Database } from '$lib/types/database.generated.types';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -54,9 +54,32 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			return teams
 		}
 
+		
+		const getTeamStatsSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
+			const { data: teamStats, error: teamStatsError } = await supabase
+				.from('team_with_stats')
+				.select(
+					`
+						*
+					`
+				)
+				.eq('season_id', season_id)
+				.returns<MatchStatsTeam[]>();
+
+			if (teamStatsError) {
+				throw error(500, {
+					message: teamStatsError.message,
+					devHelper: '/team_with_stats getting team with player stats - view'
+				});
+			}
+
+			return teamStats;
+		};
+
 		return { 
 			teams: getTeamsForSeason(season.id, supabase), 
-			players: getPlayerSeasonStats(season.id, supabase)
+			players: getPlayerSeasonStats(season.id, supabase),
+			teamStats: getTeamStatsSeason(season.id, supabase),
 		}
 	}
 	return {};

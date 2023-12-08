@@ -69,6 +69,13 @@ export interface FullTeam {
 	name: string;
 	players: FullPlayer[];
 }
+/* TEAMS PAGE */
+export interface PlayerIndividualStats {
+	player_id: number;
+	goals: number;
+	assists: number;
+	clutches: number;
+}
 
 /* SEASON HOME PAGE */
 export interface TeamWithStats {

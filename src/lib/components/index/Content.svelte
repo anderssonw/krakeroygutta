@@ -7,6 +7,7 @@
 	import crownTop from '$lib/assets/crown_top.png';
 	import crownBot from '$lib/assets/crown_bot.png';
 
+	
 	// Apply animation/movement as a tailwind class
 	let curPitchInView = false;
 	$: pitchVisibleAnimation = `transition-all duration-500 ${curPitchInView ? 'opacity-100' : 'opacity-0'}`;
