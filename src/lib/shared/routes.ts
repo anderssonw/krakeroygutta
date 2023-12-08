@@ -1,6 +1,6 @@
 // Protect routes
 export const nonLoggedInRoutes = ['register', 'login'];
-export const loggedInRoutes = ['fantasy', 'players', 'profile', 'teams', 'matches'];
+export const loggedInRoutes = ['season', 'fantasy', 'players', 'profile', 'teams', 'matches'];
 export const adminRoutes = ['admin'];
 
 // Navbar routes
@@ -41,8 +41,15 @@ export const navNoSessionRoutes: MainRoute[] = [
 export const navSessionRoutes: MainRoute[] = [
 	{
 		route: {
-			name: 'Sesong',
+			name: 'Hjem',
 			url: '/',
+		},
+		subRoute: []
+	},
+	{
+		route: {
+			name: 'Sesong',
+			url: '/season',
 		},
 		subRoute: [
 			{
