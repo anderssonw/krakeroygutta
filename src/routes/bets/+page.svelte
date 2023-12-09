@@ -27,7 +27,7 @@
 </script>
 
 <div class="structure">
-    <h1> Bets </h1>
+    <h1> Veddemål </h1>
     <RuleSpeechBubble imageSrc={pirateMadsSrc} text={speechBubbleText} mirror={true} />
 
     {#if !betExists() && season && !isSeasonPastDeadline(season)}

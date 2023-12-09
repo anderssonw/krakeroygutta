@@ -18,7 +18,7 @@
 	];
 </script>
 
-<div class="flex flex-col items-center">
+<div class="structure">
 	<h1>Kamper</h1>
 
 	<RuleSpeechBubble imageSrc={madsSeriosSrc} text={speechBubbleText} mirror={true} />
