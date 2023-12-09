@@ -63,8 +63,28 @@
 				match?.team_away?.name
 			}`}
 		</h3>
-		<div class="flex flex-row justify-around w-full p-6 gap-2">
-			<div class="flex flex-col gap-4">
+		<div class="flex flex-row justify-around w-full flex-wrap p-6">
+			<div class="flex flex-col">
+				<p>Mål / Assist</p>
+
+				{#each goals as goal}
+					<form action="?/delete-goal" method="POST">
+						<input hidden id={`goal_id_${goal.id}`} name="goal_id" value={goal.id} />
+						<div class="flex flex-row justify-between border-t-2 py-2">
+							<div class="text-left">
+								<p>{`Mål: ${players?.find((player) => player.id === goal.goal_player_id)?.name}`}</p>
+								<p>{`Assist: ${players?.find((player) => player.id === goal.assist_player_id)?.name || 'Ingen assist'}`}</p>
+							</div>
+
+							<button>
+								<DeleteIcon class="cursor-pointer" />
+							</button>
+						</div>
+					</form>
+				{:else}
+					<p>Ingen Mål / Assist denne kampen</p>
+				{/each}
+
 				<button type="button" class="btn mt-4" on:click={() => openDialogById('new-goal')}>Nytt mål</button>
 
 				<h5>Mål / Assist</h5>
@@ -159,16 +179,17 @@
 
 			<div class="flex flex-col gap-2">
 
-				<label class="flex flex-row justify-between items-center gap-2" for="goal">
-					Mål
-					<select class="border-2 rounded-sm py-2 w-3/4" name="goal" id="goal" bind:value={selectedDialogPlayer}>
-						{#if players}
-							{#each players as player}
-								<option value={player.id}>{player.name}</option>
-							{/each}
-						{/if}
-					</select>
-				</label>
+			<label for="assist">
+				Assist
+				<select class="border-2 rounded-sm" name="assist" id="assist">
+					{#if players}
+						<option value={-1}>Ingen assist</option>
+						{#each players as player}
+							<option value={player.id}>{player.name}</option>
+						{/each}
+					{/if}
+				</select>
+			</label>
 
 				<label class="flex flex-row justify-between items-center gap-2" for="assist">
 					Assist

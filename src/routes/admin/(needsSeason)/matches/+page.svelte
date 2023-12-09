@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import AdminTeamSelect from '$lib/components/admin/AdminTeamSelect.svelte';
 	import MagnifierIcon from 'virtual:icons/ph/magnifying-glass-bold';
+	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
 	import type { PageData, ActionData } from './$types';
 	import { goto } from '$app/navigation';
 
@@ -35,6 +36,7 @@
 	<form
 		class="w-2/3 tablet:w-auto flex flex-col mt-0 pt-0"
 		method="POST"
+		action="?/create-match"
 		use:enhance={() => {
 			return async ({ update }) => {
 				await update();
@@ -103,7 +105,17 @@
 							{match.team_away?.name}
 						</td>
 						<td class="px-4">
-							<MagnifierIcon class="cursor-pointer" />
+							<div class="flex flex-row align-middle">
+								<a class="py-0 px-2" href={`${$page.url.pathname}/${match.id}`}>
+									<MagnifierIcon class="cursor-pointer" />
+								</a>
+								<form method="POST" action="?/delete-match" use:enhance>
+									<input hidden name="id" value={match.id} />
+									<button class="py-0 px-2">
+										<DeleteIcon class="cursor-pointer" />
+									</button>
+								</form>
+							</div>
 						</td>
 					</tr>
 				{/each}

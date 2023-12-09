@@ -74,7 +74,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 };
 
 export const actions = {
-	default: async ({ request, locals: { supabase } }) => {
+	'create-match': async ({ request, locals: { supabase } }) => {
 		const formData = Object.fromEntries(await request.formData());
 
 		try {
@@ -112,6 +112,53 @@ export const actions = {
 		}
 
 		return {};
+	},
+	'delete-match': async ({ request, locals: { supabase } }) => {
+		const formData = Object.fromEntries(await request.formData());
+
+		try {
+			const res = matchDeleteSchema.parse(formData);
+
+			const { error: matchDeleteError } = await supabase.from('matches').delete().eq('id', res.id);
+
+			if (matchDeleteError) {
+				if (matchDeleteError.details.includes('is still referenced')) {
+					let errors = {
+						referenced: 'Denne kampen har mål og/eller se-momenter. Du kan ikke slette den med mindre du sletter disse'
+					};
+					return {
+						delete: {
+							data: formData,
+							errors
+						}
+					};
+				}
+
+				throw error(500, {
+					message: matchDeleteError.message,
+					devHelper: '/admin/matches deleting match'
+				});
+			}
+
+			return {
+				success: true
+			};
+		} catch (err) {
+			if (err instanceof ZodError) {
+				const { fieldErrors: errors } = err.flatten();
+
+				console.log(err);
+
+				return {
+					delete: {
+						data: formData,
+						errors
+					}
+				};
+			}
+		}
+
+		return {};
 	}
 } satisfies Actions;
 
@@ -120,4 +167,8 @@ const matchSchema = z.object({
 	teamAwayId: z.string().min(1, 'Du må velge bortelag'),
 	teamHomeId: z.string().min(1, 'Du må velge hjemmelag'),
 	seasonId: z.string().min(1, 'Du må velge sesong')
+});
+
+const matchDeleteSchema = z.object({
+	id: z.string()
 });

@@ -212,7 +212,7 @@ export const actions = {
 			let goalInsert: TablesInsert<'goals'> = {
 				match_id: Number(id),
 				goal_player_id: Number(res.goal),
-				assist_player_id: Number(res.assist)
+				assist_player_id: Number(res.assist) == -1 ? null : Number(res.assist)
 			};
 
 			const { error: goalInsertError } = await supabase.from('goals').insert(goalInsert);
