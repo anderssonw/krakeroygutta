@@ -142,3 +142,24 @@ export interface PlayerStatsSeason {
 	wins: number;
 	clean_sheets: number;
 }
+
+/* /STATISTICS PAGE*/
+export interface PlayerStatsSeasonSummary {
+	player_id: number;
+	player_name: string;
+	player_image: string;
+	goals: number;
+	assists: number;
+	clutches: number;
+	wins: number;
+	clean_sheets: number;
+	points: number;
+}
+
+/* /STATISTICS PAGE*/
+export interface StandardPlayer {
+	id: number;
+	name: string;
+	image: string;
+}
+
