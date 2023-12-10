@@ -11,10 +11,20 @@
 	import PlayerStatisticCard from '$lib/components/statistics/PlayerStatisticCard.svelte';
 	import PlayerStatisticCardGroup from '$lib/components/statistics/PlayerStatisticCardGroup.svelte';
 
+	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
+    import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
+    import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
+	import winIcon from '$lib/assets/stat_icons/win_icon.png';
+    import cleanIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
+	import { getTotalStatsForPlayer, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
+
 	export let data: PageData;
 	// All of this stuff is also in admin/layout, not sure how to copy it over effectively just letting it stay for now
 
-	$: ({ seasons, lazy, players } = data);
+	$: ({ seasons, lazy, players, allMatches, teamStats } = data);
+	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
+	$: playersWithStats = getTotalStatsForPlayer(players ?? [], matches);
+
 	$: seasonOption = null as DropdownOption | null;
 	$: setSeasonURL(seasonOption);
 	onMount(() => {
@@ -45,7 +55,7 @@
 
 		let statsSeasons: DropdownOption[] = [];
 		seasons?.forEach((season) => {
-			if(new Date(season.end_time) < new Date()) {
+			if(new Date(season.deadline_time) < new Date()) {
 				let opt = {
 					name: season.name,
 					id: season.id
@@ -172,9 +182,15 @@
 </script>
 
 <div class="structure">
-	<div class="w-96">
-		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
-	</div>
+	{#if getSeasonOptions().length > 0}
+		<div class="w-96">
+			<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
+		</div>
+	{:else}
+		<div class="p-8 tablet:p-4 laptop:p-0">
+			<h5>Ingen statistikk tilgjengelig. Vent til en aktiv sesong er over.</h5>
+		</div>
+	{/if}
 
 	{#if seasonOption}
 		<div class="flex flex-col">
@@ -247,6 +263,61 @@
 						{/each}
 					</PlayerStatisticCardGroup>
 				{/await}
+			</div>
+			
+			<div class="mb-4 mx-4 flex-1">
+				<h2 class="mb-4">Full oversikt</h2>
+				<div class="grid gap-4">
+					{#each playersWithStats as player}
+						<div class="grid grid-cols-10 tablet:grid-cols-8 bg-primary-color pr-4">
+							<div class="col-span-4 tablet:col-span-2">
+								<div class="flex flex-row items-center">
+									<img class="bg-white rounded-full p-2 mx-4 my-2 w-8 h-8 tablet:w-12 tablet:h-12" src={player.player_image} alt="image" />
+									<div class="mr-4">
+										<p class="font-semibold text-xs tablet:text-xl">{player.player_name.split(" ")[player.player_name.split(" ").length-1]}</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-span-1 flex items-center justify-end">
+								<div class="flex flex-row items-center">
+									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={goalIcon} alt="goal" />
+									<p class="text-xs tablet:text-xl font-semibold">{player.goals}</p>
+								</div>
+							</div>
+							<div class="col-span-1 flex items-center justify-end">
+								<div class="flex flex-row items-center">
+									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={assistIcon} alt="assist" />
+									<h3 class="text-xs tablet:text-xl font-semibold">{player.assists}</h3>
+								</div>
+							</div>
+							<div class="col-span-1 flex items-center justify-end">
+								<div class="flex flex-row items-center">
+									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={clutchIcon} alt="clutch" />
+									<h3 class="text-xs tablet:text-xl font-semibold">{player.clutches}</h3>
+								</div>
+							</div>
+							<div class="col-span-1 flex items-center justify-end">
+								<div class="flex flex-row items-center">
+									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={winIcon} alt="wins" />
+									<h3 class="text-xs tablet:text-xl font-semibold">{player.wins}</h3>
+								</div>
+							</div>
+							<div class="col-span-1 flex items-center justify-end">
+								<div class="flex flex-row items-center">
+									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={cleanIcon} alt="clean sheets" />
+									<h3 class="text-xs tablet:text-xl font-semibold">{player.clean_sheets}</h3>
+								</div>
+							</div>
+							<div class="col-span-1 flex items-center justify-end">
+								<div class="flex flex-row items-center">
+									<h3 class="text-xs tablet:text-xl font-semibold">{player.points}</h3>
+								</div>
+							</div>
+						</div>
+						
+					{/each}
+					
+				</div>
 			</div>
 		</div>
 	{/if}

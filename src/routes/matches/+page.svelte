@@ -18,14 +18,20 @@
 	];
 </script>
 
-<div class="flex flex-col items-center">
+<div class="structure">
 	<h1>Kamper</h1>
 
 	<RuleSpeechBubble imageSrc={madsSeriosSrc} text={speechBubbleText} mirror={true} />
 
-	{#each stats as match}
-		<div class="py-4">
-			<MatchCard {match} />
+	{#if stats.length > 0}
+		{#each stats as match}
+			<div class="py-4">
+				<MatchCard {match} />
+			</div>
+		{/each}
+	{:else}
+		<div class="p-8 tablet:p-4 laptop:p-0">
+			<h5>Det er ikke blitt spilt noen kamper foreløpig.</h5>
 		</div>
-	{/each}
+	{/if}
 </div>

@@ -5,6 +5,8 @@ import type {
 	MatchStatsTeam,
 	MatchesWithSeasonName,
 	PlayerStatsSeason,
+	PlayerStatsSeasonSummary,
+	StandardPlayer,
 	TeamWithStats
 } from '$lib/types/newTypes';
 
@@ -149,6 +151,107 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[]) => {
 	});
 
 	return playerPointsMap;
+};
+
+
+export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: MatchStatsQuery[]) => {
+	const victoryPoints = 3;
+	const cleanSheetPoints = 1;
+
+	const goalPointFactor = 3;
+	const assistPointFactor = 2;
+	const clutchPointFactor = 1;
+
+	const playerMap = new Map<number, PlayerStatsSeasonSummary>();
+
+	// Initialise all players in the playerPointsMap
+	players.forEach((player) => {
+		const createStats: PlayerStatsSeasonSummary = {
+			player_id: player.id,
+			player_name: player.name,
+			player_image: player.image,
+			goals: 0,
+			assists: 0,
+			clutches: 0,
+			wins: 0,
+			clean_sheets: 0,
+			points: 0
+		}
+		playerMap.set(player.id, createStats)
+	});
+
+
+	matches.forEach((match) => {
+		let goals = getGoalsForTeamsInMatch(match);
+		let homeTeamPlayers = match.home_team.players;
+		let awayTeamPlayers = match.away_team.players;
+
+		// Victory
+		if (goals.homeTeamGoals > goals.awayTeamGoals) {
+			homeTeamPlayers.forEach((player) => {
+				let updateWins = playerMap.get(player.id)
+				if(updateWins) {
+					updateWins.wins += 1; 
+					updateWins.points += victoryPoints;
+					playerMap.set(player.id, updateWins);
+				}
+			});
+		} else if (goals.awayTeamGoals > goals.homeTeamGoals) {
+			awayTeamPlayers.forEach((player) => {
+				let updateWins = playerMap.get(player.id) 
+				if(updateWins) {
+					updateWins.wins += 1; 
+					updateWins.points += victoryPoints;
+					playerMap.set(player.id, updateWins);
+				}
+			});
+		}
+
+		// Clean sheets
+		if (goals.awayTeamGoals === 0) {
+			homeTeamPlayers.forEach((player) => {
+				let updateCs = playerMap.get(player.id) 
+				if(updateCs) {
+					updateCs.clean_sheets += 1; 
+					updateCs.points += cleanSheetPoints; 
+					playerMap.set(player.id, updateCs);
+				}
+			});
+		}
+		if (goals.homeTeamGoals === 0) {
+			awayTeamPlayers.forEach((player) => {
+				let updateCs = playerMap.get(player.id) 
+				if(updateCs) {
+					updateCs.clean_sheets += 1; 
+					updateCs.points += cleanSheetPoints; 
+					playerMap.set(player.id, updateCs);
+				}
+			});
+		}
+
+		let allPlayersInMatch = homeTeamPlayers.concat(awayTeamPlayers);
+
+		allPlayersInMatch.forEach((player) => {
+			let updateGoalsAssistClutch = playerMap.get(player.id);
+			if(updateGoalsAssistClutch) { 
+				updateGoalsAssistClutch.goals += player.goals; 
+				updateGoalsAssistClutch.assists += player.assists; 
+				updateGoalsAssistClutch.clutches += player.clutches; 
+				updateGoalsAssistClutch.points += 
+					player.goals * goalPointFactor + player.assists * assistPointFactor + player.clutches * clutchPointFactor;
+				playerMap.set(player.id, updateGoalsAssistClutch); 
+			}
+		});
+	});
+
+	let listOfPlayerStats = []
+	for (let value of playerMap.values()) {
+		listOfPlayerStats.push(value);
+	}
+
+	listOfPlayerStats.sort((a, b) => b.points - a.points);
+
+	return listOfPlayerStats;
 };
 
 export const getPointsFromTeamStats = (team: TeamWithStats) => {

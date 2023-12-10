@@ -3,7 +3,7 @@
 	import { afterUpdate } from 'svelte';
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
-	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type Route } from '$lib/shared/routes';
+	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type MainRoute, } from '$lib/shared/routes';
 	import smallHeaderLogo from '$lib/assets/headerSmall.png';
 
 	import HamburgerIcon from 'virtual:icons/mdi/hamburger-menu';
@@ -12,9 +12,9 @@
 	export let user: Tables<'users'> | null;
 	export let showMobileNavbar: boolean;
 
-	let routes: Route[] = getRoutes(session, user);
+	let routes: MainRoute[] = getRoutes(session, user);
 	function getRoutes(session: Session | null, user: Tables<'users'> | null) {
-		let allRoutes: Route[] = session ? navSessionRoutes : navNoSessionRoutes;
+		let allRoutes: MainRoute[] = session ? navSessionRoutes : navNoSessionRoutes;
 
 		if (session && (user?.is_admin || user?.is_superadmin)) {
 			allRoutes = allRoutes.concat(navAdminRoutes);
@@ -22,6 +22,8 @@
 
 		return allRoutes;
 	}
+
+	$: isHoveringSeason = false;
 
 	let browserWidth = 0;
 	$: isMobile = browserWidth <= 766;
@@ -56,7 +58,29 @@
 		<!-- Else Nav -->
 		<div class="hidden tablet:flex">
 			{#each routes as route}
-				<a href={route.route}> <h5 class="navbtn">{route.name}</h5> </a>
+				{#if route.subRoute.length > 0}
+					<div class="relative flex"
+						on:mouseenter={() => isHoveringSeason = true}
+						on:mouseleave={() => isHoveringSeason = false}>
+						<a href={route.route.url}> 
+							<h5 class="navbtn">{route.route.name}</h5> 
+						</a>
+						{#if isHoveringSeason}
+							<div class="w-full p-1 rounded absolute top-[100%] left-1/2 -translate-x-1/2 bg-primary-color-light flex flex-col gap-2">
+								{#each route.subRoute as subRoute}
+									<a href={subRoute.url} class="p-1"> 
+										<h5>{subRoute.name}</h5> 
+									</a>
+								{/each}
+							</div>
+						{/if}
+					</div>
+				{:else}
+					<a href={route.route.url}> 
+						<h5 class="navbtn">{route.route.name}</h5> 
+					</a>
+				{/if}
+				
 			{/each}
 		</div>
 	</div>
