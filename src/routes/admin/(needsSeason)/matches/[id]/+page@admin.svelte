@@ -64,27 +64,7 @@
 			}`}
 		</h3>
 		<div class="flex flex-row justify-around w-full flex-wrap p-6">
-			<div class="flex flex-col">
-				<p>Mål / Assist</p>
-
-				{#each goals as goal}
-					<form action="?/delete-goal" method="POST">
-						<input hidden id={`goal_id_${goal.id}`} name="goal_id" value={goal.id} />
-						<div class="flex flex-row justify-between border-t-2 py-2">
-							<div class="text-left">
-								<p>{`Mål: ${players?.find((player) => player.id === goal.goal_player_id)?.name}`}</p>
-								<p>{`Assist: ${players?.find((player) => player.id === goal.assist_player_id)?.name || 'Ingen assist'}`}</p>
-							</div>
-
-							<button>
-								<DeleteIcon class="cursor-pointer" />
-							</button>
-						</div>
-					</form>
-				{:else}
-					<p>Ingen Mål / Assist denne kampen</p>
-				{/each}
-
+			<div class="flex flex-col gap-4">
 				<button type="button" class="btn mt-4" on:click={() => openDialogById('new-goal')}>Nytt mål</button>
 
 				<h5>Mål / Assist</h5>
