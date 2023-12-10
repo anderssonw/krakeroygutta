@@ -132,7 +132,7 @@
 	{/await}
 
 	<dialog id="new-clutch" class="px-4 py-4 rounded-lg text-left w-full">
-		<form class="flex flex-col gap-8" action="?/create-clutch" method="POST" use:enhance>
+		<form class="flex flex-col gap-6" action="?/create-clutch" method="POST" use:enhance>
 			<h4>Nytt C-moment</h4>
 
 			<label class="flex flex-row justify-between items-center gap-2" for="clutch">
@@ -154,14 +154,23 @@
 	</dialog>
 
 	<dialog id="new-goal" class="px-4 py-4 rounded-lg text-left w-full">
-		<form class="flex flex-col gap-8" action="?/create-goal" method="POST" use:enhance>
+		<form class="flex flex-col gap-6" action="?/create-goal" method="POST" use:enhance>
 			<h4>Nytt mål</h4>
 
-			<div class="flex flex-col gap-2">
+			<label class="flex flex-row justify-between items-center gap-2" for="goal">
+				Mål
+				<select class="border-2 rounded-sm py-2 w-3/4" name="goal" id="goal">
+					{#if players}
+						{#each players as player}
+							<option value={player.id}>{player.name}</option>
+						{/each}
+					{/if}
+				</select>
+			</label>
 
-			<label for="assist">
+			<label class="flex flex-row justify-between items-center gap-2" for="assist">
 				Assist
-				<select class="border-2 rounded-sm" name="assist" id="assist">
+				<select class="border-2 rounded-sm py-2 w-3/4" name="assist" id="assist">
 					{#if players}
 						<option value={-1}>Ingen assist</option>
 						{#each players as player}
@@ -170,18 +179,6 @@
 					{/if}
 				</select>
 			</label>
-
-				<label class="flex flex-row justify-between items-center gap-2" for="assist">
-					Assist
-					<select class="border-2 rounded-sm py-2 w-3/4" name="assist" id="assist">
-						{#if players}
-							{#each selectedDialogTeam as player}
-								<option value={player.id}>{player.name}</option>
-							{/each}
-						{/if}
-					</select>
-				</label>
-			</div>
 
 			<div class="flex flex-col">
 				<button class="btn mt-4 bg-green-400" on:click={() => closeDialogById('new-goal')}>Legg til</button>
