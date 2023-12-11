@@ -3,7 +3,9 @@
 	import { page } from '$app/stores';
 	import AdminTeamSelect from '$lib/components/admin/AdminTeamSelect.svelte';
 	import MagnifierIcon from 'virtual:icons/ph/magnifying-glass-bold';
+	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
 	import type { PageData, ActionData } from './$types';
+	import { goto } from '$app/navigation';
 
 	export let form: ActionData;
 	export let data: PageData;
@@ -32,8 +34,9 @@
 <div class="structure">
 	<h4>Ny Kamp</h4>
 	<form
-		class="flex flex-col mt-0 pt-0"
+		class="w-2/3 tablet:w-auto flex flex-col mt-0 pt-0"
 		method="POST"
+		action="?/create-match"
 		use:enhance={() => {
 			return async ({ update }) => {
 				await update();
@@ -74,42 +77,54 @@
 			<p>Noe gikk galt</p>
 		{/await}
 	</form>
-	<table>
+	<div class="w-full px-4">
 		{#await matches}
 			<p>Henter Kamper</p>
 		{:then matches}
 			{#if matches.length === 0}
 				<p>Ingen Kamper for denne sesongen</p>
 			{:else}
-				<tr class="text-left">
-					<th class="px-4">ID</th>
-					<th class="px-4">Hjemmelag</th>
-					<th class="px-4">Bortelag</th>
-					<th class="px-4" />
-				</tr>
+			<div class="flex flex-row justify-between">
+				<div class="grid grid-cols-7 w-[85%] py-2 border-b">
+					<div class="col-span-1">
+						<h5 class="font-semibold">ID</h5>
+					</div>
+					<div class="col-span-3">
+						<h5 class="font-semibold">Hjemmelag</h5>
+					</div>
+					<div class="col-span-3">
+						<h5 class="font-semibold">Bortelag</h5>
+					</div>
+				</div>
+				<div>
+				</div>
+			</div>
 				{#each matches.sort((a, b) => {
 					return a.id - b.id;
 				}) as match}
-					<tr>
-						<td class="px-4">
-							{match.id}
-						</td>
-						<td class="px-4">
-							{match.team_home?.name}
-						</td>
-						<td class="px-4">
-							{match.team_away?.name}
-						</td>
-						<td class="px-4">
-							<a href={`${$page.url.pathname}/${match.id}`}>
-								<MagnifierIcon class="cursor-pointer" />
-							</a>
-						</td>
-					</tr>
+					<div class="flex flex-row justify-between">
+						<div class="grid grid-cols-7 w-[85%] py-4 border-b cursor-pointer" on:click={() => goto(`${$page.url.pathname}/${match.id}`)}>
+							<div class="col-span-1">
+								<p>{match.id}</p>
+							</div>
+							<div class="col-span-3">
+								<p>{match.team_home?.name}</p>
+							</div>
+							<div class="col-span-3">
+								<p>{match.team_away?.name}</p>
+							</div>
+						</div>
+						<form class="flex justify-between items-center" method="POST" action="?/delete-match" use:enhance>
+							<input hidden name="id" value={match.id} />
+							<button class="py-0 px-2">
+								<DeleteIcon class="cursor-pointer" />
+							</button>
+						</form>
+					</div>
 				{/each}
 			{/if}
 		{:catch error}
 			<p>Noe gikk galt!</p>
 		{/await}
-	</table>
+	</div>
 </div>

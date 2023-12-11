@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { Tables } from '$lib/types/database.helper.types';
+import type { MatchStatsTeam, MatchesWithSeasonName, StandardPlayer } from '$lib/types/newTypes';
 
 export const load = (async ({ locals: { supabase }, url }) => {
 	const getFantasyTeamPlayersForSeason = async (seasonId: number) => {
@@ -25,7 +25,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 	};
 
 	const getPlayers = async () => {
-		const { data: players, error: playersError } = await supabase.from('players').select();
+		const { data: players, error: playersError } = await supabase.from('players').select().returns<StandardPlayer[]>();
 
 		if (playersError) {
 			throw error(500, {
@@ -38,7 +38,16 @@ export const load = (async ({ locals: { supabase }, url }) => {
 	};
 
 	const getMatchesForSeason = async (seasonId: number) => {
-		const { data: matches, error: matchesError } = await supabase.from('matches').select().eq('season_id', seasonId);
+		const { data: matches, error: matchesError } = await supabase
+				.from('matches')
+				.select(
+					`
+						*,
+						season_name:seasons(name)
+					`
+				)
+				.eq('season_id', seasonId)
+				.returns<MatchesWithSeasonName[]>();
 
 		if (matchesError) {
 			throw error(500, {
@@ -48,6 +57,27 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		}
 
 		return matches;
+	};
+
+	const getTeamStatsSeason = async (season_id: number) => {
+		const { data: teamStats, error: teamStatsError } = await supabase
+			.from('team_with_stats')
+			.select(
+				`
+					*
+				`
+			)
+			.eq('season_id', season_id)
+			.returns<MatchStatsTeam[]>();
+
+		if (teamStatsError) {
+			throw error(500, {
+				message: teamStatsError.message,
+				devHelper: '/team_with_stats getting team with player stats - view'
+			});
+		}
+
+		return teamStats;
 	};
 
 	const getGoals = async (matchIds: number[]) => {
@@ -83,20 +113,24 @@ export const load = (async ({ locals: { supabase }, url }) => {
 
 		return {
 			players: getPlayers(),
+			allMatches: matches,
+			teamStats: getTeamStatsSeason(seasonId),
 			lazy: {
 				fantasyTeamPlayers: getFantasyTeamPlayersForSeason(seasonId),
 				goals: getGoals(matches.map((match) => match.id)),
-				clutches: getClutches(matches.map((match) => match.id))
+				clutches: getClutches(matches.map((match) => match.id)),
 			}
 		};
 	}
 
 	return {
 		players: [],
+		allMatches: [],
+		teamStats: [],
 		lazy: {
 			fantasyTeamPlayers: [],
 			goals: [],
-			clutches: []
+			clutches: [],
 		}
 	};
 }) satisfies PageServerLoad;

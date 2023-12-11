@@ -242,19 +242,19 @@ export interface Database {
       }
       goals: {
         Row: {
-          assist_player_id: number
+          assist_player_id: number | null
           goal_player_id: number
           id: number
           match_id: number
         }
         Insert: {
-          assist_player_id: number
+          assist_player_id?: number | null
           goal_player_id: number
           id?: number
           match_id: number
         }
         Update: {
-          assist_player_id?: number
+          assist_player_id?: number | null
           goal_player_id?: number
           id?: number
           match_id?: number
@@ -389,6 +389,7 @@ export interface Database {
           player_id: number
           price: number
           season_id: number
+          skill: number
         }
         Insert: {
           attack?: number
@@ -398,6 +399,7 @@ export interface Database {
           player_id: number
           price?: number
           season_id: number
+          skill?: number
         }
         Update: {
           attack?: number
@@ -407,6 +409,7 @@ export interface Database {
           player_id?: number
           price?: number
           season_id?: number
+          skill?: number
         }
         Relationships: [
           {
@@ -628,6 +631,7 @@ export interface Database {
           player_id: number | null
           price: number | null
           season_id: number | null
+          skill: number | null
           team_color: string | null
           team_id: number | null
         }

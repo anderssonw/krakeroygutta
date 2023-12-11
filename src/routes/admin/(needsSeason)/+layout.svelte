@@ -10,7 +10,7 @@
 	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 
 	export let data: LayoutData;
-	$: ({ seasons } = data);
+	$: ({ seasons, season } = data);
 	$: seasonOption = null as DropdownOption | null;
 	$: setSeasonURL(seasonOption);
 	onMount(() => {
@@ -22,6 +22,13 @@
 				id: seasonFromParam.id,
 				name: seasonFromParam.name
 			};
+		} else {
+			if(season) {
+				seasonOption = {
+					id: season.id,
+					name: season.name
+				}
+			}
 		}
 	});
 	const setSeasonURL = (seasonOption: DropdownOption | null) => {

@@ -32,14 +32,16 @@
 
 			<div class="absolute w-4/5 top-[6%] tablet:top-[10%] left-[10%] flex flex-col space-y-6 tablet:space-y-8 laptop:space-y-10">
 				<p class="font-bold text-center text-base tablet:text-xl laptop:text-3xl">Velkommen til Fantasy Futsal!</p>
-				<p class="text-xs tablet:text-base laptop:text-xl">Fra og med 1. desember vil det være mulig å opprette ditt helt egne fantasylag.</p>
 				<p class="text-xs tablet:text-base laptop:text-xl">
-					Den 16.desember 2023 braker det løs, både i Blomsterøyhallen og Casa Bjerkholt. Klokken 12:00 samme dag vil det ikke lenger være
+					Fra og med 11. desember vil det være mulig å opprette ditt helt egne fantasylag.
+				</p>
+				<p class="text-xs tablet:text-base laptop:text-xl">
+					Den 16.desember 2023 braker det løs, både i Blomsterøyhallen og Casa Bjerkholt. Klokken 11:00 samme dag vil det ikke lenger være
 					mulig å endre på laget sitt.
 				</p>
 				<div>
-				<p class="text-center pt-4 tablet:pt-24 laptop:pt-32 text-base tablet:text-xl laptop:text-2xl">Spell og ha det gøy!</p>
-				<p class="text-center text-xs laptop:text-base">Kråkerøygutt, hei, hei, hei!</p>
+					<p class="text-center pt-4 tablet:pt-24 laptop:pt-32 text-base tablet:text-xl laptop:text-2xl">Spell og ha det gøy!</p>
+					<p class="text-center text-xs laptop:text-base">Kråkerøygutt, hei, hei, hei!</p>
 				</div>
 			</div>
 		</div>
