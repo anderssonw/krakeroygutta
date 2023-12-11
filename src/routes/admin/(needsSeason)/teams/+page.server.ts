@@ -1,7 +1,7 @@
 import { type fail, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { ZodError, z } from 'zod';
-import type { TablesInsert, TablesUpdate } from '$lib/types/database.helper.types';
+import type { Tables, TablesInsert, TablesUpdate } from '$lib/types/database.helper.types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }) => {
 	const { session, user } = await parent();
@@ -26,7 +26,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 		const { data: data, error: playersError } = await supabase
 			.from('players_seasons')
 			.select('...players(id, name)')
-			.eq('season_id', seasonId);
+			.eq('season_id', seasonId)
+			.returns<{ id: number; name: string }[]>();
 
 		if (playersError) {
 			throw error(500, {

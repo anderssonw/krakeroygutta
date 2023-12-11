@@ -542,18 +542,21 @@ export interface Database {
           is_admin: boolean | null
           is_superadmin: boolean | null
           nickname: string
+          player_id: number | null
         }
         Insert: {
           id: string
           is_admin?: boolean | null
           is_superadmin?: boolean | null
           nickname?: string
+          player_id?: number | null
         }
         Update: {
           id?: string
           is_admin?: boolean | null
           is_superadmin?: boolean | null
           nickname?: string
+          player_id?: number | null
         }
         Relationships: [
           {
@@ -561,6 +564,18 @@ export interface Database {
             columns: ["id"]
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_player_id_fkey"
+            columns: ["player_id"]
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "users_player_id_fkey"
+            columns: ["player_id"]
+            referencedRelation: "player_season_stats"
+            referencedColumns: ["player_id"]
           }
         ]
       }
