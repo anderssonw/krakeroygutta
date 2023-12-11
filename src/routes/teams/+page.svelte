@@ -7,8 +7,8 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer, FullTeam, MatchStatsTeam, PlayerIndividualStats } from '$lib/types/newTypes';
 	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
-    import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
-    import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
+	import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
+	import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
 
 	// Get server data
 	export let data: PageData;
@@ -32,49 +32,51 @@
 	}
 
 	function mapToPerPlayerStats(teamStats: MatchStatsTeam[] | undefined): Map<number, PlayerIndividualStats> | null {
-		if(!teamStats) {
+		if (!teamStats) {
 			return null;
 		}
 
 		const playerMap = new Map<number, PlayerIndividualStats>();
 
-		teamStats?.map(team_stats => {
-			team_stats.players.map(player => {
+		teamStats?.map((team_stats) => {
+			team_stats.players.map((player) => {
 				const curPlayerStats: PlayerIndividualStats | undefined = playerMap.get(player.id);
 				if (curPlayerStats) {
-					const copyPlayer = {...curPlayerStats};
+					const copyPlayer = { ...curPlayerStats };
 					copyPlayer.goals += player.goals;
 					copyPlayer.assists += player.assists;
 					copyPlayer.clutches += player.clutches;
-					playerMap.set(player.id, copyPlayer)
+					playerMap.set(player.id, copyPlayer);
 				} else {
 					const createStats: PlayerIndividualStats = {
 						player_id: player.id,
 						goals: player.goals,
 						assists: player.assists,
 						clutches: player.clutches
-					}
-					playerMap.set(player.id, createStats)
+					};
+					playerMap.set(player.id, createStats);
 				}
-			})
-		})
-		
+			});
+		});
+
 		return playerMap;
 	}
 
 	function getPlayerStats(pid: number) {
-		if(player_stats) {
+		console.log(pid);
+		console.log(player_stats);
+		if (player_stats) {
 			const player: PlayerIndividualStats | undefined = player_stats.get(pid);
-			if(player) {
+			if (player) {
 				return player;
 			}
 		}
 		const noPlayer: PlayerIndividualStats = {
 			player_id: 0,
-			goals: -1,
-			assists: -1,
-			clutches: -1
-		}
+			goals: 0,
+			assists: 0,
+			clutches: 0
+		};
 		return noPlayer;
 	}
 
@@ -125,6 +127,5 @@
 				<h5>Fortvil ikke! Julebordskomiteen jobber iherdig med å sette opp rettferdige lag i skrivende stund.</h5>
 			</div>
 		{/if}
-
 	</div>
 {/if}
