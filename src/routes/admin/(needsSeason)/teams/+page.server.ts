@@ -1,7 +1,7 @@
 import { type fail, type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { ZodError, z } from 'zod';
-import type { TablesInsert, TablesUpdate } from '$lib/types/database.helper.types';
+import type { Tables, TablesInsert, TablesUpdate } from '$lib/types/database.helper.types';
 
 export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }) => {
 	const { session, user } = await parent();
@@ -22,8 +22,12 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 		return data;
 	};
 
-	const getPlayers = async () => {
-		const { data: data, error: playersError } = await supabase.from('players').select('id, name');
+	const getPlayers = async (seasonId: string) => {
+		const { data: data, error: playersError } = await supabase
+			.from('players_seasons')
+			.select('...players(id, name)')
+			.eq('season_id', seasonId)
+			.returns<{ id: number; name: string }[]>();
 
 		if (playersError) {
 			throw error(500, {
@@ -39,7 +43,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 	if (!seasonIdParam) return {};
 
 	if (session && user?.is_superadmin) {
-		return { teams: getTeams(seasonIdParam), players: getPlayers(), seasonId: Number(seasonIdParam) };
+		return { teams: getTeams(seasonIdParam), players: getPlayers(seasonIdParam), seasonId: Number(seasonIdParam) };
 	}
 
 	return {};
