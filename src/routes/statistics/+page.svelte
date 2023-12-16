@@ -12,10 +12,10 @@
 	import PlayerStatisticCardGroup from '$lib/components/statistics/PlayerStatisticCardGroup.svelte';
 
 	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
-    import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
-    import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
+	import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
+	import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
 	import winIcon from '$lib/assets/stat_icons/win_icon.png';
-    import cleanIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
+	import cleanIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
 	import { getTotalStatsForPlayer, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 
 	export let data: PageData;
@@ -55,7 +55,7 @@
 
 		let statsSeasons: DropdownOption[] = [];
 		seasons?.forEach((season) => {
-			if(new Date(season.deadline_time) < new Date()) {
+			if (new Date(season.deadline_time) < new Date()) {
 				let opt = {
 					name: season.name,
 					id: season.id
@@ -64,7 +64,7 @@
 			}
 		});
 
-		return statsSeasons
+		return statsSeasons;
 	};
 
 	function getTopScorers(goals: Tables<'goals'>[]) {
@@ -96,11 +96,13 @@
 		let playerGoals: number[] = [];
 
 		goals.forEach((goal) => {
-			if (!playerGoals[goal.assist_player_id]) {
-				playerGoals[goal.assist_player_id] = 0;
-			}
+			if (goal.assist_player_id) {
+				if (!playerGoals[goal.assist_player_id]) {
+					playerGoals[goal.assist_player_id] = 0;
+				}
 
-			playerGoals[goal.assist_player_id]++;
+				playerGoals[goal.assist_player_id]++;
+			}
 		});
 
 		return playerGoals
@@ -202,7 +204,7 @@
 						{#each getMostSelectedPlayers(players) as player, index}
 							<PlayerStatisticCard
 								playerName={player.player.name}
-								playerSubtitle={`Valgt ${player.selections} ${player.selections > 1 ? 'ganger' : 'gang'}`}
+								playerSubtitle={`Valgt ${player.selections} ${player.selections === 1 ? 'gang' : 'ganger'}`}
 								imgSrc={player.player.image}
 								imgAlt={player.player.name}
 								position={index + 1}
@@ -216,7 +218,7 @@
 								playerSubtitle={`Valgt ${player.selections} ${player.selections === 1 ? 'gang' : 'ganger'}`}
 								imgSrc={player.player.image}
 								imgAlt={player.player.name}
-								position={index + 10}
+								position={playersWithStats.length - index}
 							/>
 						{/each}
 					</PlayerStatisticCardGroup>
@@ -264,7 +266,7 @@
 					</PlayerStatisticCardGroup>
 				{/await}
 			</div>
-			
+
 			<div class="mb-4 mx-4 flex-1">
 				<h2 class="mb-4">Full oversikt</h2>
 				<div class="grid gap-4">
@@ -272,9 +274,11 @@
 						<div class="grid grid-cols-10 tablet:grid-cols-8 bg-primary-color pr-4">
 							<div class="col-span-4 tablet:col-span-2">
 								<div class="flex flex-row items-center">
-									<img class="bg-white rounded-full p-2 mx-4 my-2 w-8 h-8 tablet:w-12 tablet:h-12" src={player.player_image} alt="image" />
+									<img class="bg-white rounded-full p-2 mx-4 my-2 w-8 h-8 tablet:w-12 tablet:h-12" src={player.player_image} alt="Player" />
 									<div class="mr-4">
-										<p class="font-semibold text-xs tablet:text-xl">{player.player_name.split(" ")[player.player_name.split(" ").length-1]}</p>
+										<p class="font-semibold text-xs tablet:text-xl">
+											{player.player_name.split(' ')[player.player_name.split(' ').length - 1]}
+										</p>
 									</div>
 								</div>
 							</div>
@@ -310,13 +314,11 @@
 							</div>
 							<div class="col-span-1 flex items-center justify-end">
 								<div class="flex flex-row items-center">
-									<h3 class="text-xs tablet:text-xl font-semibold">{player.points}</h3>
+									<h3 class="text-xs tablet:text-xl font-semibold">{player.points}p</h3>
 								</div>
 							</div>
 						</div>
-						
 					{/each}
-					
 				</div>
 			</div>
 		</div>

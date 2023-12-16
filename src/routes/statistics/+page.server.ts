@@ -24,8 +24,12 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		return players;
 	};
 
-	const getPlayers = async () => {
-		const { data: players, error: playersError } = await supabase.from('players').select().returns<StandardPlayer[]>();
+	const getPlayers = async (seasonId: number) => {
+		const { data: players, error: playersError } = await supabase
+			.from('players_seasons')
+			.select('...players(id, name, image)')
+			.eq('season_id', seasonId)
+			.returns<StandardPlayer[]>();
 
 		if (playersError) {
 			throw error(500, {
@@ -39,15 +43,15 @@ export const load = (async ({ locals: { supabase }, url }) => {
 
 	const getMatchesForSeason = async (seasonId: number) => {
 		const { data: matches, error: matchesError } = await supabase
-				.from('matches')
-				.select(
-					`
+			.from('matches')
+			.select(
+				`
 						*,
 						season_name:seasons(name)
 					`
-				)
-				.eq('season_id', seasonId)
-				.returns<MatchesWithSeasonName[]>();
+			)
+			.eq('season_id', seasonId)
+			.returns<MatchesWithSeasonName[]>();
 
 		if (matchesError) {
 			throw error(500, {
@@ -112,13 +116,13 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		const matches = await getMatchesForSeason(seasonId);
 
 		return {
-			players: getPlayers(),
+			players: getPlayers(seasonId),
 			allMatches: matches,
 			teamStats: getTeamStatsSeason(seasonId),
 			lazy: {
 				fantasyTeamPlayers: getFantasyTeamPlayersForSeason(seasonId),
 				goals: getGoals(matches.map((match) => match.id)),
-				clutches: getClutches(matches.map((match) => match.id)),
+				clutches: getClutches(matches.map((match) => match.id))
 			}
 		};
 	}
@@ -130,7 +134,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		lazy: {
 			fantasyTeamPlayers: [],
 			goals: [],
-			clutches: [],
+			clutches: []
 		}
 	};
 }) satisfies PageServerLoad;
