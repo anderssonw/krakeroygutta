@@ -27,7 +27,10 @@
 				<input name="password" type="password" id="password" class="input w-full" placeholder="" bind:value={password} required />
 			</div>
 			<div>
-				<button class="btn">{loading ? 'Laster' : 'Logg deg inn'}</button>
+				<a href={'/login/reset'}> Glemt passord? </a>
+			</div>
+			<div>
+				<button class="btn">{loading ? 'Laster' : 'Logg inn'}</button>
 			</div>
 		</div>
 
