@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		};
 
 		return {
-			player: getPlayer(user.player_id || -1, supabase)
+			player: await getPlayer(user.player_id || -1, supabase)
 		};
 	}
 	return {};

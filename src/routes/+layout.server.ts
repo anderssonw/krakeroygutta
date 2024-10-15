@@ -1,13 +1,13 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ locals: { getSession, getUser, getSeason } }) => {
-	const session = await getSession();
-	const user = await getUser();
+export const load: LayoutServerLoad = async ({ locals: { safeGetSession, getGuttaUser, getSeason }, cookies }) => {
+	const { session } = await safeGetSession();
+	const guttaUser = await getGuttaUser();
 	const season = await getSeason();
-
 	return {
-		user: user,
+		session,
+		user: guttaUser,
 		season: season,
-		session: session
+		cookies: cookies.getAll()
 	};
 };
