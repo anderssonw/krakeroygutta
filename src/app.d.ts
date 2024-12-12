@@ -4,16 +4,19 @@
 import type { Database } from '$lib/types/database.generated.types';
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import type { Tables } from '$lib/types/database.helper.types';
-import 'unplugin-icons/types/svelte';
+import type { Session, SupabaseClient, User } from '@supabase/supabase-js';
 
-// and what to do when importing types
 declare global {
 	namespace App {
 		interface Locals {
-			supabase: SupabaseClient<Database>;
-			getSession(): Promise<Session | null>;
-			getUser(): Promise<Tables<'users'> | null>;
+			supabase: SupabaseClient;
+			safeGetSession: () => Promise<{ session: Session | null; user: User | null }>;
+			session: Session | null;
+			getUser(): User | null;
+			user: User | null;
 			getSeason(): Promise<Tables<'seasons'> | null>;
+			getGuttaUser(): Promise<Tables<'users'> | null>;
+			guttaUser: Tables<'users'> | null;
 		}
 		interface PageData {
 			session: Session | null;
