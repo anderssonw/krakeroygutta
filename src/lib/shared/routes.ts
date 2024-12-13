@@ -13,26 +13,18 @@ export interface MainRoute {
 	subRoute: Route[];
 }
 
-
 export const navNoSessionRoutes: MainRoute[] = [
 	{
 		route: {
 			name: 'Hjem',
-			url: '/',
+			url: '/'
 		},
 		subRoute: []
 	},
 	{
 		route: {
 			name: 'Logg inn',
-			url: '/login',
-		},
-		subRoute: []
-	},
-	{
-		route: {
-			name: 'Registrer deg',
-			url: '/register',
+			url: '/login'
 		},
 		subRoute: []
 	}
@@ -42,62 +34,62 @@ export const navSessionRoutes: MainRoute[] = [
 	{
 		route: {
 			name: 'Hjem',
-			url: '/',
+			url: '/'
 		},
 		subRoute: []
 	},
 	{
 		route: {
 			name: 'Sesong',
-			url: '/season',
+			url: '/season'
 		},
 		subRoute: [
 			{
 				name: 'Spillere',
-				url: '/players',
+				url: '/players'
 			},
 			{
 				name: 'Lag',
-				url: '/teams',
+				url: '/teams'
 			},
 			{
 				name: 'Kamper',
-				url: '/matches',
+				url: '/matches'
 			},
 			{
 				name: 'Veddemål',
-				url: '/bets',
+				url: '/bets'
 			}
 		]
 	},
 	{
 		route: {
 			name: 'Mitt Lag',
-			url: '/fantasy',
+			url: '/fantasy'
 		},
 		subRoute: []
 	},
 	{
 		route: {
 			name: 'Statistikk',
-			url: '/statistics',
+			url: '/statistics'
 		},
 		subRoute: []
 	},
 	{
 		route: {
 			name: 'Profil',
-			url: '/profile',
+			url: '/profile'
 		},
 		subRoute: []
-	},
+	}
 ];
 
 export const navAdminRoutes: MainRoute[] = [
 	{
 		route: {
 			name: 'Admin',
-			url: '/admin',
+			url: '/admin'
 		},
 		subRoute: []
 	}

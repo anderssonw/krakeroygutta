@@ -63,8 +63,6 @@
 	}
 
 	function getPlayerStats(pid: number) {
-		console.log(pid);
-		console.log(player_stats);
 		if (player_stats) {
 			const player: PlayerIndividualStats | undefined = player_stats.get(pid);
 			if (player) {
