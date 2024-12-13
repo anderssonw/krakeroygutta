@@ -67,8 +67,6 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 
 	if (!matches) return [];
 
-	// console.log(JSON.stringify(matches, null, ' '));
-
 	matches.forEach((match) => {
 		let goals = getGoalsForTeamsInMatch(match);
 
@@ -153,7 +151,6 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[]) => {
 	return playerPointsMap;
 };
 
-
 export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: MatchStatsQuery[]) => {
 	const victoryPoints = 3;
 	const cleanSheetPoints = 1;
@@ -176,10 +173,9 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 			wins: 0,
 			clean_sheets: 0,
 			points: 0
-		}
-		playerMap.set(player.id, createStats)
+		};
+		playerMap.set(player.id, createStats);
 	});
-
 
 	matches.forEach((match) => {
 		let goals = getGoalsForTeamsInMatch(match);
@@ -189,18 +185,18 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 		// Victory
 		if (goals.homeTeamGoals > goals.awayTeamGoals) {
 			homeTeamPlayers.forEach((player) => {
-				let updateWins = playerMap.get(player.id)
-				if(updateWins) {
-					updateWins.wins += 1; 
+				let updateWins = playerMap.get(player.id);
+				if (updateWins) {
+					updateWins.wins += 1;
 					updateWins.points += victoryPoints;
 					playerMap.set(player.id, updateWins);
 				}
 			});
 		} else if (goals.awayTeamGoals > goals.homeTeamGoals) {
 			awayTeamPlayers.forEach((player) => {
-				let updateWins = playerMap.get(player.id) 
-				if(updateWins) {
-					updateWins.wins += 1; 
+				let updateWins = playerMap.get(player.id);
+				if (updateWins) {
+					updateWins.wins += 1;
 					updateWins.points += victoryPoints;
 					playerMap.set(player.id, updateWins);
 				}
@@ -210,20 +206,20 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 		// Clean sheets
 		if (goals.awayTeamGoals === 0) {
 			homeTeamPlayers.forEach((player) => {
-				let updateCs = playerMap.get(player.id) 
-				if(updateCs) {
-					updateCs.clean_sheets += 1; 
-					updateCs.points += cleanSheetPoints; 
+				let updateCs = playerMap.get(player.id);
+				if (updateCs) {
+					updateCs.clean_sheets += 1;
+					updateCs.points += cleanSheetPoints;
 					playerMap.set(player.id, updateCs);
 				}
 			});
 		}
 		if (goals.homeTeamGoals === 0) {
 			awayTeamPlayers.forEach((player) => {
-				let updateCs = playerMap.get(player.id) 
-				if(updateCs) {
-					updateCs.clean_sheets += 1; 
-					updateCs.points += cleanSheetPoints; 
+				let updateCs = playerMap.get(player.id);
+				if (updateCs) {
+					updateCs.clean_sheets += 1;
+					updateCs.points += cleanSheetPoints;
 					playerMap.set(player.id, updateCs);
 				}
 			});
@@ -233,18 +229,18 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 
 		allPlayersInMatch.forEach((player) => {
 			let updateGoalsAssistClutch = playerMap.get(player.id);
-			if(updateGoalsAssistClutch) { 
-				updateGoalsAssistClutch.goals += player.goals; 
-				updateGoalsAssistClutch.assists += player.assists; 
-				updateGoalsAssistClutch.clutches += player.clutches; 
-				updateGoalsAssistClutch.points += 
+			if (updateGoalsAssistClutch) {
+				updateGoalsAssistClutch.goals += player.goals;
+				updateGoalsAssistClutch.assists += player.assists;
+				updateGoalsAssistClutch.clutches += player.clutches;
+				updateGoalsAssistClutch.points +=
 					player.goals * goalPointFactor + player.assists * assistPointFactor + player.clutches * clutchPointFactor;
-				playerMap.set(player.id, updateGoalsAssistClutch); 
+				playerMap.set(player.id, updateGoalsAssistClutch);
 			}
 		});
 	});
 
-	let listOfPlayerStats = []
+	let listOfPlayerStats = [];
 	for (let value of playerMap.values()) {
 		listOfPlayerStats.push(value);
 	}

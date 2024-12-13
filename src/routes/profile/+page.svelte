@@ -12,19 +12,16 @@
 		<p>Laster</p>
 	{:then player}
 		{#if user}
-			{#if player}
-				<div class="flex flex-col items-center">
-					<h1>Hei {player.name}!</h1>
+			<div class="flex flex-col items-center space-y-4">
+				<h1>Hei {user.nickname}!</h1>
+				{#if player}
 					<h3>Brukernavn: {user.nickname}</h3>
 					<h3>Din id: {player.id}</h3>
 					<img class="h-64" src={player.image} alt="head" />
-				</div>
-			{:else}
-				<div class="flex flex-col items-center">
-					<h1>Hei {user.nickname}!</h1>
+				{:else}
 					<p>Du har ikke en spiller knyttet til profilen din. Kontakt Magnus eller William for å gjøre dette.</p>
-				</div>
-			{/if}
+				{/if}
+			</div>
 		{/if}
 	{/await}
 	<form class="py-4" method="POST">
