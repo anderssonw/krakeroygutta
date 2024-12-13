@@ -4,10 +4,13 @@ export const actions = {
 	default: async ({ url, locals: { supabase } }) => {
 		const errors: Record<string, string> = {};
 
+		const redirectTo = `${url.origin}/auth/callback?next=/profile`;
+
+		console.log(`Redirect URL: ${redirectTo}`);
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {
-				redirectTo: `${url.origin}/auth/callback?next=/profile`
+				redirectTo: redirectTo
 			}
 		});
 
