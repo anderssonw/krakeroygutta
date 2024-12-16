@@ -103,14 +103,14 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			allPlayers: getPlayersForSeason(season.id, supabase),
 			fantasyTeam: getFantasyTeamForSeason(season.id, session.user.id, supabase),
 			allMatches: getMatchesForSeason(season.id, supabase),
-			teamStats: getTeamStatsSeason(season.id, supabase),
+			teamStats: getTeamStatsSeason(season.id, supabase)
 		};
 	}
 	return {};
 };
 
 export const actions = {
-	default: async ({ request, locals: { supabase, getSession, getSeason } }) => {
+	default: async ({ request, locals: { supabase, safeGetSession, getSeason } }) => {
 		const formData = await request.formData();
 
 		const name = String(formData.get('teamName'));
@@ -130,10 +130,10 @@ export const actions = {
 			formIsValid = false;
 		}
 
-		const session = await getSession();
+		const session = await safeGetSession();
 		const season = await getSeason();
 
-		if (session && season) {
+		if (session && season && session.user) {
 			if (isSeasonPastDeadline(season)) {
 				formHints.push('Sesongen er over, og du kan ikke lagre laget ditt lenger');
 				formIsValid = false;

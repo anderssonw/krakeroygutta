@@ -5,11 +5,12 @@ import type { Database } from '$lib/types/database.generated.types';
 import type { SupabaseClient, Session } from '@supabase/supabase-js';
 import type { Tables } from '$lib/types/database.helper.types';
 import type { Session, SupabaseClient, User } from '@supabase/supabase-js';
+import 'unplugin-icons/types/svelte';
 
 declare global {
 	namespace App {
 		interface Locals {
-			supabase: SupabaseClient;
+			supabase: SupabaseClient<Database>;
 			safeGetSession: () => Promise<{ session: Session | null; user: User | null }>;
 			session: Session | null;
 			getUser(): User | null;
