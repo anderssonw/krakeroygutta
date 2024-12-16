@@ -24,7 +24,7 @@
 
 	let y = 0;
 
-	export let isLoggedIn;
+	export let isLoggedIn: boolean;
 </script>
 
 <div class="relative h-60 w-full mt-4 tablet:mt-32 laptop:mt-60" bind:this={animatedPitch}>

@@ -84,25 +84,26 @@
 			{#if matches.length === 0}
 				<p>Ingen Kamper for denne sesongen</p>
 			{:else}
-			<div class="flex flex-row justify-between">
-				<div class="grid grid-cols-7 w-[85%] py-2 border-b">
-					<div class="col-span-1">
-						<h5 class="font-semibold">ID</h5>
+				<div class="flex flex-row justify-between">
+					<div class="grid grid-cols-7 w-[85%] py-2 border-b">
+						<div class="col-span-1">
+							<h5 class="font-semibold">ID</h5>
+						</div>
+						<div class="col-span-3">
+							<h5 class="font-semibold">Hjemmelag</h5>
+						</div>
+						<div class="col-span-3">
+							<h5 class="font-semibold">Bortelag</h5>
+						</div>
 					</div>
-					<div class="col-span-3">
-						<h5 class="font-semibold">Hjemmelag</h5>
-					</div>
-					<div class="col-span-3">
-						<h5 class="font-semibold">Bortelag</h5>
-					</div>
+					<div />
 				</div>
-				<div>
-				</div>
-			</div>
 				{#each matches.sort((a, b) => {
 					return a.id - b.id;
 				}) as match}
 					<div class="flex flex-row justify-between">
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y-no-static-element-interactions -->
 						<div class="grid grid-cols-7 w-[85%] py-4 border-b cursor-pointer" on:click={() => goto(`${$page.url.pathname}/${match.id}`)}>
 							<div class="col-span-1">
 								<p>{match.id}</p>

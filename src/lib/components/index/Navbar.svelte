@@ -3,7 +3,7 @@
 	import { afterUpdate } from 'svelte';
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
-	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type MainRoute, } from '$lib/shared/routes';
+	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type MainRoute } from '$lib/shared/routes';
 	import smallHeaderLogo from '$lib/assets/headerSmall.png';
 
 	import HamburgerIcon from 'virtual:icons/mdi/hamburger-menu';
@@ -42,7 +42,7 @@
 	});
 </script>
 
-<div class="nav flex items-center {isMobile ? "" : hideNavbar}">
+<div class="nav flex items-center {isMobile ? '' : hideNavbar}">
 	<a href="/">
 		<div class="w-16 tablet:w-28 flex flex-row">
 			<img src={smallHeaderLogo} alt="trophy" />
@@ -59,28 +59,26 @@
 		<div class="hidden tablet:flex">
 			{#each routes as route}
 				{#if route.subRoute.length > 0}
-					<div class="relative flex"
-						on:mouseenter={() => isHoveringSeason = true}
-						on:mouseleave={() => isHoveringSeason = false}>
-						<a href={route.route.url}> 
-							<h5 class="navbtn">{route.route.name}</h5> 
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
+					<div class="relative flex" on:mouseenter={() => (isHoveringSeason = true)} on:mouseleave={() => (isHoveringSeason = false)}>
+						<a href={route.route.url}>
+							<h5 class="navbtn">{route.route.name}</h5>
 						</a>
 						{#if isHoveringSeason}
 							<div class="w-full p-1 rounded absolute top-[100%] left-1/2 -translate-x-1/2 bg-primary-color-light flex flex-col gap-2">
 								{#each route.subRoute as subRoute}
-									<a href={subRoute.url} class="p-1"> 
-										<h5>{subRoute.name}</h5> 
+									<a href={subRoute.url} class="p-1">
+										<h5>{subRoute.name}</h5>
 									</a>
 								{/each}
 							</div>
 						{/if}
 					</div>
 				{:else}
-					<a href={route.route.url}> 
-						<h5 class="navbtn">{route.route.name}</h5> 
+					<a href={route.route.url}>
+						<h5 class="navbtn">{route.route.name}</h5>
 					</a>
 				{/if}
-				
 			{/each}
 		</div>
 	</div>

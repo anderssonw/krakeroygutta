@@ -7,7 +7,7 @@ import { adminRoutes, loggedInRoutes } from '$lib/shared/routes';
 import { createServerClient } from '@supabase/ssr';
 import { type Handle, redirect } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { Database } from '$lib/types/database.generated.types';
+import type { Database } from '$lib/types/database.generated.types';
 
 const isLoggedInRoute = (pathname: string): boolean => {
 	if (pathname.length == 0) return false;
