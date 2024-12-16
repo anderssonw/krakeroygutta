@@ -3,10 +3,10 @@ import type { PageServerLoad } from './$types';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '$lib/types/database.generated.types';
 
-export const load: PageServerLoad = async ({ locals: { supabase }, parent, params }) => {
-	let { session, user } = await parent();
+export const load: PageServerLoad = async ({ locals: { supabase, getGuttaUser } }) => {
+	let user = await getGuttaUser();
 
-	if (session && user) {
+	if (user) {
 		const getPlayer = async (player_id: number, supabase: SupabaseClient<Database>) => {
 			if (player_id == -1) return null;
 			const { data: player, error: playerError } = await supabase.from('players').select().eq('id', player_id).single();

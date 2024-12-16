@@ -23,11 +23,11 @@
 				name: seasonFromParam.name
 			};
 		} else {
-			if(season) {
+			if (season) {
 				seasonOption = {
 					id: season.id,
 					name: season.name
-				}
+				};
 			}
 		}
 	});
@@ -55,7 +55,6 @@
 </script>
 
 <div class="structure">
-	<ReturnToRoute text="Tilbake til hovedadminside" route="/admin" />
 	<div class="w-3/5">
 		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
 	</div>
