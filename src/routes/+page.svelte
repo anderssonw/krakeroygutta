@@ -6,8 +6,10 @@
 	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
 	import crownTop from '$lib/assets/crown_top.png';
 	import crownBot from '$lib/assets/crown_bot.png';
+	import scrollImg from '$lib/assets/scroll1.png';
 
 	import type { PageData } from './$types';
+	import SnowAnimation from '$lib/components/common/SnowAnimation.svelte';
 	export let data: PageData;
 
 	$: ({ session } = data);
@@ -29,6 +31,8 @@
 </script>
 
 <div class="w-full overflow-x-hidden">
+	<SnowAnimation />
+
 	<div class="structure space-y-10">
 		<LargeLogo />
 
@@ -52,6 +56,22 @@
 		</div>
 
 		<div class="relative w-[90%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
+			<div class="relative flex justify-center">
+				<img src={scrollImg} alt="scroll" class="w-[80%] tablet:w-[60%]" />
+				<div class="absolute top-[100px] text-amber-700 italic font-bold">
+					<div>REGEL 1</div>
+					<div>REGEL 2</div>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<ContentFooter isLoggedIn={session != null} />
+</div>
+
+<!--
+<div class="relative w-[90%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
 			<img src={crownTop} alt="crown" />
 			<div>
 				<p class="text-center text-lg tablet:text-xl laptop:text-3xl">Regler</p>
@@ -79,10 +99,9 @@
 			</div>
 			<img src={crownBot} alt="crown" />
 		</div>
-	</div>
+-->
 
-	<ContentFooter isLoggedIn={session != null} />
-</div>
+<!-- <SnowAnimation /> -->
 
 <!-- Applies afterUpdate since y updates on scrolling -->
 <svelte:window bind:scrollY={y} />
