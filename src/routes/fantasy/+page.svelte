@@ -13,7 +13,7 @@
 	export let data: PageData;
 	const { fantasyTeam, allPlayers, season, allMatches, teamStats } = data;
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
-	$: playersWithPoints = getTotalPointsForPlayers(matches);
+	$: playersWithPoints = getTotalPointsForPlayers(matches, season);
 
 	export let form: ActionData;
 
