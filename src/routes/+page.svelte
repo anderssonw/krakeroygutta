@@ -12,8 +12,6 @@
 
 	$: ({ session, season } = data);
 
-	console.log(session);
-
 	// Apply animation/movement as a tailwind class
 	let curPitchInView = false;
 	$: pitchVisibleAnimation = `transition-all duration-500 ${curPitchInView ? 'opacity-100' : 'opacity-0'}`;
