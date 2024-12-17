@@ -1,7 +1,7 @@
-import { Actions, error } from '@sveltejs/kit';
+import { type Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { Tables, TablesUpdate } from '$lib/types/database.helper.types';
-import { PlayerWithStats } from './types';
+import type { Tables, TablesUpdate } from '$lib/types/database.helper.types';
+import { type PlayerWithStats } from './types';
 
 export const load: PageServerLoad = async ({ params, locals: { supabase }, parent }) => {
 	const { session, user } = await parent();

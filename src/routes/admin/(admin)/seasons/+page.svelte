@@ -64,11 +64,11 @@
 					<td>{getStatusFromSeasonTimes(season)}</td>
 					<td>
 						<div class="flex flex-row justify-evenly">
-							<form method="POST" action="?/update">
+							<div>
 								<button type="button" on:click={() => goto(`/admin/seasons/${season.id}`)}>
 									<EditIcon class="cursor-pointer" />
 								</button>
-							</form>
+							</div>
 							<form
 								method="POST"
 								action="?/delete"
