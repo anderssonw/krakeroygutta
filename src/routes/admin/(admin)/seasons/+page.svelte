@@ -2,14 +2,14 @@
 	import EditIcon from 'virtual:icons/mingcute/edit-line';
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
 
+	import { goto } from '$app/navigation';
+
 	import type { Tables } from '$lib/types/database.helper.types';
 
 	import type { PageData } from './$types';
 	import AdminSeasonInput from '$lib/components/admin/AdminSeasonInput.svelte';
 	import { enhance } from '$app/forms';
 	import type { MouseEventHandler } from 'svelte/elements';
-	import type { SeasonForm } from '$lib/types/newTypes';
-	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 
 	// Get server data
 	export let data: PageData;
@@ -39,40 +39,9 @@
 
 		return date.toISOString().split('T')[0];
 	};
-
-	$: modalSeason = {
-		id: -1,
-		name: '',
-		startTime: '',
-		endTime: '',
-		deadlineTime: '',
-		startingCurrency: -1
-	} satisfies SeasonForm;
-
-	const showSeasonEditModal = (season: Tables<'seasons'>): MouseEventHandler<HTMLButtonElement> | null | undefined => {
-		const dialog = document.querySelector('dialog');
-		modalSeason = {
-			id: season.id,
-			name: season.name,
-			startTime: season.start_time,
-			endTime: season.end_time,
-			deadlineTime: season.deadline_time,
-			startingCurrency: season.starting_currency
-		} satisfies SeasonForm;
-
-		dialog?.showModal();
-		return;
-	};
-
-	const closeSeasonEditModal = (): MouseEventHandler<HTMLButtonElement> | null | undefined => {
-		const dialog = document.querySelector('dialog');
-		dialog?.close();
-		return;
-	};
 </script>
 
 <div class="structure">
-	<ReturnToRoute text="Tilbake til adminhovedside" route={`/admin`} />
 	<h3>Nåværende sesonger</h3>
 	<table class="w-full">
 		<tr class="text-left">
@@ -95,17 +64,11 @@
 					<td>{getStatusFromSeasonTimes(season)}</td>
 					<td>
 						<div class="flex flex-row justify-evenly">
-							<form method="POST" action="?/update">
-								<dialog class="p-6 rounded-lg drop-shadow-lg bg-primary-color-light text-secondary-color-dark">
-									<div class="flex flex-col items-center">
-										<AdminSeasonInput season={modalSeason} />
-										<button class="mt-2 btn bg-red-500 w-[50%]" type="button" on:click={closeSeasonEditModal}>Avbryt</button>
-									</div>
-								</dialog>
-								<button type="button" on:click={showSeasonEditModal(season)}>
+							<div>
+								<button type="button" on:click={() => goto(`/admin/seasons/${season.id}`)}>
 									<EditIcon class="cursor-pointer" />
 								</button>
-							</form>
+							</div>
 							<form
 								method="POST"
 								action="?/delete"
@@ -131,6 +94,6 @@
 	<h3>Legg til ny sesong</h3>
 
 	<form class="form" method="POST" action="?/create" use:enhance>
-		<AdminSeasonInput />
+		<AdminSeasonInput id={null} />
 	</form>
 </div>

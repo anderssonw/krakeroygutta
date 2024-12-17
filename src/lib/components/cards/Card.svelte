@@ -1,13 +1,11 @@
 <script lang="ts">
 	import { CARD_SIZE, calculatePlayerStatAverage, getPlayerCardType } from '$lib/shared/playerCardFunctions';
-	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import TeamKit from '../common/TeamKit.svelte';
 	import currencyImg from '$lib/assets/currency.png';
 
 	export let player: FullPlayer | null;
 	export let card_size: CARD_SIZE;
-	export let season: Tables<'seasons'> | null;
 
 	$: playerStatAverage = calculatePlayerStatAverage(player);
 	$: cardType = getPlayerCardType(player, true);
@@ -41,8 +39,8 @@
 		<div class="relative w-full h-[53.2%]">
 			<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
 				<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
-				{#if season}
-					<TeamKit color={player?.team_color} />
+				{#if player.team_color}
+					<TeamKit color={player.team_color} />
 				{/if}
 			</div>
 
@@ -79,10 +77,10 @@
 				</div>
 			</div>
 
-			{#if season}
+			{#if player.price}
 				<div class="flex flex-row items-center justify-center space-x-1 {cardSizing.currency_space_y}">
 					<div class="font-stats tracking-[-.05em] font-bold {cardSizing.stats_value}">
-						{player?.price}
+						{player.price}
 					</div>
 					<div class={cardSizing.currency_size}>
 						<img src={currencyImg} alt="currency" />

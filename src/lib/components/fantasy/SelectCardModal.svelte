@@ -29,6 +29,7 @@
 {#if hasCardSelected}
 	<div class="fixed bottom-0 top-0 right-0 left-0 z-50 bg-black/90">
 		<div class="fixed top-20 right-20 hover:cursor-pointer">
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<h3
 				on:mouseup={() => {
 					fantasyForm.selectedCardPosition = -1;
@@ -40,9 +41,11 @@
 		<div class="max-w-screen-laptop h-3/4 px-4 tablet:px-8 rounded-lg fixed m-auto inset-x-0 inset-y-0 overflow-y-scroll">
 			<div class="w-full flex flex-row flex-wrap gap-4 tablet:gap-8 justify-around tablet:justify-center">
 				{#each playersNotInForm as player}
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<div class="clickable-card hidden tablet:block" on:mouseup={() => buyPlayer(player)}>
 						<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
 					</div>
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<div class="clickable-card block tablet:hidden" on:mouseup={() => buyPlayer(player)}>
 						<Card {player} card_size={CARD_SIZE.SMALL} {season} />
 					</div>

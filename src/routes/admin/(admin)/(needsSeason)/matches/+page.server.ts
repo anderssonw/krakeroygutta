@@ -1,4 +1,4 @@
-import type { Tables, TablesInsert } from '$lib/types/database.helper.types';
+import type { TablesInsert } from '$lib/types/database.helper.types';
 import { error } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
