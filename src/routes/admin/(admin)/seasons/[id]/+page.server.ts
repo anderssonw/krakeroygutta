@@ -73,8 +73,12 @@ export const actions = {
 					devHelper: '/admin/seasons updating season'
 				});
 			}
+
+			return { success: true };
 		}
 
-		return { success: true };
+		throw error(400, {
+			message: 'Mangler data for å oppdatere sesong'
+		});
 	}
 } satisfies Actions;

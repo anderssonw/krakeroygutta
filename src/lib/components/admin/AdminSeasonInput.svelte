@@ -10,6 +10,7 @@
 </script>
 
 <div class="form-structure">
+	<input name="seasonId" type="hidden" value={id} />
 	<TextField header="Navn på sesong" label="seasonName" type="text" placeholder="Vinter 2024" value={name} />
 	<TextField header="Pengesekk" label="seasonStartingCurrency" type="number" placeholder={'25000'} value={startingCurrency} />
 	<TextField header="Startdato" label="seasonStart" type="datetime-local" value={startTime} />
