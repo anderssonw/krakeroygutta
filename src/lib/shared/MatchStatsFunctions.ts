@@ -96,12 +96,14 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 export const getTotalPointsForPlayers = (matches: MatchStatsQuery[], season: Tables<'seasons'> | null) => {
 	let playerPointsMap: number[] = [];
 
-	const victoryPoints = season ? season.points_per_win : 3;
-	const cleanSheetPoints = season ? season.points_per_clean_sheet : 1;
+	if (!season) return playerPointsMap;
 
-	const goalPointFactor = season ? season.points_per_goal : 3;
-	const assistPointFactor = season ? season.points_per_assist : 2;
-	const clutchPointFactor = season ? season.points_per_clutch : 1;
+	const victoryPoints = season.points_per_win;
+	const cleanSheetPoints = season.points_per_clean_sheet;
+
+	const goalPointFactor = season.points_per_goal;
+	const assistPointFactor = season.points_per_assist;
+	const clutchPointFactor = season.points_per_clutch;
 
 	// Initialise all players in the playerPointsMap
 	matches.forEach((match) => {

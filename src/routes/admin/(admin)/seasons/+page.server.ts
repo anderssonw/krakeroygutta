@@ -15,7 +15,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 			});
 		}
 
-		return { seasons: seasons };
+		return { seasons };
 	}
 
 	return { seasons: [] };
