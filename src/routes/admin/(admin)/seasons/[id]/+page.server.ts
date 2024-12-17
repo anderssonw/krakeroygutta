@@ -1,6 +1,7 @@
 import { Actions, error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { TablesUpdate } from '$lib/types/database.helper.types';
+import { Tables, TablesUpdate } from '$lib/types/database.helper.types';
+import { PlayerWithStats } from './types';
 
 export const load: PageServerLoad = async ({ params, locals: { supabase }, parent }) => {
 	const { session, user } = await parent();
@@ -15,34 +16,29 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 			});
 		}
 
-		const { data: players } = await supabase.from('players').select();
-		// .select('*, players_seasons(attack, defence, physical, morale, price, skill)')
-		// .eq('players_seasons.season_id', params.id);
+		const { data: players } = await supabase.from('players').select('*, players_seasons(*)').eq('players_seasons.season_id', params.id);
 
-		// type PlayersWithStats = QueryData<typeof playersWithStatsQuery>;
-		// const { data } = await playersWithStatsQuery;
-		// const players: PlayersWithStats | null = data;
-
-		const players_with_stats = players?.map((player) => {
-			const stats = player.players_seasons[0];
+		const playersWithStats = players?.map((player): PlayerWithStats => {
+			const stats: Tables<'players_seasons'> | null = player.players_seasons[0];
 
 			return {
+				id: player.id,
 				name: player.name,
-				isInSeason: stats == null,
+				isInSeason: stats != null,
 				stats: {
-					attack: stats.attack || 0,
-					defence: stats.defence || 0,
-					physical: stats.physical || 0,
-					morale: stats.morale || 0,
-					skill: stats.skill || 0,
-					price: stats.price || 0
+					attack: stats?.attack || 0,
+					defence: stats?.defence || 0,
+					physical: stats?.physical || 0,
+					morale: stats?.morale || 0,
+					skill: stats?.skill || 0,
+					price: stats?.price || 0
 				}
 			};
 		});
 
 		return {
 			season,
-			players: players_with_stats
+			players: playersWithStats
 		};
 	}
 
