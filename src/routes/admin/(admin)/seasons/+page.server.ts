@@ -74,38 +74,6 @@ export const actions = {
 		return { success: true };
 	},
 
-	update: async ({ request, locals: { supabase } }) => {
-		const formData = await request.formData();
-
-		const seasonId = Number(formData.get('seasonId'));
-		const seasonName = formData.get('seasonName')?.toString();
-		const seasonStart = formData.get('seasonStart')?.toString();
-		const seasonDeadline = formData.get('seasonDeadline')?.toString();
-		const seasonEnd = formData.get('seasonEnd')?.toString();
-		const startingCurrency = Number(formData.get('seasonStartingCurrency'));
-
-		if (seasonId && seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency) {
-			const seasonForm: TablesUpdate<'seasons'> = {
-				name: seasonName,
-				start_time: seasonStart,
-				deadline_time: seasonDeadline,
-				end_time: seasonEnd,
-				starting_currency: startingCurrency
-			};
-
-			const { error: updateError } = await supabase.from('seasons').update(seasonForm).eq('id', seasonId);
-
-			if (updateError) {
-				throw error(500, {
-					message: updateError.message,
-					devHelper: '/admin/seasons updating season'
-				});
-			}
-		}
-
-		return { success: true };
-	},
-
 	delete: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
 
