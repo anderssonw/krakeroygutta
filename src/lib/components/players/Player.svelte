@@ -8,8 +8,8 @@
 </script>
 
 <div class="relative w-full h-64 tablet:h-80 laptop:h-96 {cardBackType}">
-	<div class="w-52 tablet:w-64 laptop:w-80 absolute bottom-0 left-1/2 -translate-x-1/2">
-		<img src={player.image} alt="head" />
+	<div class="{player.inform_image ? 'w-40 tablet:w-48 laptop:w-60' : 'w-54 tablet:w-64 laptop:w-80'} absolute bottom-0 left-1/2 -translate-x-1/2">
+		<img src={player.inform_image ? player.inform_image : player.image} alt="head" />
 	</div>
 </div>
 

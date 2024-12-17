@@ -35,7 +35,7 @@
 </script>
 
 {#if player}
-	<div class="{cardType} {cardSizing.width} {cardSizing.height} text-primary-color">
+	<div class="{cardType} {cardSizing.width} {cardSizing.height} {player.inform_image ? 'text-tertiary-color' : 'text-primary-color'}">
 		<div class="relative w-full h-[53.2%]">
 			<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
 				<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
@@ -44,8 +44,8 @@
 				{/if}
 			</div>
 
-			<div class="w-[60%] absolute bottom-0 right-[5%] flex flex-col items-center">
-				<img src={player.image} alt="head" />
+			<div class="{player.inform_image ? 'w-[50%] right-[10%]' : 'w-[60%] right-[5%]'} absolute bottom-0 flex flex-col items-center">
+				<img src={player.inform_image ? player.inform_image : player.image} alt="head" />
 			</div>
 		</div>
 

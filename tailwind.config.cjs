@@ -5,6 +5,7 @@ const config = {
 	theme: {
 		// Use 'tablet' and 'laptop' instead of 'sm' and 'lg'
 		screens: {
+			mobile: '512px',
 			tablet: '768px',
 			laptop: '1024px'
 		},
@@ -21,6 +22,9 @@ const config = {
 					light: '#f0f0f0',
 					DEFAULT: '#e8e8e8',
 					dark: '#d8d8d8'
+				},
+				'tertiary-color': {
+					DEFAULT: '#D4AF37'
 				},
 				'team-green': '#2E8B57',
 				'team-red': '#DC143C',
