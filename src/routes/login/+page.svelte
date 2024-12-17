@@ -1,10 +1,13 @@
 <script lang="ts">
 	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
+	import SnowAnimation from '$lib/components/common/SnowAnimation.svelte';
 	import type { ActionData } from './$types';
 	export let form: ActionData;
 </script>
 
 <div class="structure">
+	<SnowAnimation />
+
 	<LargeLogo />
 
 	<h3>Logg inn / Registrer deg med Google</h3>

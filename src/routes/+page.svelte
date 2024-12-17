@@ -4,9 +4,7 @@
 	import ContentFooter from '$lib/components/index/ContentFooter.svelte';
 	import { isInViewport } from '$lib/shared/isInView';
 	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
-	import crownTop from '$lib/assets/crown_top.png';
-	import crownBot from '$lib/assets/crown_bot.png';
-	import scrollImg from '$lib/assets/scroll1.png';
+	import scrollImg from '$lib/assets/ruleScroll.png';
 
 	import type { PageData } from './$types';
 	import SnowAnimation from '$lib/components/common/SnowAnimation.svelte';
@@ -55,12 +53,35 @@
 			</div>
 		</div>
 
-		<div class="relative w-[90%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
+		<div class="relative w-[100%] mobile:w-[80%] tablet:w-[60%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
 			<div class="relative flex justify-center">
-				<img src={scrollImg} alt="scroll" class="w-[80%] tablet:w-[60%]" />
-				<div class="absolute top-[100px] text-amber-700 italic font-bold">
-					<div>REGEL 1</div>
-					<div>REGEL 2</div>
+				<img src={scrollImg} alt="scroll" class="w-[100%]" />
+				<div class="absolute top-[75px] text-amber-700 italic font-serif">
+					<div class="w-[75%] laptop:w-[60%] m-auto">
+						<p class="text-center text-base tablet:text-l laptop:text-2xl font-bold">Regler</p>
+
+						<ol class="list-decimal list-inside flex flex-col gap-4">
+							<li class="text-2xs tablet:text-sm laptop:text-base">
+								Poengfordelingen lyder:
+								<ul class="list-disc list-inside pl-4">
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">3 poeng ved seier</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">3 poeng ved mål</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">2 poeng ved assist</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">1 poeng ved clean sheet</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">1 poeng ved c-moment</li>
+								</ul>
+							</li>
+							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
+								Alle lag skal ha en førings-ansvarlig. Disse står ansvarlig for å føre mål, assists og selvfølgelig C-momenter. Ved C-momenter
+								er det føringsansvarlig, gjerne med bistand fra resten av gutta, som har til rådighet å gi poeng for vel... C-momenter
+							</li>
+							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
+								Det skal etter beste evne konsumeres én enhet a 0.33L ved hver kamp spilt. Husk at banespy fort gjelder som C-moment! (Og
+								poentiselt værre fysikk-score ved neste års Fantasy)
+							</li>
+							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">Når du velger laget ditt skal du også velge en kaptein. Kapteinen din vil få doblet score blant alle poenggivninger</li>
+						</ol>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -69,39 +90,6 @@
 
 	<ContentFooter isLoggedIn={session != null} />
 </div>
-
-<!--
-<div class="relative w-[90%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
-			<img src={crownTop} alt="crown" />
-			<div>
-				<p class="text-center text-lg tablet:text-xl laptop:text-3xl">Regler</p>
-				<ol class="list-decimal list-inside flex flex-col gap-4">
-					<li>
-						Poengfordelingen lyder:
-						<ul class="list-disc list-inside pl-4">
-							<li>3 poeng ved seier</li>
-							<li>3 poeng ved mål</li>
-							<li>2 poeng ved assist</li>
-							<li>1 poeng ved clean sheet</li>
-							<li>1 poeng ved c-moment</li>
-						</ul>
-					</li>
-					<li>
-						Alle lag skal ha en førings-ansvarlig. Disse står ansvarlig for å føre mål, assists og selvfølgelig C-momenter. Ved C-momenter
-						er det føringsansvarlig, gjerne med bistand fra resten av gutta, som har til rådighet å gi poeng for vel... C-momenter
-					</li>
-					<li>
-						Det skal etter beste evne konsumeres én enhet a 0.33L ved hver kamp spilt. Husk at banespy fort gjelder som C-moment! (Og
-						poentiselt værre fysikk-score ved neste års Fantasy)
-					</li>
-					<li>Når du velger laget ditt skal du også velge en kaptein. Kapteinen din vil få doblet score blant alle poenggivninger</li>
-				</ol>
-			</div>
-			<img src={crownBot} alt="crown" />
-		</div>
--->
-
-<!-- <SnowAnimation /> -->
 
 <!-- Applies afterUpdate since y updates on scrolling -->
 <svelte:window bind:scrollY={y} />

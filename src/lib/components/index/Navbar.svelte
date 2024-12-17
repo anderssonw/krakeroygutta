@@ -4,7 +4,7 @@
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type MainRoute, } from '$lib/shared/routes';
-	import smallHeaderLogo from '$lib/assets/headerSmall.png';
+	import smallHeaderLogo from '$lib/assets/headerSmallXmas.png';
 
 	import HamburgerIcon from 'virtual:icons/mdi/hamburger-menu';
 
