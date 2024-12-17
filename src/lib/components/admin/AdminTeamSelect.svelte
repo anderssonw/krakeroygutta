@@ -20,12 +20,14 @@
 	export let id: string;
 </script>
 
-<label class="my-2" for={id}>{label}</label>
-<select class="rounded-md py-2 bg-inherit border-2" {id} name={id} bind:value>
-	<option class="text-primary-color-dark" value={undefined}>Velg lag</option>
-	{#each teams as team}
-		<option class="text-primary-color-dark" value={team.id}>
-			{team.name}
-		</option>
-	{/each}
-</select>
+<div class="flex flex-col">
+	<label class="my-2" for={id}>{label}</label>
+	<select class="rounded-md py-2 bg-inherit border-2" {id} name={id} bind:value>
+		<option class="text-primary-color-dark" value={undefined}>Velg lag</option>
+		{#each teams as team}
+			<option class="text-primary-color-dark" value={team.id}>
+				{team.name}
+			</option>
+		{/each}
+	</select>
+</div>

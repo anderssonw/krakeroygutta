@@ -52,77 +52,72 @@
 		{#await teams}
 			<p>Laster</p>
 		{:then teams}
-			<AdminTeamSelect
-				id="teamHomeId"
-				label="Velg Hjemmelag"
-				teams={getAvailableTeams(teams, matchForm.teamHomeId)}
-				bind:value={matchForm.teamHomeId}
-			/>
-			{#if form?.create?.errors['teamHomeId']}
-				<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
-			{/if}
-			<AdminTeamSelect
-				id="teamAwayId"
-				label="Velg Bortelag"
-				teams={getAvailableTeams(teams, matchForm.teamAwayId)}
-				bind:value={matchForm.teamAwayId}
-			/>
-			{#if form?.create?.errors['teamAwayId']}
-				<p class="text-red-400">{form.create.errors['teamAwayId']}</p>
-			{/if}
-			<input hidden name="seasonId" value={seasonId} />
+			<div class="flex gap-2 flex-grow justify-between">
+				<AdminTeamSelect
+					id="teamHomeId"
+					label="Velg Hjemmelag"
+					teams={getAvailableTeams(teams, matchForm.teamHomeId)}
+					bind:value={matchForm.teamHomeId}
+				/>
+				{#if form?.create?.errors['teamHomeId']}
+					<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
+				{/if}
+				<AdminTeamSelect
+					id="teamAwayId"
+					label="Velg Bortelag"
+					teams={getAvailableTeams(teams, matchForm.teamAwayId)}
+					bind:value={matchForm.teamAwayId}
+				/>
+				{#if form?.create?.errors['teamAwayId']}
+					<p class="text-red-400">{form.create.errors['teamAwayId']}</p>
+				{/if}
+				<input hidden name="seasonId" value={seasonId} />
+			</div>
 
 			<button class="btn bg-green-400 mt-4">Opprett Kamp</button>
 		{:catch error}
 			<p>Noe gikk galt</p>
 		{/await}
 	</form>
-	<div class="w-full px-4">
+	<div class="structure px-4">
 		{#await matches}
 			<p>Henter Kamper</p>
 		{:then matches}
 			{#if matches.length === 0}
 				<p>Ingen Kamper for denne sesongen</p>
 			{:else}
-				<div class="flex flex-row justify-between">
-					<div class="grid grid-cols-7 w-[85%] py-2 border-b">
-						<div class="col-span-1">
-							<h5 class="font-semibold">ID</h5>
-						</div>
-						<div class="col-span-3">
-							<h5 class="font-semibold">Hjemmelag</h5>
-						</div>
-						<div class="col-span-3">
-							<h5 class="font-semibold">Bortelag</h5>
-						</div>
-					</div>
-					<div />
-				</div>
-				{#each matches.sort((a, b) => {
-					return a.id - b.id;
-				}) as match}
-					<div class="flex flex-row justify-between">
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<!-- svelte-ignore a11y-no-static-element-interactions -->
-						<div class="grid grid-cols-7 w-[85%] py-4 border-b cursor-pointer" on:click={() => goto(`${$page.url.pathname}/${match.id}`)}>
-							<div class="col-span-1">
-								<p>{match.id}</p>
-							</div>
-							<div class="col-span-3">
-								<p>{match.team_home?.name}</p>
-							</div>
-							<div class="col-span-3">
-								<p>{match.team_away?.name}</p>
-							</div>
-						</div>
-						<form class="flex justify-between items-center" method="POST" action="?/delete-match" use:enhance>
-							<input hidden name="id" value={match.id} />
-							<button class="py-0 px-2">
-								<DeleteIcon class="cursor-pointer" />
-							</button>
-						</form>
-					</div>
-				{/each}
+				<table class="w-2/3">
+					<tr class="text-left">
+						<th>Hjemmelag</th>
+						<th>Score</th>
+						<th>Bortelag</th>
+						<th />
+					</tr>
+
+					{#each matches.sort((a, b) => {
+						return b.id - a.id;
+					}) as match}
+						<tr>
+							<td>{match.team_home?.name}</td>
+							<td>0-0</td>
+							<td>{match.team_away?.name}</td>
+							<td>
+								<div class="flex gap-2">
+									<button on:click={() => goto(`${$page.url.pathname}/${match.id}`)}>
+										<MagnifierIcon style="font-size: 1.2em" class="cursor-pointer" />
+									</button>
+
+									<form method="POST" action="?/delete-match" use:enhance>
+										<button>
+											<input hidden name="id" value={match.id} />
+											<DeleteIcon style="font-size: 1.2em" class="cursor-pointer" />
+										</button>
+									</form>
+								</div>
+							</td>
+						</tr>
+					{/each}
+				</table>
 			{/if}
 		{:catch error}
 			<p>Noe gikk galt!</p>
