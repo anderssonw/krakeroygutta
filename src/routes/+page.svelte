@@ -55,7 +55,6 @@
 			</div>
 		</div>
 
-		{#if season}
 		<div class="relative w-[100%] mobile:w-[80%] tablet:w-[60%] {pitchVisibleAnimation}" bind:this={animatedPitch}>
 			<div class="relative flex justify-center">
 				<img src={scrollImg} alt="scroll" class="w-[100%]" />
@@ -67,11 +66,11 @@
 							<li class="text-2xs tablet:text-sm laptop:text-base">
 								Poengfordelingen lyder:
 								<ul class="list-disc list-inside pl-4">
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season.points_per_win} poeng ved seier</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season.points_per_goal} poeng ved mål</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season.points_per_assist} poeng ved assist</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season.points_per_clean_sheet} poeng ved clean sheet</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season.points_per_clutch} poeng ved c-moment</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_win ?? 1} poeng ved seier</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_goal ?? 1} poeng ved mål</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_assist ?? 1} poeng ved assist</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_clean_sheet ?? 1} poeng ved clean sheet</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_clutch ?? 1} poeng ved c-moment</li>
 								</ul>
 							</li>
 							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
@@ -88,7 +87,6 @@
 				</div>
 			</div>
 		</div>
-		{/if}
 		
 	</div>
 
