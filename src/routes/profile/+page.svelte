@@ -1,10 +1,75 @@
 <script lang="ts">
+	import Card from '$lib/components/cards/Card.svelte';
+	import { accordion } from '$lib/hooks/accordion';
+	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
+	import type { FullPlayer } from '$lib/types/newTypes';
 	import type { ActionData, PageData } from './$types';
+	import ArrowUpIcon from 'virtual:icons/ph/arrow-up';
+	import ArrowDownIcon from 'virtual:icons/ph/arrow-down';
 
 	// Get server data
 	export let data: PageData;
 	export let form: ActionData;
-	$: ({ player, user } = data);
+	$: ({ player, seasons, user } = data);
+
+	$: playerSeasonsWithCardDate = (): FullPlayer[] => {
+		if (!player) return [];
+
+		// Gjøre denne litt mer robust, sortering er kun på sesongens ID nå
+		const playerSeasons = player.players_seasons.sort((a, b) => b.season_id - a.season_id);
+
+		return playerSeasons.map((playerSeason) => {
+			return {
+				player_id: player.id,
+				name: player.name,
+				image: player.image,
+				attack: playerSeason.attack,
+				defence: playerSeason.defence,
+				morale: playerSeason.morale,
+				physical: playerSeason.physical,
+				price: playerSeason.price,
+				skill: playerSeason.skill,
+				season_id: playerSeason.season_id
+			} as FullPlayer;
+		});
+	};
+
+	$: sortedSeasons =
+		seasons?.sort((a, b) => {
+			return new Date(b.start_time).getTime() - new Date(a.start_time).getTime();
+		}) || [];
+
+	$: getCurrentSeasonCard = () => {
+		const currentSeason = sortedSeasons.at(0);
+
+		if (!currentSeason) return null;
+
+		return {
+			player: playerSeasonsWithCardDate().find((playerSeason) => {
+				return playerSeason.season_id === currentSeason.id;
+			}),
+			season: currentSeason
+		};
+	};
+
+	$: currentSeasonCard = getCurrentSeasonCard();
+
+	$: getOtherSeasonCards = () => {
+		const otherSeasons = sortedSeasons.slice(1);
+
+		return otherSeasons.map((season) => {
+			return {
+				player: playerSeasonsWithCardDate().find((playerSeason) => {
+					return playerSeason.season_id === season.id;
+				}),
+				season
+			};
+		});
+	};
+
+	$: otherSeasonCards = getOtherSeasonCards();
+
+	let openSeasons = false;
 </script>
 
 <div class="flex flex-col items-center py-8">
@@ -15,9 +80,32 @@
 			<div class="flex flex-col items-center space-y-4">
 				<h1>Hei {user.nickname}!</h1>
 				{#if player}
-					<h3>Brukernavn: {user.nickname}</h3>
-					<h3>Din id: {player.id}</h3>
-					<img class="h-64" src={player.image} alt="head" />
+					{#if currentSeasonCard?.player}
+						<h2>Spillerkort for sesong - {currentSeasonCard.season.name}</h2>
+						<Card card_size={CARD_SIZE.LARGE} player={currentSeasonCard.player} />
+					{/if}
+					{#if otherSeasonCards}
+						<button class="border-b-2" on:click={() => (openSeasons = !openSeasons)}>
+							<div class="text-lg flex flex-row align-middle py-4 gap-2">
+								Se tidligere sesonger
+								{#if openSeasons}
+									<ArrowUpIcon />
+								{:else}
+									<ArrowDownIcon />
+								{/if}
+							</div>
+						</button>
+						<div class="flex flex-row gap-8" use:accordion={openSeasons}>
+							{#each otherSeasonCards as playerSeason}
+								{#if playerSeason.player}
+									<div class="flex flex-col gap-4 items-center">
+										<h3 class="text-s w-40 text-center">{playerSeason.season.name}</h3>
+										<Card card_size={CARD_SIZE.MEDIUM} player={playerSeason.player} />
+									</div>
+								{/if}
+							{/each}
+						</div>
+					{/if}
 				{:else}
 					<p>Du har ikke en spiller knyttet til profilen din. Kontakt Magnus eller William for å gjøre dette.</p>
 				{/if}
