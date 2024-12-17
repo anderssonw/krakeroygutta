@@ -125,10 +125,10 @@ export interface FullPlayer {
 	morale: number;
 	physical: number;
 	skill: number;
-	price: number;
-	team_color: string;
-	team_id: number;
-	season_id: number;
+	price: number | null;
+	team_color: string | null;
+	team_id: number | null;
+	season_id: number | null;
 	points?: number;
 }
 
@@ -162,4 +162,3 @@ export interface StandardPlayer {
 	name: string;
 	image: string;
 }
-

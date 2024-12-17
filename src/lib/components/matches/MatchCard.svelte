@@ -6,6 +6,7 @@
 	import MatchCardTeamHeader from './MatchCardTeamHeader.svelte';
 	import MatchCardVersus from './MatchCardVersus.svelte';
 	import type { MatchStatsPlayer, MatchStatsQuery, MatchStatsTeam } from '$lib/types/newTypes';
+	import { accordion } from '$lib/hooks/accordion';
 
 	export let cardOpen: boolean = false;
 
@@ -23,37 +24,6 @@
 
 		return `${homeGoals} - ${awayGoals}`;
 	};
-
-	function accordion(node: HTMLDivElement, isOpen: boolean) {
-		let initialHeight = node.offsetHeight;
-
-		// Høyden her blir feil hvis man endrer fra mobil-bredde til laptopbredde
-		node.style.height = isOpen ? 'fit-content' : '0';
-		node.style.overflow = 'hidden';
-		return {
-			update(isOpen: any) {
-				let animation = node.animate(
-					[
-						{
-							height: initialHeight + 'px',
-							overflow: 'hidden'
-						},
-						{
-							height: 0,
-							overflow: 'hidden'
-						}
-					],
-					{ duration: 300, fill: 'both', easing: 'ease-in-out' }
-				);
-				animation.pause();
-				if (!isOpen) {
-					animation.play();
-				} else {
-					animation.reverse();
-				}
-			}
-		};
-	}
 </script>
 
 <div class="flex flex-col items-center bg-team-white text-black rounded-lg mx-4">
