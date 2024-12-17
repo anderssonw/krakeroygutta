@@ -99,7 +99,7 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[], season: Tab
 	const victoryPoints = season ? season.points_per_win : 3;
 	const cleanSheetPoints = season ? season.points_per_clean_sheet : 1;
 
-	const goalPointFactor = season ? season.points_per_goal : 3;;
+	const goalPointFactor = season ? season.points_per_goal : 3;
 	const assistPointFactor = season ? season.points_per_assist : 2;
 	const clutchPointFactor = season ? season.points_per_clutch : 1;
 
