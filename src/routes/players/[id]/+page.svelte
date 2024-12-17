@@ -8,7 +8,7 @@
 	// Get server data
 	export let data: PageData;
 	$: ({ playerVersions, allMatches, teamStats, season } = data);
-	$: player = playerVersions?.find(version => version.season_id == season?.id);
+	$: player = playerVersions?.find((version) => version.season_id == season?.id);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 	$: seasonStatsArr = fillSeasonMapWithStatsForPlayer(matches, playerVersions ?? []);
 
@@ -19,7 +19,7 @@
 	<div class="structure">
 		<Player {player} />
 
-		<button class="btn" on:click={() => showStats = !showStats}> Vis statistikk </button>
+		<button class="btn" on:click={() => (showStats = !showStats)}> Vis statistikk </button>
 
 		{#if showStats}
 			{#each seasonStatsArr as seasonStats}
@@ -35,6 +35,8 @@
 						<IconStats amount={seasonStats.clean_sheets} large={true} icon={'cleansheet'} />
 					</div>
 				</div>
+			{:else}
+				<p>Ingen statistikk å vise</p>
 			{/each}
 		{/if}
 	</div>
