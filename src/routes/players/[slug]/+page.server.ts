@@ -76,9 +76,9 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		
 
 		return { 
-			playerVersions: getPlayersForSeason(parseInt(params.slug), supabase),
-			allMatches: getMatchesForSeason(supabase),
-			teamStats: getTeamStatsSeason(supabase)
+			playerVersions: await getPlayersForSeason(parseInt(params.slug), supabase),
+			allMatches: await getMatchesForSeason(supabase),
+			teamStats: await getTeamStatsSeason(supabase)
 		}
 
 	}

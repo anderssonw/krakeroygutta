@@ -32,6 +32,10 @@
 		if (card_size == CARD_SIZE.MEDIUM) return medium_opt;
 		return small_opt;
 	};
+	const getLastName = (player: FullPlayer) => {
+		const lastName = player.name.split(' ')[1];
+		return 	lastName.split('-')[0];
+	}
 </script>
 
 {#if player}
@@ -51,7 +55,7 @@
 
 		<div class="relative w-full h-[46.8%]">
 			<div class="w-full flex flex-col items-center {cardSizing.stat_gap_y}">
-				<div class="{cardSizing.name} font-semibold">{player.name.split(' ')[1]}</div>
+				<div class="{cardSizing.name} font-semibold">{getLastName(player)}</div>
 
 				<div class="grid grid-cols-5 {cardSizing.stat_gap_x}">
 					<div class="flex flex-col items-center">

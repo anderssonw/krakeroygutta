@@ -17,16 +17,23 @@ export const mapTeamStats = (matches: MatchesWithSeasonName[], teamStats: MatchS
 			let home_team = teamStats.find((ts) => ts.team_id == match.team_home_id && ts.match_id == match.id);
 			let away_team = teamStats.find((ts) => ts.team_id == match.team_away_id && ts.match_id == match.id);
 
-			if (home_team && away_team) {
-				let matchStatsQuery: MatchStatsQuery = {
-					match_id: match.id,
-					season_id: match.season_id,
-					season_name: match.season_name.name,
-					home_team: home_team,
-					away_team: away_team
-				};
-				matchStatsQueries.push(matchStatsQuery);
+			const emptyStatTeam: MatchStatsTeam = {
+				match_id: match.id,
+				team_id: 0,
+				name: '',
+				color: '',
+				players: [],
+				season_id: match.season_id
 			}
+
+			let matchStatsQuery: MatchStatsQuery = {
+				match_id: match.id,
+				season_id: match.season_id,
+				season_name: match.season_name.name,
+				home_team: home_team ? home_team : emptyStatTeam,
+				away_team: away_team ? away_team : emptyStatTeam
+			};
+			matchStatsQueries.push(matchStatsQuery);
 		});
 		return matchStatsQueries;
 	} else {
@@ -153,15 +160,17 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[], season: Tab
 	return playerPointsMap;
 };
 
-export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: MatchStatsQuery[]) => {
-	const victoryPoints = 3;
-	const cleanSheetPoints = 1;
-
-	const goalPointFactor = 3;
-	const assistPointFactor = 2;
-	const clutchPointFactor = 1;
-
+export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: MatchStatsQuery[], season: Tables<'seasons'> | null) => {
 	const playerMap = new Map<number, PlayerStatsSeasonSummary>();
+
+	if (!season) return [];
+
+	const victoryPoints = season.points_per_win;
+	const cleanSheetPoints = season.points_per_clean_sheet;
+
+	const goalPointFactor = season.points_per_goal;
+	const assistPointFactor = season.points_per_assist;
+	const clutchPointFactor = season.points_per_clutch;
 
 	// Initialise all players in the playerPointsMap
 	players.forEach((player) => {

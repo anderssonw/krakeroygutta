@@ -24,7 +24,9 @@ const config = {
 					dark: '#d8d8d8'
 				},
 				'tertiary-color': {
-					DEFAULT: '#D4AF37'
+					light: '#d9b74c',
+					DEFAULT: '#D4AF37',
+					dark: '#c7a22b'
 				},
 				'team-green': '#2E8B57',
 				'team-red': '#DC143C',

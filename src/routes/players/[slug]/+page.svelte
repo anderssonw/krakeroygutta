@@ -4,6 +4,11 @@
 	import { page } from '$app/stores';
 	import IconStats from '$lib/components/common/IconStats.svelte';
 	import { fillSeasonMapWithStatsForPlayer, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
+	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
+    import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
+    import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
+    import winIcon from '$lib/assets/stat_icons/win_icon.png';
+    import cleansheetIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
 
 	// Get server data
 	export let data: PageData;
@@ -11,32 +16,60 @@
 	$: player = playerVersions?.find(version => version.season_id == season?.id);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 	$: seasonStatsArr = fillSeasonMapWithStatsForPlayer(matches, playerVersions ?? []);
-
-	let showStats: boolean = false;
+	console.log(seasonStatsArr);
 </script>
 
 {#if player}
 	<div class="structure">
 		<Player {player} />
 
-		<button class="btn" on:click={() => showStats = !showStats}> Vis statistikk </button>
-
-		{#if showStats}
-			{#each seasonStatsArr as seasonStats}
-				<div class="w-full flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6 pb-12 border-b-4 border-secondary-light">
-					<h3>{seasonStats.season_name}</h3>
-					<div class="grid grid-cols-3 w-full tablet:w-2/3 pb-2 border-b-2">
-						<IconStats amount={seasonStats.goals} large={true} icon={'goal'} />
-						<IconStats amount={seasonStats.assists} large={true} icon={'assist'} />
-						<IconStats amount={seasonStats.clutches} large={true} icon={'clutch'} />
-					</div>
-					<div class="grid grid-cols-2 w-full tablet:w-2/3">
-						<IconStats amount={seasonStats.wins} large={true} icon={'win'} />
-						<IconStats amount={seasonStats.clean_sheets} large={true} icon={'cleansheet'} />
-					</div>
+		<div class="w-full bg-primary-color laptop:rounded-lg p-8 flex flex-col gap-8">
+			<div class="flex flex-row justify-between px-16">
+				<div class="flex flex-col items-center gap-2">
+					<div class="h-20"></div>
+					<div class="text-5xl">10</div>
+					<div class="text-base">kamper</div>
 				</div>
-			{/each}
-		{/if}
+				<div class="flex flex-col items-center gap-2"> 		
+					<div> <img class={'w-20'} src={winIcon} alt="seiere" /></div>
+					<div class="text-5xl">10</div>
+					<div class="text-base">seiere</div>
+				</div>
+				<div class="flex flex-col items-center gap-2">
+					<div> <img class={'w-20'} src={goalIcon} alt="goal" /></div>
+					<div class="text-5xl">10</div>
+					<div class="text-base">mål</div>
+				</div>
+				<div class="flex flex-col items-center gap-2">
+					<div> <img class={'w-20'} src={assistIcon} alt="assist" /></div>
+					<div class="text-5xl">10</div>
+					<div class="text-base">assist</div>
+				</div>
+			</div>
+
+			<div class="w-full rounded text-primary-color-dark border border-tertiary-color-dark">
+				<div class="bg-tertiary-color-light rounded-t grid grid-cols-8 border-t border-x border-primary-color-light">
+					<div class="border-b border-r border-primary-color-light p-4 col-span-2">Sesong</div>
+					<div class="border-b border-r border-primary-color-light p-4">Kamper</div>
+					<div class="border-b border-r border-primary-color-light p-4">Seiere</div>
+					<div class="border-b border-r border-primary-color-light p-4">Clean sheets</div>
+					<div class="border-b border-r border-primary-color-light p-4">Mål</div>
+					<div class="border-b border-r border-primary-color-light p-4">Assist</div>
+					<div class="border-b border-primary-color-light p-4">C-moment</div>
+				</div>
+				{#each seasonStatsArr as seasonStats, idx}
+					<div class="bg-secondary-color grid grid-cols-8 border-x border-primary-color-light odd:bg-secondary-color-dark last:border-b last:rounded-b">
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light p-4 col-span-2">{seasonStats.season_name}</div>
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light p-4">10</div>
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light p-4">{seasonStats.wins}</div>
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light p-4">{seasonStats.clean_sheets}</div>
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light p-4">{seasonStats.goals}</div>
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light p-4">{seasonStats.assists}</div>
+						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-primary-color-light p-4">{seasonStats.clutches}</div>
+					</div>
+				{/each}
+			</div>
+		</div>
 	</div>
 {:else}
 	<p>Fant ente spellern med id {$page.params.slug}</p>

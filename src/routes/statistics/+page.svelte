@@ -21,9 +21,9 @@
 	export let data: PageData;
 	// All of this stuff is also in admin/layout, not sure how to copy it over effectively just letting it stay for now
 
-	$: ({ seasons, lazy, players, allMatches, teamStats } = data);
+	$: ({ seasons, lazy, players, allMatches, teamStats, season } = data);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
-	$: playersWithStats = getTotalStatsForPlayer(players ?? [], matches);
+	$: playersWithStats = getTotalStatsForPlayer(players ?? [], matches, season);
 
 	$: seasonOption = null as DropdownOption | null;
 	$: setSeasonURL(seasonOption);
