@@ -6,7 +6,6 @@ export const actions = {
 
 		const redirectTo = `${url.origin}/auth/callback?next=/profile`;
 
-		console.log(`Redirect URL: ${redirectTo}`);
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
 			options: {

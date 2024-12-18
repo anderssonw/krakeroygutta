@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { MatchStatsTeam, MatchesWithSeasonName, StandardPlayer } from '$lib/types/newTypes';
+import type { MatchStatsTeam, MatchWithSeasonName, StandardPlayer } from '$lib/types/newTypes';
 
 export const load = (async ({ locals: { supabase }, url }) => {
 	const getFantasyTeamPlayersForSeason = async (seasonId: number) => {
@@ -51,7 +51,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 					`
 			)
 			.eq('season_id', seasonId)
-			.returns<MatchesWithSeasonName[]>();
+			.returns<MatchWithSeasonName[]>();
 
 		if (matchesError) {
 			throw error(500, {

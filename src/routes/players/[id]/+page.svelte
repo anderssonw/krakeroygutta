@@ -13,7 +13,7 @@
 	// Get server data
 	export let data: PageData;
 	$: ({ playerVersions, allMatches, teamStats, season } = data);
-	$: player = playerVersions?.find(version => version.season_id == season?.id);
+	$: player = playerVersions?.find((version) => version.season_id == season?.id);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 	$: seasonStatsArr = fillSeasonMapWithStatsForPlayer(matches, playerVersions ?? []);
 	console.log(seasonStatsArr);

@@ -40,7 +40,7 @@ export interface MatchStatsQuery {
 	home_team: MatchStatsTeam;
 	away_team: MatchStatsTeam;
 }
-export interface MatchesWithSeasonName extends Tables<'matches'> {
+export interface MatchWithSeasonName extends Tables<'matches'> {
 	season_name: SeasonForm;
 }
 

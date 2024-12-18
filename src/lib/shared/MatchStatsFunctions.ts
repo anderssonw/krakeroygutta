@@ -3,14 +3,14 @@ import type {
 	FullPlayer,
 	MatchStatsQuery,
 	MatchStatsTeam,
-	MatchesWithSeasonName,
+	MatchWithSeasonName,
 	PlayerStatsSeason,
 	PlayerStatsSeasonSummary,
 	StandardPlayer,
 	TeamWithStats
 } from '$lib/types/newTypes';
 
-export const mapTeamStats = (matches: MatchesWithSeasonName[], teamStats: MatchStatsTeam[]): MatchStatsQuery[] => {
+export const mapTeamStats = (matches: MatchWithSeasonName[], teamStats: MatchStatsTeam[]): MatchStatsQuery[] => {
 	if (matches.length > 0 && teamStats.length > 0) {
 		let matchStatsQueries: MatchStatsQuery[] = [];
 		matches.forEach((match) => {
