@@ -1,6 +1,6 @@
 INSERT INTO seasons (name, start_time, deadline_time, end_time, starting_currency)
 VALUES ('Cageball Høst 2023', '2023-11-16 12:00:00', '2023-11-18 14:30:00', '2023-11-19 18:00:00', 20000),
-       ('Julebord Futsalturnering 2023', '2024-12-1 18:00:00', '2024-12-21 12:00:00', '2024-12-24 18:00:00', 20000);
+       ('Julebord Futsalturnering 2024', '2024-12-1 18:00:00', '2024-12-21 12:00:00', '2024-12-24 18:00:00', 20000);
 
 INSERT INTO players (name, image)
 VALUES ('Wiliam Andersson', 'https://i.imgur.com/1ttlwn2.png'),
@@ -28,7 +28,7 @@ VALUES  (1, 1, 53, 61, 65, 70, 65, 4200),
         (8, 1, 68, 61, 64, 80, 82, 5100),
         (9, 1, 57, 71, 72, 71, 74, 4600),
         (10, 1, 75, 53, 68, 46, 93, 4500),
-        (13, 1, 84, 76, 95, 72, 78, 6500),
+        (13, 1, 70, 70, 70, 70, 70, 6500),
         (14, 1, 42, 51, 44, 82, 92, 3300);
 
 INSERT INTO players_seasons (player_id, season_id, attack, defence, skill, morale, physical, inform_image)
@@ -44,7 +44,8 @@ VALUES  (1, 2, 53, 61, 65, 70, 65, null),
         (10, 2, 75, 53, 68, 46, 93, null),
         (11, 2, 49, 65, 52, 86, 67, 'https://i.imgur.com/O4b0bvY.png'),
         (12, 2, 64, 70, 61, 54, 91, null),
-        (13, 2, 84, 76, 95, 72, 78, null);
+        (13, 2, 84, 76, 95, 72, 78, null),
+        (16, 2, 60, 60, 60, 60, 60, null);
 
 INSERT INTO teams (season_id, name, color)
 VALUES (1, 'Røde Runkere', 'red'),
@@ -69,4 +70,5 @@ VALUES (5, 1),
        (7, 10),
        (7, 11),
        (7, 12),
-       (8, 13);
+       (8, 13),
+       (8, 16);

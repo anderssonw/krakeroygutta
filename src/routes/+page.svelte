@@ -1,6 +1,6 @@
 <script lang="ts">
 	import KrakeroyKommune from '$lib/components/index/krakeroyKommune.svelte';
-	import { afterUpdate } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import ContentFooter from '$lib/components/index/ContentFooter.svelte';
 	import { isInViewport } from '$lib/shared/isInView';
 	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
@@ -10,7 +10,7 @@
 	import SnowAnimation from '$lib/components/common/SnowAnimation.svelte';
 	export let data: PageData;
 
-	$: ({ session } = data);
+	$: ({ session, season } = data);
 
 	// Apply animation/movement as a tailwind class
 	let curPitchInView = false;
@@ -64,11 +64,11 @@
 							<li class="text-2xs tablet:text-sm laptop:text-base">
 								Poengfordelingen lyder:
 								<ul class="list-disc list-inside pl-4">
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">3 poeng ved seier</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">3 poeng ved mål</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">2 poeng ved assist</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">1 poeng ved clean sheet</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">1 poeng ved c-moment</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_win ?? 1} poeng ved seier</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_goal ?? 1} poeng ved mål</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_assist ?? 1} poeng ved assist</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_clean_sheet ?? 1} poeng ved clean sheet</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_clutch ?? 1} poeng ved c-moment</li>
 								</ul>
 							</li>
 							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">

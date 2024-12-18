@@ -106,3 +106,28 @@ VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 1
 
 INSERT INTO bets_against(bet_id, user_id)
 VALUES (1, 'ec61970a-704a-4c92-8d54-1a3181175c91');
+
+/*
+INSERT INTO teams (season_id, name, color)
+VALUES (2, 'Røde Runkere', 'red'),
+       (2, 'Blå Bavianer', 'blue');
+
+INSERT INTO teams_players(team_id, player_id)
+VALUES (1, 11),
+       (2, 12),
+       (2, 13);
+
+INSERT INTO matches (season_id, team_home_id, team_away_id)
+VALUES  (2, 1, 2),
+        (2, 2, 1),
+        (2, 1, 2);
+
+INSERT INTO goals(match_id, goal_player_id, assist_player_id)
+VALUES (1, 13, null),
+       (2, 11, null),
+       (2, 11, null),
+       (2, 12, 13);
+
+INSERT INTO clutches(match_id, player_id)
+VALUES (2, 13);
+*/

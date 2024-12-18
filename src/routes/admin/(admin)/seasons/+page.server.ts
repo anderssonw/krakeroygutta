@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		return { seasons };
 	}
 
-	return {};
+	return { seasons: [] };
 };
 
 export const actions = {
@@ -30,6 +30,12 @@ export const actions = {
 		const seasonDeadline = formData.get('seasonDeadline')?.toString();
 		const seasonEnd = formData.get('seasonEnd')?.toString();
 		const startingCurrency = Number(formData.get('seasonStartingCurrency'));
+		const pointsPerWin = Number(formData.get('seasonPointsPerWin'));
+		const pointsPerCleanSheet = Number(formData.get('seasonPointsPerCleanSheet'));
+		const pointsPerGoal = Number(formData.get('seasonPointsPerGoal'));
+		const pointsPerAssist = Number(formData.get('seasonPointsPerAssist'));
+		const pointsPerClutch = Number(formData.get('seasonPointsPerClutch'));
+		
 
 		// Check overlapping dates
 		let isOverlapDate: boolean = false;
@@ -52,13 +58,20 @@ export const actions = {
         }
         */
 
-		if (seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency && !isOverlapDate) {
+		if (seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency &&
+			pointsPerWin && pointsPerCleanSheet && pointsPerGoal && pointsPerAssist && pointsPerClutch
+			&& !isOverlapDate) {
 			const seasonForm: TablesInsert<'seasons'> = {
 				name: seasonName,
 				start_time: seasonStart,
 				deadline_time: seasonDeadline,
 				end_time: seasonEnd,
-				starting_currency: startingCurrency
+				starting_currency: startingCurrency,
+				points_per_win: pointsPerWin,
+				points_per_clean_sheet: pointsPerCleanSheet,
+				points_per_goal: pointsPerGoal,
+				points_per_assist: pointsPerAssist,
+				points_per_clutch: pointsPerClutch
 			};
 
 			const { error: insertError } = await supabase.from('seasons').insert(seasonForm);
