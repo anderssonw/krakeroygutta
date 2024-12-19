@@ -3,6 +3,44 @@
 	import type { FullPlayer } from '$lib/types/newTypes';
 
 	export let player: FullPlayer;
+	export let prevPlayer: FullPlayer | null;
+
+	const diff = (stat: number) => {
+		if (stat >= 0) {
+			return '+'
+		} 
+		return '-'
+	}
+
+	const attackDiff = () => {
+		if (prevPlayer) {
+			return diff(player.attack - prevPlayer.attack) + (player.attack - prevPlayer.attack).toString();
+		}
+	}
+
+	const defenceDiff = () => {
+		if (prevPlayer) {
+			return diff(player.defence - prevPlayer.defence) + (player.defence - prevPlayer.defence).toString();
+		}
+	}
+
+	const skillDiff = () => {
+		if (prevPlayer) {
+			return diff(player.skill - prevPlayer.skill) + (player.skill - prevPlayer.skill).toString();
+		}
+	}
+
+	const physicalDiff = () => {
+		if (prevPlayer) {
+			return diff(player.physical - prevPlayer.physical) + (player.physical - prevPlayer.physical).toString();
+		}
+	}
+
+	const moraleDiff = () => {
+		if (prevPlayer) {
+			return diff(player.morale - prevPlayer.morale) + (player.morale - prevPlayer.morale).toString();
+		}
+	}
 
 	$: cardBackType = getPlayerCardType(player, false);
 </script>
@@ -23,25 +61,30 @@
 	<h3>Pris: {player?.price}</h3>
 
 	<div class="w-2/3 flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6">
-		<div class="w-full flex flex-row border-b-2">
+		<div class="w-full flex flex-row border-b-2 items-center">
 			<h3 class="grow">Angrep</h3>
 			<h3 class="grow text-end">{player?.attack}</h3>
+			<h5>{attackDiff()}</h5>
 		</div>
-		<div class="w-full flex flex-row border-b-2">
+		<div class="w-full flex flex-row border-b-2 items-center">
 			<h3 class="grow">Forsvar</h3>
 			<h3 class="grow text-end">{player?.defence}</h3>
+			<h5>{defenceDiff()}</h5>
 		</div>
-		<div class="w-full flex flex-row border-b-2">
+		<div class="w-full flex flex-row border-b-2 items-center">
 			<h3 class="grow">Teknikk</h3>
 			<h3 class="grow text-end">{player?.skill}</h3>
+			<h5>{skillDiff()}</h5>
 		</div>
-		<div class="w-full flex flex-row border-b-2">
+		<div class="w-full flex flex-row border-b-2 items-center">
 			<h3 class="grow">Fysikk</h3>
 			<h3 class="grow text-end">{player?.physical}</h3>
+			<h5>{physicalDiff()}</h5>
 		</div>
-		<div class="w-full flex flex-row border-b-2">
+		<div class="w-full flex flex-row border-b-2 items-center">
 			<h3 class="grow">Moral</h3>
 			<h3 class="grow text-end">{player?.morale}</h3>
+			<h5>{moraleDiff()}</h5>
 		</div>
 		<h3>Total: {calculatePlayerStatAverage(player)}</h3>
 	</div>
