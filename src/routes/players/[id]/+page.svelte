@@ -15,7 +15,7 @@
 	// Get server data
 	export let data: PageData;
 	$: ({ playerVersions, allMatches, teamStats, season } = data);
-	$: player = playerVersions?.find((version) => version.season_id == season?.id);
+	// $: player = playerVersions?.find((version) => version.season_id == season?.id);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 	$: seasonStatsArr = fillSeasonMapWithStatsForPlayer(matches, playerVersions ?? []);
 
@@ -28,9 +28,9 @@
 	})
 </script>
 
-{#if player}
+{#if playerVersions && season}
 	<div class="structure">
-		<Player {player} prevPlayer={prevPlayer} />
+		<Player playerVersions={playerVersions} season={season}/>
 
 		<div class="w-full bg-primary-color laptop:rounded-lg p-4 tablet:p-8 flex flex-col gap-8">
 			<div class="flex flex-row justify-between px-0 mobile:px-4 tablet:px-16">
