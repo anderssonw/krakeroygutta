@@ -1,9 +1,15 @@
 <script lang="ts">
 	import { calculatePlayerStatAverage, getPlayerCardType } from '$lib/shared/playerCardFunctions';
+	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 
-	export let player: FullPlayer;
-	export let prevPlayer: FullPlayer | null;
+	//export let player: FullPlayer;
+	//export let prevPlayer: FullPlayer | null;
+	export let playerVersions: FullPlayer[];
+	export let season: Tables<'seasons'>;
+
+	$: player = playerVersions.find((version) => version.season_id == season.id);
+	$: prevPlayer = playerVersions.find((version) => version.season_id == season.id-1);
 
 	const diff = (stat: number) => {
 		if (stat >= 0) {
@@ -13,41 +19,46 @@
 	}
 
 	const attackDiff = () => {
-		if (prevPlayer) {
+		if (player && prevPlayer) {
 			return diff(player.attack - prevPlayer.attack) + (player.attack - prevPlayer.attack).toString();
 		}
+		return '';
 	}
 
 	const defenceDiff = () => {
-		if (prevPlayer) {
+		if (player && prevPlayer) {
 			return diff(player.defence - prevPlayer.defence) + (player.defence - prevPlayer.defence).toString();
 		}
+		return '';
 	}
 
 	const skillDiff = () => {
-		if (prevPlayer) {
+		if (player && prevPlayer) {
 			return diff(player.skill - prevPlayer.skill) + (player.skill - prevPlayer.skill).toString();
 		}
+		return '';
 	}
 
 	const physicalDiff = () => {
-		if (prevPlayer) {
+		if (player && prevPlayer) {
 			return diff(player.physical - prevPlayer.physical) + (player.physical - prevPlayer.physical).toString();
 		}
+		return '';
 	}
 
 	const moraleDiff = () => {
-		if (prevPlayer) {
+		if (player && prevPlayer) {
 			return diff(player.morale - prevPlayer.morale) + (player.morale - prevPlayer.morale).toString();
 		}
+		return '';
 	}
 
-	$: cardBackType = getPlayerCardType(player, false);
+	$: cardBackType = getPlayerCardType(player ?? null, false);
 </script>
 
 <div class="relative w-full h-64 tablet:h-80 laptop:h-96 {cardBackType}">
-	<div class="{player.inform_image ? 'w-40 tablet:w-48 laptop:w-60' : 'w-54 tablet:w-64 laptop:w-80'} absolute bottom-0 left-1/2 -translate-x-1/2">
-		<img src={player.inform_image ? player.inform_image : player.image} alt="head" />
+	<div class="{player?.inform_image ? 'w-40 tablet:w-48 laptop:w-60' : 'w-54 tablet:w-64 laptop:w-80'} absolute bottom-0 left-1/2 -translate-x-1/2">
+		<img src={player?.inform_image ? player.inform_image : player?.image} alt="head" />
 	</div>
 </div>
 
@@ -86,6 +97,6 @@
 			<h3 class="grow text-end">{player?.morale}</h3>
 			<h5>{moraleDiff()}</h5>
 		</div>
-		<h3>Total: {calculatePlayerStatAverage(player)}</h3>
+		<h3>Total: {calculatePlayerStatAverage(player ?? null)}</h3>
 	</div>
 </div>
