@@ -3,8 +3,6 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import type { FullPlayer } from '$lib/types/newTypes';
 
-	//export let player: FullPlayer;
-	//export let prevPlayer: FullPlayer | null;
 	export let playerVersions: FullPlayer[];
 	export let season: Tables<'seasons'>;
 
