@@ -9,7 +9,7 @@
 		if (stat >= 0) {
 			return '+'
 		} 
-		return '-'
+		return ''
 	}
 
 	const attackDiff = () => {
