@@ -7,27 +7,12 @@
 	import type { Tables } from '$lib/types/database.helper.types';
 	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
-    import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
+	import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
 	import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
 
 	export let data: PageData;
 
 	$: ({ match, players, lazy } = data);
-
-	let selectedDialogPlayer: number | undefined;
-	$: selectedDialogTeam = getPlayerTeam(selectedDialogPlayer)
-
-	const getPlayerTeam = (pid: number | undefined): any[] => {
-		if(pid && players){
-			let curPlayer = players.find(player => player.id === pid);
-
-			if(curPlayer) {
-				let teamPlayers = players.filter(player => player.team_id == curPlayer?.team_id);
-				return teamPlayers;
-			}
-		}
-		return [];
-	}
 
 	const getGoalCountForTeam = (teamId: number | undefined, goals: Tables<'goals'>[]) => {
 		return goals.filter((goal) => {
@@ -81,7 +66,7 @@
 									</div>
 									<div class="flex flex-row items-center">
 										<img class={'w-6 h-6'} src={assistIcon} alt="assist" />
-										<p class="text-xs">{`${players?.find((player) => player.id === goal.assist_player_id)?.name}`}</p>
+										<p class="text-xs">{`${players?.find((player) => player.id === goal.assist_player_id)?.name ?? 'Ingen assist'} `}</p>
 									</div>
 								</div>
 
@@ -121,14 +106,10 @@
 						{:else}
 							<p>Ingen C-momenter denne kampen</p>
 						{/each}
-					{:catch error}
-						<p>Noe gikk galt</p>
 					{/await}
 				</div>
 			</div>
 		</div>
-	{:catch error}
-		<p>Noe gikk galt</p>
 	{/await}
 
 	<dialog id="new-clutch" class="px-4 py-4 rounded-lg text-left w-full">

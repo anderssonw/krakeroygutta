@@ -54,10 +54,8 @@
 	};
 </script>
 
-<div class="structure">
-	<div class="w-3/5">
-		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
-	</div>
+<div class="flex flex-col gap-4 items-center">
+	<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
 	{#if seasonOption}
 		<slot />
 	{/if}
