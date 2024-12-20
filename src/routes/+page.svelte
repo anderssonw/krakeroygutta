@@ -19,13 +19,13 @@
 
 	const parseMonth = (time: string) => {
 		return new Date(time).toLocaleString('no-NO', { month: 'long' });
-	}
+	};
 	const parseDate = (time: string) => {
 		return new Date(time).getDate();
-	}
+	};
 	const parseYear = (time: string) => {
 		return new Date(time).getFullYear();
-	}
+	};
 	const parseHour = (time: string) => {
 		const hour = new Date(time).getHours().toString();
 		let minute = new Date(time).getMinutes().toString();
@@ -33,7 +33,7 @@
 			minute += '0';
 		}
 		return hour + ':' + minute;
-	}
+	};
 
 	// Handle checking if the element is present after scrolling
 	let animatedPitch: any;
@@ -61,20 +61,22 @@
 
 				{#if season}
 					<p class="text-xs tablet:text-base laptop:text-xl">
-						Fra og med {parseDate(season.start_time)}. {parseMonth(season.start_time)} {parseYear(season.start_time)} vil det være mulig å opprette ditt helt egne fantasylag.
+						Fra og med {parseDate(season.start_time)}. {parseMonth(season.start_time)}
+						{parseYear(season.start_time)} vil det være mulig å opprette ditt helt egne fantasylag.
 					</p>
 					<p class="text-xs tablet:text-base laptop:text-xl">
-						Den {parseDate(season.deadline_time)}. {parseMonth(season.deadline_time)} {parseYear(season.deadline_time)} braker det løs, både i Blomsterøyhallen og Casa Bjerkholt. 
-						Klokken {parseHour(season.deadline_time)} samme dag vil det ikke lenger være
-						mulig å endre på laget sitt.
+						Den {parseDate(season.deadline_time)}. {parseMonth(season.deadline_time)}
+						{parseYear(season.deadline_time)} braker det løs, både i hallen på Kvernhuset og Casa Bjerkholt. Klokken {parseHour(
+							season.deadline_time
+						)} samme dag vil det ikke lenger være mulig å endre på laget sitt.
 					</p>
 				{:else}
 					<p class="text-xs tablet:text-base laptop:text-xl">
 						Fra og med 19. desember vil det være mulig å opprette ditt helt egne fantasylag.
 					</p>
 					<p class="text-xs tablet:text-base laptop:text-xl">
-						Den 21.desember 2024 braker det løs, både i Blomsterøyhallen og Casa Bjerkholt. Klokken 11:00 samme dag vil det ikke lenger være
-						mulig å endre på laget sitt.
+						Den 21.desember 2024 braker det løs, både i hallen på Kvernhuset og Casa Bjerkholt. Klokken 11:00 samme dag vil det ikke lenger
+						være mulig å endre på laget sitt.
 					</p>
 				{/if}
 				<div>
@@ -98,25 +100,31 @@
 									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_win ?? 1} poeng ved seier</li>
 									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_goal ?? 1} poeng ved mål</li>
 									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_assist ?? 1} poeng ved assist</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_clean_sheet ?? 1} poeng ved clean sheet</li>
-									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">{season?.points_per_clutch ?? 1} poeng ved c-moment</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
+										{season?.points_per_clean_sheet ?? 1} poeng ved clean sheet
+									</li>
+									<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
+										{season?.points_per_clutch ?? 1} poeng ved c-moment
+									</li>
 								</ul>
 							</li>
 							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
-								Alle lag skal ha en førings-ansvarlig. Disse står ansvarlig for å føre mål, assists og selvfølgelig C-momenter. Ved C-momenter
-								er det føringsansvarlig, gjerne med bistand fra resten av gutta, som har til rådighet å gi poeng for vel... C-momenter
+								Alle lag skal ha en førings-ansvarlig. Disse står ansvarlig for å føre mål, assists og selvfølgelig C-momenter. Ved
+								C-momenter er det føringsansvarlig, gjerne med bistand fra resten av gutta, som har til rådighet å gi poeng for vel...
+								C-momenter
 							</li>
 							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
 								Det skal etter beste evne konsumeres én enhet a 0.33L ved hver kamp spilt. Husk at banespy fort gjelder som C-moment! (Og
 								poentiselt værre fysikk-score ved neste års Fantasy)
 							</li>
-							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">Når du velger laget ditt skal du også velge en kaptein. Kapteinen din vil få doblet score blant alle poenggivninger</li>
+							<li class="text-2xs mobile:text-xs tablet:text-sm laptop:text-base">
+								Når du velger laget ditt skal du også velge en kaptein. Kapteinen din vil få doblet score blant alle poenggivninger
+							</li>
 						</ol>
 					</div>
 				</div>
 			</div>
 		</div>
-		
 	</div>
 
 	<ContentFooter isLoggedIn={session != null} />
