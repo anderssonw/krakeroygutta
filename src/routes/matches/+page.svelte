@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 	import type { PageData } from './$types';
 	import madsSeriosSrc from '$lib/assets/speechbubble/madsBubble4.png';
 	import RuleSpeechBubble from '$lib/components/common/RuleSpeechBubble.svelte';
 	import MatchCard from '$lib/components/matches/MatchCard.svelte';
+	import { mapTeamStats } from '$lib/shared/newMatchStatFunctions';
 
 	// Get server data
 	export let data: PageData;

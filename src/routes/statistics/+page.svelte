@@ -1,65 +1,89 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import type { DropdownOption } from '$lib/types/newTypes';
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
-	import DropdownMenu from '$lib/components/admin/dropdownMenu.svelte';
-	import type { Tables } from '$lib/types/database.helper.types';
-
-	import PlayerStatisticCard from '$lib/components/statistics/PlayerStatisticCard.svelte';
-	import PlayerStatisticCardGroup from '$lib/components/statistics/PlayerStatisticCardGroup.svelte';
-
-	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
-	import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
-	import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
-	import winIcon from '$lib/assets/stat_icons/win_icon.png';
-	import cleanIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
-	import { getTotalStatsForPlayer, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
+	import PlayerStatisticsTable from '$lib/components/statistics/PlayerStatisticsTable.svelte';
+	import type { DropdownOption, FilterOption, PlayerStatsSeasonSummary } from '$lib/types/newTypes';
+	import FilterMenu from '$lib/components/admin/FilterMenu.svelte';
+	import { onMount } from 'svelte';
+	import { calculateFantasyPoints, mapMatchSummary, mapPlayerStatistics, mapTeamStats } from '$lib/shared/newMatchStatFunctions';
+	import PlayerFantasyRanks from '$lib/components/statistics/PlayerFantasyRanks.svelte';
 
 	export let data: PageData;
 	// All of this stuff is also in admin/layout, not sure how to copy it over effectively just letting it stay for now
 
-	$: ({ seasons, lazy, players, allMatches, teamStats, season } = data);
-	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
-	$: playersWithStats = getTotalStatsForPlayer(players ?? [], matches, season);
+	$: ({ seasons, players, allMatches, teamStats, season, fantasyTeamPlayers } = data);
+	$: matches = mapTeamStats(allMatches, teamStats);
+    $: matchSummary = mapMatchSummary(matches);
 
-	$: seasonOption = null as DropdownOption | null;
-	$: setSeasonURL(seasonOption);
-	onMount(() => {
-		let seasonParamId = Number($page.url.searchParams.get('season'));
-		if (seasonParamId) {
-			let seasonFromParam = seasons?.find((season) => season.id == seasonParamId);
-			if (!seasonFromParam) return;
-			seasonOption = {
-				id: seasonFromParam.id,
-				name: seasonFromParam.name
-			};
-		}
-	});
-	const setSeasonURL = (seasonOption: DropdownOption | null) => {
-		if (!browser) return;
+    const filterOptions: FilterOption[] = [
+        {
+            id: 1,
+            name: 'Navn',
+            desc: true,
+        },
+        {
+            id: 2,
+            name: 'Mål',
+            desc: true,
+        },
+        {
+            id: 3,
+            name: 'Assist',
+            desc: true,
+        },
+        {
+            id: 4,
+            name: 'C-moment',
+            desc: true,
+        },
+        {
+            id: 5,
+            name: 'Seiere',
+            desc: true,
+        },
+        {
+            id: 6,
+            name: 'Clean sheets',
+            desc: true,
+        },
+        {
+            id: 7,
+            name: 'Poeng',
+            desc: true,
+        },
+    ]
+    $: filterOption = filterOptions[filterOptions.length-1];
 
-		let url = $page.url;
-		if (seasonOption) {
-			let query = new URLSearchParams(url.searchParams.toString());
-			query.set('season', `${seasonOption.id}`);
-			goto(`?${query.toString()}`);
-		} else {
-			goto(`${url.origin}${url.pathname}`);
-		}
-	};
-	const getSeasonOptions = () => {
+    const seasonDefaultOptions: FilterOption[] = [
+        {
+                name: 'Oppsummering',
+                id: -2,
+                desc: true
+            },
+            {
+                name: 'Sesong for sesong',
+                id: -1,
+                desc: true
+            },
+    ]
+    $: seasonOption = seasonDefaultOptions[0];
+    const getCurrentSeason = () => {
+        if (season) {
+            return { name: season.name, id: season.id, desc: true } satisfies FilterOption
+        }
+
+        return seasonDefaultOptions[0];
+    }
+    const getSeasonOptions = () => {
 		if (!seasons) return [];
 
-		let statsSeasons: DropdownOption[] = [];
-		seasons?.forEach((season) => {
+		let statsSeasons: FilterOption[] = seasonDefaultOptions;
+		seasons.sort((a, b) => b.id - a.id).forEach((season) => {
 			if (new Date(season.deadline_time) < new Date()) {
 				let opt = {
 					name: season.name,
-					id: season.id
-				} satisfies DropdownOption;
+					id: season.id,
+                    desc: true
+				} satisfies FilterOption;
 				statsSeasons.push(opt);
 			}
 		});
@@ -67,260 +91,216 @@
 		return statsSeasons;
 	};
 
-	function getTopScorers(goals: Tables<'goals'>[]) {
-		let playerGoals: number[] = [];
+    export const splitName = (player_name: string) => {
+        return player_name.split(' ')[player_name.split(' ').length - 1];
+    }
 
-		goals.forEach((goal) => {
-			if (!playerGoals[goal.goal_player_id]) {
-				playerGoals[goal.goal_player_id] = 0;
-			}
+    const sortByFilter = (players: PlayerStatsSeasonSummary[], filterOption: FilterOption | null) => {
+        if (!filterOption) return players;
 
-			playerGoals[goal.goal_player_id]++;
-		});
+        let copyPlayerStatsSummary = [...players];
 
-		return playerGoals
-			.map((goals, index) => {
-				let player = players?.find((player) => player.id === index);
-				return {
-					goals: goals,
-					player: {
-						name: player?.name,
-						image: player?.image
-					}
-				};
-			})
-			.sort((a, b) => b.goals - a.goals)
-			.slice(0, 3);
-	}
-	function getTopAssisters(goals: Tables<'goals'>[]) {
-		let playerGoals: number[] = [];
+        if (filterOption.id === filterOptions[0].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => splitName(a.player_name).localeCompare(splitName(b.player_name)))
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => splitName(b.player_name).localeCompare(splitName(a.player_name)))
+            }
+            return copyPlayerStatsSummary;
+        }
 
-		goals.forEach((goal) => {
-			if (goal.assist_player_id) {
-				if (!playerGoals[goal.assist_player_id]) {
-					playerGoals[goal.assist_player_id] = 0;
-				}
+        if (filterOption.id === filterOptions[1].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => b.goals-a.goals)
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => a.goals-b.goals)
+            }
+            return copyPlayerStatsSummary;
+        }
 
-				playerGoals[goal.assist_player_id]++;
-			}
-		});
+        if (filterOption.id === filterOptions[2].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => b.assists-a.assists)
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => a.assists-b.assists)
+            }
+            return copyPlayerStatsSummary;
+        }
 
-		return playerGoals
-			.map((goals, index) => {
-				let player = players?.find((player) => player.id === index);
-				return {
-					assists: goals,
-					player: {
-						name: player?.name,
-						image: player?.image
-					}
-				};
-			})
-			.sort((a, b) => b.assists - a.assists)
-			.slice(0, 3);
-	}
+        if (filterOption.id === filterOptions[3].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => b.clutches-a.clutches)
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => a.clutches-b.clutches)
+            }
+            return copyPlayerStatsSummary;
+        }
 
-	function getTopClutchers(clutches: Tables<'clutches'>[]) {
-		let playerGoals: number[] = [];
+        if (filterOption.id === filterOptions[4].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => b.wins-a.wins)
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => a.wins-b.wins)
+            }
+            return copyPlayerStatsSummary;
+        }
 
-		clutches.forEach((clutch) => {
-			if (!playerGoals[clutch.player_id]) {
-				playerGoals[clutch.player_id] = 0;
-			}
+        if (filterOption.id === filterOptions[5].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => b.clean_sheets-a.clean_sheets)
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => a.clean_sheets-b.clean_sheets)
+            }
+            return copyPlayerStatsSummary;
+        }
 
-			playerGoals[clutch.player_id]++;
-		});
+        
+        if (filterOption.id === filterOptions[6].id) {
+            if (filterOption.desc) {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => b.points-a.points)
+            } else {
+                copyPlayerStatsSummary = copyPlayerStatsSummary.sort((a, b) => a.points-b.points)
+            }
+            return copyPlayerStatsSummary;
+        }
 
-		return playerGoals
-			.map((clutches, index) => {
-				let player = players?.find((player) => player.id === index);
-				return {
-					clutches,
-					player: {
-						name: player?.name,
-						image: player?.image
-					}
-				};
-			})
-			.sort((a, b) => b.clutches - a.clutches)
-			.slice(0, 3);
-	}
+        return players;
+    }
 
-	const getPlayerSelections = (teams: { id: number; players: { player_id: number }[] }[] | never[]) => {
-		let playerMap: number[] = [];
+    const mapPlayersByPoints = (seasonOption: DropdownOption) => {
+        const playerStatsSummaryArray: PlayerStatsSeasonSummary[] = [];
+        players.forEach((player) => {
+            const playerStatistics = mapPlayerStatistics(matchSummary, player.id.toString());
 
-		players.forEach((player) => (playerMap[player.id - 1] = 0));
+            if (seasonOption.id === seasonDefaultOptions[0].id) {
+                const playerStatsSummary: PlayerStatsSeasonSummary = {
+                        season_id: 0,
+                        player_id: player.id,
+                        player_image: player.image,
+                        player_name: player.name,
+                        goals: 0,
+                        assists: 0,
+                        clutches: 0,
+                        points: 0,
+                        wins: 0,
+                        clean_sheets: 0
+                    }
 
-		teams.forEach((team) => {
-			team.players.forEach((player) => {
-				playerMap[player.player_id - 1]++;
-			});
-		});
+                playerStatistics.forEach((playerSeason) => {
+                    const getCurrentSeason = seasons.find(s => s.id === playerSeason.season_id);
 
-		return playerMap.map((selections, index) => {
-			let player = players?.find((player) => player.id === index + 1);
+                    if (getCurrentSeason) {
+                        const fantasyPoints = calculateFantasyPoints(playerStatistics, getCurrentSeason, false);
 
-			return {
-				selections,
-				player: {
-					name: player?.name,
-					image: player?.image
-				}
-			};
-		});
-	};
+                        playerStatsSummary.goals += playerSeason.goals;
+                        playerStatsSummary.assists += playerSeason.assists;
+                        playerStatsSummary.clutches += playerSeason.clutches;
+                        playerStatsSummary.wins += playerSeason.wins;
+                        playerStatsSummary.clean_sheets += playerSeason.clean_sheets;
+                        playerStatsSummary.points += fantasyPoints;
+                    }
+                })
 
-	function getMostSelectedPlayers(teams: { id: number; players: { player_id: number }[] }[] | never[]) {
-		let playerSelections = getPlayerSelections(teams);
+                playerStatsSummaryArray.push(playerStatsSummary);
+            } else if (seasonOption.id === seasonDefaultOptions[1].id) {
+                playerStatistics.forEach((playerSeason) => {
+                    const getCurrentSeason = seasons.find(s => s.id === playerSeason.season_id);
 
-		return playerSelections.sort((a, b) => b.selections - a.selections).slice(0, 3);
-	}
+                    if (getCurrentSeason) {
+                        const fantasyPoints = calculateFantasyPoints(playerStatistics, getCurrentSeason, false);
 
-	function getLeastSelectedPlayers(teams: { id: number; players: { player_id: number }[] }[] | never[]) {
-		let playerSelections = getPlayerSelections(teams);
+                        const playerStatsSummary: PlayerStatsSeasonSummary = {
+                            season_id: getCurrentSeason.id,
+                            player_id: player.id,
+                            player_image: player.image,
+                            player_name: player.name,
+                            goals: playerSeason.goals,
+                            assists: playerSeason.assists,
+                            clutches: playerSeason.clutches,
+                            points: fantasyPoints,
+                            wins: playerSeason.wins,
+                            clean_sheets: playerSeason.clean_sheets
+                        }
+                        playerStatsSummaryArray.push(playerStatsSummary);
+                    }
+                })
+            } else {
+                const playerStats = playerStatistics.find(ps => ps.season_id === seasonOption.id);
 
-		return playerSelections.sort((a, b) => a.selections - b.selections).slice(0, 3);
-	}
+                if (playerStats && season) {
+                    const fantasyPoints = calculateFantasyPoints([playerStats], season, false);
+                    const playerStatsSummary: PlayerStatsSeasonSummary = {
+                        season_id: season.id,
+                        player_id: player.id,
+                        player_image: player.image,
+                        player_name: player.name,
+                        goals: playerStats.goals,
+                        assists: playerStats.assists,
+                        clutches: playerStats.clutches,
+                        points: fantasyPoints,
+                        wins: playerStats.wins,
+                        clean_sheets: playerStats.clean_sheets
+                    }
+                    playerStatsSummaryArray.push(playerStatsSummary);
+                }
+            }
+        })
+
+        return playerStatsSummaryArray.sort((a, b) => b.points - a.points);
+    }
+
+    $: allPlayerStatistics = mapPlayersByPoints(seasonOption);
+
+    onMount(() => {
+        seasonOption = getCurrentSeason();
+    })
 </script>
 
 <div class="structure">
-	{#if getSeasonOptions().length > 0}
-		<div class="w-96">
-			<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
-		</div>
-	{:else}
-		<div class="p-8 tablet:p-4 laptop:p-0">
-			<h5>Ingen statistikk tilgjengelig. Vent til en aktiv sesong er over.</h5>
-		</div>
-	{/if}
 
-	{#if seasonOption}
-		<div class="flex flex-col">
-			<div class="flex flex-row flex-wrap">
-				{#await lazy.fantasyTeamPlayers}
-					<!-- promise is pending -->
-				{:then players}
-					<PlayerStatisticCardGroup title="Mest valgte spillere 😍🍆💦">
-						{#each getMostSelectedPlayers(players) as player, index}
-							<PlayerStatisticCard
-								playerName={player.player.name}
-								playerSubtitle={`Valgt ${player.selections} ${player.selections === 1 ? 'gang' : 'ganger'}`}
-								imgSrc={player.player.image}
-								imgAlt={player.player.name}
-								position={index + 1}
-							/>
-						{/each}
-					</PlayerStatisticCardGroup>
-					<PlayerStatisticCardGroup title="Minst valgte spillere 😩😰">
-						{#each getLeastSelectedPlayers(players) as player, index}
-							<PlayerStatisticCard
-								playerName={player.player.name}
-								playerSubtitle={`Valgt ${player.selections} ${player.selections === 1 ? 'gang' : 'ganger'}`}
-								imgSrc={player.player.image}
-								imgAlt={player.player.name}
-								position={playersWithStats.length - index}
-							/>
-						{/each}
-					</PlayerStatisticCardGroup>
-				{/await}
-			</div>
-			<div class="flex flex-row flex-wrap">
-				{#await lazy.goals}
-					<p>Laster mål</p>
-				{:then goals}
-					<PlayerStatisticCardGroup title="Flest mål">
-						{#each getTopScorers(goals) as goal}
-							<PlayerStatisticCard
-								playerName={goal.player.name}
-								playerSubtitle={`Scoret ${goal.goals} ${goal.goals === 1 ? 'gang' : 'ganger'}`}
-								imgSrc={goal.player.image}
-								imgAlt={goal.player.name}
-							/>
-						{/each}
-					</PlayerStatisticCardGroup>
+    <div class="w-full flex justify-between">
+        <FilterMenu header="Sesong" options={getSeasonOptions()} bind:selectedOption={seasonOption} optionPlacement='right' sorting={false} />
+        <FilterMenu header="Sortér" options={filterOptions} bind:selectedOption={filterOption} optionPlacement='left' sorting={true} />
+    </div>
 
-					<PlayerStatisticCardGroup title="Flest assists">
-						{#each getTopAssisters(goals) as goal}
-							<PlayerStatisticCard
-								playerName={goal.player.name}
-								playerSubtitle={`Hadde ${goal.assists} ${goal.assists === 1 ? 'assist' : 'assister'}`}
-								imgSrc={goal.player.image}
-								imgAlt={goal.player.name}
-							/>
-						{/each}
-					</PlayerStatisticCardGroup>
-				{/await}
+    {#if seasonOption.id === seasonDefaultOptions[0].id}
+        <div class="w-full">
+            <div class="flex justify-center mb-8 px-2">
+                <h1 class="text-center text-3xl tablet:text-4xl">{seasonOption.name}</h1>
+            </div>
+            <div class="grid gap-4">
+                {#each sortByFilter(allPlayerStatistics, filterOption) as player}
+                    <PlayerStatisticsTable player={player} />
+                {/each}
+            </div>
+        </div>
+    {:else if seasonOption.id === seasonDefaultOptions[1].id}
+        <div class="w-full flex flex-col gap-16">
+            {#each seasons.sort((a, b) => b.id - a.id) as seas}
+                <div>
+                    <div class="flex justify-center mb-8 px-2">
+                        <h1 class="text-center text-3xl tablet:text-4xl">{seas.name}</h1>
+                    </div>
+                    <div class="grid gap-4">
+                        {#each sortByFilter(allPlayerStatistics.filter(aps => aps.season_id === seas.id), filterOption) as player}
+                            <PlayerStatisticsTable player={player} />
+                        {/each}
+                    </div>
+                </div>
+            {/each}
+        </div>
+    {:else}
+        <div class="w-full flex flex-col gap-8">
+            <div class="flex justify-center px-2">
+                <h1 class="text-center text-3xl tablet:text-4xl">{seasonOption.name}</h1>
+            </div>
+            <div class="grid gap-4">
+                {#each sortByFilter(allPlayerStatistics, filterOption) as player}
+                    <PlayerStatisticsTable player={player} />
+                {/each}
+            </div>
 
-				{#await lazy.clutches}
-					<p>Laster c-momenter</p>
-				{:then clutches}
-					<PlayerStatisticCardGroup title="Flest c-momenter">
-						{#each getTopClutchers(clutches) as clutch}
-							<PlayerStatisticCard
-								playerName={clutch.player.name}
-								playerSubtitle={`Hadde ${clutch.clutches} ${clutch.clutches === 1 ? 'c-moment' : 'c-momenter'}`}
-								imgSrc={clutch.player.image}
-								imgAlt={clutch.player.name}
-							/>
-						{/each}
-					</PlayerStatisticCardGroup>
-				{/await}
-			</div>
-
-			<div class="mb-4 mx-4 flex-1">
-				<h2 class="mb-4">Full oversikt</h2>
-				<div class="grid gap-4">
-					{#each playersWithStats as player}
-						<div class="grid grid-cols-10 tablet:grid-cols-8 bg-primary-color pr-4">
-							<div class="col-span-4 tablet:col-span-2">
-								<div class="flex flex-row items-center">
-									<img class="bg-white rounded-full p-2 mx-4 my-2 w-8 h-8 tablet:w-12 tablet:h-12" src={player.player_image} alt="Player" />
-									<div class="mr-4">
-										<p class="font-semibold text-xs tablet:text-xl">
-											{player.player_name.split(' ')[player.player_name.split(' ').length - 1]}
-										</p>
-									</div>
-								</div>
-							</div>
-							<div class="col-span-1 flex items-center justify-end">
-								<div class="flex flex-row items-center">
-									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={goalIcon} alt="goal" />
-									<p class="text-xs tablet:text-xl font-semibold">{player.goals}</p>
-								</div>
-							</div>
-							<div class="col-span-1 flex items-center justify-end">
-								<div class="flex flex-row items-center">
-									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={assistIcon} alt="assist" />
-									<h3 class="text-xs tablet:text-xl font-semibold">{player.assists}</h3>
-								</div>
-							</div>
-							<div class="col-span-1 flex items-center justify-end">
-								<div class="flex flex-row items-center">
-									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={clutchIcon} alt="clutch" />
-									<h3 class="text-xs tablet:text-xl font-semibold">{player.clutches}</h3>
-								</div>
-							</div>
-							<div class="col-span-1 flex items-center justify-end">
-								<div class="flex flex-row items-center">
-									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={winIcon} alt="wins" />
-									<h3 class="text-xs tablet:text-xl font-semibold">{player.wins}</h3>
-								</div>
-							</div>
-							<div class="col-span-1 flex items-center justify-end">
-								<div class="flex flex-row items-center">
-									<img class="w-4 h-4 tablet:w-6 tablet:h-6" src={cleanIcon} alt="clean sheets" />
-									<h3 class="text-xs tablet:text-xl font-semibold">{player.clean_sheets}</h3>
-								</div>
-							</div>
-							<div class="col-span-1 flex items-center justify-end">
-								<div class="flex flex-row items-center">
-									<h3 class="text-xs tablet:text-xl font-semibold">{player.points}p</h3>
-								</div>
-							</div>
-						</div>
-					{/each}
-				</div>
-			</div>
-		</div>
-	{/if}
+            <PlayerFantasyRanks fantasyTeamPlayers={fantasyTeamPlayers.filter(ftp => ftp.season_id === seasonOption.id)} allPlayerStatistics={allPlayerStatistics} />
+        </div>
+    {/if}
 </div>

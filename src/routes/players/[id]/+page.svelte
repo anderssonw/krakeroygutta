@@ -2,7 +2,6 @@
 	import type { PageData } from './$types';
 	import Player from '$lib/components/players/Player.svelte';
 	import { page } from '$app/stores';
-	import { fillSeasonMapWithStatsForPlayer, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
 	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
     import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
     import fieldIcon from '$lib/assets/stat_icons/field_icon.png';
@@ -11,13 +10,16 @@
 	import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
 	import { onMount } from 'svelte';
 	import type { FullPlayer } from '$lib/types/newTypes';
+	import { mapMatchSummary, mapPlayerStatistics, mapTeamStats } from '$lib/shared/newMatchStatFunctions';
 
 	// Get server data
 	export let data: PageData;
+    
 	$: ({ playerVersions, allMatches, teamStats, season } = data);
 	// $: player = playerVersions?.find((version) => version.season_id == season?.id);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
-	$: seasonStatsArr = fillSeasonMapWithStatsForPlayer(matches, playerVersions ?? []);
+	$: matchSummary = mapMatchSummary(matches);
+	$: playerStatistics = mapPlayerStatistics(matchSummary, data.player_id ?? '0');
 
 	let prevPlayer: FullPlayer | null = null;
 	onMount(() => {
@@ -41,17 +43,17 @@
 				</div>
 				<div class="flex flex-col items-center gap-2"> 		
 					<div> <img class={'w-16 mobile:w-20'} src={winIcon} alt="seiere" /></div>
-					<div class="text-5xl">{seasonStatsArr.reduce((init, current) => init + current.wins, 0)}</div>
+					<div class="text-5xl">{playerStatistics.reduce((init, current) => init + current.wins, 0)}</div>
 					<div class="text-base">seiere</div>
 				</div>
 				<div class="flex flex-col items-center gap-2">
 					<div> <img class={'w-16 mobile:w-20'} src={goalIcon} alt="goal" /></div>
-					<div class="text-5xl">{seasonStatsArr.reduce((init, current) => init + current.goals, 0)}</div>
+					<div class="text-5xl">{playerStatistics.reduce((init, current) => init + current.goals, 0)}</div>
 					<div class="text-base">mål</div>
 				</div>
 				<div class="flex flex-col items-center gap-2">
 					<div> <img class={'w-16 mobile:w-20'} src={assistIcon} alt="assist" /></div>
-					<div class="text-5xl">{seasonStatsArr.reduce((init, current) => init + current.assists, 0)}</div>
+					<div class="text-5xl">{playerStatistics.reduce((init, current) => init + current.assists, 0)}</div>
 					<div class="text-base">assist</div>
 				</div>
 			</div>
@@ -66,15 +68,15 @@
 					<div class="border-b border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4"><img class={'w-8'} src={assistIcon} alt="assist" /></div>
 					<div class="border-b border-primary-color-light p-1 mobile:p-2 tablet:p-4"><img class={'w-8'} src={clutchIcon} alt="c-moment" /></div>
 				</div>
-				{#each seasonStatsArr as seasonStats, idx}
+				{#each playerStatistics as seasonStats, idx}
 					<div class="bg-secondary-color grid grid-cols-8 border-x border-primary-color-light odd:bg-secondary-color-dark last:border-b last:rounded-b">
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4 col-span-2">{seasonStats.season_name}</div>
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{matches.filter(match => match.season_id === seasonStats.season_id).length}</div>
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.wins}</div>
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.clean_sheets}</div>
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.goals}</div>
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.assists}</div>
-						<div class="{idx !== seasonStatsArr.length-1 ? 'border-b' : ''} border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.clutches}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4 col-span-2">{seasonStats.season_name}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{matches.filter(match => match.season_id === seasonStats.season_id).length}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.wins}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.clean_sheets}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.goals}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-r border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.assists}</div>
+						<div class="{idx !== playerStatistics.length-1 ? 'border-b' : ''} border-primary-color-light flex items-center p-1 mobile:p-2 tablet:p-4">{seasonStats.clutches}</div>
 					</div>
 				{/each}
 			</div>

@@ -51,6 +51,24 @@
 		return '';
 	}
 
+	const priceDiff = () => {
+		if (player && prevPlayer) {
+			if (player.price && prevPlayer.price) {
+				return diff(player.price - prevPlayer.price) + (player.price - prevPlayer.price).toString();
+			}
+		}
+		return '';
+	}
+
+	const totalDiff = () => {
+		if (player && prevPlayer) {
+			const current = calculatePlayerStatAverage(player ?? null);
+			const old = calculatePlayerStatAverage(prevPlayer ?? null);
+			return diff(current - old) + (current - old).toString();
+		}
+		return '';
+	}
+
 	$: cardBackType = getPlayerCardType(player ?? null, false);
 </script>
 
@@ -67,7 +85,10 @@
 	border-y-4 laptop:border-4 border-secondary-light laptop:rounded-lg"
 >
 	<h1>{player?.name}</h1>
+	<div class="flex flex-row items-center gap-1">
 	<h3>Pris: {player?.price}</h3>
+	<h5>{priceDiff()}</h5>
+</div>
 
 	<div class="w-2/3 flex flex-col items-center space-y-2 tablet:space-y-4 laptop:space-y-6">
 		<div class="w-full flex flex-row border-b-2 items-center">
@@ -95,6 +116,9 @@
 			<h3 class="grow text-end">{player?.morale}</h3>
 			<h5>{moraleDiff()}</h5>
 		</div>
-		<h3>Total: {calculatePlayerStatAverage(player ?? null)}</h3>
+		<div class="flex flex-row items-center gap-1">
+			<h3>Total: {calculatePlayerStatAverage(player ?? null)}</h3>
+			<h5>{totalDiff()}</h5>
+		</div>
 	</div>
 </div>

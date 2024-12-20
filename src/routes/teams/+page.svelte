@@ -12,7 +12,7 @@
 
 	// Get server data
 	export let data: PageData;
-	$: ({ teams, players, season, teamStats } = data);
+	$: ({ teams, players, teamStats } = data);
 	$: player_stats = mapToPerPlayerStats(teamStats);
 	$: fullTeams = mapToFullTeam(teams ?? [], players ?? []);
 
@@ -99,7 +99,7 @@
 					<div class="flex flex-row justify-around flex-wrap">
 						{#each team.players as player}
 							<div class="flex flex-col justify-center gap-2">
-								<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
+								<Card {player} card_size={CARD_SIZE.MEDIUM} />
 								<div class="flex flex-row justify-between items-center">
 									<div class="flex flex-row items-center">
 										<img class="w-7 h-7" src={goalIcon} alt="goal" />

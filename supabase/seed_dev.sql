@@ -66,31 +66,6 @@ VALUES (1, 13),
         (2, 13);
 
 /*
-INSERT INTO auth.users (id, raw_user_meta_data)
-VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', '{"nickname": "bing chilling"}'),
-       ('ec61970a-704a-4c92-8d54-1a3181175c91', '{"nickname": "chill bill"}'),
-       ('c43e4127-0ba4-4db4-b217-61898937542d', '{"nickname": "xue hue"}');
-
-
-INSERT INTO fantasy_teams (user_id, season_id, name, captain_id)
-VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Skulle Chippa FC' , 1),
-       ('ec61970a-704a-4c92-8d54-1a3181175c91', 2, 'Jørgens Tubaer' , 5),
-       ('c43e4127-0ba4-4db4-b217-61898937542d', 2, 'PAD MAMAAAAAA' , 9);
-
-INSERT INTO fantasy_teams_players(fantasy_team_id, player_id)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (2, 5),
-       (2, 6),
-       (2, 7),
-       (2, 8),
-       (3, 9),
-       (3, 10),
-       (3, 11),
-       (3, 12);
-
 INSERT INTO bets(user_id, season_id, bet, value)
 VALUES ('25f77d08-43a9-44b1-99fb-67597562bcaf', 2, 'Herman scorer ingen mål', 100);
 

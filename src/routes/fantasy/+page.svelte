@@ -6,14 +6,25 @@
 	import FantasyCardMobile from '$lib/components/fantasy/FantasyCardMobile.svelte';
 	import currencyImg from '$lib/assets/currency.png';
 	import { enhance } from '$app/forms';
-	import { isSeasonActive, isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
-	import { getTotalPointsForPlayers, mapTeamStats } from '$lib/shared/MatchStatsFunctions';
+	import { isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
+	import { calculateFantasyPoints, mapMatchSummary, mapPlayerStatistics, mapTeamStats } from '$lib/shared/newMatchStatFunctions';
 
 	// Get server data
 	export let data: PageData;
 	const { fantasyTeam, allPlayers, season, allMatches, teamStats } = data;
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
-	$: playersWithPoints = getTotalPointsForPlayers(matches, season);
+
+	const calculatePointsPerPlayer = (player_id: number) => {
+		const matchSummary = mapMatchSummary(matches);
+
+		let playerPoints = 0;
+		if (fantasyTeam && season) {
+			const playerStats = mapPlayerStatistics(matchSummary, player_id.toString());
+			playerPoints += calculateFantasyPoints(playerStats, season, player_id === fantasyTeam.captain_id);
+		}
+
+		return playerPoints;
+	}
 
 	export let form: ActionData;
 
@@ -32,8 +43,9 @@
 				season?.starting_currency -
 				players.reduce((accumulator, player) => {
 					if (!player) return accumulator;
+					if (!player.price) return accumulator;
 
-					return accumulator + player?.price;
+					return accumulator + player.price;
 				}, 0)
 			);
 		} else {
@@ -70,7 +82,7 @@
 </script>
 
 {#if allPlayers && season}
-	<SelectCardModal bind:fantasyForm players={allPlayers} {season} />
+	<SelectCardModal bind:fantasyForm players={allPlayers} />
 
 	{#if season}
 		<form class="structure" method="POST" use:enhance>
@@ -121,7 +133,7 @@
 				class="relative w-full tablet:h-192 hidden tablet:block bg-cover bg-no-repeat bg-center bg-[url('$lib/assets/fantasy/fantasy_field_large.png')]"
 			>
 				{#each fantasyForm.players as player, position}
-					<FantasyCard bind:fantasyForm {player} {position} {season} {playersWithPoints} />
+					<FantasyCard bind:fantasyForm {player} {position} {season} points={calculatePointsPerPlayer(player ? player.player_id : 0)} />
 				{/each}
 			</div>
 
@@ -130,7 +142,7 @@
 			>
 				<div class="grid grid-cols-2 gap-y-8">
 					{#each fantasyForm.players as player, position}
-						<FantasyCardMobile bind:fantasyForm {player} {position} {season} {playersWithPoints}/>
+						<FantasyCardMobile bind:fantasyForm {player} {position} {season}  points={calculatePointsPerPlayer(player ? player.player_id : 0)} />
 					{/each}
 				</div>
 			</div>

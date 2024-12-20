@@ -2,44 +2,13 @@ import type { Tables } from '$lib/types/database.helper.types';
 import type {
 	FullPlayer,
 	MatchStatsQuery,
-	MatchStatsTeam,
-	MatchWithSeasonName,
 	PlayerStatsSeason,
 	PlayerStatsSeasonSummary,
 	StandardPlayer,
 	TeamWithStats
 } from '$lib/types/newTypes';
 
-export const mapTeamStats = (matches: MatchWithSeasonName[], teamStats: MatchStatsTeam[]): MatchStatsQuery[] => {
-	if (matches.length > 0 && teamStats.length > 0) {
-		let matchStatsQueries: MatchStatsQuery[] = [];
-		matches.forEach((match) => {
-			let home_team = teamStats.find((ts) => ts.team_id == match.team_home_id && ts.match_id == match.id);
-			let away_team = teamStats.find((ts) => ts.team_id == match.team_away_id && ts.match_id == match.id);
 
-			const emptyStatTeam: MatchStatsTeam = {
-				match_id: match.id,
-				team_id: 0,
-				name: '',
-				color: '',
-				players: [],
-				season_id: match.season_id
-			}
-
-			let matchStatsQuery: MatchStatsQuery = {
-				match_id: match.id,
-				season_id: match.season_id,
-				season_name: match.season_name.name,
-				home_team: home_team ? home_team : emptyStatTeam,
-				away_team: away_team ? away_team : emptyStatTeam
-			};
-			matchStatsQueries.push(matchStatsQuery);
-		});
-		return matchStatsQueries;
-	} else {
-		return [];
-	}
-};
 
 export const getGoalsForTeamsInMatch = (match: MatchStatsQuery) => {
 	let homeTeamGoals = match.home_team.players.reduce((goalSum, player) => {
@@ -56,6 +25,8 @@ export const getGoalsForTeamsInMatch = (match: MatchStatsQuery) => {
 	};
 };
 
+
+/*
 export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: MatchStatsQuery[] | null | undefined): TeamWithStats[] => {
 	let teamStats: TeamWithStats[] = teams.map((team) => {
 		return {
@@ -99,7 +70,9 @@ export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: Match
 
 	return teamStats;
 };
+*/
 
+/*
 export const getTotalPointsForPlayers = (matches: MatchStatsQuery[], season: Tables<'seasons'> | null) => {
 	let playerPointsMap: number[] = [];
 
@@ -159,6 +132,8 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[], season: Tab
 
 	return playerPointsMap;
 };
+*/
+
 
 export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: MatchStatsQuery[], season: Tables<'seasons'> | null) => {
 	const playerMap = new Map<number, PlayerStatsSeasonSummary>();
@@ -175,6 +150,7 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 	// Initialise all players in the playerPointsMap
 	players.forEach((player) => {
 		const createStats: PlayerStatsSeasonSummary = {
+			season_id: season.id,
 			player_id: player.id,
 			player_name: player.name,
 			player_image: player.image,
@@ -261,10 +237,8 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 	return listOfPlayerStats;
 };
 
-export const getPointsFromTeamStats = (team: TeamWithStats) => {
-	return team.wins * 3 + team.draws;
-};
 
+/*
 function initSeasonMap(matches: MatchStatsQuery[]): Map<number, PlayerStatsSeason> {
 	let seasonMap: Map<number, PlayerStatsSeason> = new Map<number, PlayerStatsSeason>();
 
@@ -277,7 +251,8 @@ function initSeasonMap(matches: MatchStatsQuery[]): Map<number, PlayerStatsSeaso
 				assists: 0,
 				clutches: 0,
 				wins: 0,
-				clean_sheets: 0
+				clean_sheets: 0,
+				games: 0
 			};
 			seasonMap.set(match.season_id, initPlayerStats);
 		}
@@ -297,7 +272,9 @@ function mapToSortedArray(seasonMap: Map<number, PlayerStatsSeason>): PlayerStat
 
 	return sortedSeasonStats;
 }
+*/
 
+/*
 export function fillSeasonMapWithStatsForPlayer(matches: MatchStatsQuery[], playerVersions: FullPlayer[]): PlayerStatsSeason[] {
 	let seasonMap: Map<number, PlayerStatsSeason> = initSeasonMap(matches);
 
@@ -367,3 +344,4 @@ export function fillSeasonMapWithStatsForPlayer(matches: MatchStatsQuery[], play
 
 	return mapToSortedArray(seasonMap);
 }
+*/
