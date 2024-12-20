@@ -6,12 +6,12 @@
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
 	import type { PageData, ActionData } from './$types';
 	import { goto } from '$app/navigation';
+	import type { Tables } from '$lib/types/database.generated.types';
 
 	export let form: ActionData;
 	export let data: PageData;
 
-	$: matches = data.lazy.matches;
-	$: teams = data.lazy.teams;
+	$: ({ matches, teams, players, goals } = data);
 
 	interface MatchForm {
 		teamHomeId: number | undefined;
@@ -29,12 +29,24 @@
 			return team.id != matchForm.teamHomeId && team.id != matchForm.teamAwayId;
 		});
 	};
+
+	const getGoalCountForTeam = (matchId: number, teamId: number, goals: Tables<'goals'>[]) => {
+		return goals.filter((goal) => {
+			const isCorrectMatch = goal.match_id == matchId;
+
+			if (!isCorrectMatch) return false;
+
+			const playerForGoal = players?.find((player) => player.id === goal.goal_player_id);
+
+			return playerForGoal?.team_id === teamId;
+		}).length;
+	};
 </script>
 
-<div class="structure">
+<div class="flex flex-col gap-4 items-center">
 	<h4>Ny Kamp</h4>
 	<form
-		class="w-2/3 tablet:w-auto flex flex-col mt-0 pt-0"
+		class="flex flex-col mt-0 pt-0"
 		method="POST"
 		action="?/create-match"
 		use:enhance={() => {
@@ -79,15 +91,15 @@
 			<p>Noe gikk galt</p>
 		{/await}
 	</form>
-	<div class="structure px-4">
+	<div class="px-4">
 		{#await matches}
 			<p>Henter Kamper</p>
 		{:then matches}
 			{#if matches.length === 0}
 				<p>Ingen Kamper for denne sesongen</p>
 			{:else}
-				<table class="w-2/3">
-					<tr class="text-left">
+				<table>
+					<tr class="text-center">
 						<th>Hjemmelag</th>
 						<th>Score</th>
 						<th>Bortelag</th>
@@ -98,9 +110,15 @@
 						return b.id - a.id;
 					}) as match}
 						<tr>
-							<td>{match.team_home?.name}</td>
-							<td>0-0</td>
-							<td>{match.team_away?.name}</td>
+							<td>
+								<p>{match.team_home?.name}</p>
+							</td>
+							<td class="text-center">
+								{getGoalCountForTeam(match.id, match.team_home_id, goals)} - {getGoalCountForTeam(match.id, match.team_away_id, goals)}
+							</td>
+							<td>
+								<p>{match.team_away?.name}</p>
+							</td>
 							<td>
 								<div class="flex gap-2">
 									<button on:click={() => goto(`${$page.url.pathname}/${match.id}`)}>

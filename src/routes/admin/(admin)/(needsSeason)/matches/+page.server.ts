@@ -14,13 +14,15 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 				`
 				*,
 				team_home:teams!matches_team_home_id_fkey(
-                    name,
-                    color
-                ),
-                team_away:teams!matches_team_away_id_fkey(
-                    name,
-                    color
-                )
+						id,
+						name,
+						color
+				),
+				team_away:teams!matches_team_away_id_fkey(
+						id,
+						name,
+						color
+				)
 				`
 			)
 			.eq('season_id', seasonId);
@@ -48,6 +50,42 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 		return teams;
 	};
 
+	const getRelevantPlayers = async () => {
+		const { data: players, error: playersError } = await supabase.from('teams_players').select(
+			`
+				team_id,
+				players(
+						id,
+						name
+				)
+      `
+		);
+
+		if (playersError) {
+			console.log(playersError);
+			throw error(500, {
+				message: playersError.message,
+				devHelper: '/admin/matches getting players'
+			});
+		}
+
+		return players;
+	};
+
+	const getGoals = async (matchIds: number[]) => {
+		const { data: goals, error: goalsError } = await supabase.from('goals').select().in('match_id', matchIds);
+
+		if (goalsError) {
+			console.log(goalsError);
+			throw error(500, {
+				message: goalsError.message,
+				devHelper: '/admin/matches getting goals'
+			});
+		}
+
+		return goals;
+	};
+
 	const seasonId = url.searchParams.get('season');
 
 	if (session && seasonId) {
@@ -57,19 +95,30 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 			});
 		}
 
+		const matches = await getMatches(Number(seasonId));
+
+		const playersRes = await getRelevantPlayers();
+		const players = playersRes.map((player) => {
+			return {
+				id: player.players?.id,
+				name: player.players?.name,
+				team_id: player.team_id
+			};
+		});
+
 		return {
-			lazy: {
-				matches: getMatches(Number(seasonId)),
-				teams: getTeams(Number(seasonId))
-			}
+			matches: matches,
+			teams: await getTeams(Number(seasonId)),
+			players: players,
+			goals: await getGoals(matches.map((match) => match.id))
 		};
 	}
 
 	return {
-		lazy: {
-			matches: [],
-			teams: []
-		}
+		matches: [],
+		teams: [],
+		players: [],
+		goals: []
 	};
 };
 

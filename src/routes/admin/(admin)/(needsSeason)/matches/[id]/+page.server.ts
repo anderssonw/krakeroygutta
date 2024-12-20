@@ -11,15 +11,15 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			.from('matches')
 			.select(
 				`
-                *,
-                team_home:teams!matches_team_home_id_fkey(
-                    name,
-                    color
-                ),
-                team_away:teams!matches_team_away_id_fkey(
-                    name,
-                    color
-                )
+				*,
+				team_home:teams!matches_team_home_id_fkey(
+						name,
+						color
+				),
+				team_away:teams!matches_team_away_id_fkey(
+						name,
+						color
+				)
             `
 			)
 			.eq('id', id)
@@ -42,10 +42,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			.select(
 				`
 				team_id,
-                players(
-                    id,
-                    name
-                )
+				players(
+						id,
+						name
+				)
             `
 			)
 			.or(`team_id.eq.${homeTeamId},team_id.eq.${awayTeamId}`);
