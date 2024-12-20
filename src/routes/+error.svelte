@@ -19,9 +19,13 @@
 				text="Husk å være snill med Magnus og William, selv om ikke alt alltid går på skinner. Det kan være vanskelig å lage gode nettsider!"
 			/>
 
-			<h4>{$page.error.devHelper}</h4>
+			{#if $page.error.devHelper}
+				<h4>{$page.error.devHelper}</h4>
+			{/if}
 
-			<p>{$page.error.message}</p>
+			{#if $page.error.message}
+				<p>{$page.error.message}</p>
+			{/if}
 		{/if}
 	{/if}
 </div>
