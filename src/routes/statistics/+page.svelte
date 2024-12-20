@@ -226,11 +226,12 @@
                 })
             } else {
                 const playerStats = playerStatistics.find(ps => ps.season_id === seasonOption.id);
+                const getCurrentSeason = seasons.find(s => s.id === seasonOption.id);
 
-                if (playerStats && season) {
-                    const fantasyPoints = calculateFantasyPoints([playerStats], season, false);
+                if (playerStats && getCurrentSeason) {
+                    const fantasyPoints = calculateFantasyPoints([playerStats], getCurrentSeason, false);
                     const playerStatsSummary: PlayerStatsSeasonSummary = {
-                        season_id: season.id,
+                        season_id: getCurrentSeason.id,
                         player_id: player.id,
                         player_image: player.image,
                         player_name: player.name,
