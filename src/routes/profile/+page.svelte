@@ -29,6 +29,7 @@
 				physical: playerSeason.physical,
 				price: playerSeason.price,
 				skill: playerSeason.skill,
+				inform_image: playerSeason.inform_image,
 				season_id: playerSeason.season_id
 			} as FullPlayer;
 		});

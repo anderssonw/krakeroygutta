@@ -40,7 +40,7 @@ export interface MatchStatsQuery {
 	home_team: MatchStatsTeam;
 	away_team: MatchStatsTeam;
 }
-export interface MatchesWithSeasonName extends Tables<'matches'> {
+export interface MatchWithSeasonName extends Tables<'matches'> {
 	season_name: SeasonForm;
 }
 
@@ -129,6 +129,7 @@ export interface FullPlayer {
 	team_color: string | null;
 	team_id: number | null;
 	season_id: number | null;
+	inform_image?: string;
 	points?: number;
 }
 

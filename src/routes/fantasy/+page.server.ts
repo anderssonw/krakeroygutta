@@ -1,6 +1,6 @@
 import { fail, type Actions, error, redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { FantasyWithPlayers, FullPlayer, MatchStatsTeam, MatchesWithSeasonName } from '$lib/types/newTypes';
+import type { FantasyWithPlayers, FullPlayer, MatchStatsTeam, MatchWithSeasonName } from '$lib/types/newTypes';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '$lib/types/database.generated.types';
 import { isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
@@ -87,7 +87,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					`
 				)
 				.eq('season_id', season_id)
-				.returns<MatchesWithSeasonName[]>();
+				.returns<MatchWithSeasonName[]>();
 
 			if (matchesError) {
 				throw error(500, {

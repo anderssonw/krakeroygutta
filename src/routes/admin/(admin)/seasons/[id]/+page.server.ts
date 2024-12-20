@@ -55,14 +55,25 @@ export const actions = {
 		const seasonDeadline = formData.get('seasonDeadline')?.toString();
 		const seasonEnd = formData.get('seasonEnd')?.toString();
 		const startingCurrency = Number(formData.get('seasonStartingCurrency'));
+		const pointsPerWin = Number(formData.get('seasonPointsPerWin'));
+		const pointsPerCleanSheet = Number(formData.get('seasonPointsPerCleanSheet'));
+		const pointsPerGoal = Number(formData.get('seasonPointsPerGoal'));
+		const pointsPerAssist = Number(formData.get('seasonPointsPerAssist'));
+		const pointsPerClutch = Number(formData.get('seasonPointsPerClutch'));
 
-		if (seasonId && seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency) {
+		if (seasonId && seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency &&
+			pointsPerWin && pointsPerCleanSheet && pointsPerGoal && pointsPerAssist && pointsPerClutch) {
 			const seasonForm: TablesUpdate<'seasons'> = {
 				name: seasonName,
 				start_time: seasonStart,
 				deadline_time: seasonDeadline,
 				end_time: seasonEnd,
-				starting_currency: startingCurrency
+				starting_currency: startingCurrency,
+				points_per_win: pointsPerWin,
+				points_per_clean_sheet: pointsPerCleanSheet,
+				points_per_goal: pointsPerGoal,
+				points_per_assist: pointsPerAssist,
+				points_per_clutch: pointsPerClutch
 			};
 
 			const { error: updateError } = await supabase.from('seasons').update(seasonForm).eq('id', seasonId);

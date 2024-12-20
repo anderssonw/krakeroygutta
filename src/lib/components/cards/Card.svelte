@@ -32,10 +32,14 @@
 		if (card_size == CARD_SIZE.MEDIUM) return medium_opt;
 		return small_opt;
 	};
+	const getLastName = (player: FullPlayer) => {
+		const lastName = player.name.split(' ')[1];
+		return 	lastName.split('-')[0];
+	}
 </script>
 
 {#if player}
-	<div class="{cardType} {cardSizing.width} {cardSizing.height} text-primary-color">
+	<div class="{cardType} {cardSizing.width} {cardSizing.height} {player.inform_image ? 'text-tertiary-color' : 'text-primary-color'}">
 		<div class="relative w-full h-[53.2%]">
 			<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
 				<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
@@ -44,14 +48,14 @@
 				{/if}
 			</div>
 
-			<div class="w-[60%] absolute bottom-0 right-[5%] flex flex-col items-center">
-				<img src={player.image} alt="head" />
+			<div class="{player.inform_image ? 'w-[50%] right-[10%]' : 'w-[60%] right-[5%]'} absolute bottom-0 flex flex-col items-center">
+				<img src={player.inform_image ? player.inform_image : player.image} alt="head" />
 			</div>
 		</div>
 
 		<div class="relative w-full h-[46.8%]">
 			<div class="w-full flex flex-col items-center {cardSizing.stat_gap_y}">
-				<div class="{cardSizing.name} font-semibold">{player.name.split(' ')[1]}</div>
+				<div class="{cardSizing.name} font-semibold">{getLastName(player)}</div>
 
 				<div class="grid grid-cols-5 {cardSizing.stat_gap_x}">
 					<div class="flex flex-col items-center">

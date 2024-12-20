@@ -114,6 +114,11 @@
 				startTime={season.start_time}
 				endTime={season.end_time}
 				deadlineTime={season.deadline_time}
+				pointsPerWin={season.points_per_win}
+				pointsPerCleanSheet={season.points_per_clean_sheet}
+				pointsPerGoal={season.points_per_goal}
+				pointsPerAssist={season.points_per_assist}
+				pointsPerClutch={season.points_per_clutch}
 			/>
 		</form>
 	{/if}

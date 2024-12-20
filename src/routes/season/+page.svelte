@@ -4,6 +4,7 @@
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
 	import type { FantasyTeamFull, FantasyTeamWithPlayers } from '$lib/types/newTypes';
 	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats, getTotalPointsForPlayers } from '$lib/shared/MatchStatsFunctions';
+	import type { Tables } from '$lib/types/database.helper.types';
 
 	export let data: PageData;
 	$: ({ season, teams, allMatches, teamStats, lazy } = data);
@@ -17,7 +18,7 @@
 			});
 		}
 
-		let playersWithPoints = getTotalPointsForPlayers(matches);
+		let playersWithPoints = getTotalPointsForPlayers(matches, season);
 
 		return fantasyTeams
 			.map((fantasyTeam) => {
