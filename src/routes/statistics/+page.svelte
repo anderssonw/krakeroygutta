@@ -10,7 +10,7 @@
 	export let data: PageData;
 	// All of this stuff is also in admin/layout, not sure how to copy it over effectively just letting it stay for now
 
-	$: ({ seasons, players, allMatches, teamStats, season, fantasyTeamPlayers } = data);
+	$: ({ seasons, players, allMatches, teamStats, fantasyTeamPlayers } = data);
 	$: matches = mapTeamStats(allMatches, teamStats);
     $: matchSummary = mapMatchSummary(matches);
 
@@ -67,8 +67,9 @@
     ]
     $: seasonOption = seasonDefaultOptions[0];
     const getCurrentSeason = () => {
-        if (season) {
-            return { name: season.name, id: season.id, desc: true } satisfies FilterOption
+        if (seasons.length > 0) {
+            const newestSeason = seasons.sort((a, b) => b.id - a.id)[0];
+            return { name: newestSeason.name, id: newestSeason.id, desc: true } satisfies FilterOption
         }
 
         return seasonDefaultOptions[0];
@@ -297,18 +298,25 @@
             {/each}
         </div>
     {:else}
-        <div class="w-full flex flex-col gap-8">
-            <div class="flex justify-center px-2">
-                <h1 class="text-center text-3xl tablet:text-4xl">{seasonOption.name}</h1>
-            </div>
+        {#if allPlayerStatistics.length > 0}
+            <div class="w-full flex flex-col gap-8">
+                <div class="flex justify-center px-2">
+                    <h1 class="text-center text-3xl tablet:text-4xl">{seasonOption.name}</h1>
+                </div>
 
-            <div class="grid gap-4">
-                {#each sortByFilter(allPlayerStatistics, filterOption) as player}
-                    <PlayerStatisticsTable player={player} />
-                {/each}
-            </div>
+                <div class="grid gap-4">
+                    {#each sortByFilter(allPlayerStatistics, filterOption) as player}
+                        <PlayerStatisticsTable player={player} />
+                    {/each}
+                </div>
 
-            <PlayerFantasyRanks fantasyTeamPlayers={fantasyTeamPlayers.filter(ftp => ftp.season_id === seasonOption.id)} allPlayerStatistics={allPlayerStatistics} />
-        </div>
+                <PlayerFantasyRanks fantasyTeamPlayers={fantasyTeamPlayers.filter(ftp => ftp.season_id === seasonOption.id)} allPlayerStatistics={allPlayerStatistics} />
+            </div>
+        {:else}
+            <div>
+                <div>Det er ikke blitt spilt noen kamper enda...</div>
+                <div>Statistikken blir oppdatert ettersom kampene registreres og man ser hvilke spillere som er involvert i sesongen.</div>
+            </div>
+        {/if}
     {/if}
 </div>

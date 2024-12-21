@@ -26,8 +26,10 @@ export const load = (async ({ locals: { supabase }, url }) => {
 	};
 
     const getSeasons = async () => {
-        const { data: seasons, error: seasonsError } = await supabase.from('seasons').select();
+        let todayDate = new Date().toLocaleString();
 
+        const { data: seasons, error: seasonsError } = await supabase.from('seasons').select().lt('deadline_time', todayDate);
+        
         if (seasonsError) {
             throw error(500, {
                 message: seasonsError.message,
