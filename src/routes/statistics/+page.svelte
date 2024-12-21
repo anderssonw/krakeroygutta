@@ -260,33 +260,39 @@
 <div class="structure">
 
     <div class="w-full flex justify-between">
-        <FilterMenu header="Sesong" options={getSeasonOptions()} bind:selectedOption={seasonOption} optionPlacement='right' sorting={false} />
+        <FilterMenu header="Velg sesong" options={getSeasonOptions()} bind:selectedOption={seasonOption} optionPlacement='right' sorting={false} />
         <FilterMenu header="Sortér" options={filterOptions} bind:selectedOption={filterOption} optionPlacement='left' sorting={true} />
     </div>
 
     {#if seasonOption.id === seasonDefaultOptions[0].id}
-        <div class="w-full">
-            <div class="flex justify-center mb-8 px-2">
+        <div class="w-full flex flex-col gap-8">
+            <div class="flex justify-center px-2">
                 <h1 class="text-center text-3xl tablet:text-4xl">{seasonOption.name}</h1>
             </div>
+
             <div class="grid gap-4">
                 {#each sortByFilter(allPlayerStatistics, filterOption) as player}
                     <PlayerStatisticsTable player={player} />
                 {/each}
             </div>
+
+            <PlayerFantasyRanks fantasyTeamPlayers={fantasyTeamPlayers} allPlayerStatistics={allPlayerStatistics} />
         </div>
     {:else if seasonOption.id === seasonDefaultOptions[1].id}
         <div class="w-full flex flex-col gap-16">
             {#each seasons.sort((a, b) => b.id - a.id) as seas}
-                <div>
-                    <div class="flex justify-center mb-8 px-2">
+                <div class="w-full flex flex-col gap-8">
+                    <div class="flex justify-center px-2">
                         <h1 class="text-center text-3xl tablet:text-4xl">{seas.name}</h1>
                     </div>
+
                     <div class="grid gap-4">
                         {#each sortByFilter(allPlayerStatistics.filter(aps => aps.season_id === seas.id), filterOption) as player}
                             <PlayerStatisticsTable player={player} />
                         {/each}
                     </div>
+
+                    <PlayerFantasyRanks fantasyTeamPlayers={fantasyTeamPlayers.filter(ftp => ftp.season_id === seas.id)} allPlayerStatistics={allPlayerStatistics} />
                 </div>
             {/each}
         </div>
@@ -295,6 +301,7 @@
             <div class="flex justify-center px-2">
                 <h1 class="text-center text-3xl tablet:text-4xl">{seasonOption.name}</h1>
             </div>
+
             <div class="grid gap-4">
                 {#each sortByFilter(allPlayerStatistics, filterOption) as player}
                     <PlayerStatisticsTable player={player} />
