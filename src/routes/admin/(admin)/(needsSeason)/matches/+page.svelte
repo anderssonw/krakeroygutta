@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import AdminTeamSelect from '$lib/components/admin/AdminTeamSelect.svelte';
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
+	import MagnifierIcon from 'virtual:icons/ph/magnifying-glass-bold';
 	import type { PageData, ActionData } from './$types';
 	import { goto } from '$app/navigation';
 	import type { Tables } from '$lib/types/database.generated.types';
