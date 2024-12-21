@@ -2,7 +2,6 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import AdminTeamSelect from '$lib/components/admin/AdminTeamSelect.svelte';
-	import MagnifierIcon from 'virtual:icons/ph/magnifying-glass-bold';
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
 	import type { PageData, ActionData } from './$types';
 	import { goto } from '$app/navigation';

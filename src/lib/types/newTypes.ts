@@ -16,6 +16,12 @@ export interface DropdownOption {
 	id: number;
 	name: string;
 }
+export interface FilterOption {
+	id: number;
+	name: string;
+	desc: boolean;
+}
+
 
 /* MATCHES PAGE (GENERAL FOR ALL MATCH STATISTICS) */
 export interface MatchStatsPlayer {
@@ -39,6 +45,19 @@ export interface MatchStatsQuery {
 	season_name: string;
 	home_team: MatchStatsTeam;
 	away_team: MatchStatsTeam;
+}
+export interface MatchSummary {
+	match_id: number;
+	team_id: number;
+	team_name: string;
+	team_color: string;
+	season_id: number;
+	season_name: string;
+	players: MatchStatsPlayer[];
+	win: boolean;
+	draw: boolean;
+	loss: boolean;
+	clean_sheet: boolean;
 }
 export interface MatchWithSeasonName extends Tables<'matches'> {
 	season_name: SeasonForm;
@@ -142,10 +161,12 @@ export interface PlayerStatsSeason {
 	clutches: number;
 	wins: number;
 	clean_sheets: number;
+	games: number;
 }
 
 /* /STATISTICS PAGE*/
 export interface PlayerStatsSeasonSummary {
+	season_id: number;
 	player_id: number;
 	player_name: string;
 	player_image: string;

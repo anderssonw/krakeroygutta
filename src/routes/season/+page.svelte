@@ -2,43 +2,63 @@
 	import jogaVideo from '$lib/assets/jogabonito.mp4';
 	import type { PageData } from './$types';
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
-	import type { FantasyTeamFull, FantasyTeamWithPlayers } from '$lib/types/newTypes';
-	import { getPointsFromTeamStats, getTeamStatsFromMatches, mapTeamStats, getTotalPointsForPlayers } from '$lib/shared/MatchStatsFunctions';
-	import type { Tables } from '$lib/types/database.helper.types';
+	import type { FantasyTeamWithPlayers, MatchSummary, TeamWithStats } from '$lib/types/newTypes';
+	import { calculateFantasyPoints, mapMatchSummary, mapPlayerStatistics, mapTeamStats } from '$lib/shared/newMatchStatFunctions';
 
 	export let data: PageData;
 	$: ({ season, teams, allMatches, teamStats, lazy } = data);
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
+	$: matchSummary = mapMatchSummary(matches);
+	$: seasonTableStatistics = getSeasonTableStatistics(matchSummary);
 
-	// Not a huge fan of the typing, perhaps we should do something nicer here, idk
-	const getFantasyTeamsWithPoints = (fantasyTeams: FantasyTeamWithPlayers[]): FantasyTeamFull[] => {
-		if (matches.length === 0) {
-			return fantasyTeams.map((fantasyTeam) => {
-				return { ...fantasyTeam, points: 0 };
-			});
-		}
+	const getSeasonTableStatistics = (matchSummaries: MatchSummary[]) => {
+		const teamWithStatsArray: TeamWithStats[] = [];
 
-		let playersWithPoints = getTotalPointsForPlayers(matches, season);
+		matchSummaries.forEach((summary) => {
+			const teamIndex = teamWithStatsArray.findIndex(twsa => twsa.team_id === summary.team_id);
+			if (teamIndex >= 0) {
+				const existingTeam = {...teamWithStatsArray[teamIndex]};
+				if (summary.win) existingTeam.wins += 1;
+				if (summary.draw) existingTeam.draws += 1;
+				if (summary.loss) existingTeam.losses += 1;
+				teamWithStatsArray[teamIndex] = existingTeam;
+			} else {
+				const newTeamWithStats: TeamWithStats = {
+					team_id: summary.team_id,
+					wins: summary.win ? 1 : 0,
+					draws: summary.draw ? 1 : 0,
+					losses: summary.loss ? 1 : 0,
+					color: summary.team_color,
+					name: summary.team_name
+				}
+				teamWithStatsArray.push(newTeamWithStats);
+			}
+		})
 
-		return fantasyTeams
-			.map((fantasyTeam) => {
-				let pointsForFantasyTeam = 0;
+		return teamWithStatsArray;
+	}
 
-				fantasyTeam.fantasy_teams_players.forEach((player) => {
-					let isCaptainFactor = fantasyTeam.captain_id === player.player_id ? 2 : 1;
-
-					if (playersWithPoints[player.player_id]) {
-						pointsForFantasyTeam += isCaptainFactor * playersWithPoints[player.player_id];
-					}
-				});
-
-				return {
-					...fantasyTeam,
-					points: pointsForFantasyTeam
-				};
-			})
-			.sort((a, b) => b.points - a.points);
+	const getPointsFromTeamStats = (team: TeamWithStats) => {
+		return team.wins * 3 + team.draws;
 	};
+
+	const getFantasyTableStatistics = (fantasyTeams: FantasyTeamWithPlayers[]) => {
+		if (!season) return fantasyTeams;
+
+		fantasyTeams.forEach((fantasyTeam) => {
+			fantasyTeam.points = 0;
+			fantasyTeam.fantasy_teams_players.forEach((player) => {
+				const playerStats = mapPlayerStatistics(matchSummary, player.player_id.toString());
+				const playerPoints = calculateFantasyPoints(playerStats, season, player.player_id === fantasyTeam.captain_id)
+				
+				if ((fantasyTeam.points !== undefined)) {
+					fantasyTeam.points += playerPoints;
+				}
+			})
+		})
+
+		return fantasyTeams.sort((a, b) => b.points! - a.points!);
+	}
 </script>
 
 <div class="structure mb-16 tablet:mb-24 laptop:mb-32">
@@ -62,7 +82,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each getTeamStatsFromMatches(teams, matches).sort((a, b) => getPointsFromTeamStats(b) - getPointsFromTeamStats(a)) as team, i}
+					{#each seasonTableStatistics.sort((a, b) => getPointsFromTeamStats(b) - getPointsFromTeamStats(a)) as team, i}
 						<tr class="border-t-2 border-secondary-color">
 							<th class="border-r-2 border-secondary-color">{i + 1 + '.'}</th>
 							<th class="border-r-2 border-secondary-color flex-row items-center justify-center">
@@ -103,7 +123,7 @@
 
 				<tr class="h-4" />
 
-				{#each getFantasyTeamsWithPoints(fantasyTeams ?? []) as team, i}
+				{#each getFantasyTableStatistics(fantasyTeams ?? []) as team, i}
 					<tr class=" even:bg-green-100 odd:bg-green-50">
 						<td class="px-2">{i + 1 + '.'} plass</td>
 						<td class="px-2">{team.name}</td>
