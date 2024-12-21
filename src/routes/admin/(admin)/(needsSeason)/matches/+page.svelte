@@ -65,24 +65,28 @@
 			<p>Laster</p>
 		{:then teams}
 			<div class="flex gap-2 flex-grow justify-between">
-				<AdminTeamSelect
-					id="teamHomeId"
-					label="Velg Hjemmelag"
-					teams={getAvailableTeams(teams, matchForm.teamHomeId)}
-					bind:value={matchForm.teamHomeId}
-				/>
-				{#if form?.create?.errors['teamHomeId']}
-					<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
-				{/if}
-				<AdminTeamSelect
-					id="teamAwayId"
-					label="Velg Bortelag"
-					teams={getAvailableTeams(teams, matchForm.teamAwayId)}
-					bind:value={matchForm.teamAwayId}
-				/>
-				{#if form?.create?.errors['teamAwayId']}
-					<p class="text-red-400">{form.create.errors['teamAwayId']}</p>
-				{/if}
+				<div class="flex flex-col">
+					<AdminTeamSelect
+						id="teamHomeId"
+						label="Velg Hjemmelag"
+						teams={getAvailableTeams(teams, matchForm.teamHomeId)}
+						bind:value={matchForm.teamHomeId}
+					/>
+					{#if form?.create?.errors['teamHomeId']}
+						<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
+					{/if}
+				</div>
+				<div class="flex flex-col">
+					<AdminTeamSelect
+						id="teamAwayId"
+						label="Velg Bortelag"
+						teams={getAvailableTeams(teams, matchForm.teamAwayId)}
+						bind:value={matchForm.teamAwayId}
+					/>
+					{#if form?.create?.errors['teamAwayId']}
+						<p class="text-red-400">{form.create.errors['teamAwayId']}</p>
+					{/if}
+				</div>
 				<input hidden name="seasonId" value={seasonId} />
 			</div>
 
