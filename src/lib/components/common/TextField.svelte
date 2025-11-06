@@ -5,6 +5,7 @@
 	export let disabled: boolean = false;
 	export let type: string;
 	export let value: string | number | undefined = undefined;
+	export let required: boolean = true;
 
 	function typeAction(node: any) {
 		node.type = type;
@@ -13,5 +14,5 @@
 
 <div class="w-full">
 	<label for={label} class="block mb-1"><h5>{header}</h5></label>
-	<input name={label} use:typeAction id={label} class="input w-full" {placeholder} required {disabled} bind:value />
+	<input name={label} use:typeAction id={label} class="input w-full" {placeholder} {required} {disabled} bind:value />
 </div>

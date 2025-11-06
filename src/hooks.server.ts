@@ -109,6 +109,27 @@ const supabase: Handle = async ({ event, resolve }) => {
 		return null;
 	};
 
+	event.locals.getLatestSeasons = async (): Promise<Tables<'seasons'>[]> => {
+		let session = await event.locals.safeGetSession();
+
+		if (session) {
+			let todayDate = new Date().toLocaleString();
+
+			const { data, error } = await event.locals.supabase
+				.from('seasons')
+				.select()
+				.lt('start_time', todayDate)
+				.order('start_time', { ascending: false })
+				.limit(2);
+
+			if (error) return [];
+
+			return data;
+		}
+
+		return [];
+	};
+
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
 			/**

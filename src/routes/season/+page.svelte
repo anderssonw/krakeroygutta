@@ -1,5 +1,6 @@
 <script lang="ts">
 	import jogaVideo from '$lib/assets/jogabonito.mp4';
+	import eirikVideo from '$lib/assets/eirikComp.mp4';
 	import type { PageData } from './$types';
 	import SeasonButton from '$lib/components/index/SeasonButton.svelte';
 	import type { FantasyTeamWithPlayers, MatchSummary, TeamWithStats } from '$lib/types/newTypes';
@@ -15,9 +16,9 @@
 		const teamWithStatsArray: TeamWithStats[] = [];
 
 		matchSummaries.forEach((summary) => {
-			const teamIndex = teamWithStatsArray.findIndex(twsa => twsa.team_id === summary.team_id);
+			const teamIndex = teamWithStatsArray.findIndex((twsa) => twsa.team_id === summary.team_id);
 			if (teamIndex >= 0) {
-				const existingTeam = {...teamWithStatsArray[teamIndex]};
+				const existingTeam = { ...teamWithStatsArray[teamIndex] };
 				if (summary.win) existingTeam.wins += 1;
 				if (summary.draw) existingTeam.draws += 1;
 				if (summary.loss) existingTeam.losses += 1;
@@ -30,13 +31,13 @@
 					losses: summary.loss ? 1 : 0,
 					color: summary.team_color,
 					name: summary.team_name
-				}
+				};
 				teamWithStatsArray.push(newTeamWithStats);
 			}
-		})
+		});
 
 		return teamWithStatsArray;
-	}
+	};
 
 	const getPointsFromTeamStats = (team: TeamWithStats) => {
 		return team.wins * 3 + team.draws;
@@ -49,22 +50,22 @@
 			fantasyTeam.points = 0;
 			fantasyTeam.fantasy_teams_players.forEach((player) => {
 				const playerStats = mapPlayerStatistics(matchSummary, player.player_id.toString());
-				const playerPoints = calculateFantasyPoints(playerStats, season, player.player_id === fantasyTeam.captain_id)
-				
-				if ((fantasyTeam.points !== undefined)) {
+				const playerPoints = calculateFantasyPoints(playerStats, season, player.player_id === fantasyTeam.captain_id);
+
+				if (fantasyTeam.points !== undefined) {
 					fantasyTeam.points += playerPoints;
 				}
-			})
-		})
+			});
+		});
 
 		return fantasyTeams.sort((a, b) => b.points! - a.points!);
-	}
+	};
 </script>
 
 <div class="structure mb-16 tablet:mb-24 laptop:mb-32">
-	<div class="w-full h-[44vw] laptop:h-128 border-b-4">
-		<video class="relative scale-y-50 origin-top-left" width="100%" autoplay muted loop>
-			<source src={jogaVideo} type="video/mp4" />
+	<div class="w-full">
+		<video src={eirikVideo} controls autoPlay>
+			<track kind="captions" />
 		</video>
 	</div>
 	{#if season && teams}

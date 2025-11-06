@@ -34,8 +34,8 @@
 	};
 	const getLastName = (player: FullPlayer) => {
 		const lastName = player.name.split(' ')[1];
-		return 	lastName.split('-')[0];
-	}
+		return lastName.split('-')[0];
+	};
 </script>
 
 {#if player}
@@ -48,7 +48,11 @@
 				{/if}
 			</div>
 
-			<div class="{player.inform_image ? 'w-[50%] right-[10%]' : 'w-[60%] right-[5%]'} absolute bottom-0 flex flex-col items-center">
+			<div
+				class="{player.inform_image ? 'w-[50%] right-[10%]' : 'w-[60%] right-[5%]'} absolute {card_size === CARD_SIZE.SMALL
+					? 'bottom-[1px]'
+					: 'bottom-0'} flex flex-col items-center"
+			>
 				<img src={player.inform_image ? player.inform_image : player.image} alt="head" />
 			</div>
 		</div>

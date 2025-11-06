@@ -16,11 +16,14 @@ declare global {
 			getUser(): User | null;
 			user: User | null;
 			getSeason(): Promise<Tables<'seasons'> | null>;
+			getLatestSeasons(): Promise<Tables<'seasons'>[]>;
 			getGuttaUser(): Promise<Tables<'users'> | null>;
 			guttaUser: Tables<'users'> | null;
 		}
 		interface PageData {
 			session: Session | null;
+			season: Tables<'seasons'> | null;
+			previousSeason: Tables<'seasons'> | null;
 		}
 		interface Error {
 			devHelper?: string;
