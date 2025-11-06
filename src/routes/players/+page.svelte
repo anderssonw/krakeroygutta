@@ -22,19 +22,23 @@
 	};
 </script>
 
-{#if players}
-	<div class="structure">
-		<h1>Spillere</h1>
+<div class="structure">
+	<h1>Spillere</h1>
 
-		<RuleSpeechBubble imageSrc={madsHangLoose} text={speechBubbleText} mirror={true} />
+	<RuleSpeechBubble imageSrc={madsHangLoose} text={speechBubbleText} mirror={true} />
 
-		{#if sortPlayers(players).length > 0}
-			<Players players={sortPlayers(players)} {season} />
+	{#await players}
+		<p>Laster spillere...</p>
+	{:then resolvedPlayers}
+		{#if resolvedPlayers && sortPlayers(resolvedPlayers).length > 0}
+			<Players players={sortPlayers(resolvedPlayers)} {season} />
 		{:else}
 			<div class="p-8 tablet:p-4 laptop:p-0">
 				<h5>Spillere for denne sesongen er foreløpig ikke tildelt ett lag, og er derfor ikke tilgjengelige.</h5>
 				<h5>Spillerne vil være tilgjengelige så snart de rettferdige lagene er blitt satt opp av julebordskomiteen</h5>
 			</div>
 		{/if}
-	</div>
-{/if}
+	{:catch error}
+		<p>Feil ved lasting av spillere: {error.message}</p>
+	{/await}
+</div>

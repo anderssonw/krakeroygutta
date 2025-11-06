@@ -18,8 +18,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 						*
 					`
 				)
-				.eq('season_id', season_id)
-				.returns<FullPlayer[]>();
+				.eq('season_id', season_id).overrideTypes<FullPlayer[]>();
 
 			if (playersError) {
 				error(500, {
