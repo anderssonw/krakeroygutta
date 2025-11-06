@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 
 		if (matchesError) {
 			console.log(matchesError);
-			throw error(500, {
+			error(500, {
 				message: matchesError.message,
 				devHelper: '/admin/matches getting matches'
 			});
@@ -52,7 +52,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 
 		if (playersError) {
 			console.log(playersError);
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/admin/matches getting players'
 			});
@@ -66,7 +66,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 
 		if (goalsError) {
 			console.log(goalsError);
-			throw error(500, {
+			error(500, {
 				message: goalsError.message,
 				devHelper: '/admin/matches getting goals'
 			});
@@ -80,7 +80,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 
 		if (clutchesError) {
 			console.log(clutchesError);
-			throw error(500, {
+			error(500, {
 				message: clutchesError.message,
 				devHelper: '/admin/matches getting clutches'
 			});
@@ -91,7 +91,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 
 	if (session) {
 		if (!user?.is_admin && !user?.is_superadmin) {
-			throw error(403, {
+			error(403, {
 				message: 'Du har ikke rettigheter til å se denne siden'
 			});
 		}
@@ -142,7 +142,7 @@ export const actions = {
 			const { error: clutchInsertError } = await supabase.from('clutches').insert(clutchInsert);
 
 			if (clutchInsertError) {
-				throw error(500, {
+				error(500, {
 					message: clutchInsertError.message,
 					devHelper: '/admin/matches/[id] inserting clutch'
 				});
@@ -176,7 +176,7 @@ export const actions = {
 			const { error: clutchDeleteError } = await supabase.from('clutches').delete().eq('id', res.clutch_id);
 
 			if (clutchDeleteError) {
-				throw error(500, {
+				error(500, {
 					message: clutchDeleteError.message,
 					devHelper: '/admin/matches/[id] deleting clutch'
 				});
@@ -218,7 +218,7 @@ export const actions = {
 			const { error: goalInsertError } = await supabase.from('goals').insert(goalInsert);
 
 			if (goalInsertError) {
-				throw error(500, {
+				error(500, {
 					message: goalInsertError.message,
 					devHelper: '/admin/matches/[id] inserting goal'
 				});
@@ -250,7 +250,7 @@ export const actions = {
 			const { error: goalDeleteError } = await supabase.from('goals').delete().eq('id', res.goal_id);
 
 			if (goalDeleteError) {
-				throw error(500, {
+				error(500, {
 					message: goalDeleteError.message,
 					devHelper: '/admin/matches/[id] deleting goal'
 				});

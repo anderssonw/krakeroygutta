@@ -24,7 +24,7 @@
 		}
 
 		return playerPoints;
-	}
+	};
 
 	export let form: ActionData;
 
@@ -142,7 +142,13 @@
 			>
 				<div class="grid grid-cols-2 gap-y-8">
 					{#each fantasyForm.players as player, position}
-						<FantasyCardMobile bind:fantasyForm {player} {position} {season}  points={calculatePointsPerPlayer(player ? player.player_id : 0)} />
+						<FantasyCardMobile
+							bind:fantasyForm
+							{player}
+							{position}
+							{season}
+							points={calculatePointsPerPlayer(player ? player.player_id : 0)}
+						/>
 					{/each}
 				</div>
 			</div>

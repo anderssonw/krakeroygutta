@@ -19,14 +19,14 @@
 					{route.route.name}
 				</a>
 				<div class="grid grid-cols-2 px-12 gap-4 pt-6">
-				{#each route.subRoute as subRoute}
-					<div class="col-span-1 py-2 ">
-						<a class="text-lg p-0 w-1/2" href={subRoute.url} on:mouseup={() => (showMobileNavbar = false)}>
-							{subRoute.name}
-						</a>
-					</div>
-				{/each}
-			</div>
+					{#each route.subRoute as subRoute}
+						<div class="col-span-1 py-2">
+							<a class="text-lg p-0 w-1/2" href={subRoute.url} on:mouseup={() => (showMobileNavbar = false)}>
+								{subRoute.name}
+							</a>
+						</div>
+					{/each}
+				</div>
 			</div>
 		{/each}
 	</div>

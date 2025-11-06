@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 
 	if (session) {
 		if (!season) return {};
-	
+
 		const getPlayersForSeason = async (season_id: number, supabase: SupabaseClient<Database>) => {
 			const { data: players, error: playersError } = await supabase
 				.from('player_season_stats')
@@ -19,19 +19,19 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					`
 				)
 				.eq('season_id', season_id)
-				.overrideTypes<FullPlayer[]>()
+				.overrideTypes<FullPlayer[]>();
 
 			if (playersError) {
-				throw error(500, {
+				error(500, {
 					message: playersError.message,
 					devHelper: 'players/[slug] fetch player with stats'
 				});
 			}
-		
-			return players;
-		}
 
-		return {players: getPlayersForSeason(season.id, supabase) } 
+			return players;
+		};
+
+		return { players: await getPlayersForSeason(season.id, supabase) };
 	}
 	return {};
 };

@@ -34,8 +34,8 @@
 	};
 	const getLastName = (player: FullPlayer) => {
 		const lastName = player.name.split(' ')[1];
-		return 	lastName.split('-')[0];
-	}
+		return lastName.split('-')[0];
+	};
 </script>
 
 {#if player}

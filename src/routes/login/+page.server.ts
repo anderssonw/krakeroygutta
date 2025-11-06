@@ -19,7 +19,7 @@ export const actions = {
 		}
 
 		if (data.url) {
-			throw redirect(303, data.url);
+			redirect(303, data.url);
 		}
 	}
 } satisfies Actions;

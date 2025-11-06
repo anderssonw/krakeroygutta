@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 			.eq('season_id', seasonIdParam);
 
 		if (teamsError) {
-			throw error(500, {
+			error(500, {
 				message: teamsError.message,
 				devHelper: '/admin/teams getting teams'
 			});
@@ -30,7 +30,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 			.overrideTypes<{ id: number; name: string }[]>();
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/admin/teams getting players'
 			});
@@ -43,7 +43,11 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 	if (!seasonIdParam) return {};
 
 	if (session && user?.is_superadmin) {
-		return { teams: await getTeams(Number(seasonIdParam)), players: await getPlayers(Number(seasonIdParam)), seasonId: Number(seasonIdParam) };
+		return {
+			teams: await getTeams(Number(seasonIdParam)),
+			players: await getPlayers(Number(seasonIdParam)),
+			seasonId: Number(seasonIdParam)
+		};
 	}
 
 	return {};
@@ -75,7 +79,7 @@ export const actions = {
 			const { data: team, error: insertError } = await supabase.from('teams').insert(teamInsert).select().single();
 
 			if (insertError) {
-				throw error(500, {
+				error(500, {
 					message: insertError.message,
 					devHelper: '/admin/teams inserting team'
 				});
@@ -93,7 +97,7 @@ export const actions = {
 				const { error: insertPlayersError } = await supabase.from('teams_players').insert(playersInsert);
 
 				if (insertPlayersError) {
-					throw error(500, {
+					error(500, {
 						message: insertPlayersError.message,
 						devHelper: '/admin/teams inserting team players'
 					});
@@ -141,7 +145,7 @@ export const actions = {
 				console.log('matches', matches);
 
 				if (matchesError) {
-					throw error(500, {
+					error(500, {
 						message: matchesError.message,
 						devHelper: '/admin/teams selecting matches (checking if should delete players/team)'
 					});
@@ -151,7 +155,7 @@ export const actions = {
 					const { error: deletePlayersFail } = await supabase.from('teams_players').delete().eq('team_id', Number(res.id));
 
 					if (deletePlayersFail) {
-						throw error(500, {
+						error(500, {
 							message: deletePlayersFail.message,
 							devHelper: '/admin/teams deleting team_players while updating'
 						});
@@ -171,7 +175,7 @@ export const actions = {
 						const { error: insertPlayersError } = await supabase.from('teams_players').insert(playersInsert);
 
 						if (insertPlayersError) {
-							throw error(500, {
+							error(500, {
 								message: insertPlayersError.message,
 								devHelper: '/admin/teams inserting team players while updating'
 							});
@@ -190,7 +194,7 @@ export const actions = {
 					const { error: updateTeamError } = await supabase.from('teams').update(teamUpdate).eq('id', Number(res.id));
 
 					if (updateTeamError) {
-						throw error(500, {
+						error(500, {
 							message: updateTeamError.message,
 							devHelper: '/admin/teams update team'
 						});
@@ -239,7 +243,7 @@ export const actions = {
 				.or(`team_home_id.eq.${teamId},team_away_id.eq.${teamId}`);
 
 			if (matchesError) {
-				throw error(500, {
+				error(500, {
 					message: matchesError.message,
 					devHelper: '/admin/teams selecting matches (checking if should delete players/team)'
 				});
@@ -249,7 +253,7 @@ export const actions = {
 				const { error: deletePlayersFail } = await supabase.from('teams_players').delete().eq('team_id', teamId);
 
 				if (deletePlayersFail) {
-					throw error(500, {
+					error(500, {
 						message: deletePlayersFail.message,
 						devHelper: '/admin/teams deleting team_players'
 					});
@@ -258,7 +262,7 @@ export const actions = {
 				const { error: deleteFail } = await supabase.from('teams').delete().eq('id', teamId).eq('season_id', seasonId);
 
 				if (deleteFail) {
-					throw error(500, {
+					error(500, {
 						message: deleteFail.message,
 						devHelper: '/admin/teams deleting team'
 					});

@@ -22,7 +22,6 @@ export interface FilterOption {
 	desc: boolean;
 }
 
-
 /* MATCHES PAGE (GENERAL FOR ALL MATCH STATISTICS) */
 export interface MatchStatsPlayer {
 	id: number;

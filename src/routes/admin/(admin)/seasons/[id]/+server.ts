@@ -1,4 +1,4 @@
-import { Tables } from '$lib/types/database.helper.types.js';
+import type { Tables } from '$lib/types/database.helper.types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ locals: { supabase }, request, params }) {

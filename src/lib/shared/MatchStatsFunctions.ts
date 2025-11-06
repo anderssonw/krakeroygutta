@@ -8,8 +8,6 @@ import type {
 	TeamWithStats
 } from '$lib/types/newTypes';
 
-
-
 export const getGoalsForTeamsInMatch = (match: MatchStatsQuery) => {
 	let homeTeamGoals = match.home_team.players.reduce((goalSum, player) => {
 		return goalSum + player.goals;
@@ -24,7 +22,6 @@ export const getGoalsForTeamsInMatch = (match: MatchStatsQuery) => {
 		awayTeamGoals
 	};
 };
-
 
 /*
 export const getTeamStatsFromMatches = (teams: Tables<'teams'>[], matches: MatchStatsQuery[] | null | undefined): TeamWithStats[] => {
@@ -134,7 +131,6 @@ export const getTotalPointsForPlayers = (matches: MatchStatsQuery[], season: Tab
 };
 */
 
-
 export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: MatchStatsQuery[], season: Tables<'seasons'> | null) => {
 	const playerMap = new Map<number, PlayerStatsSeasonSummary>();
 
@@ -236,7 +232,6 @@ export const getTotalStatsForPlayer = (players: StandardPlayer[], matches: Match
 
 	return listOfPlayerStats;
 };
-
 
 /*
 function initSeasonMap(matches: MatchStatsQuery[]): Map<number, PlayerStatsSeason> {

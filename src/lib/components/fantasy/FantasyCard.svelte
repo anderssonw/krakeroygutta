@@ -28,7 +28,7 @@
 
 		<div class="absolute left-full top-16 flex flex-col space-y-1">
 			{#if season}
-				<FantasyCardButtons bind:fantasyForm={fantasyForm} player={player} position={position} isSeasonPastDeadline={isSeasonPastDeadline(season)} />
+				<FantasyCardButtons bind:fantasyForm {player} {position} isSeasonPastDeadline={isSeasonPastDeadline(season)} />
 			{/if}
 		</div>
 	</div>
