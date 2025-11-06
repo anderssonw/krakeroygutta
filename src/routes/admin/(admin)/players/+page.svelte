@@ -81,7 +81,7 @@
 
 {#if allPlayers}
 	<div class="w-full flex flex-col gap-4">
-		<div class="flex flex-row justify-center flex-wrap">
+		<div class="flex flex-row gap-2 justify-center flex-wrap">
 			{#each currentSeasonCards as currentCard}
 				<Card player={currentCard} card_size={CARD_SIZE.MEDIUM} />
 			{/each}
@@ -90,7 +90,7 @@
 		{#if currentSeasonCards.length > 0}
 			<div class="border-b w-full flex justify-end">
 				<button class="flex flex-row gap-2 text-lg items-center justify-end p-2" on:click={() => (openSeasons = !openSeasons)}>
-					Sammenlikn med fjoråret
+					{openSeasons ? 'Skjul' : 'Vis'} fjorårets spillere
 					{#if openSeasons}
 						<ArrowUpIcon />
 					{:else}
@@ -101,7 +101,7 @@
 		{/if}
 
 		{#if seasonIsActive && openSeasons}
-			<div class="flex flex-row justify-center flex-wrap">
+			<div class="flex flex-row gap-2 justify-center flex-wrap">
 				{#each previousSeasonCards as previousCard}
 					<Card player={previousCard} card_size={CARD_SIZE.SMALL} />
 				{/each}
