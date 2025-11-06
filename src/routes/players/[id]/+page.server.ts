@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 				.returns<FullPlayer[]>();
 
 			if (playerError) {
-				throw error(500, {
+				error(500, {
 					message: playerError.message,
 					devHelper: 'players/[slug] fetch player with stats'
 				});
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 				.returns<MatchWithSeasonName[]>();
 
 			if (matchesError) {
-				throw error(500, {
+				error(500, {
 					message: matchesError.message,
 					devHelper: '/matches getting matches'
 				});
@@ -57,7 +57,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 				.returns<MatchStatsTeam[]>();
 
 			if (teamStatsError) {
-				throw error(500, {
+				error(500, {
 					message: teamStatsError.message,
 					devHelper: '/team_with_stats getting team with player stats - view'
 				});

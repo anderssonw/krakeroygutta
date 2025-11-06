@@ -30,7 +30,7 @@
 
 		<div class="flex flex-row space-x-2">
 			{#if season}
-				<FantasyCardButtons bind:fantasyForm player={player} position={position} isSeasonPastDeadline={isSeasonPastDeadline(season)} />
+				<FantasyCardButtons bind:fantasyForm {player} {position} isSeasonPastDeadline={isSeasonPastDeadline(season)} />
 			{/if}
 		</div>
 	</div>

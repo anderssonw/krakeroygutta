@@ -135,7 +135,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 
 	if (!event.locals.session) {
 		if (isLoggedInRoute(event.url.pathname)) {
-			throw redirect(303, '/login');
+			redirect(303, '/login');
 		}
 	}
 
@@ -144,7 +144,7 @@ const authGuard: Handle = async ({ event, resolve }) => {
 			const guttaUser = await event.locals.getGuttaUser();
 
 			if (!guttaUser || !guttaUser.is_admin) {
-				throw redirect(303, '/');
+				redirect(303, '/');
 			}
 		}
 	}

@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getGuttaUser } 
 				.single();
 
 			if (playerError) {
-				throw error(500, {
+				error(500, {
 					message: `Noe gikk galt: ${playerError.message}`,
 					devHelper: '/profile get player'
 				});
@@ -32,7 +32,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, getGuttaUser } 
 			const { data: seasons, error: seasonsError } = await supabase.from('seasons').select();
 
 			if (seasonsError) {
-				throw error(500, {
+				error(500, {
 					message: `Noe gikk galt: ${seasonsError.message}`,
 					devHelper: '/profile get player'
 				});
@@ -59,6 +59,6 @@ export const actions = {
 			return fail(500, { errors });
 		}
 
-		throw redirect(303, '/');
+		redirect(303, '/');
 	}
 } satisfies Actions;

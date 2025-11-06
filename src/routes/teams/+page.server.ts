@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.returns<Tables<'teams'>[]>();
 
 			if (teamError) {
-				throw error(500, {
+				error(500, {
 					message: teamError.message,
 					devHelper: '/teams fetching teams for a season'
 				});
@@ -44,7 +44,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.returns<FullPlayer[]>();
 
 			if (teamError) {
-				throw error(500, {
+				error(500, {
 					message: teamError.message,
 					devHelper: '/teams fetching teams for a season'
 				});
@@ -65,7 +65,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.returns<MatchStatsTeam[]>();
 
 			if (teamStatsError) {
-				throw error(500, {
+				error(500, {
 					message: teamStatsError.message,
 					devHelper: '/team_with_stats getting team with player stats - view'
 				});

@@ -15,7 +15,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 			.eq('season_id', seasonId);
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/statistics getting players'
 			});
@@ -32,7 +32,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 			.returns<StandardPlayer[]>();
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/statistics getting matches'
 			});
@@ -54,7 +54,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 			.returns<MatchWithSeasonName[]>();
 
 		if (matchesError) {
-			throw error(500, {
+			error(500, {
 				message: matchesError.message,
 				devHelper: '/statistics getting matches'
 			});
@@ -75,7 +75,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 			.returns<MatchStatsTeam[]>();
 
 		if (teamStatsError) {
-			throw error(500, {
+			error(500, {
 				message: teamStatsError.message,
 				devHelper: '/team_with_stats getting team with player stats - view'
 			});
@@ -88,7 +88,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		const { data: goals, error: goalsError } = await supabase.from('goals').select().in('match_id', matchIds);
 
 		if (goalsError) {
-			throw error(500, {
+			error(500, {
 				message: goalsError.message,
 				devHelper: '/statistics getting goals'
 			});
@@ -101,7 +101,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		const { data: clutches, error: clutchesError } = await supabase.from('clutches').select().in('match_id', matchIds);
 
 		if (clutchesError) {
-			throw error(500, {
+			error(500, {
 				message: clutchesError.message,
 				devHelper: '/statistics getting clutches'
 			});

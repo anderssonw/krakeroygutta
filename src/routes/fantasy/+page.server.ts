@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.returns<FullPlayer[]>();
 
 			if (playersError) {
-				throw error(500, {
+				error(500, {
 					message: playersError.message,
 					devHelper: 'players/[slug] fetch player with stats'
 				});
@@ -47,7 +47,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.maybeSingle();
 
 			if (fantasyTeamsError) {
-				throw error(500, {
+				error(500, {
 					message: fantasyTeamsError.message,
 					devHelper: '/fantasy getting fantasy team for user'
 				});
@@ -68,7 +68,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.returns<MatchStatsTeam[]>();
 
 			if (teamStatsError) {
-				throw error(500, {
+				error(500, {
 					message: teamStatsError.message,
 					devHelper: '/team_with_stats getting team with player stats - view'
 				});
@@ -90,7 +90,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				.returns<MatchWithSeasonName[]>();
 
 			if (matchesError) {
-				throw error(500, {
+				error(500, {
 					message: matchesError.message,
 					devHelper: '/matches getting matches'
 				});
@@ -166,7 +166,7 @@ export const actions = {
 				.maybeSingle();
 
 			if (fantasyTeamError) {
-				throw error(500, {
+				error(500, {
 					message: fantasyTeamError.message,
 					devHelper: '/fantasy fetching current fantasy team'
 				});
@@ -178,7 +178,7 @@ export const actions = {
 				const { error: updateError } = await supabase.from('fantasy_teams').update(fantasyTeamToInsert).eq('id', currentFantasyTeam.id);
 
 				if (updateError) {
-					throw error(500, {
+					error(500, {
 						message: updateError.message,
 						devHelper: '/fantasy updating current fantasy team'
 					});
@@ -193,7 +193,7 @@ export const actions = {
 					.single();
 
 				if (insertError) {
-					throw error(500, {
+					error(500, {
 						message: insertError.message,
 						devHelper: '/fantasy inserting current fantasy team'
 					});
@@ -205,7 +205,7 @@ export const actions = {
 			const { error: deleteCurrentTeamError } = await supabase.from('fantasy_teams_players').delete().eq('fantasy_team_id', fantasyTeamId);
 
 			if (deleteCurrentTeamError) {
-				throw error(500, {
+				error(500, {
 					message: deleteCurrentTeamError.message,
 					devHelper: '/fantasy deleting fantasy team players'
 				});
@@ -221,13 +221,13 @@ export const actions = {
 			);
 
 			if (fantasyTeamsPlayersError) {
-				throw error(500, {
+				error(500, {
 					message: fantasyTeamsPlayersError.message,
 					devHelper: '/fantasy inserting/updating fantasy team players'
 				});
 			}
 		}
 
-		throw redirect(303, '/fantasy');
+		redirect(303, '/fantasy');
 	}
 } satisfies Actions;

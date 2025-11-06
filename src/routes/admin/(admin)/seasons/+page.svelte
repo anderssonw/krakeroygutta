@@ -8,9 +8,9 @@
 	import { enhance } from '$app/forms';
 	import goalIcon from '$lib/assets/stat_icons/goal_icon.png';
 	import assistIcon from '$lib/assets/stat_icons/assist_icon.png';
-    import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
-    import winIcon from '$lib/assets/stat_icons/win_icon.png';
-    import cleansheetIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
+	import clutchIcon from '$lib/assets/stat_icons/clutch_icon.png';
+	import winIcon from '$lib/assets/stat_icons/win_icon.png';
+	import cleansheetIcon from '$lib/assets/stat_icons/cleansheet_icon.png';
 
 	// Get server data
 	export let data: PageData;
@@ -104,11 +104,13 @@
 	<h3>Legg til ny sesong</h3>
 
 	<form class="form" method="POST" action="?/create" use:enhance>
-		<AdminSeasonInput id={null} 
-			pointsPerWin={seasons[seasons.length-1] ? seasons[seasons.length-1].points_per_win : 1}
-			pointsPerCleanSheet={seasons[seasons.length-1] ? seasons[seasons.length-1].points_per_clean_sheet : 1}
-			pointsPerGoal={seasons[seasons.length-1] ? seasons[seasons.length-1].points_per_goal : 1}
-			pointsPerAssist={seasons[seasons.length-1] ? seasons[seasons.length-1].points_per_assist : 1}
-			pointsPerClutch={seasons[seasons.length-1] ? seasons[seasons.length-1].points_per_clutch : 1} />
+		<AdminSeasonInput
+			id={null}
+			pointsPerWin={seasons[seasons.length - 1] ? seasons[seasons.length - 1].points_per_win : 1}
+			pointsPerCleanSheet={seasons[seasons.length - 1] ? seasons[seasons.length - 1].points_per_clean_sheet : 1}
+			pointsPerGoal={seasons[seasons.length - 1] ? seasons[seasons.length - 1].points_per_goal : 1}
+			pointsPerAssist={seasons[seasons.length - 1] ? seasons[seasons.length - 1].points_per_assist : 1}
+			pointsPerClutch={seasons[seasons.length - 1] ? seasons[seasons.length - 1].points_per_clutch : 1}
+		/>
 	</form>
 </div>

@@ -8,7 +8,7 @@ export const load: LayoutServerLoad = async ({ locals: { supabase }, parent }) =
 		const { data: seasons, error: seasonsError } = await supabase.from('seasons').select();
 
 		if (seasonsError) {
-			throw error(500, {
+			error(500, {
 				message: seasonsError.message,
 				devHelper: '/statistics getting seasons'
 			});

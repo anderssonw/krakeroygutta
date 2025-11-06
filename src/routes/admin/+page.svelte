@@ -8,10 +8,10 @@
 </script>
 
 <div class="structure">
-	<h1> Administrasjon </h1>
+	<h1>Administrasjon</h1>
 	{#if user?.is_superadmin}
-		<button class="btn" on:click={() => goto("/admin/seasons")}> Administrer sesonger </button>
-		<button class="btn" on:click={() => goto("/admin/teams")}> Administrer lag </button>
+		<button class="btn" on:click={() => goto('/admin/seasons')}> Administrer sesonger </button>
+		<button class="btn" on:click={() => goto('/admin/teams')}> Administrer lag </button>
 	{/if}
-	<button class="btn" on:click={() => goto("/admin/matches")}> Administrer kamper </button>
+	<button class="btn" on:click={() => goto('/admin/matches')}> Administrer kamper </button>
 </div>
