@@ -168,7 +168,7 @@ export const actions = {
 		try {
 			const res = matchDeleteSchema.parse(formData);
 
-			const { error: matchDeleteError } = await supabase.from('matches').delete().eq('id', res.id);
+			const { error: matchDeleteError } = await supabase.from('matches').delete().eq('id', Number(res.id));
 
 			if (matchDeleteError) {
 				if (matchDeleteError.details.includes('is still referenced')) {

@@ -22,7 +22,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 				)
             `
 			)
-			.eq('id', id)
+			.eq('id', Number(id))
 			.single();
 
 		if (matchesError) {

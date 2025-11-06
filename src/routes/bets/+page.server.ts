@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
             `
 		)
 		.eq('season_id', season.id)
-		.returns<Bet[]>();
+		.overrideTypes<Bet[]>();
 
 	if (betsViewErrors) {
 		throw error(500, {

@@ -29,7 +29,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 			.from('players_seasons')
 			.select('...players(id, name, image)')
 			.eq('season_id', seasonId)
-			.returns<StandardPlayer[]>();
+			.overrideTypes<StandardPlayer[]>();
 
 		if (playersError) {
 			throw error(500, {
@@ -51,7 +51,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 					`
 			)
 			.eq('season_id', seasonId)
-			.returns<MatchWithSeasonName[]>();
+			.overrideTypes<MatchWithSeasonName[]>();
 
 		if (matchesError) {
 			throw error(500, {
@@ -72,7 +72,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 				`
 			)
 			.eq('season_id', season_id)
-			.returns<MatchStatsTeam[]>();
+			.overrideTypes<MatchStatsTeam[]>();
 
 		if (teamStatsError) {
 			throw error(500, {

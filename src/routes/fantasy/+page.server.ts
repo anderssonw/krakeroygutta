@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					`
 				)
 				.eq('season_id', season_id)
-				.returns<FullPlayer[]>();
+				.overrideTypes<FullPlayer[]>();
 
 			if (playersError) {
 				throw error(500, {
@@ -43,8 +43,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				)
 				.eq('user_id', user_id)
 				.eq('season_id', season_id)
-				.returns<FantasyWithPlayers[]>()
-				.maybeSingle();
+				.overrideTypes<FantasyWithPlayers[]>()
 
 			if (fantasyTeamsError) {
 				throw error(500, {
@@ -65,7 +64,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					`
 				)
 				.eq('season_id', season_id)
-				.returns<MatchStatsTeam[]>();
+				.overrideTypes<MatchStatsTeam[]>();
 
 			if (teamStatsError) {
 				throw error(500, {
@@ -87,7 +86,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 					`
 				)
 				.eq('season_id', season_id)
-				.returns<MatchWithSeasonName[]>();
+				.overrideTypes<MatchWithSeasonName[]>();
 
 			if (matchesError) {
 				throw error(500, {
@@ -100,10 +99,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		};
 
 		return {
-			allPlayers: getPlayersForSeason(season.id, supabase),
-			fantasyTeam: getFantasyTeamForSeason(season.id, session.user.id, supabase),
-			allMatches: getMatchesForSeason(season.id, supabase),
-			teamStats: getTeamStatsSeason(season.id, supabase)
+			allPlayers: await getPlayersForSeason(season.id, supabase),
+			fantasyTeam: await getFantasyTeamForSeason(season.id, session.user.id, supabase),
+			allMatches: await getMatchesForSeason(season.id, supabase),
+			teamStats: await getTeamStatsSeason(season.id, supabase)
 		};
 	}
 	return {};

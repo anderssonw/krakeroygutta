@@ -6,7 +6,7 @@ import type { Tables, TablesInsert, TablesUpdate } from '$lib/types/database.hel
 export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }) => {
 	const { session, user } = await parent();
 
-	const getTeams = async (seasonIdParam: string) => {
+	const getTeams = async (seasonIdParam: number) => {
 		const { data: data, error: teamsError } = await supabase
 			.from('teams')
 			.select(`*, teams_players(player_id)`)
@@ -22,12 +22,12 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 		return data;
 	};
 
-	const getPlayers = async (seasonId: string) => {
+	const getPlayers = async (seasonId: number) => {
 		const { data: data, error: playersError } = await supabase
 			.from('players_seasons')
 			.select('...players(id, name)')
 			.eq('season_id', seasonId)
-			.returns<{ id: number; name: string }[]>();
+			.overrideTypes<{ id: number; name: string }[]>();
 
 		if (playersError) {
 			throw error(500, {
@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 	if (!seasonIdParam) return {};
 
 	if (session && user?.is_superadmin) {
-		return { teams: getTeams(seasonIdParam), players: getPlayers(seasonIdParam), seasonId: Number(seasonIdParam) };
+		return { teams: await getTeams(Number(seasonIdParam)), players: await getPlayers(Number(seasonIdParam)), seasonId: Number(seasonIdParam) };
 	}
 
 	return {};
@@ -148,8 +148,7 @@ export const actions = {
 				}
 
 				if (matches && matches.length === 0) {
-					console.log('boutta update');
-					const { error: deletePlayersFail } = await supabase.from('teams_players').delete().eq('team_id', res.id);
+					const { error: deletePlayersFail } = await supabase.from('teams_players').delete().eq('team_id', Number(res.id));
 
 					if (deletePlayersFail) {
 						throw error(500, {
@@ -188,7 +187,7 @@ export const actions = {
 
 					console.log('teamupdate', teamUpdate);
 
-					const { error: updateTeamError } = await supabase.from('teams').update(teamUpdate).eq('id', res.id);
+					const { error: updateTeamError } = await supabase.from('teams').update(teamUpdate).eq('id', Number(res.id));
 
 					if (updateTeamError) {
 						throw error(500, {

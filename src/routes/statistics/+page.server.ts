@@ -44,7 +44,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
         const { data: players, error: playersError } = await supabase
             .from('players')
             .select('*')
-            .returns<StandardPlayer[]>();
+            .overrideTypes<StandardPlayer[]>();
 
         if (playersError) {
             throw error(500, {
@@ -65,7 +65,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
                         season_name:seasons(name)
                     `
             )
-            .returns<MatchWithSeasonName[]>();
+            .overrideTypes<MatchWithSeasonName[]>();
 
         if (matchesError) {
             throw error(500, {
@@ -85,7 +85,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
                     *
                 `
             )
-            .returns<MatchStatsTeam[]>();
+            .overrideTypes<MatchStatsTeam[]>();
 
         if (teamStatsError) {
             throw error(500, {

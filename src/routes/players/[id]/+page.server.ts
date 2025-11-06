@@ -12,8 +12,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			const { data: player, error: playerError } = await supabase
 				.from('player_season_stats')
 				.select()
-				.eq('player_id', params.id)
-				.returns<FullPlayer[]>();
+				.eq('player_id', Number(params.id))
+				.overrideTypes<FullPlayer[]>();
 
 			if (playerError) {
 				throw error(500, {
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 						season_name:seasons(name)
 					`
 				)
-				.returns<MatchWithSeasonName[]>();
+				.overrideTypes<MatchWithSeasonName[]>();
 
 			if (matchesError) {
 				throw error(500, {
@@ -54,7 +54,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 						*
 					`
 				)
-				.returns<MatchStatsTeam[]>();
+				.overrideTypes<MatchStatsTeam[]>();
 
 			if (teamStatsError) {
 				throw error(500, {

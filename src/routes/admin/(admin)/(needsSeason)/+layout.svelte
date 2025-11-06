@@ -7,7 +7,6 @@
 	import { onMount } from 'svelte';
 
 	import { browser } from '$app/environment';
-	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 
 	export let data: LayoutData;
 	$: ({ seasons, season } = data);
