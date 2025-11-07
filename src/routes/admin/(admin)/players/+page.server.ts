@@ -1,9 +1,10 @@
 import { error, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import type { FullPlayer, StandardPlayer, StandardPlayerSeason } from '$lib/types/newTypes';
+import type { StandardPlayer, StandardPlayerSeason } from '$lib/types/newTypes';
 import { z } from 'zod';
 import type { TablesInsert, TablesUpdate } from '$lib/types/database.generated.types';
-export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }) => {
+
+export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => {
 	const { session, user, season, previousSeason } = await parent();
 
 	const getAllPlayers = async () => {
@@ -14,10 +15,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
                     *
                 `
 			)
-			.returns<StandardPlayer[]>();
+			.overrideTypes<StandardPlayer[]>();
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/admin/players fetch players'
 			});
@@ -34,10 +35,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
                     *
                 `
 			)
-			.returns<StandardPlayerSeason[]>();
+			.overrideTypes<StandardPlayerSeason[]>();
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/admin/players fetch season stats for players'
 			});
@@ -50,8 +51,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, url, parent }
 		return {
 			season: season,
 			previousSeason: previousSeason,
-			allPlayers: getAllPlayers(),
-			playersPerSeason: getPlayersPerSeason()
+			allPlayers: await getAllPlayers(),
+			playersPerSeason: await getPlayersPerSeason()
 		};
 	}
 

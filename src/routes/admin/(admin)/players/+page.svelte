@@ -82,7 +82,7 @@
 {#if allPlayers}
 	<div class="w-full flex flex-col gap-4">
 		<div class="flex flex-row gap-2 justify-center flex-wrap">
-			{#each currentSeasonCards as currentCard}
+			{#each currentSeasonCards as currentCard (currentCard.player_id)}
 				<Card player={currentCard} card_size={CARD_SIZE.MEDIUM} />
 			{/each}
 		</div>
@@ -109,6 +109,7 @@
 		{/if}
 	</div>
 
+	<!--
 	{#if seasonIsActive}
 		<div class="structure">
 			<div class={`w-full grid grid-cols-2`}>
@@ -147,4 +148,5 @@
 			</div>
 		</div>
 	{/if}
+	-->
 {/if}

@@ -23,7 +23,8 @@
 			stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-1.5', 'gap-x-1'),
 			header_gap_y: sizeBasedReturn('gap-y-6', 'gap-y-3', 'gap-y-2'),
 			currency_size: sizeBasedReturn('w-4', 'w-3', 'w-2'),
-			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5')
+			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5'),
+			image_width: sizeBasedReturn(120, 100, 80)
 		};
 		return sizes;
 	};
@@ -35,6 +36,16 @@
 	const getLastName = (player: FullPlayer) => {
 		const lastName = player.name.split(' ')[1];
 		return lastName.split('-')[0];
+	};
+
+	let widthDiff = 0;
+	const handleImageLoad = (e: any) => {
+		if (e.target) {
+			const heightToWidthRatio = e.target.naturalHeight / e.target.naturalWidth;
+			const changeBy = (1 - heightToWidthRatio) * 100;
+			const changeByClamped = Math.min(Math.max(changeBy, -20), 20);
+			widthDiff = changeByClamped;
+		}
 	};
 </script>
 
@@ -49,11 +60,10 @@
 			</div>
 
 			<div
-				class="{player.inform_image ? 'w-[50%] right-[10%]' : 'w-[60%] right-[5%]'} absolute {card_size === CARD_SIZE.SMALL
-					? 'bottom-[1px]'
-					: 'bottom-0'} flex flex-col items-center"
+				style={`width: ${cardSizing.image_width + widthDiff}px;`}
+				class="right-[5%] absolute {card_size === CARD_SIZE.SMALL ? 'bottom-[1px]' : 'bottom-0'} flex flex-col items-center"
 			>
-				<img src={player.inform_image ? player.inform_image : player.image} alt="head" />
+				<img src={player.inform_image ? player.inform_image : player.image} alt="head" on:load={(e) => handleImageLoad(e)} />
 			</div>
 		</div>
 
