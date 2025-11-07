@@ -3,17 +3,14 @@ import type { PageServerLoad } from './$types';
 import type { MatchStatsTeam, MatchWithSeasonName, StandardPlayer } from '$lib/types/newTypes';
 
 export const load = (async ({ locals: { supabase }, url }) => {
-
-    const getFantasyTeamPlayersForSeason = async () => {
-		const { data: players, error: playersError } = await supabase
-			.from('fantasy_teams')
-			.select(
-				`
+	const getFantasyTeamPlayersForSeason = async () => {
+		const { data: players, error: playersError } = await supabase.from('fantasy_teams').select(
+			`
 				id,
                 season_id,
 				players:fantasy_teams_players(player_id)
 				`
-			)
+		);
 
 		if (playersError) {
 			throw error(500, {
@@ -25,83 +22,80 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		return players;
 	};
 
-    const getSeasons = async () => {
-        let todayDate = new Date().toLocaleString();
+	const getSeasons = async () => {
+		let todayDate = new Date().toLocaleString();
 
-        const { data: seasons, error: seasonsError } = await supabase.from('seasons').select().lt('deadline_time', todayDate);
-        
-        if (seasonsError) {
-            throw error(500, {
-                message: seasonsError.message,
-                devHelper: '/statistics getting seasons'
-            });
-        }
+		const { data: seasons, error: seasonsError } = await supabase.from('seasons').select().lt('deadline_time', todayDate);
 
-        return seasons;
-    }
+		if (seasonsError) {
+			throw error(500, {
+				message: seasonsError.message,
+				devHelper: '/statistics getting seasons'
+			});
+		}
 
-    const getPlayers = async () => {
-        const { data: players, error: playersError } = await supabase
-            .from('players')
-            .select('*')
-            .returns<StandardPlayer[]>();
+		return seasons;
+	};
 
-        if (playersError) {
-            throw error(500, {
-                message: playersError.message,
-                devHelper: '/statistics getting matches'
-            });
-        }
-        
-        return players;
-    };
+	const getPlayers = async () => {
+		const { data: players, error: playersError } = await supabase.from('players').select('*').returns<StandardPlayer[]>();
 
-    const getMatchesForSeason = async () => {
-        const { data: matches, error: matchesError } = await supabase
-            .from('matches')
-            .select(
-                `
+		if (playersError) {
+			throw error(500, {
+				message: playersError.message,
+				devHelper: '/statistics getting matches'
+			});
+		}
+
+		return players;
+	};
+
+	const getMatchesForSeason = async () => {
+		const { data: matches, error: matchesError } = await supabase
+			.from('matches')
+			.select(
+				`
                         *,
                         season_name:seasons(name)
                     `
-            )
-            .returns<MatchWithSeasonName[]>();
+			)
+			.returns<MatchWithSeasonName[]>();
 
-        if (matchesError) {
-            throw error(500, {
-                message: matchesError.message,
-                devHelper: '/statistics getting matches'
-            });
-        }
+		if (matchesError) {
+			throw error(500, {
+				message: matchesError.message,
+				devHelper: '/statistics getting matches'
+			});
+		}
 
-        return matches;
-    };
+		return matches;
+	};
 
-    const getTeamStatsSeason = async () => {
-        const { data: teamStats, error: teamStatsError } = await supabase
-            .from('team_with_stats')
-            .select(
-                `
+	const getTeamStatsSeason = async () => {
+		const { data: teamStats, error: teamStatsError } = await supabase
+			.from('team_with_stats')
+			.select(
+				`
                     *
                 `
-            )
-            .returns<MatchStatsTeam[]>();
+			)
+			.returns<MatchStatsTeam[]>();
 
-        if (teamStatsError) {
-            throw error(500, {
-                message: teamStatsError.message,
-                devHelper: '/team_with_stats getting team with player stats - view'
-            });
-        }
+		if (teamStatsError) {
+			throw error(500, {
+				message: teamStatsError.message,
+				devHelper: '/team_with_stats getting team with player stats - view'
+			});
+		}
 
-        return teamStats;
-    };
+		return teamStats;
+	};
 
-    return {
-        seasons: await getSeasons(),
-        players: await getPlayers(),
-        allMatches: await getMatchesForSeason(),
-        teamStats: await getTeamStatsSeason(),
-        fantasyTeamPlayers: await getFantasyTeamPlayersForSeason()
-    };
+	return {
+		seasons: await getSeasons(),
+		players: await getPlayers(),
+		allMatches: await getMatchesForSeason(),
+		teamStats: await getTeamStatsSeason(),
+		fantasyTeamPlayers: await getFantasyTeamPlayersForSeason()
+	};
 }) satisfies PageServerLoad;

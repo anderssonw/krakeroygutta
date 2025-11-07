@@ -61,8 +61,19 @@ export const actions = {
 		const pointsPerAssist = Number(formData.get('seasonPointsPerAssist'));
 		const pointsPerClutch = Number(formData.get('seasonPointsPerClutch'));
 
-		if (seasonId && seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency &&
-			pointsPerWin && pointsPerCleanSheet && pointsPerGoal && pointsPerAssist && pointsPerClutch) {
+		if (
+			seasonId &&
+			seasonName &&
+			seasonStart &&
+			seasonDeadline &&
+			seasonEnd &&
+			startingCurrency &&
+			pointsPerWin &&
+			pointsPerCleanSheet &&
+			pointsPerGoal &&
+			pointsPerAssist &&
+			pointsPerClutch
+		) {
 			const seasonForm: TablesUpdate<'seasons'> = {
 				name: seasonName,
 				start_time: seasonStart,

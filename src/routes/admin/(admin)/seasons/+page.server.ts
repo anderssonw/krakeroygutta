@@ -35,7 +35,6 @@ export const actions = {
 		const pointsPerGoal = Number(formData.get('seasonPointsPerGoal'));
 		const pointsPerAssist = Number(formData.get('seasonPointsPerAssist'));
 		const pointsPerClutch = Number(formData.get('seasonPointsPerClutch'));
-		
 
 		// Check overlapping dates
 		let isOverlapDate: boolean = false;
@@ -58,9 +57,19 @@ export const actions = {
         }
         */
 
-		if (seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency &&
-			pointsPerWin && pointsPerCleanSheet && pointsPerGoal && pointsPerAssist && pointsPerClutch
-			&& !isOverlapDate) {
+		if (
+			seasonName &&
+			seasonStart &&
+			seasonDeadline &&
+			seasonEnd &&
+			startingCurrency &&
+			pointsPerWin &&
+			pointsPerCleanSheet &&
+			pointsPerGoal &&
+			pointsPerAssist &&
+			pointsPerClutch &&
+			!isOverlapDate
+		) {
 			const seasonForm: TablesInsert<'seasons'> = {
 				name: seasonName,
 				start_time: seasonStart,
