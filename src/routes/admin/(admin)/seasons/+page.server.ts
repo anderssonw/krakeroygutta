@@ -9,7 +9,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		const { data: seasons, error: seasonsError } = await supabase.from('seasons').select();
 
 		if (seasonsError) {
-			throw error(500, {
+			error(500, {
 				message: seasonsError.message,
 				devHelper: '/admin/seasons getting seasons'
 			});
@@ -86,7 +86,7 @@ export const actions = {
 			const { error: insertError } = await supabase.from('seasons').insert(seasonForm);
 
 			if (insertError) {
-				throw error(500, {
+				error(500, {
 					message: insertError.message,
 					devHelper: '/admin/seasons inserting season'
 				});
@@ -105,7 +105,7 @@ export const actions = {
 			const { error: deleteFail } = await supabase.from('seasons').delete().eq('id', seasonId);
 
 			if (deleteFail) {
-				throw error(500, {
+				error(500, {
 					message: deleteFail.message,
 					devHelper: '/admin/seasons deleting season'
 				});

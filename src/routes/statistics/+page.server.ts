@@ -13,7 +13,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		);
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/statistics getting players'
 			});
@@ -28,7 +28,7 @@ export const load = (async ({ locals: { supabase }, url }) => {
 		const { data: seasons, error: seasonsError } = await supabase.from('seasons').select().lt('deadline_time', todayDate);
 
 		if (seasonsError) {
-			throw error(500, {
+			error(500, {
 				message: seasonsError.message,
 				devHelper: '/statistics getting seasons'
 			});
@@ -38,10 +38,10 @@ export const load = (async ({ locals: { supabase }, url }) => {
 	};
 
 	const getPlayers = async () => {
-		const { data: players, error: playersError } = await supabase.from('players').select('*').returns<StandardPlayer[]>();
+		const { data: players, error: playersError } = await supabase.from('players').select('*').overrideTypes<StandardPlayer[]>();
 
 		if (playersError) {
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/statistics getting matches'
 			});
@@ -59,10 +59,10 @@ export const load = (async ({ locals: { supabase }, url }) => {
                         season_name:seasons(name)
                     `
 			)
-			.returns<MatchWithSeasonName[]>();
+			.overrideTypes<MatchWithSeasonName[]>();
 
 		if (matchesError) {
-			throw error(500, {
+			error(500, {
 				message: matchesError.message,
 				devHelper: '/statistics getting matches'
 			});
@@ -79,10 +79,10 @@ export const load = (async ({ locals: { supabase }, url }) => {
                     *
                 `
 			)
-			.returns<MatchStatsTeam[]>();
+			.overrideTypes<MatchStatsTeam[]>();
 
 		if (teamStatsError) {
-			throw error(500, {
+			error(500, {
 				message: teamStatsError.message,
 				devHelper: '/team_with_stats getting team with player stats - view'
 			});

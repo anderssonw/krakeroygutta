@@ -11,12 +11,12 @@ export const GET = async (event) => {
 	if (code) {
 		const { error } = await supabase.auth.exchangeCodeForSession(code);
 		if (!error) {
-			throw redirect(303, `/${next.slice(1)}`);
+			redirect(303, `/${next.slice(1)}`);
 		}
 
 		console.log(`Bruker opplevde feil under redirect til session: ${error}`);
 	}
 
 	// return the user to an error page with instructions
-	throw redirect(303, '/auth/auth-code-error');
+	redirect(303, '/auth/auth-code-error');
 };

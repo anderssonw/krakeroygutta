@@ -28,7 +28,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 			.eq('season_id', seasonId);
 
 		if (matchesError) {
-			throw error(500, {
+			error(500, {
 				message: matchesError.message,
 				devHelper: '/admin/matches getting matches'
 			});
@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 		const { data: teams, error: teamsError } = await supabase.from('teams').select().eq('season_id', seasonId);
 
 		if (teamsError) {
-			throw error(500, {
+			error(500, {
 				message: teamsError.message,
 				devHelper: '/admin/matches getting teams'
 			});
@@ -63,7 +63,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 
 		if (playersError) {
 			console.log(playersError);
-			throw error(500, {
+			error(500, {
 				message: playersError.message,
 				devHelper: '/admin/matches getting players'
 			});
@@ -77,7 +77,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 
 		if (goalsError) {
 			console.log(goalsError);
-			throw error(500, {
+			error(500, {
 				message: goalsError.message,
 				devHelper: '/admin/matches getting goals'
 			});
@@ -90,7 +90,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, url }
 
 	if (session && seasonId) {
 		if (!user?.is_admin && !user?.is_superadmin) {
-			throw error(403, {
+			error(403, {
 				message: 'Du har ikke rettigheter til å se denne siden'
 			});
 		}
@@ -138,7 +138,7 @@ export const actions = {
 			const { error: matchInsertError } = await supabase.from('matches').insert(matchInsert);
 
 			if (matchInsertError) {
-				throw error(500, {
+				error(500, {
 					message: matchInsertError.message,
 					devHelper: '/admin/matches inserting match'
 				});
@@ -168,7 +168,7 @@ export const actions = {
 		try {
 			const res = matchDeleteSchema.parse(formData);
 
-			const { error: matchDeleteError } = await supabase.from('matches').delete().eq('id', res.id);
+			const { error: matchDeleteError } = await supabase.from('matches').delete().eq('id', Number(res.id));
 
 			if (matchDeleteError) {
 				if (matchDeleteError.details.includes('is still referenced')) {
@@ -183,7 +183,7 @@ export const actions = {
 					};
 				}
 
-				throw error(500, {
+				error(500, {
 					message: matchDeleteError.message,
 					devHelper: '/admin/matches deleting match'
 				});
