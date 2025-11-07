@@ -16,7 +16,7 @@
 	export let data: PageData;
 
 	$: ({ playerVersions, allMatches, teamStats, season } = data);
-	// $: player = playerVersions?.find((version) => version.season_id == season?.id);
+
 	$: matches = mapTeamStats(allMatches ?? [], teamStats ?? []);
 	$: matchSummary = mapMatchSummary(matches);
 	$: playerStatistics = mapPlayerStatistics(matchSummary, data.player_id ?? '0');

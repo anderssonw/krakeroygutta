@@ -16,29 +16,8 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 			});
 		}
 
-		const { data: players } = await supabase.from('players').select('*, players_seasons(*)').eq('players_seasons.season_id', params.id);
-
-		const playersWithStats = players?.map((player): PlayerWithStats => {
-			const stats: Tables<'players_seasons'> | null = player.players_seasons[0];
-
-			return {
-				id: player.id,
-				name: player.name,
-				isInSeason: stats != null,
-				stats: {
-					attack: stats?.attack || 0,
-					defence: stats?.defence || 0,
-					physical: stats?.physical || 0,
-					morale: stats?.morale || 0,
-					skill: stats?.skill || 0,
-					price: stats?.price || 0
-				}
-			};
-		});
-
 		return {
-			season,
-			players: playersWithStats
+			season
 		};
 	}
 

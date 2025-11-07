@@ -43,7 +43,8 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 				)
 				.eq('user_id', user_id)
 				.eq('season_id', season_id)
-				.overrideTypes<FantasyWithPlayers[]>();
+				.single()
+				.overrideTypes<FantasyWithPlayers>();
 
 			if (fantasyTeamsError) {
 				error(500, {

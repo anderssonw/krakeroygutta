@@ -96,11 +96,11 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 		};
 
 		return {
-			teams: getTeamsForSeason(season.id, supabase),
-			allMatches: getMatchesForSeason(season.id, supabase),
-			teamStats: getTeamStatsSeason(season.id, supabase),
+			teams: await getTeamsForSeason(season.id, supabase),
+			allMatches: await getMatchesForSeason(season.id, supabase),
+			teamStats: await getTeamStatsSeason(season.id, supabase),
 			lazy: {
-				fantasyTeams: getFantasyTeamsForSeason(season.id, supabase)
+				fantasyTeams: await getFantasyTeamsForSeason(season.id, supabase)
 			}
 		};
 	}

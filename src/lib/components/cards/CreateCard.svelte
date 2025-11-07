@@ -4,6 +4,8 @@
 	import TextField from '../common/TextField.svelte';
 	import DeleteIcon from 'virtual:icons/material-symbols/delete-outline';
 	import currencyImg from '$lib/assets/currency.png';
+	import { enhance } from '$app/forms';
+	import { onMount } from 'svelte';
 
 	export let player: StandardPlayer;
 	export let seasonId: number;
@@ -27,7 +29,8 @@
 			stat_gap_x: sizeBasedReturn('gap-x-4', 'gap-x-1.5', 'gap-x-1'),
 			header_gap_y: sizeBasedReturn('gap-y-6', 'gap-y-3', 'gap-y-2'),
 			currency_size: sizeBasedReturn('w-4', 'w-3', 'w-2'),
-			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5')
+			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5'),
+			image_width: sizeBasedReturn(120, 100, 80)
 		};
 		return sizes;
 	};
@@ -40,12 +43,28 @@
 		const lastName = player.name.split(' ')[1];
 		return lastName.split('-')[0];
 	};
+
+	let widthDiff = 0;
+	const handleImageLoad = (target: any) => {
+		if (target) {
+			const heightToWidthRatio = target.naturalHeight / target.naturalWidth;
+			const changeBy = (1 - heightToWidthRatio) * 100;
+			const changeByClamped = Math.min(Math.max(changeBy, -20), 20);
+			widthDiff = changeByClamped;
+		}
+	};
+
+	let imgEl: HTMLImageElement;
+	onMount(() => {
+		if (imgEl && imgEl.complete) {
+			handleImageLoad(imgEl);
+		}
+	});
 </script>
 
-<form method="POST">
+<form method="POST" use:enhance>
 	<input type="hidden" name="player_id" bind:value={player.id} />
 	<input type="hidden" name="season_id" bind:value={seasonId} />
-
 	{#if currentCard}
 		<div class="flex flex-col gap-2 items-center">
 			<div class="flex flex-row gap-4">
@@ -55,14 +74,20 @@
 						: 'text-primary-color'}"
 				>
 					<div class="relative w-full h-[53.2%]">
-						<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
-							<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
+						<div
+							style={`width: ${cardSizing.image_width + widthDiff}px;`}
+							class="right-[5%] absolute {card_size === CARD_SIZE.SMALL ? 'bottom-[1px]' : 'bottom-0'} flex flex-col items-center"
+						>
+							<img
+								bind:this={imgEl}
+								src={currentCard.inform_image ? currentCard.inform_image : currentCard.image}
+								alt="head"
+								on:load={(e) => handleImageLoad(e.target)}
+							/>
 						</div>
 
-						<div
-							class="{currentCard.inform_image ? 'w-[50%] right-[10%]' : 'w-[60%] right-[5%]'} absolute bottom-0 flex flex-col items-center"
-						>
-							<img src={currentCard.inform_image ? currentCard.inform_image : currentCard.image} alt="head" />
+						<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
+							<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
 						</div>
 					</div>
 

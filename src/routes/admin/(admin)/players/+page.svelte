@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { FullPlayer, StandardPlayer, StandardPlayerSeason } from '$lib/types/newTypes';
 	import { afterUpdate } from 'svelte';
-	import { isSeasonActive } from '$lib/shared/SeasonFunctions';
+	import { isSeasonActive, isSeasonPastDeadline } from '$lib/shared/SeasonFunctions';
 	import type { PageData } from './$types';
 	import { CARD_SIZE } from '$lib/shared/playerCardFunctions';
 	import Card from '$lib/components/cards/Card.svelte';
@@ -22,7 +22,7 @@
 
 	let openSeasons = false;
 
-	$: seasonIsActive = (season && isSeasonActive(season)) ?? false;
+	$: seasonIsActive = (season && isSeasonActive(season) && !isSeasonPastDeadline(season)) ?? false;
 	$: allPlayerSeasonCards = findCardsForPlayers(allPlayers ?? [], playersPerSeason ?? []);
 	$: currentSeasonCards = allPlayerSeasonCards
 		.map((cards) => cards.currentCard)
@@ -87,7 +87,7 @@
 			{/each}
 		</div>
 
-		{#if currentSeasonCards.length > 0}
+		{#if seasonIsActive && currentSeasonCards.length > 0 && previousSeasonCards.length > 0}
 			<div class="border-b w-full flex justify-end">
 				<button class="flex flex-row gap-2 text-lg items-center justify-end p-2" on:click={() => (openSeasons = !openSeasons)}>
 					{openSeasons ? 'Skjul' : 'Vis'} fjorårets spillere
@@ -109,7 +109,6 @@
 		{/if}
 	</div>
 
-	<!--
 	{#if seasonIsActive}
 		<div class="structure">
 			<div class={`w-full grid grid-cols-2`}>
@@ -148,5 +147,4 @@
 			</div>
 		</div>
 	{/if}
-	-->
 {/if}

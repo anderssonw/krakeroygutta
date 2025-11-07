@@ -3,6 +3,7 @@
 	import type { FullPlayer } from '$lib/types/newTypes';
 	import TeamKit from '../common/TeamKit.svelte';
 	import currencyImg from '$lib/assets/currency.png';
+	import { onMount } from 'svelte';
 
 	export let player: FullPlayer | null;
 	export let card_size: CARD_SIZE;
@@ -39,31 +40,43 @@
 	};
 
 	let widthDiff = 0;
-	const handleImageLoad = (e: any) => {
-		if (e.target) {
-			const heightToWidthRatio = e.target.naturalHeight / e.target.naturalWidth;
+	const handleImageLoad = (target: any) => {
+		if (target) {
+			const heightToWidthRatio = target.naturalHeight / target.naturalWidth;
 			const changeBy = (1 - heightToWidthRatio) * 100;
 			const changeByClamped = Math.min(Math.max(changeBy, -20), 20);
 			widthDiff = changeByClamped;
 		}
 	};
+
+	let imgEl: HTMLImageElement;
+	onMount(() => {
+		if (imgEl && imgEl.complete) {
+			handleImageLoad(imgEl);
+		}
+	});
 </script>
 
 {#if player}
 	<div class="{cardType} {cardSizing.width} {cardSizing.height} {player.inform_image ? 'text-tertiary-color' : 'text-primary-color'}">
 		<div class="relative w-full h-[53.2%]">
+			<div
+				style={`width: ${cardSizing.image_width + widthDiff}px;`}
+				class="right-[5%] absolute {card_size === CARD_SIZE.SMALL ? 'bottom-[1px]' : 'bottom-0'} flex flex-col items-center"
+			>
+				<img
+					bind:this={imgEl}
+					src={player.inform_image ? player.inform_image : player.image}
+					alt="head"
+					on:load={(e) => handleImageLoad(e.target)}
+				/>
+			</div>
+
 			<div class="absolute top-[20%] left-[10%] w-[25%] flex flex-col items-center {cardSizing.header_gap_y}">
 				<div class="{cardSizing.avg_stats} font-stats">{playerStatAverage}</div>
 				{#if player.team_color}
 					<TeamKit color={player.team_color} />
 				{/if}
-			</div>
-
-			<div
-				style={`width: ${cardSizing.image_width + widthDiff}px;`}
-				class="right-[5%] absolute {card_size === CARD_SIZE.SMALL ? 'bottom-[1px]' : 'bottom-0'} flex flex-col items-center"
-			>
-				<img src={player.inform_image ? player.inform_image : player.image} alt="head" on:load={(e) => handleImageLoad(e)} />
 			</div>
 		</div>
 
