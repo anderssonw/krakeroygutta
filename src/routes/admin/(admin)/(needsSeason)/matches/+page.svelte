@@ -33,12 +33,12 @@
 	const getGoalCountForTeam = (matchId: number, teamId: number, goals: Tables<'goals'>[]) => {
 		return goals.filter((goal) => {
 			const isCorrectMatch = goal.match_id == matchId;
-
 			if (!isCorrectMatch) return false;
 
-			const playerForGoal = players?.find((player) => player.id === goal.goal_player_id);
+			const playerForGoal = players?.find((player) => player.id === goal.goal_player_id && player.team_id === teamId);
+			if (!playerForGoal) return false;
 
-			return playerForGoal?.team_id === teamId;
+			return true;
 		}).length;
 	};
 </script>

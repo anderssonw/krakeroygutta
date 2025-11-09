@@ -22,7 +22,6 @@ export interface FilterOption {
 	desc: boolean;
 }
 
-
 /* MATCHES PAGE (GENERAL FOR ALL MATCH STATISTICS) */
 export interface MatchStatsPlayer {
 	id: number;
@@ -149,6 +148,7 @@ export interface FullPlayer {
 	team_id: number | null;
 	season_id: number | null;
 	inform_image?: string;
+	outofform_image?: string;
 	points?: number;
 }
 
@@ -183,4 +183,16 @@ export interface StandardPlayer {
 	id: number;
 	name: string;
 	image: string;
+}
+
+export interface StandardPlayerSeason {
+	player_id: number;
+	season_id: number;
+	attack: number;
+	defence: number;
+	morale: number;
+	physical: number;
+	skill: number;
+	price: number;
+	inform_image?: string;
 }

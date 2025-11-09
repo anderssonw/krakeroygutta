@@ -6,7 +6,6 @@
 	import Card from '../cards/Card.svelte';
 
 	export let players: FullPlayer[];
-	export let season: Tables<'seasons'> | null;
 </script>
 
 <div class="structure">
@@ -14,7 +13,7 @@
 		{#each players as player}
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<div class="clickable-card" on:mouseup={() => goto(`/players/${player.player_id}`)}>
-				<Card {player} card_size={CARD_SIZE.MEDIUM} {season} />
+				<Card {player} card_size={CARD_SIZE.MEDIUM} />
 			</div>
 		{/each}
 	</div>

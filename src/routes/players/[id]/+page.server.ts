@@ -12,11 +12,11 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 			const { data: player, error: playerError } = await supabase
 				.from('player_season_stats')
 				.select()
-				.eq('player_id', params.id)
-				.returns<FullPlayer[]>();
+				.eq('player_id', Number(params.id))
+				.overrideTypes<FullPlayer[]>();
 
 			if (playerError) {
-				throw error(500, {
+				error(500, {
 					message: playerError.message,
 					devHelper: 'players/[slug] fetch player with stats'
 				});
@@ -34,10 +34,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 						season_name:seasons(name)
 					`
 				)
-				.returns<MatchWithSeasonName[]>();
+				.overrideTypes<MatchWithSeasonName[]>();
 
 			if (matchesError) {
-				throw error(500, {
+				error(500, {
 					message: matchesError.message,
 					devHelper: '/matches getting matches'
 				});
@@ -54,10 +54,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 						*
 					`
 				)
-				.returns<MatchStatsTeam[]>();
+				.overrideTypes<MatchStatsTeam[]>();
 
 			if (teamStatsError) {
-				throw error(500, {
+				error(500, {
 					message: teamStatsError.message,
 					devHelper: '/team_with_stats getting team with player stats - view'
 				});
@@ -67,9 +67,9 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent, param
 		};
 
 		return {
-			playerVersions: getPlayersForSeason(),
-			allMatches: getMatchesForSeason(),
-			teamStats: getTeamStatsSeason(),
+			playerVersions: await getPlayersForSeason(),
+			allMatches: await getMatchesForSeason(),
+			teamStats: await getTeamStatsSeason(),
 			player_id: params.id
 		};
 	}

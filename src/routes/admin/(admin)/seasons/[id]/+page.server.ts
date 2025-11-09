@@ -10,35 +10,14 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, paren
 		const { data: season, error: seasonsError } = await supabase.from('seasons').select().eq('id', params.id).single();
 
 		if (seasonsError) {
-			throw error(500, {
+			error(500, {
 				message: seasonsError.message,
 				devHelper: '/admin/seasons getting seasons'
 			});
 		}
 
-		const { data: players } = await supabase.from('players').select('*, players_seasons(*)').eq('players_seasons.season_id', params.id);
-
-		const playersWithStats = players?.map((player): PlayerWithStats => {
-			const stats: Tables<'players_seasons'> | null = player.players_seasons[0];
-
-			return {
-				id: player.id,
-				name: player.name,
-				isInSeason: stats != null,
-				stats: {
-					attack: stats?.attack || 0,
-					defence: stats?.defence || 0,
-					physical: stats?.physical || 0,
-					morale: stats?.morale || 0,
-					skill: stats?.skill || 0,
-					price: stats?.price || 0
-				}
-			};
-		});
-
 		return {
-			season,
-			players: playersWithStats
+			season
 		};
 	}
 
@@ -61,8 +40,19 @@ export const actions = {
 		const pointsPerAssist = Number(formData.get('seasonPointsPerAssist'));
 		const pointsPerClutch = Number(formData.get('seasonPointsPerClutch'));
 
-		if (seasonId && seasonName && seasonStart && seasonDeadline && seasonEnd && startingCurrency &&
-			pointsPerWin && pointsPerCleanSheet && pointsPerGoal && pointsPerAssist && pointsPerClutch) {
+		if (
+			seasonId &&
+			seasonName &&
+			seasonStart &&
+			seasonDeadline &&
+			seasonEnd &&
+			startingCurrency &&
+			pointsPerWin &&
+			pointsPerCleanSheet &&
+			pointsPerGoal &&
+			pointsPerAssist &&
+			pointsPerClutch
+		) {
 			const seasonForm: TablesUpdate<'seasons'> = {
 				name: seasonName,
 				start_time: seasonStart,
@@ -79,7 +69,7 @@ export const actions = {
 			const { error: updateError } = await supabase.from('seasons').update(seasonForm).eq('id', seasonId);
 
 			if (updateError) {
-				throw error(500, {
+				error(500, {
 					message: updateError.message,
 					devHelper: '/admin/seasons updating season'
 				});
@@ -88,7 +78,7 @@ export const actions = {
 			return { success: true };
 		}
 
-		throw error(400, {
+		error(400, {
 			message: 'Mangler data for å oppdatere sesong'
 		});
 	}

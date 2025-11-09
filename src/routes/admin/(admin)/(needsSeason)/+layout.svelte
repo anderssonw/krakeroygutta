@@ -7,7 +7,6 @@
 	import { onMount } from 'svelte';
 
 	import { browser } from '$app/environment';
-	import ReturnToRoute from '$lib/components/common/ReturnToRoute.svelte';
 
 	export let data: LayoutData;
 	$: ({ seasons, season } = data);
@@ -54,8 +53,11 @@
 	};
 </script>
 
-<div class="flex flex-col gap-4 items-center">
-	<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
+<div class="flex flex-col gap-4 items-center w-full">
+	<div class="w-full laptop:w-1/2">
+		<DropdownMenu header={'Velg Sesong'} option={'sesong'} options={getSeasonOptions()} bind:selectedOption={seasonOption} />
+	</div>
+
 	{#if seasonOption}
 		<slot />
 	{/if}

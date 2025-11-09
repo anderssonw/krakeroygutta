@@ -6,11 +6,12 @@
 	import type { ActionData, PageData } from './$types';
 	import ArrowUpIcon from 'virtual:icons/ph/arrow-up';
 	import ArrowDownIcon from 'virtual:icons/ph/arrow-down';
+	import { isSeasonActive } from '$lib/shared/SeasonFunctions';
 
 	// Get server data
 	export let data: PageData;
 	export let form: ActionData;
-	$: ({ player, seasons, user } = data);
+	$: ({ player, seasons, user, season } = data);
 
 	$: playerSeasonsWithCardDate = (): FullPlayer[] => {
 		if (!player) return [];
@@ -81,10 +82,16 @@
 			<div class="flex flex-col items-center space-y-4">
 				<h1>Hei {user.nickname}!</h1>
 				{#if player}
-					{#if currentSeasonCard?.player}
-						<h2>Spillerkort for sesong - {currentSeasonCard.season.name}</h2>
-						<Card card_size={CARD_SIZE.LARGE} player={currentSeasonCard.player} />
+					{#if isSeasonActive(season)}
+						<h2>Spillerkort for sesong - {season.name}</h2>
+						{#if currentSeasonCard?.player}
+							<Card card_size={CARD_SIZE.LARGE} player={currentSeasonCard.player} />
+						{:else}
+							<Card player={null} card_size={CARD_SIZE.LARGE} />
+							<h3>Skal du ikke være med i år?!</h3>
+						{/if}
 					{/if}
+
 					{#if otherSeasonCards}
 						<button class="border-b-2" on:click={() => (openSeasons = !openSeasons)}>
 							<div class="text-lg flex flex-row align-middle py-4 gap-2">
@@ -99,8 +106,8 @@
 						<div class="flex flex-row gap-8" use:accordion={openSeasons}>
 							{#each otherSeasonCards as playerSeason}
 								{#if playerSeason.player}
-									<div class="flex flex-col gap-4 items-center">
-										<h3 class="text-s w-40 text-center">{playerSeason.season.name}</h3>
+									<div class="flex flex-col gap-4 items-center justify-end">
+										<h3 class="text-s w-60 text-center">{playerSeason.season.name}</h3>
 										<Card card_size={CARD_SIZE.MEDIUM} player={playerSeason.player} />
 									</div>
 								{/if}

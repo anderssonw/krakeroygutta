@@ -1,10 +1,10 @@
-import { Tables } from '$lib/types/database.helper.types.js';
+import type { Tables } from '$lib/types/database.helper.types.js';
 import { error } from '@sveltejs/kit';
 
 export async function POST({ locals: { supabase }, request, params }) {
 	const playersToUpdate = (await request.json()) as Tables<'players_seasons'>[];
 
-	const { data: players, error: getErr } = await supabase.from('players_seasons').select().eq('season_id', params.id);
+	const { data: players, error: getErr } = await supabase.from('players_seasons').select().eq('season_id', Number(params.id));
 	const { error: upsertErr } = await supabase.from('players_seasons').upsert(playersToUpdate);
 
 	if (getErr || upsertErr) {
@@ -19,8 +19,8 @@ export async function POST({ locals: { supabase }, request, params }) {
 	const { error: deleteErr } = await supabase
 		.from('players_seasons')
 		.delete()
-		.in('player_id', [playersToDelete])
-		.eq('season_id', params.id);
+		.in('player_id', playersToDelete)
+		.eq('season_id', Number(params.id));
 
 	if (deleteErr) {
 		console.log(deleteErr);

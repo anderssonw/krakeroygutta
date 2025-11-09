@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
 	let { season } = await parent();
 
 	if (season == null) {
-		throw error(500, {
+		error(500, {
 			message: 'Mangler sesong, må ha sesong for bets'
 		});
 	}
@@ -21,10 +21,10 @@ export const load: PageServerLoad = async ({ locals: { supabase }, parent }) => 
             `
 		)
 		.eq('season_id', season.id)
-		.returns<Bet[]>();
+		.overrideTypes<Bet[]>();
 
 	if (betsViewErrors) {
-		throw error(500, {
+		error(500, {
 			message: betsViewErrors.message,
 			devHelper: '/bets fetching bet information'
 		});
@@ -66,14 +66,14 @@ export const actions = {
 			const { error: insertError } = await supabase.from('bets').insert(betForm);
 
 			if (insertError) {
-				throw error(500, {
+				error(500, {
 					message: insertError.message,
 					devHelper: '/bets inserting a bet'
 				});
 			}
 		}
 
-		throw redirect(302, '/bets');
+		redirect(302, '/bets');
 	},
 	addBetAgainst: async ({ request, locals: { supabase, getGuttaUser, getSeason } }) => {
 		// Form data
@@ -92,14 +92,14 @@ export const actions = {
 			const { error: insertError } = await supabase.from('bets_against').insert(betAgainstForm);
 
 			if (insertError) {
-				throw error(500, {
+				error(500, {
 					message: insertError.message,
 					devHelper: '/bets inserting a bet_against'
 				});
 			}
 		}
 
-		throw redirect(302, '/bets');
+		redirect(302, '/bets');
 	},
 	removeBetAgainst: async ({ request, locals: { supabase, getGuttaUser, getSeason } }) => {
 		// Form data
@@ -114,14 +114,14 @@ export const actions = {
 			const { error: deleteError } = await supabase.from('bets_against').delete().eq('user_id', user.id).eq('bet_id', parseInt(bet_id));
 
 			if (deleteError) {
-				throw error(500, {
+				error(500, {
 					message: deleteError.message,
 					devHelper: '/bets deleting a bet_against'
 				});
 			}
 		}
 
-		throw redirect(302, '/bets');
+		redirect(302, '/bets');
 	},
 	removeBet: async ({ locals: { supabase, getGuttaUser, getSeason } }) => {
 		// Get from hooks
@@ -132,13 +132,13 @@ export const actions = {
 			const { error: deleteError } = await supabase.from('bets').delete().eq('user_id', user.id).eq('season_id', season.id);
 
 			if (deleteError) {
-				throw error(500, {
+				error(500, {
 					message: deleteError.message,
 					devHelper: '/bets deleting a bet'
 				});
 			}
 		}
 
-		throw redirect(302, '/bets');
+		redirect(302, '/bets');
 	}
 } satisfies Actions;
