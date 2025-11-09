@@ -88,7 +88,6 @@
 			const heightToWidthRatio = target.naturalHeight / target.naturalWidth;
 			const changeBy = (1 - heightToWidthRatio) * 200;
 			const changeByClamped = Math.min(Math.max(changeBy, -100), 100);
-			console.log(changeByClamped);
 			widthDiff = changeByClamped;
 		}
 	};
