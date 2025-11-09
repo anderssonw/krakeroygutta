@@ -80,7 +80,12 @@
 						>
 							<img
 								bind:this={imgEl}
-								src={currentCard.inform_image ? currentCard.inform_image : currentCard.image}
+								src={currentCard.outofform_image
+									? currentCard.outofform_image
+									: currentCard.inform_image
+									? currentCard.inform_image
+									: currentCard.image}
+								class={`w-full ${currentCard.outofform_image ? 'grayscale-[0.75]' : 'grayscale-0'}`}
 								alt="head"
 								on:load={(e) => handleImageLoad(e.target)}
 							/>
@@ -187,6 +192,14 @@
 							type="text"
 							placeholder="https://i.imgur.com/"
 							bind:value={currentCard.inform_image}
+							required={false}
+						/>
+						<TextField
+							header="Out of form"
+							label="outofform_image"
+							type="text"
+							placeholder="https://i.imgur.com/"
+							bind:value={currentCard.outofform_image}
 							required={false}
 						/>
 					</div>

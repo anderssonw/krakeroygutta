@@ -148,6 +148,7 @@ export interface FullPlayer {
 	team_id: number | null;
 	season_id: number | null;
 	inform_image?: string;
+	outofform_image?: string;
 	points?: number;
 }
 

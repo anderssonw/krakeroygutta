@@ -74,7 +74,8 @@ export const actions = {
 				morale: Number(res.morale),
 				skill: Number(res.skill),
 				price: Number(res.price),
-				inform_image: null
+				inform_image: null,
+				outofform_image: null
 			};
 
 			const { error: insertPlayersError } = await supabase.from('players_seasons').insert(playerSeasonInsert);
@@ -102,7 +103,8 @@ export const actions = {
 				morale: Number(res.morale),
 				skill: Number(res.skill),
 				price: Number(res.price),
-				inform_image: res.inform_image
+				inform_image: res.inform_image,
+				outofform_image: res.outofform_image
 			};
 
 			const { error: updatePlayersError } = await supabase
@@ -160,6 +162,7 @@ const updateSchema = z.object({
 	player_id: z.string(),
 	season_id: z.string(),
 	inform_image: z.string().nullable(),
+	outofform_image: z.string().nullable(),
 	attack: z.string(),
 	defence: z.string(),
 	physical: z.string(),

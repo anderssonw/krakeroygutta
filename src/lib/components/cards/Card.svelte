@@ -25,7 +25,7 @@
 			header_gap_y: sizeBasedReturn('gap-y-6', 'gap-y-3', 'gap-y-2'),
 			currency_size: sizeBasedReturn('w-4', 'w-3', 'w-2'),
 			currency_space_y: sizeBasedReturn('pt-3', 'pt-0.5', 'pt-0.5'),
-			image_width: sizeBasedReturn(120, 100, 80)
+			image_width: sizeBasedReturn(140, 100, 80)
 		};
 		return sizes;
 	};
@@ -66,7 +66,8 @@
 			>
 				<img
 					bind:this={imgEl}
-					src={player.inform_image ? player.inform_image : player.image}
+					src={player.outofform_image ? player.outofform_image : player.inform_image ? player.inform_image : player.image}
+					class={`w-full ${player.outofform_image ? 'grayscale-[0.75]' : 'grayscale-0'}`}
 					alt="head"
 					on:load={(e) => handleImageLoad(e.target)}
 				/>

@@ -12,6 +12,9 @@ export const calculatePlayerStatAverage = (player: FullPlayer | null) => {
 };
 export const getPlayerCardType = (player: FullPlayer | null, card: boolean) => {
 	if (player) {
+		if (player.outofform_image) {
+			return card ? 'trash-card' : 'trash-back';
+		}
 		if (player.inform_image) {
 			return card ? 'inform-card' : 'inform-back';
 		}
