@@ -107,7 +107,6 @@
 	const openTeamDeleteModal = (id: number): MouseEventHandler<HTMLButtonElement> | null | undefined => {
 		const dialog = document.querySelector(`dialog#delete-dialog-${id}`) as HTMLDialogElement;
 
-		console.log(modalTeam);
 		dialog?.showModal();
 		return;
 	};
