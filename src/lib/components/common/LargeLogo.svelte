@@ -1,7 +1,11 @@
 <script lang="ts">
-	import headerLogo from '$lib/assets/headerLargeXmas.png';
+	import headerLarge from '$lib/assets/headerLarge.png';
+	import headerLargeDisco from '$lib/assets/headerLargeDisco.webp';
 </script>
 
 <div class="w-[90%] sm:w-[80%]">
-	<img src={headerLogo} alt="logo" />
+	<picture>
+		<source srcset={headerLargeDisco} type="image/webp" />
+		<img src={headerLarge} alt="logo" />
+	</picture>
 </div>

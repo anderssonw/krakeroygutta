@@ -4,9 +4,11 @@
 	import NavbarModal from './NavbarModal.svelte';
 	import type { Session } from '@supabase/supabase-js';
 	import { navAdminRoutes, navNoSessionRoutes, navSessionRoutes, type MainRoute } from '$lib/shared/routes';
-	import smallHeaderLogo from '$lib/assets/headerSmallXmas.png';
+	import smallHeaderLogo from '$lib/assets/headerSmallDisco.png';
+	import eirikStormoen from '$lib/assets/eirikstormoen.gif';
 
 	import HamburgerIcon from 'virtual:icons/mdi/hamburger-menu';
+	import Dancer from '../common/Dancer.svelte';
 
 	export let session: Session | null;
 	export let user: Tables<'users'> | null;
@@ -44,8 +46,10 @@
 
 <div class="nav flex items-center {isMobile ? '' : hideNavbar}">
 	<a href="/">
-		<div class="w-16 tablet:w-28 flex flex-row">
-			<img src={smallHeaderLogo} alt="trophy" />
+		<div class="relative flex flex-row items-center">
+			<div class="w-16 tablet:w-28 flex flex-row">
+				<img src={smallHeaderLogo} alt="trophy" />
+			</div>
 		</div>
 	</a>
 	<div class="w-full flex flex-row justify-end">
