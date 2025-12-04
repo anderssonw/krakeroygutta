@@ -1,14 +1,13 @@
 <script lang="ts">
 	import KrakeroyKommune from '$lib/components/index/krakeroyKommune.svelte';
-	import { afterUpdate, onMount } from 'svelte';
+	import { afterUpdate } from 'svelte';
 	import ContentFooter from '$lib/components/index/ContentFooter.svelte';
 	import { isInViewport } from '$lib/shared/isInView';
 	import LargeLogo from '$lib/components/common/LargeLogo.svelte';
 	import scrollImg from '$lib/assets/ruleScroll.png';
+	import StrobeLights from '$lib/components/common/StrobeLights.svelte';
 
 	import type { PageData } from './$types';
-	import SnowAnimation from '$lib/components/common/SnowAnimation.svelte';
-	import { datetimeRegex } from 'zod';
 	export let data: PageData;
 
 	$: ({ session, season } = data);
@@ -48,8 +47,6 @@
 </script>
 
 <div class="w-full overflow-x-hidden">
-	<SnowAnimation />
-
 	<div class="structure space-y-10">
 		<LargeLogo />
 
@@ -132,3 +129,20 @@
 
 <!-- Applies afterUpdate since y updates on scrolling -->
 <svelte:window bind:scrollY={y} />
+
+<StrobeLights />
+
+<style>
+	.johabbu-plane {
+		animation: johabbu 10s linear infinite;
+	}
+
+	@keyframes johabbu {
+		0% {
+			transform: translateX(-100%);
+		}
+		100% {
+			transform: translateX(calc(100vw + 100%));
+		}
+	}
+</style>

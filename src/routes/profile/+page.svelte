@@ -7,6 +7,7 @@
 	import ArrowUpIcon from 'virtual:icons/ph/arrow-up';
 	import ArrowDownIcon from 'virtual:icons/ph/arrow-down';
 	import { isSeasonActive } from '$lib/shared/SeasonFunctions';
+	import Dancer from '$lib/components/common/Dancer.svelte';
 
 	// Get server data
 	export let data: PageData;
@@ -76,7 +77,7 @@
 
 <div class="flex flex-col items-center py-8">
 	{#await player}
-		<p>Laster</p>
+		<Dancer />
 	{:then player}
 		{#if user}
 			<div class="flex flex-col items-center space-y-4">
