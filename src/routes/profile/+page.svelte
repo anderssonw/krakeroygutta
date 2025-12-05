@@ -82,7 +82,7 @@
 		{#if user}
 			<div class="flex flex-col items-center space-y-4">
 				<h1>Hei {user.nickname}!</h1>
-				{#if player}
+				{#if player && season}
 					{#if isSeasonActive(season)}
 						<h2>Spillerkort for sesong - {season.name}</h2>
 						{#if currentSeasonCard?.player}
@@ -104,7 +104,7 @@
 								{/if}
 							</div>
 						</button>
-						<div class="flex flex-row gap-8" use:accordion={openSeasons}>
+						<div class="flex flex-col gap-8" use:accordion={openSeasons}>
 							{#each otherSeasonCards as playerSeason}
 								{#if playerSeason.player}
 									<div class="flex flex-col gap-4 items-center justify-end">
