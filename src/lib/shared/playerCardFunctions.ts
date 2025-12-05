@@ -20,8 +20,8 @@ export const getPlayerCardType = (player: FullPlayer | null, card: boolean) => {
 		}
 
 		let avgStats: number = calculatePlayerStatAverage(player);
-		if (avgStats > 75) return card ? 'gold-card' : 'gold-back';
-		if (avgStats > 65) return card ? 'silver-card' : 'silver-back';
+		if (avgStats > 74) return card ? 'gold-card' : 'gold-back';
+		if (avgStats > 64) return card ? 'silver-card' : 'silver-back';
 		return card ? 'bronze-card' : 'bronze-back';
 	} else {
 		return 'empty-card';

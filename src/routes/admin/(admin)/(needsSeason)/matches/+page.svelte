@@ -43,10 +43,10 @@
 	};
 </script>
 
-<div class="flex flex-col gap-4 items-center">
+<div class="flex flex-col w-full gap-4 items-center">
 	<h4>Ny Kamp</h4>
 	<form
-		class="flex flex-col mt-0 pt-0"
+		class="flex flex-col mt-0 pt-0 flex-1 w-full"
 		method="POST"
 		action="?/create-match"
 		use:enhance={() => {
@@ -64,8 +64,8 @@
 		{#await teams}
 			<p>Laster</p>
 		{:then teams}
-			<div class="flex gap-2 flex-grow justify-between">
-				<div class="flex flex-col">
+			<div class="flex gap-2 flex-grow flex-1 justify-around">
+				<div class="flex flex-col w-32">
 					<AdminTeamSelect
 						id="teamHomeId"
 						label="Velg Hjemmelag"
@@ -76,7 +76,7 @@
 						<p class="text-red-400">{form.create.errors['teamHomeId']}</p>
 					{/if}
 				</div>
-				<div class="flex flex-col">
+				<div class="flex flex-col w-32">
 					<AdminTeamSelect
 						id="teamAwayId"
 						label="Velg Bortelag"
@@ -95,15 +95,15 @@
 			<p>Noe gikk galt</p>
 		{/await}
 	</form>
-	<div class="px-4">
+	<div class="w-full px-4">
 		{#await matches}
 			<p>Henter Kamper</p>
 		{:then matches}
 			{#if matches.length === 0}
 				<p>Ingen Kamper for denne sesongen</p>
 			{:else}
-				<table>
-					<tr class="text-center">
+				<table class="w-full text-left">
+					<tr>
 						<th>Hjemmelag</th>
 						<th>Score</th>
 						<th>Bortelag</th>
@@ -113,11 +113,11 @@
 					{#each matches.sort((a, b) => {
 						return b.id - a.id;
 					}) as match}
-						<tr>
+						<tr class="border-t-2 border-secondary-color">
 							<td>
 								<p>{match.team_home?.name}</p>
 							</td>
-							<td class="text-center">
+							<td>
 								{getGoalCountForTeam(match.id, match.team_home_id, goals)} - {getGoalCountForTeam(match.id, match.team_away_id, goals)}
 							</td>
 							<td>
@@ -129,7 +129,20 @@
 										<MagnifierIcon style="font-size: 1.2em" class="cursor-pointer" />
 									</button>
 
-									<form method="POST" action="?/delete-match" use:enhance>
+									<form
+										class="flex flex-col justify-center"
+										method="POST"
+										action="?/delete-match"
+										use:enhance={({ cancel }) => {
+											if (!confirm('Er du sikker på at du vil slette denne kampen?')) {
+												return cancel();
+											}
+
+											return async ({ update }) => {
+												await update();
+											};
+										}}
+									>
 										<button>
 											<input hidden name="id" value={match.id} />
 											<DeleteIcon style="font-size: 1.2em" class="cursor-pointer" />
