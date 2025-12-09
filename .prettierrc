@@ -3,5 +3,20 @@
 	"singleQuote": true,
 	"trailingComma": "none",
 	"printWidth": 140,
-	"pluginSearchDirs": ["."]
+	"pluginSearchDirs": [
+		"."
+	],
+	"plugins": [
+		"prettier-plugin-tailwindcss",
+		"prettier-plugin-svelte"
+	],
+	"overrides": [
+		{
+			"files": "*.svelte",
+			"options": {
+				"parser": "svelte"
+			}
+		}
+	],
+	"tailwindStylesheet": "./src/routes/layout.css"
 }
