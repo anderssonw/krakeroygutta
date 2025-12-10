@@ -3,9 +3,10 @@
 		src?: string | null;
 		alt?: string | null;
 		size?: 'sm' | 'md' | 'lg';
+		class?: string;
 	}
 
-	let { src, alt, size = 'md' }: Props = $props();
+	let { src, alt, size = 'md', class: className = '' }: Props = $props();
 
 	const sizeClasses = {
 		sm: 'h-8 w-8 min-w-8',
@@ -15,5 +16,5 @@
 </script>
 
 {#if src}
-	<img {src} alt={alt || 'Player'} class="aspect-square rounded-full object-cover {sizeClasses[size]}" />
+	<img {src} alt={alt || 'Player'} class="aspect-square rounded-full object-cover {sizeClasses[size]} {className}" />
 {/if}
