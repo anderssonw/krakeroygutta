@@ -13,11 +13,12 @@ declare global {
 				user: Session['user'] | null;
 				profile: Profile | null;
 			}>;
+			session: Seassion | null;
+			profile: Profile | null;
 			season(): Promise<Season | null>;
 		}
 		interface PageData {
 			session: Session | null;
-			user?: Session['user'] | null;
 		}
 		// interface PageState {}
 		// interface Platform {}

@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import PlayerImage from '$lib/components/PlayerImage.svelte';
-	import SortableTableHeader from '$lib/components/SortableTableHeader.svelte';
+	import PlayerImageAvatar from '$lib/components/PlayerImageAvatar.svelte';
+	import SortableTableHeader from './SortableTableHeader.svelte';
 	import type { PageProps } from './$types';
 	import type { FullPlayerStats } from './+page.server';
 	import clsx from 'clsx';
+	import type { Header, SortKey } from './types';
 
 	let { data }: PageProps = $props();
 
@@ -14,8 +15,6 @@
 		const seasonId = select.value;
 		goto(`/statistikk?season=${seasonId}`);
 	}
-
-	type SortKey = 'points' | 'goals' | 'assists' | 'clutches' | 'clean_sheets' | 'victories' | 'name';
 
 	const sortFunctions: Record<SortKey, (a: FullPlayerStats, b: FullPlayerStats) => number> = {
 		points: (a, b) => b.totalScore - a.totalScore,
@@ -43,15 +42,6 @@
 		const sortFn = sortFunctions[currentSortKey] || sortFunctions.points;
 		return [...players].sort((a, b) => sortFn(a, b) * sortDirection);
 	}
-
-	type Header = {
-		sortKey: SortKey;
-		label: string;
-		field: keyof FullPlayerStats;
-		color?: string;
-		abbreviation?: string;
-		isIcon?: boolean;
-	};
 
 	const getPlayerNameForBreakpoint = (name: string) => {
 		const parts = name.split(' ');
@@ -160,7 +150,13 @@
 						{:then players}
 							<!-- Actual data -->
 							{#each getSortedPlayers(players) as player, i}
-								<tr class="border-b last:border-b-0 hover:bg-muted/30">
+								<tr
+									class={clsx(
+										'border-b last:border-b-0 hover:bg-muted/30',
+										data.profile?.player_id === player.id &&
+											'relative bg-primary/10 shadow-[inset_0_0_20px_oklch(var(--primary),0.15)] animate-pulse-subtle'
+									)}
+								>
 									{#each headers as header}
 										<td
 											class={clsx(
@@ -171,7 +167,7 @@
 										>
 											{#if header.sortKey === 'name'}
 												<div class="flex items-center gap-2 sm:gap-3">
-													<PlayerImage src={player.image} alt={player.name} size={'sm'} class="sm:h-10 sm:w-10" />
+													<PlayerImageAvatar src={player.image} alt={player.name} size={'sm'} class="sm:h-10 sm:w-10" />
 													<span class="text-xs sm:text-medium md:text-base">{getPlayerNameForBreakpoint(player.name)}</span>
 												</div>
 											{:else if header.isIcon}

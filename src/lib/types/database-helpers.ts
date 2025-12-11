@@ -1,5 +1,6 @@
 import type { Database } from './database.generated.types';
 
+// TODO Hvor bør disse leve? Liker ikke database-helpers
 export type Profile = Database['public']['Tables']['users']['Row'];
 
 export function tableSeasonRowToSeason(row: Database['public']['Tables']['seasons']['Row']): Season {

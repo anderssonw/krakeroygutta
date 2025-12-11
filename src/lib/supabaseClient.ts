@@ -6,7 +6,7 @@ export const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLIS
 /**
  * Wraps a Supabase query and handles errors by logging and throwing
  */
-export async function querySupabase<T>(
+export async function supabaseQuery<T>(
 	queryPromise: PromiseLike<{ data: T | null; error: PostgrestError | null }>,
 	errorContext?: string
 ): Promise<T | null> {

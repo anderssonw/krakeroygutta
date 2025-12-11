@@ -3,17 +3,23 @@
 
 	let { children, data } = $props();
 
-	let { user, profile, currentSeason } = $derived(data);
+	const links = [{ href: '/', label: 'Hjem' }];
 
-	const links = [
-		{ href: '/', label: 'Hjem' },
-		{ href: '/statistikk', label: 'Statistikk' }
+	const unAuthenticatedLinks = [{ href: '/login', label: 'Logg inn' }];
+
+	const authenticatedLinks = [
+		{ href: '/spillere', label: 'Spillere' },
+		{ href: '/statistikk', label: 'Statistikk' },
+		{ href: '/profil', label: 'Profil' }
 	];
-
-	const authenticatedLinks = [{ href: '/profil', label: 'Profil' }];
 </script>
 
-<svelte:head />
+<svelte:head>
+	<title>Kråkerøy Gutta</title>
+	<meta name="description" content="Kråkerøygutta sin offisielle nettside!" />
+	<link rel="icon" href="/favicon.ico" />
+	<script src="https://accounts.google.com/gsi/client" async></script>
+</svelte:head>
 
 <div>
 	<div class="w-full p-4 flex justify-end sticky top-0 bg-slate-700 shadow-md">
@@ -21,12 +27,14 @@
 			<a class="mx-2" href={link.href}>{link.label}</a>
 		{/each}
 
-		{#if user}
+		{#if data.user}
 			{#each authenticatedLinks as link}
 				<a class="mx-2" href={link.href}>{link.label}</a>
 			{/each}
 		{:else}
-			<a class="mx-2" href="/login">Logg inn</a>
+			{#each unAuthenticatedLinks as link}
+				<a class="mx-2" href={link.href}>{link.label}</a>
+			{/each}
 		{/if}
 	</div>
 

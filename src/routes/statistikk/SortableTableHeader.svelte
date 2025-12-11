@@ -1,6 +1,6 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import type { SortKey } from '../../routes/statistikk/types';
+	import type { SortKey } from './types';
 	import type { Snippet } from 'svelte';
 
 	interface Props {

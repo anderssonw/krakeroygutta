@@ -83,3 +83,23 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+@layer utilities {
+	@keyframes pulse-subtle {
+		0%,
+		100% {
+			box-shadow:
+				inset 0 0 20px oklch(from var(--primary) l c h / 0.15),
+				0 0 15px oklch(from var(--primary) l c h / 0.1);
+		}
+		50% {
+			box-shadow:
+				inset 0 0 30px oklch(from var(--primary) l c h / 0.25),
+				0 0 25px oklch(from var(--primary) l c h / 0.2);
+		}
+	}
+
+	.animate-pulse-subtle {
+		animation: pulse-subtle 3s ease-in-out infinite;
+	}
+}

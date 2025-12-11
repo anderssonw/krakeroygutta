@@ -1,5 +1,5 @@
 import { type Season } from '$lib/types/database-helpers';
-import { defer, querySupabase } from '$lib/supabaseClient';
+import { defer, supabaseQuery } from '$lib/supabaseClient';
 import type { PageServerLoad } from './$types';
 
 export type FullPlayerStats = {
@@ -29,7 +29,7 @@ export type SeasonWithPlayerStatistics = {
 
 export const load = (async ({ locals: { supabase, season }, url }) => {
 	// First, get all seasons to determine target season
-	const allSeasons = await querySupabase(
+	const allSeasons = await supabaseQuery(
 		supabase.from('seasons').select('*').order('start_time', { ascending: false }),
 		'Error fetching seasons'
 	);
@@ -69,22 +69,22 @@ export const load = (async ({ locals: { supabase, season }, url }) => {
 
 	const deferredPlayers = defer(async () => {
 		const [allPlayers, goalsData, clutchesData, matches, teams] = await Promise.all([
-			querySupabase(
+			supabaseQuery(
 				supabase
 					.from('players')
 					.select('id, name, image, players_seasons!inner(season_id)')
 					.eq('players_seasons.season_id', targetSeasonId),
 				'Error fetching players'
 			),
-			querySupabase(
+			supabaseQuery(
 				supabase.from('goals').select('goal_player_id, assist_player_id, matches!inner(season_id)').eq('matches.season_id', targetSeasonId),
 				'Error fetching goals'
 			),
-			querySupabase(
+			supabaseQuery(
 				supabase.from('clutches').select('player_id, matches!inner(season_id)').eq('matches.season_id', targetSeasonId),
 				'Error fetching clutches'
 			),
-			querySupabase(
+			supabaseQuery(
 				supabase
 					.from('matches')
 					.select(
@@ -102,7 +102,7 @@ export const load = (async ({ locals: { supabase, season }, url }) => {
 					.eq('season_id', targetSeasonId),
 				'Error fetching matches'
 			),
-			querySupabase(
+			supabaseQuery(
 				supabase
 					.from('teams')
 					.select(
