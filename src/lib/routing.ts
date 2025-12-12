@@ -15,9 +15,10 @@ export const routes: RouteLink[] = [
 	{ href: '/', label: 'Hjem', visibility: 'public', requiresAuth: false, requiresAdmin: false, index: 0 },
 	{ href: '/login', label: 'Logg inn', visibility: 'unauthenticated', requiresAuth: false, requiresAdmin: false, index: 1 },
 	{ href: '/spillere', label: 'Spillere', visibility: 'authenticated', requiresAuth: true, requiresAdmin: false, index: 2 },
-	{ href: '/statistikk', label: 'Statistikk', visibility: 'authenticated', requiresAuth: true, requiresAdmin: false, index: 3 },
-	{ href: '/profil', label: 'Profil', visibility: 'authenticated', requiresAuth: true, requiresAdmin: false, index: 4 },
-	{ href: '/admin', label: 'Admin', visibility: 'admin', requiresAuth: true, requiresAdmin: true, index: 5 }
+	{ href: '/fantasy', label: 'Fantasy', visibility: 'authenticated', requiresAuth: true, requiresAdmin: false, index: 3 },
+	{ href: '/statistikk', label: 'Statistikk', visibility: 'authenticated', requiresAuth: true, requiresAdmin: false, index: 4 },
+	{ href: '/profil', label: 'Profil', visibility: 'authenticated', requiresAuth: true, requiresAdmin: false, index: 5 }
+	// { href: '/admin', label: 'Admin', visibility: 'admin', requiresAuth: true, requiresAdmin: true, index: 6 }
 ];
 
 export function getVisibleRoutes(profile: Profile | null): RouteLink[] {

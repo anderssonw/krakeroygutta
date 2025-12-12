@@ -27,7 +27,7 @@ export type SeasonWithPlayerStatistics = {
 	players: FullPlayerStats[];
 };
 
-export const load = (async ({ locals: { supabase, season }, url }) => {
+export const load = (async ({ locals: { supabase, getSeason: season }, url }) => {
 	// First, get all seasons to determine target season
 	const allSeasons = await supabaseQuery(
 		supabase.from('seasons').select('*').order('start_time', { ascending: false }),

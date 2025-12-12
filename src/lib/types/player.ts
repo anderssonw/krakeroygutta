@@ -1,7 +1,10 @@
-export type PlayerInfo = {
+interface BasePlayer {
 	id: number;
 	name: string;
 	image: string;
+}
+
+export interface SeasonPlayer extends BasePlayer {
 	inform_image: string | null;
 	outofform_image: string | null;
 	attack: number;
@@ -10,9 +13,12 @@ export type PlayerInfo = {
 	skill: number;
 	morale: number;
 	price: number;
+}
+
+export interface SeasonAndTeamPlayer extends SeasonPlayer {
 	team: {
 		id: number;
 		name: string;
 		color: string;
 	};
-};
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
-	import PlayerCard from '$lib/components/PlayerCard.svelte';
+	import PlayerCard from '$lib/components/PlayerCards/PlayerCard.svelte';
 	import MadsSpeechBubble from '$lib/components/MadsSpeechBubble.svelte';
 	import { getPlayerAverage } from '$lib/player';
 

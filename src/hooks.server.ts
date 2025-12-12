@@ -26,11 +26,6 @@ const locals: Handle = async ({ event, resolve }) => {
 		}
 	});
 
-	/**
-	 * Unlike `supabase.auth.getSession`, which is unsafe on the server because it
-	 * doesn't validate the JWT, this function validates the JWT by first calling
-	 * `getUser` and aborts early if the JWT signature is invalid.
-	 */
 	event.locals.safeGetSession = async () => {
 		const {
 			data: { user },
@@ -55,7 +50,7 @@ const locals: Handle = async ({ event, resolve }) => {
 		return { session, profile: null };
 	};
 
-	event.locals.season = async () => {
+	event.locals.getSeason = async () => {
 		const seasonsData = await supabaseQuery(event.locals.supabase.from('seasons').select('*'));
 
 		if (!seasonsData || seasonsData.length === 0) {

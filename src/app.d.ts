@@ -12,9 +12,7 @@ declare global {
 				session: Session | null;
 				profile: Profile | null;
 			}>;
-			session: Session | null;
-			profile: Profile | null;
-			season(): Promise<Season | null>;
+			getSeason(): Promise<Season | null>;
 		}
 		interface PageData {
 			session: Session | null;

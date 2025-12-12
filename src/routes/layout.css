@@ -103,6 +103,18 @@
 		animation: pulse-subtle 3s ease-in-out infinite;
 	}
 
+	.fantasy-field {
+		@apply bg-cover bg-center bg-no-repeat;
+	}
+
+	.fantasy-field.small {
+		background-image: url('$lib/assets/fantasy/fantasy_field_small.png');
+	}
+
+	.fantasy-field.large {
+		background-image: url('$lib/assets/fantasy/fantasy_field_large.png');
+	}
+
 	.player-card {
 		@apply bg-cover bg-center bg-no-repeat;
 	}
@@ -125,5 +137,9 @@
 
 	.player-card.trash {
 		background-image: url('$lib/assets/cards/trash_card.png');
+	}
+
+	.player-card.empty {
+		background-image: url('$lib/assets/cards/empty.png');
 	}
 }

@@ -3,5 +3,11 @@
 	let { season } = $derived(data);
 </script>
 
-<h1>{JSON.stringify(season, null, 2)}</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<div class="container mx-auto my-4 text-center">
+	{#if season}
+		<h2 class="mb-4 text-2xl font-bold">Velkommen til sesongen {season.name}!</h2>
+	{:else}
+		<h2 class="mb-4 text-2xl font-bold">Ingen aktiv sesong</h2>
+		<p>Vennligst sjekk tilbake senere for oppdateringer.</p>
+	{/if}
+</div>

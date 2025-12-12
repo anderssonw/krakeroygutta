@@ -1,8 +1,10 @@
 <script lang="ts">
+	import type { BreakPoint } from '$lib/breakpoints';
+
 	interface Props {
 		src?: string | null;
 		alt?: string | null;
-		size?: 'sm' | 'md' | 'lg';
+		size?: BreakPoint;
 		class?: string;
 	}
 
