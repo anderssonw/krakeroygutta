@@ -3,15 +3,15 @@ import { zfd } from 'zod-form-data';
 
 export const TEAM_SIZE = 4;
 
-export type FantasyValidationError = 'incomplete_team' | 'over_budget' | 'missing_name' | 'no_captain';
+type FantasyValidationError = 'incomplete_team' | 'over_budget' | 'missing_name' | 'no_captain';
 
-export type ValidationError = {
+type ValidationError = {
 	error: FantasyValidationError;
 	message: string;
 };
 
 // Validation error messages
-export const VALIDATION_MESSAGES = {
+const VALIDATION_MESSAGES = {
 	MISSING_NAME: 'Gi laget ditt et navn',
 	TEAM_SIZE_REQUIRED: (count: number) => `Du må velge ${count} spillere`,
 	NO_CAPTAIN: 'Velg en kaptein for laget ditt',
@@ -27,9 +27,9 @@ export const fantasyTeamFormSchema = zfd.formData({
 	captainId: zfd.numeric(z.number({ message: VALIDATION_MESSAGES.NO_CAPTAIN }))
 });
 
-export type FantasyTeamFormData = z.infer<typeof fantasyTeamFormSchema>;
+type FantasyTeamFormData = z.infer<typeof fantasyTeamFormSchema>;
 
-export type FantasyTeamData = {
+type FantasyTeamData = {
 	name: string;
 	playerIds: number[];
 	captainPlayerId: number | null;

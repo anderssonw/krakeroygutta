@@ -1,8 +1,8 @@
 import type { Profile } from './types/database-helpers';
 
-export type RouteVisibility = 'public' | 'unauthenticated' | 'authenticated' | 'admin';
+type RouteVisibility = 'public' | 'unauthenticated' | 'authenticated' | 'admin';
 
-export type RouteLink = {
+type RouteLink = {
 	href: string;
 	label: string;
 	visibility: RouteVisibility;

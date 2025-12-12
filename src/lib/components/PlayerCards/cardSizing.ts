@@ -1,6 +1,6 @@
 import type { BreakPoint } from '$lib/breakpoints';
 
-export type CardSizes = {
+type CardSizes = {
 	width: string;
 	height: string;
 	avg_stats: string;

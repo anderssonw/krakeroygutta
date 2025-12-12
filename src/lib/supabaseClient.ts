@@ -1,7 +1,4 @@
-import { createClient, PostgrestError } from '@supabase/supabase-js';
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/static/public';
-
-export const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY);
+import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Wraps a Supabase database query and handles errors by logging and throwing

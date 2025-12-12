@@ -4,7 +4,7 @@ interface BasePlayer {
 	image: string;
 }
 
-export interface SeasonPlayer extends BasePlayer {
+interface SeasonPlayer extends BasePlayer {
 	inform_image: string | null;
 	outofform_image: string | null;
 	attack: number;

@@ -15,7 +15,6 @@
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.417",
-		"@internationalized/date": "^3.10.0",
 		"@lucide/svelte": "^0.544.0",
 		"@sveltejs/adapter-vercel": "^6.1.1",
 		"@sveltejs/enhanced-img": "^0.9.2",

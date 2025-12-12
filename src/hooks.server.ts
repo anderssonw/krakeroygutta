@@ -1,4 +1,3 @@
-// src/hooks.server.ts
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/static/public';
 import { routes } from '$lib/routing';
 import { supabaseQuery } from '$lib/supabaseClient';
