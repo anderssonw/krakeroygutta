@@ -28,7 +28,7 @@
 
 <th
 	onclick={handleClick}
-	class={clsx('px-2 py-2 md:px-6 md:py-4 text-sm font-semibold select-none', alignClass, isSortable && 'cursor-pointer hover:bg-muted/50')}
+	class={clsx('px-2 py-2 text-sm font-semibold select-none md:px-6 md:py-4', alignClass, isSortable && 'cursor-pointer hover:bg-muted/50')}
 >
 	<div class="inline-flex items-center gap-1">
 		{#if children}

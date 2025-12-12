@@ -10,10 +10,9 @@ declare global {
 			supabase: SupabaseClient<Database>;
 			safeGetSession(): Promise<{
 				session: Session | null;
-				user: Session['user'] | null;
 				profile: Profile | null;
 			}>;
-			session: Seassion | null;
+			session: Session | null;
 			profile: Profile | null;
 			season(): Promise<Season | null>;
 		}

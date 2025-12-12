@@ -6,6 +6,7 @@
 	import type { FullPlayerStats } from './+page.server';
 	import clsx from 'clsx';
 	import type { Header, SortKey } from './types';
+	import { getInitials, getLastName, getNamesExceptFirst } from '$lib/names';
 
 	let { data }: PageProps = $props();
 
@@ -23,7 +24,7 @@
 		clutches: (a, b) => b.clutches - a.clutches,
 		clean_sheets: (a, b) => b.cleanSheets - a.cleanSheets,
 		victories: (a, b) => b.victories - a.victories,
-		name: (a, b) => a.name.split(' ').slice(-1)[0].localeCompare(b.name.split(' ').slice(-1)[0], 'nb-NO', { sensitivity: 'base' })
+		name: (a, b) => getLastName(a.name).localeCompare(getLastName(b.name), 'nb-NO', { sensitivity: 'base' })
 	};
 
 	let currentSortKey = $state<SortKey>('points');
@@ -44,15 +45,13 @@
 	}
 
 	const getPlayerNameForBreakpoint = (name: string) => {
-		const parts = name.split(' ');
-
 		const isSmall = window.innerWidth < 640; // Tailwind 'sm' breakpoint
 
 		if (isSmall) {
-			return `${parts.slice(0)[0][0]}. ${parts.slice(-1)[0][0]}.`; // Initialer
+			return getInitials(name);
 		}
 
-		return parts.slice(1).join(' '); // Etternavn og eventuelle mellomnavn
+		return getNamesExceptFirst(name);
 	};
 
 	const headers: Header[] = [
@@ -89,7 +88,7 @@
 						id="season-select"
 						onchange={handleSeasonChange}
 						value={data.season.id}
-						class="w-full rounded-lg border bg-card px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring md:w-auto"
+						class="w-full rounded-lg border bg-card px-4 py-2 text-sm focus:ring-2 focus:ring-ring focus:outline-none md:w-auto"
 					>
 						{#each data.allSeasons as season}
 							<option value={season.id}>{season.name}</option>
@@ -116,11 +115,11 @@
 								>
 									{#if header.isIcon}
 										<span
-											class={`inline-flex h-5 w-5 md:h-8 md:w-8 justify-center items-center rounded-full bg-${header.color}-500/20 text-xs sm:text-medium md:text-base font-bold text-${header.color}-300`}
+											class={`inline-flex h-5 w-5 items-center justify-center rounded-full md:h-8 md:w-8 bg-${header.color}-500/20 sm:text-medium text-xs font-bold md:text-base text-${header.color}-300`}
 											>{header.abbreviation}</span
 										>
 									{:else}
-										<span class="text-xs sm:text-medium md:text-base font-bold">{header.label}</span>
+										<span class="sm:text-medium text-xs font-bold md:text-base">{header.label}</span>
 									{/if}
 								</SortableTableHeader>
 							{/each}
@@ -135,13 +134,13 @@
 										<td class="px-2 py-2 md:px-6 md:py-4">
 											{#if j === 0}
 												<div class="flex items-center gap-2 sm:gap-3">
-													<div class="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-muted"></div>
-													<div class="hidden sm:block h-4 w-32 rounded bg-muted"></div>
+													<div class="h-8 w-8 rounded-full bg-muted sm:h-10 sm:w-10"></div>
+													<div class="hidden h-4 w-32 rounded bg-muted sm:block"></div>
 												</div>
 											{:else if j === headers.length - 1}
-												<div class="ml-auto h-5 w-10 sm:h-6 sm:w-16 rounded bg-muted"></div>
+												<div class="ml-auto h-5 w-10 rounded bg-muted sm:h-6 sm:w-16"></div>
 											{:else}
-												<div class="mx-auto h-4 w-6 sm:w-8 rounded bg-muted"></div>
+												<div class="mx-auto h-4 w-6 rounded bg-muted sm:w-8"></div>
 											{/if}
 										</td>
 									{/each}
@@ -154,7 +153,7 @@
 									class={clsx(
 										'border-b last:border-b-0 hover:bg-muted/30',
 										data.profile?.player_id === player.id &&
-											'relative bg-primary/10 shadow-[inset_0_0_20px_oklch(var(--primary),0.15)] animate-pulse-subtle'
+											'animate-pulse-subtle relative bg-primary/10 shadow-[inset_0_0_20px_oklch(var(--primary),0.15)]'
 									)}
 								>
 									{#each headers as header}
@@ -168,14 +167,14 @@
 											{#if header.sortKey === 'name'}
 												<div class="flex items-center gap-2 sm:gap-3">
 													<PlayerImageAvatar src={player.image} alt={player.name} size={'sm'} class="sm:h-10 sm:w-10" />
-													<span class="text-xs sm:text-medium md:text-base">{getPlayerNameForBreakpoint(player.name)}</span>
+													<span class="sm:text-medium text-xs md:text-base">{getPlayerNameForBreakpoint(player.name)}</span>
 												</div>
 											{:else if header.isIcon}
-												<span class={`text-sm sm:text-base font-semibold text-${header.color}-300`}>
+												<span class={`text-sm font-semibold sm:text-base text-${header.color}-300`}>
 													{player[header.field]}
 												</span>
 											{:else}
-												<span class="text-base sm:text-medium md:text-base font-bold">{player[header.field]}</span>
+												<span class="sm:text-medium text-base font-bold md:text-base">{player[header.field]}</span>
 											{/if}
 										</td>
 									{/each}

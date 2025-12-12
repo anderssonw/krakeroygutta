@@ -102,4 +102,28 @@
 	.animate-pulse-subtle {
 		animation: pulse-subtle 3s ease-in-out infinite;
 	}
+
+	.player-card {
+		@apply bg-cover bg-center bg-no-repeat;
+	}
+
+	.player-card.bronze {
+		background-image: url('$lib/assets/cards/bronze.png');
+	}
+
+	.player-card.silver {
+		background-image: url('$lib/assets/cards/silver.png');
+	}
+
+	.player-card.gold {
+		background-image: url('$lib/assets/cards/gold.png');
+	}
+
+	.player-card.inform {
+		background-image: url('$lib/assets/cards/inform.png');
+	}
+
+	.player-card.trash {
+		background-image: url('$lib/assets/cards/trash_card.png');
+	}
 }

@@ -1,28 +1,29 @@
 // src/hooks.server.ts
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/static/public';
-import { tableSeasonRowToSeason, type Season } from '$lib/types/database-helpers';
+import { routes } from '$lib/routing';
+import { supabaseQuery } from '$lib/supabaseClient';
+import { type Profile, type Season } from '$lib/types/database-helpers';
 import type { Database } from '$lib/types/database.generated.types';
 import { createServerClient } from '@supabase/ssr';
-import type { Handle } from '@sveltejs/kit';
+import { fail, redirect, type Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 
-export const handle: Handle = async ({ event, resolve }) => {
+const locals: Handle = async ({ event, resolve }) => {
 	event.locals.supabase = createServerClient<Database>(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
 		cookies: {
-      getAll() {
-        return event.cookies.getAll()
-      },
-      setAll(cookiesToSet) {
-        /**
-         * Note: You have to add the `path` variable to the
-         * set and remove method due to sveltekit's cookie API
-         * requiring this to be set, setting the path to an empty string
-         * will replicate previous/standard behavior (https://kit.svelte.dev/docs/types#public-types-cookies)
-         */
-        cookiesToSet.forEach(({ name, value, options }) =>
-          event.cookies.set(name, value, { ...options, path: '/' })
-        )
-      },
-    },
+			getAll() {
+				return event.cookies.getAll();
+			},
+			setAll(cookiesToSet) {
+				/**
+				 * Note: You have to add the `path` variable to the
+				 * set and remove method due to sveltekit's cookie API
+				 * requiring this to be set, setting the path to an empty string
+				 * will replicate previous/standard behavior (https://kit.svelte.dev/docs/types#public-types-cookies)
+				 */
+				cookiesToSet.forEach(({ name, value, options }) => event.cookies.set(name, value, { ...options, path: '/' }));
+			}
+		}
 	});
 
 	/**
@@ -36,7 +37,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			error
 		} = await event.locals.supabase.auth.getUser();
 		if (error) {
-			return { session: null, user: null, profile: null };
+			return { session: null, profile: null };
 		}
 
 		const {
@@ -44,33 +45,33 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} = await event.locals.supabase.auth.getSession();
 
 		if (session && user) {
-			const { data, error } = await event.locals.supabase.from('users').select('*').eq('id', user.id).single();
-			if (error) {
-				console.log('Error fetching profile:', error.message);
-				return { session, user, profile: null };
-			}
+			const profile = await supabaseQuery<Profile>(event.locals.supabase.from('users').select('*').eq('id', user.id).maybeSingle());
 
-			return { session, user, profile: data };
+			if (profile) {
+				return { session, profile };
+			}
 		}
 
-		return { session, user, profile: null };
+		return { session, profile: null };
 	};
 
 	event.locals.season = async () => {
-		const { data, error } = await event.locals.supabase.from('seasons').select('*');
-		if (error) {
-			console.log('Error fetching season:', error.message);
-			return null;
-		}
+		const seasonsData = await supabaseQuery(event.locals.supabase.from('seasons').select('*'));
 
-		if (!data || data.length === 0) {
+		if (!seasonsData || seasonsData.length === 0) {
 			return null;
 		}
 
 		const now = new Date();
 
-		// Convert string dates to Date objects
-		const seasons: Season[] = data.map(tableSeasonRowToSeason);
+		const seasons: Season[] = seasonsData.map((season) => {
+			return {
+				...season,
+				deadline_time: new Date(season.deadline_time),
+				end_time: new Date(season.end_time),
+				start_time: new Date(season.start_time)
+			};
+		});
 
 		const currentSeason = seasons.find((season) => now >= season.start_time && now <= season.end_time);
 
@@ -91,3 +92,29 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	});
 };
+
+const authGuard: Handle = async ({ event, resolve }) => {
+	const { session, profile } = await event.locals.safeGetSession();
+
+	const pathName = event.url.pathname;
+
+	const routeFromPath = routes.find((route) => pathName.includes(route.href));
+
+	if (!routeFromPath) {
+		return resolve(event);
+	}
+
+	// Require authentication
+	if (routeFromPath.requiresAuth && !profile) {
+		redirect(303, '/login');
+	}
+
+	// Require admin privileges
+	if (routeFromPath.requiresAdmin && !profile?.is_admin) {
+		redirect(303, '/');
+	}
+
+	return resolve(event);
+};
+
+export const handle: Handle = sequence(locals, authGuard);

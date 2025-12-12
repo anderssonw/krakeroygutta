@@ -1,10 +1,10 @@
-import { createClient, PostgrestError } from '@supabase/supabase-js';
+import { AuthError, createClient, PostgrestError } from '@supabase/supabase-js';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/static/public';
 
 export const supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 
 /**
- * Wraps a Supabase query and handles errors by logging and throwing
+ * Wraps a Supabase database query and handles errors by logging and throwing
  */
 export async function supabaseQuery<T>(
 	queryPromise: PromiseLike<{ data: T | null; error: PostgrestError | null }>,
