@@ -13,6 +13,7 @@ interface SeasonPlayer extends BasePlayer {
 	skill: number;
 	morale: number;
 	price: number;
+	season_id: number;
 }
 
 export interface SeasonAndTeamPlayer extends SeasonPlayer {

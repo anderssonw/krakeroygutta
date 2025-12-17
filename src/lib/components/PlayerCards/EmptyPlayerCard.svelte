@@ -1,18 +1,22 @@
 <script lang="ts">
 	import clsx from 'clsx';
-	import type { BreakPoint } from '$lib/breakpoints';
-	import FantasyCardActions from '../../../routes/(authenticated)/fantasy/FantasyCardActions.svelte';
+	import { getCurrentBreakpoint, type BreakPoint } from '$lib/breakpoints';
 	import { cardSizing } from './cardSizing';
 
 	type PlayerCardSize = BreakPoint;
 	interface Props {
-		size: PlayerCardSize;
+		size?: PlayerCardSize;
 		onclick?: () => void;
 	}
 
-	let { size = 'md', onclick }: Props = $props();
+	let { size, onclick }: Props = $props();
 
-	const sizing = $derived(cardSizing[size]);
+	const breakpoint = getCurrentBreakpoint();
+
+	// Synes lg er veldig svær som default, så bruker det bare hvis du sender inn lg
+	const resolvedSize = $derived((size ?? breakpoint === 'lg') ? 'md' : breakpoint);
+
+	const sizing = $derived(cardSizing[resolvedSize]);
 </script>
 
 <div class="flex flex-col items-center">
@@ -23,6 +27,6 @@
 		aria-label="Legg til spiller"
 	>
 	</button>
-	<!-- TODO Kun for å gi samme høyde, bør kanskje gjøres på en bedre måte? -->
-	<FantasyCardActions hidden={true} />
+
+	<span class="h-9"></span>
 </div>

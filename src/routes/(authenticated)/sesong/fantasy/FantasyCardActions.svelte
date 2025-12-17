@@ -3,6 +3,7 @@
 	import CaptainIcon from '~icons/material-symbols/panorama-photosphere';
 	import NotCaptainIcon from '~icons/material-symbols/panorama-photosphere-outline';
 	import SelectIcon from '~icons/majesticons/open';
+	import { Button } from '$lib/components/ui/button';
 
 	type Props = {
 		isCaptain?: boolean;
@@ -16,29 +17,17 @@
 </script>
 
 <div class="flex gap-3" class:opacity-0={hidden} class:pointer-events-none={hidden} aria-hidden={hidden}>
-	<button
-		class="rounded-md border border-black bg-accent-foreground p-2 text-accent hover:bg-accent"
-		onclick={onDelete}
-		disabled={!onDelete || hidden}
-	>
-		<DeleteIcon class="h-6 w-6" />
-	</button>
-	<button
-		class="rounded-md border border-black bg-accent-foreground p-2 text-accent hover:bg-accent"
-		onclick={onToggleCaptain}
-		disabled={!onToggleCaptain || hidden}
-	>
+	<Button onclick={onToggleCaptain} disabled={!onToggleCaptain || hidden} size="icon">
 		{#if isCaptain}
 			<CaptainIcon class="h-6 w-6" />
 		{:else}
 			<NotCaptainIcon class="h-6 w-6" />
 		{/if}
-	</button>
-	<button
-		class="rounded-md border border-black bg-accent-foreground p-2 text-accent hover:bg-accent"
-		onclick={onSelect}
-		disabled={!onSelect || hidden}
-	>
+	</Button>
+	<Button onclick={onSelect} disabled={!onSelect || hidden} size="icon">
 		<SelectIcon class="h-6 w-6" />
-	</button>
+	</Button>
+	<Button onclick={onDelete} disabled={!onDelete || hidden} variant="destructive" size="icon">
+		<DeleteIcon class="h-6 w-6" />
+	</Button>
 </div>

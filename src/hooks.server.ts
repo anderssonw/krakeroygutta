@@ -1,4 +1,5 @@
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/static/public';
+import { fetchAllSeasons } from '$lib/queries';
 import { routes } from '$lib/routing';
 import { supabaseQuery } from '$lib/supabaseClient';
 import { type Profile, type Season } from '$lib/types/database-helpers';
@@ -50,22 +51,13 @@ const locals: Handle = async ({ event, resolve }) => {
 	};
 
 	event.locals.getSeason = async () => {
-		const seasonsData = await supabaseQuery(event.locals.supabase.from('seasons').select('*'));
+		const seasons = await fetchAllSeasons(event.locals.supabase);
 
-		if (!seasonsData || seasonsData.length === 0) {
+		if (!seasons || seasons.length === 0) {
 			return null;
 		}
 
 		const now = new Date();
-
-		const seasons: Season[] = seasonsData.map((season) => {
-			return {
-				...season,
-				deadline_time: new Date(season.deadline_time),
-				end_time: new Date(season.end_time),
-				start_time: new Date(season.start_time)
-			};
-		});
 
 		const currentSeason = seasons.find((season) => now >= season.start_time && now <= season.end_time);
 
@@ -88,7 +80,7 @@ const locals: Handle = async ({ event, resolve }) => {
 };
 
 const authGuard: Handle = async ({ event, resolve }) => {
-	const { session, profile } = await event.locals.safeGetSession();
+	const { profile } = await event.locals.safeGetSession();
 
 	const pathName = event.url.pathname;
 

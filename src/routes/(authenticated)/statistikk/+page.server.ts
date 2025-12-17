@@ -1,6 +1,7 @@
 import { type Season } from '$lib/types/database-helpers';
 import { defer, supabaseQuery } from '$lib/supabaseClient';
 import type { PageServerLoad } from './$types';
+import { fetchAllSeasons } from '$lib/queries';
 
 export type FullPlayerStats = {
 	id: number;
@@ -28,34 +29,20 @@ export type SeasonWithPlayerStatistics = {
 };
 
 export const load = (async ({ locals: { supabase, getSeason: season }, url }) => {
-	// First, get all seasons to determine target season
-	const allSeasons = await supabaseQuery(
-		supabase.from('seasons').select('*').order('start_time', { ascending: false }),
-		'Error fetching seasons'
-	);
-
-	const seasonsWithDates: Season[] =
-		allSeasons?.map((row) => {
-			return {
-				...row,
-				deadline_time: new Date(row.deadline_time),
-				end_time: new Date(row.end_time),
-				start_time: new Date(row.start_time)
-			};
-		}) || [];
+	const seasons = await fetchAllSeasons(supabase);
 
 	const seasonIdParam = url.searchParams.get('season');
 	let targetSeason: Season | null = null;
 
 	if (seasonIdParam) {
-		targetSeason = seasonsWithDates.find((s) => s.id === parseInt(seasonIdParam)) || null;
+		targetSeason = seasons.find((s) => s.id === parseInt(seasonIdParam)) || null;
 	}
 
 	if (!targetSeason) {
 		targetSeason = await season();
 
-		if (!targetSeason && seasonsWithDates.length > 0) {
-			targetSeason = seasonsWithDates[0];
+		if (!targetSeason && seasons.length > 0) {
+			targetSeason = seasons[0];
 		}
 	}
 
@@ -221,7 +208,7 @@ export const load = (async ({ locals: { supabase, getSeason: season }, url }) =>
 
 	return {
 		season: targetSeason,
-		allSeasons: seasonsWithDates,
+		allSeasons: seasons,
 		players: deferredPlayers
 	};
 }) satisfies PageServerLoad;

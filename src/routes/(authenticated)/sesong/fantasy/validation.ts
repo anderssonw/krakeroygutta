@@ -27,8 +27,6 @@ export const fantasyTeamFormSchema = zfd.formData({
 	captainId: zfd.numeric(z.number({ message: VALIDATION_MESSAGES.NO_CAPTAIN }))
 });
 
-type FantasyTeamFormData = z.infer<typeof fantasyTeamFormSchema>;
-
 type FantasyTeamData = {
 	name: string;
 	playerIds: number[];
@@ -37,7 +35,6 @@ type FantasyTeamData = {
 };
 
 export function validateFantasyTeam(data: FantasyTeamData): ValidationError | null {
-	// Check team size first
 	if (data.playerIds.length !== TEAM_SIZE) {
 		const remaining = TEAM_SIZE - data.playerIds.length;
 		return {
@@ -46,7 +43,6 @@ export function validateFantasyTeam(data: FantasyTeamData): ValidationError | nu
 		};
 	}
 
-	// Check budget
 	if (data.remainingCash < 0) {
 		return {
 			error: 'over_budget',
@@ -54,7 +50,6 @@ export function validateFantasyTeam(data: FantasyTeamData): ValidationError | nu
 		};
 	}
 
-	// Check team name
 	if (!data.name || data.name.trim() === '') {
 		return {
 			error: 'missing_name',

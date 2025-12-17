@@ -76,7 +76,8 @@ export const actions = {
 
 		const { teamId, teamName, playerIds, captainId } = result.data;
 
-		// Upsert fantasy team
+		// Alt nedover her er litt bob-bob. Det er litt kjipt å ikke ha transaksjoner. Vi burde egentlig ikke gjøre noen av disse operasjonene hvis én av de feiler.
+		// Kanskje en idé å lage en edge-funksjon i supabase som tar seg av hele operasjonen?
 		const upsertTeamResult = await supabaseQuery(
 			supabase
 				.from('fantasy_teams')

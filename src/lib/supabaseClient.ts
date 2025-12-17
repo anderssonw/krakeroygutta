@@ -2,6 +2,10 @@ import { PostgrestError } from '@supabase/supabase-js';
 
 /**
  * Wraps a Supabase database query and handles errors by logging and throwing
+ *
+ * Et problem med denne er at den ikke er noe fan av .single() og .maybeSingle(). I tillegg
+ * fungerer den ikke med auth-spørringer mot supabase, kun vanlige queries.
+ * Bør undersøke om det er mulig å utvide den til å støtte queries, med single, og kanskje upserts/deletes.
  */
 export async function supabaseQuery<T>(
 	queryPromise: PromiseLike<{ data: T | null; error: PostgrestError | null }>,

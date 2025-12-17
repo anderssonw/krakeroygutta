@@ -3,12 +3,14 @@
 	import madsPirate from '$lib/assets/speechbubble/madsBubble2.png';
 	import madsIrish from '$lib/assets/speechbubble/madsBubble3.png';
 	import madsClassic from '$lib/assets/speechbubble/madsBubble4.png';
+	import type { Snippet } from 'svelte';
 
 	type Props = {
 		madsVersion: 'fiesta' | 'pirate' | 'irish' | 'classic';
+		children?: Snippet;
 	};
 
-	let { madsVersion }: Props = $props();
+	let { madsVersion, children }: Props = $props();
 
 	const madsBubble = $derived.by(() => {
 		switch (madsVersion) {
@@ -33,12 +35,8 @@
 		<div
 			class="absolute top-1/2 -left-2 h-0 w-0 -translate-y-1/2 transform border-t-10 border-r-10 border-b-10 border-t-transparent border-r-slate-600 border-b-transparent"
 		></div>
-		<p class="text-xs leading-relaxed text-gray-100">
-			Alle spillere er vurdert relativt til ferdighetene som befinner seg i gjengen.
-			<br /><br />
-			Vurderingen er gjort av komiteen og trengs ikke diskuteres ytterligere.
-			<br /><br />
-			Ferdighetene er IKKE endelige og kan endre seg fra sesong til sesong basert på egen utvikling. Innenfor en sesong er dog ferdigheter endelige.
-		</p>
+		<div class="text-xs leading-relaxed text-gray-100">
+			{@render children?.()}
+		</div>
 	</div>
 </div>

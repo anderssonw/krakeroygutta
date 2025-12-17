@@ -10,12 +10,9 @@
 	<title>Kråkerøy Gutta</title>
 	<meta name="description" content="Kråkerøygutta sin offisielle nettside!" />
 	<link rel="icon" href="/favicon.ico" />
-	<script src="https://accounts.google.com/gsi/client" async></script>
 </svelte:head>
 
-<div>
-	<ToastContainer />
-	<NavBar profile={data.profile} />
+<ToastContainer />
+<NavBar profile={data.profile} />
 
-	{@render children()}
-</div>
+{@render children()}
