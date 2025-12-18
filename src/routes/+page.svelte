@@ -4,8 +4,8 @@
 	import headerLargeDisco from '$lib/assets/headerLargeDiscoDone.gif';
 	import ruleScroll from '$lib/assets/ruleScroll.png';
 	import { Button } from '$lib/components/ui/button';
-	import squadLeft from '$lib/assets/squadLeft.png';
-	import squadRight from '$lib/assets/squadRight.png';
+	import squadLeft from '$lib/assets/SquadLeft.png';
+	import squadRight from '$lib/assets/SquadRight.png';
 	import KrakeroyKommune from '$lib/components/KrakeroyKommune.svelte';
 
 	let { data } = $props();
