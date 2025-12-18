@@ -54,11 +54,11 @@
 </script>
 
 <div class="container mx-auto max-w-7xl px-4 py-8 md:px-6">
-	<!-- <div class="w-full">
+	<div class="w-full">
 		<video src={eirikVideo} autoplay controls>
 			<track kind="captions" />
 		</video>
-	</div> -->
+	</div>
 	<div class="mb-8 space-y-2">
 		<h1 class="text-3xl font-bold tracking-tight md:text-4xl">{season.name}</h1>
 		<p class="text-muted-foreground">Utforsk denne sesongen</p>

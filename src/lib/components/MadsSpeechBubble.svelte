@@ -7,11 +7,11 @@
 
 	type Props = {
 		madsVersion: 'fiesta' | 'pirate' | 'irish' | 'classic';
+		class?: string;
 		children?: Snippet;
 	};
 
-	let { madsVersion, children }: Props = $props();
-
+	let { madsVersion, children, class: className }: Props = $props();
 	const madsBubble = $derived.by(() => {
 		switch (madsVersion) {
 			case 'fiesta':
@@ -27,7 +27,7 @@
 	});
 </script>
 
-<div class="relative flex flex-row items-center justify-center gap-4">
+<div class="relative flex flex-row items-center justify-center gap-4 {className}">
 	<div class="h-32 w-32 shrink-0">
 		<img src={madsBubble} alt="Mads" class="h-full w-full object-contain" />
 	</div>

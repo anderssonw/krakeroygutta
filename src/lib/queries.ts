@@ -12,7 +12,10 @@ import type { TeamStatistics, TeamWithPlayers } from './types/team';
 export function fetchSeasonPlayersWithTeams(supabase: SupabaseClient<Database>, season: Season): Promise<SeasonAndTeamPlayer[]> {
 	return defer<SeasonAndTeamPlayer[]>(async () => {
 		const players = await supabaseQuery(
-			supabase.from('players_seasons').select('*, ...players(*, team:teams_players(...teams(id, color, name)))').eq('season_id', season.id),
+			supabase
+				.from('players_seasons')
+				.select('*, ...players(*, team:teams_players(...teams(id, color, name, season_id)))')
+				.eq('season_id', season.id),
 			'Error fetching players'
 		);
 
@@ -20,8 +23,14 @@ export function fetchSeasonPlayersWithTeams(supabase: SupabaseClient<Database>, 
 			return [];
 		}
 
-		return players.map(
-			(ps): SeasonAndTeamPlayer => ({
+		return players.map((ps): SeasonAndTeamPlayer => {
+			const seasonTeam = ps.team.find((t) => t.season_id === ps.season_id);
+
+			if (!seasonTeam) {
+				throw new Error(`No team found for player ${ps.name} in season ${ps.season_id}`);
+			}
+
+			return {
 				id: ps.id,
 				name: ps.name,
 				image: ps.image,
@@ -34,13 +43,13 @@ export function fetchSeasonPlayersWithTeams(supabase: SupabaseClient<Database>, 
 				morale: ps.morale,
 				price: ps.price,
 				team: {
-					id: ps.team[0].id,
-					name: ps.team[0].name,
-					color: ps.team[0].color
+					id: seasonTeam.id,
+					name: seasonTeam.name,
+					color: seasonTeam.color
 				},
 				season_id: ps.season_id
-			})
-		);
+			};
+		});
 	});
 }
 
