@@ -2,10 +2,10 @@ import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/stati
 import { fetchAllSeasons } from '$lib/queries';
 import { routes } from '$lib/routing';
 import { supabaseQuery } from '$lib/supabaseClient';
-import { type Profile, type Season } from '$lib/types/database-helpers';
+import { type Profile } from '$lib/types/database-helpers';
 import type { Database } from '$lib/types/database.generated.types';
 import { createServerClient } from '@supabase/ssr';
-import { fail, redirect, type Handle } from '@sveltejs/kit';
+import { redirect, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 const locals: Handle = async ({ event, resolve }) => {

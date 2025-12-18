@@ -105,8 +105,6 @@ export const actions = {
 
 		const { seasonId } = result.data;
 
-		// Check if season has related data before deleting
-		// This is important because deleting a season might break referential integrity
 		const teamsCheck = await supabaseQuery(
 			supabase.from('teams').select('id').eq('season_id', seasonId).limit(1),
 			'Kunne ikke sjekke relaterte lag'

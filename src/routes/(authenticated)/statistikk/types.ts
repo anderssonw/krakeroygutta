@@ -1,12 +1,8 @@
-import type { FullPlayerStats } from './+page.server';
+import type { SeasonPlayerFullStats } from '$lib/types/player';
+import type { TableHeader } from '$lib/types/table';
 
-export type SortKey = 'points' | 'goals' | 'assists' | 'clutches' | 'clean_sheets' | 'victories' | 'name';
+export type StatsSortKey = 'points' | 'goals' | 'assists' | 'clutches' | 'clean_sheets' | 'victories' | 'name';
 
-export type Header = {
-	sortKey: SortKey;
-	label: string;
-	field: keyof FullPlayerStats;
-	color?: string;
-	abbreviation?: string;
-	isIcon?: boolean;
-};
+export interface StatsTableHeader extends TableHeader<StatsSortKey> {
+	field: keyof SeasonPlayerFullStats;
+}

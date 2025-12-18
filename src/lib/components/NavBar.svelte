@@ -50,7 +50,13 @@
 		<img src={headerSmallDisco} alt="Kråkerøy Gutta Logo" class="h-8 w-auto" />
 	</Button>
 
-	<button class="flex h-8 w-8 items-center justify-center" onclick={() => (showMobileNavBar = !showMobileNavBar)}>
+	<button
+		class="flex h-8 w-8 items-center justify-center"
+		onclick={() => {
+			window.scrollTo(0, 0);
+			showMobileNavBar = !showMobileNavBar;
+		}}
+	>
 		{#if showMobileNavBar}
 			<CloseIcon />
 		{:else}

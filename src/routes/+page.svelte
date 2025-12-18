@@ -86,7 +86,7 @@
 		</div>
 	{/if}
 
-	<Button href={profile ? `/fantasy` : '/login'} variant="outline" class="flex w-32 justify-self-center">Kom i gang!</Button>
+	<Button href={profile ? `/sesong` : '/login'} variant="outline" class="flex w-32 justify-self-center">Kom i gang!</Button>
 </div>
 
 {@render squadImage(squadLeft, 'Squad Left', 'left')}

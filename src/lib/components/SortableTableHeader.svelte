@@ -1,13 +1,12 @@
-<script lang="ts">
+<script lang="ts" generics="TSortKey extends string">
 	import clsx from 'clsx';
-	import type { SortKey } from './types';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
-		sortKey?: SortKey;
-		currentSortKey: SortKey;
+		sortKey?: TSortKey;
+		currentSortKey: TSortKey;
 		sortDirection: number;
-		onSort?: (sortKey: SortKey) => void;
+		onSort?: (sortKey: TSortKey) => void;
 		align?: 'left' | 'center' | 'right';
 		children: Snippet;
 	}

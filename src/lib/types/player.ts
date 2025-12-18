@@ -16,6 +16,18 @@ interface SeasonPlayer extends BasePlayer {
 	season_id: number;
 }
 
+export interface SeasonPlayerStats extends BasePlayer {
+	goals: number;
+	assists: number;
+	clutches: number;
+}
+
+export interface SeasonPlayerFullStats extends SeasonPlayerStats {
+	cleanSheets: number;
+	victories: number;
+	totalScore: number;
+}
+
 export interface SeasonAndTeamPlayer extends SeasonPlayer {
 	team: {
 		id: number;
