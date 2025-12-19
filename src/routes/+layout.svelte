@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-	<title>Kråkerøy Gutta</title>
+	<title>Kråkerøygutta Fantasy</title>
 	<meta name="description" content="Kråkerøygutta sin offisielle nettside!" />
 	<link rel="icon" href="/favicon.ico" />
 </svelte:head>
