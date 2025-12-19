@@ -1,25 +1,33 @@
 <script lang="ts">
-	import NavBar from '$lib/components/NavBar.svelte';
-	import ToastContainer from '$lib/components/ToastContainer.svelte';
-	import ConfirmationDialog from '$lib/components/ConfirmationDialog.svelte';
-	import { confirmationDialog } from '$lib/stores/confirmationDialog';
-	import './layout.css';
+	import '../app.postcss';
+	import Navbar from '$lib/components/index/Navbar.svelte';
+	import Footer from '$lib/components/index/Footer.svelte';
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import type { LayoutData } from './$types';
 
-	let { children, data } = $props();
+	export let data: LayoutData;
 
-	let dialogs = $derived($confirmationDialog);
+	// Necessary for the navbar(mobile) modal
+	let showMobileNavbar: boolean = false;
+	$: screenHeight = `${showMobileNavbar ? 'h-screen overflow-y-hidden' : 'overflow-y-visible'}`;
+	$: ({ session, supabase, user } = data);
+
+	onMount(() => {
+		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
+			if (newSession?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => data.subscription.unsubscribe();
+	});
 </script>
 
-<svelte:head>
-	<title>Kråkerøygutta Fantasy</title>
-	<meta name="description" content="Kråkerøygutta sin offisielle nettside!" />
-	<link rel="icon" href="/favicon.ico" />
-</svelte:head>
+<div class={screenHeight}>
+	<Navbar bind:session bind:user bind:showMobileNavbar />
 
-<ToastContainer />
-{#each dialogs as dialog (dialog.id)}
-	<ConfirmationDialog id={dialog.id} options={dialog.options} />
-{/each}
-<NavBar profile={data.profile} />
+	<slot />
 
-{@render children()}
+	<Footer />
+</div>
