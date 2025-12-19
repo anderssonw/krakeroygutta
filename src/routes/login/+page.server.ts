@@ -1,10 +1,11 @@
-import { fail, type Actions, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
+import type { Actions } from './$types';
 
 export const actions = {
 	default: async ({ url, locals: { supabase } }) => {
 		const errors: Record<string, string> = {};
 
-		const redirectTo = `${url.origin}/auth/callback?next=/profile`;
+		const redirectTo = `${url.origin}/auth/callback?next=/profil`;
 
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'google',
