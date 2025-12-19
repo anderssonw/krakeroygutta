@@ -54,7 +54,7 @@
 						<Label for="value">Sats (kr)</Label>
 						<Input id="value" name="value" type="number" min="1" placeholder="50" required />
 					</div>
-					<Button type="submit" class="w-full">Send inn</Button>
+					<Button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90">Send inn</Button>
 				</form>
 			</CardContent>
 		</Card>
@@ -68,7 +68,7 @@
 		{:else}
 			<div class="grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{#each data.bets as bet}
-					<div class="flex w-full max-w-sm flex-col bg-secondary p-6 shadow-2xl">
+					<div class="flex w-full max-w-sm flex-col bg-white p-6 text-black shadow-2xl">
 						<!-- Logo Section -->
 						<div class="mb-8 flex flex-col items-center">
 							<img class="w-[40%]" src={betLogo} alt="bet_logo" />
@@ -114,11 +114,23 @@
 								<input type="hidden" name="bet_id" value={bet.id} />
 
 								{#if bet.better?.id === data.profile?.id}
-									<Button type="submit" formaction="?/removeBet" variant="destructive" class="w-full">Fjern veddemål</Button>
+									<Button type="submit" formaction="?/removeBet" variant="destructive" class="w-full bg-red-600 text-white hover:bg-red-700"
+										>Fjern veddemål</Button
+									>
 								{:else if userHasPlacedBet(bet)}
-									<Button type="submit" formaction="?/removeBetAgainst" variant="outline" class="w-full">Fjern utfordring</Button>
+									<Button
+										type="submit"
+										formaction="?/removeBetAgainst"
+										variant="destructive"
+										class="w-full  bg-red-600 text-white hover:bg-red-700">Fjern utfordring</Button
+									>
 								{:else}
-									<Button type="submit" formaction="?/addBetAgainst" variant="default" class="w-full">Utfordre</Button>
+									<Button
+										type="submit"
+										formaction="?/addBetAgainst"
+										variant="default"
+										class="w-full bg-green-600 text-white hover:bg-green-700">Utfordre</Button
+									>
 								{/if}
 							</form>
 						{/if}
