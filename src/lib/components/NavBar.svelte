@@ -6,7 +6,7 @@
 	import CloseIcon from '~icons/mdi/close';
 	import { fly } from 'svelte/transition';
 	import clsx from 'clsx';
-
+	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import headerSmallDisco from '$lib/assets/headerSmallDisco.png';
 	import { Button } from './ui/button';
 	import { sineInOut } from 'svelte/easing';
@@ -37,18 +37,61 @@
 	});
 </script>
 
-<nav class="space-between hidden w-full justify-around bg-accent px-2 py-4 md:flex">
-	{#each routesToUse as route, index}
-		<a href={route.href}>
-			{route.label}
-		</a>
-	{/each}
-</nav>
-
-<nav class="flex justify-between bg-accent px-4 py-4 md:hidden">
+{#snippet logoButton()}
 	<Button variant="ghost" href={routesToUse[0]?.href || '/'} onclick={() => (showMobileNavBar = false)}>
 		<img src={headerSmallDisco} alt="Kråkerøy Gutta Logo" class="h-8 w-auto" />
 	</Button>
+{/snippet}
+
+<div class="hidden w-full items-center justify-between bg-accent px-4 py-4 md:flex">
+	{@render logoButton()}
+	<NavigationMenu.Root class="z-40 flex justify-between" viewport={false}>
+		<NavigationMenu.List>
+			{#each routesToUse.slice(1) as route}
+				{@const RouteIcon = route.icon}
+				{#if route.subRoutes && route.subRoutes.length > 0}
+					<NavigationMenu.Item class={clsx('hidden md:block', isActiveRoute(route.href) && 'border-b-2 border-primary text-primary')}>
+						<NavigationMenu.Trigger class="rounded-none bg-accent">
+							<NavigationMenu.Link href={route.href} class="flex-row items-center gap-2 rounded-none">
+								<RouteIcon class="h-5 w-5" />
+								{route.label}
+							</NavigationMenu.Link>
+						</NavigationMenu.Trigger>
+						<NavigationMenu.Content class="p-0">
+							<ul class="grid gap-4 p-2">
+								{#each route.subRoutes as subRoute}
+									{@const SubRouteIcon = subRoute.icon}
+									<li>
+										<NavigationMenu.Link
+											href={getFullRoute(subRoute)}
+											class={clsx(
+												'flex-row items-center gap-2 p-4',
+												isActiveRoute(getFullRoute(subRoute)) ? 'bg-primary/10 text-primary' : 'text-foreground/70'
+											)}
+										>
+											<SubRouteIcon class="h-4 w-4" />
+											{subRoute.label}
+										</NavigationMenu.Link>
+									</li>
+								{/each}
+							</ul>
+						</NavigationMenu.Content>
+					</NavigationMenu.Item>
+				{:else}
+					<NavigationMenu.Item class={clsx(isActiveRoute(route.href) && 'border-b-2 border-primary text-primary')}>
+						<NavigationMenu.Link href={route.href} class="flex-row items-center gap-2 rounded-none p-4">
+							<RouteIcon class="h-5 w-5" />
+							{route.label}
+						</NavigationMenu.Link>
+					</NavigationMenu.Item>
+				{/if}
+			{/each}
+		</NavigationMenu.List>
+	</NavigationMenu.Root>
+</div>
+
+<nav class="flex justify-between bg-accent px-4 py-4 md:hidden">
+	{@render logoButton()}
 
 	<button
 		class="flex h-8 w-8 items-center justify-center"
@@ -77,7 +120,8 @@
 				<a
 					{href}
 					class={clsx(
-						'flex items-center gap-3 text-sm',
+						'flex items-center gap-3 text-sm transition-colors',
+						'active:border-r-4 active:border-primary active:bg-primary/10 active:text-primary',
 						isSubRoute ? 'py-2.5 pr-6 pl-12' : 'px-6 py-3 font-medium',
 						isActiveRoute(href)
 							? 'border-r-4 border-primary bg-primary/10 text-primary'
