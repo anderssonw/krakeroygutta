@@ -44,11 +44,11 @@
 
 	const headers: StatsTableHeader[] = [
 		{ sortKey: 'name', label: 'Spiller', field: 'name', color: 'white' },
-		{ sortKey: 'goals', label: 'Mål', field: 'goals', color: 'green', abbreviation: 'M', isIcon: true },
-		{ sortKey: 'assists', label: 'Assists', field: 'assists', color: 'cyan', abbreviation: 'A', isIcon: true },
-		{ sortKey: 'clutches', label: 'C-moment', field: 'clutches', color: 'orange', abbreviation: 'C', isIcon: true },
-		{ sortKey: 'clean_sheets', label: 'Clean Sheets', field: 'cleanSheets', color: 'red', abbreviation: 'CS', isIcon: true },
-		{ sortKey: 'victories', label: 'Seiere', field: 'victories', color: 'red', abbreviation: 'S', isIcon: true },
+		{ sortKey: 'goals', label: 'Mål', field: 'goals', color: 'green', abbreviation: 'M', isIcon: true, align: 'center' },
+		{ sortKey: 'assists', label: 'Assists', field: 'assists', color: 'cyan', abbreviation: 'A', isIcon: true, align: 'center' },
+		{ sortKey: 'clutches', label: 'C-moment', field: 'clutches', color: 'orange', abbreviation: 'C', isIcon: true, align: 'center' },
+		{ sortKey: 'clean_sheets', label: 'Clean Sheets', field: 'cleanSheets', color: 'red', abbreviation: 'CS', isIcon: true, align: 'center' },
+		{ sortKey: 'victories', label: 'Seiere', field: 'victories', color: 'red', abbreviation: 'S', isIcon: true, align: 'center' },
 		{ sortKey: 'points', label: 'Poeng', field: 'totalScore', color: 'white' }
 	];
 </script>
