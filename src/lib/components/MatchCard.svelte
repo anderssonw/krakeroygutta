@@ -270,13 +270,13 @@
 								</div>
 								<div class="grid grid-cols-2 gap-4 text-sm">
 									{#snippet teamColumn(players: PlayerCount[], emptyText: string, align: 'left' | 'right' = 'left')}
-									<ul class={cn('space-y-1', align === 'left' ? 'text-left' : 'text-right')}>
-										{#each players as player}
-											<li class={cn('text-muted-foreground')}>
-												{getLastName(player.name)}{player.count > 1 ? ` (${player.count})` : ''}
-											</li>
-										{:else}
-											<li class={cn('text-xs text-muted-foreground italic')}>
+										<ul class={cn('space-y-1', align === 'left' ? 'text-left' : 'text-right')}>
+											{#each players as player}
+												<li class={cn('text-muted-foreground')}>
+													{getLastName(player.name)}{player.count > 1 ? ` (${player.count})` : ''}
+												</li>
+											{:else}
+												<li class={cn('text-xs text-muted-foreground italic')}>
 													{emptyText}
 												</li>
 											{/each}

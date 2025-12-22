@@ -47,7 +47,15 @@
 		{ sortKey: 'goals', label: 'Mål', field: 'goals', color: 'green', abbreviation: 'M', isIcon: true, align: 'center' },
 		{ sortKey: 'assists', label: 'Assists', field: 'assists', color: 'cyan', abbreviation: 'A', isIcon: true, align: 'center' },
 		{ sortKey: 'clutches', label: 'C-moment', field: 'clutches', color: 'orange', abbreviation: 'C', isIcon: true, align: 'center' },
-		{ sortKey: 'clean_sheets', label: 'Clean Sheets', field: 'cleanSheets', color: 'red', abbreviation: 'CS', isIcon: true, align: 'center' },
+		{
+			sortKey: 'clean_sheets',
+			label: 'Clean Sheets',
+			field: 'cleanSheets',
+			color: 'red',
+			abbreviation: 'CS',
+			isIcon: true,
+			align: 'center'
+		},
 		{ sortKey: 'victories', label: 'Seiere', field: 'victories', color: 'red', abbreviation: 'S', isIcon: true, align: 'center' },
 		{ sortKey: 'points', label: 'Poeng', field: 'totalScore', color: 'white' }
 	];
@@ -101,7 +109,7 @@
 					)}
 			>
 				{#snippet renderCell(player, header)}
-				<td class={cn('px-2 py-2 md:px-6 md:py-4', header.isIcon && 'text-center', header.sortKey === 'points' && 'text-center')}>
+					<td class={cn('px-2 py-2 md:px-6 md:py-4', header.isIcon && 'text-center', header.sortKey === 'points' && 'text-center')}>
 						{#if header.sortKey === 'name'}
 							<div class="flex items-center gap-2 sm:gap-3">
 								<PlayerImageAvatar src={player.image} alt={player.name} size={'sm'} class="sm:h-10 sm:w-10" />

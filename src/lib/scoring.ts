@@ -4,7 +4,7 @@ import type { TeamStatistics } from './types/team';
 
 /**
  * Calculates the total score for a player in a season based on their stats
- * 
+ *
  * @param stats - Player statistics (goals, assists, clutches, etc.)
  * @param season - Season containing point multipliers
  * @returns Total calculated score for the player
@@ -33,7 +33,7 @@ export function calculatePlayerScore(
 /**
  * Enhances basic player statistics with calculated team stats (victories, clean sheets)
  * and total score
- * 
+ *
  * @param playerStats - Array of basic player statistics
  * @param teamStats - Array of team statistics containing victories and clean sheets
  * @param season - Season containing point multipliers
@@ -78,17 +78,13 @@ export function calculateFullPlayerStats(
 
 /**
  * Calculates the score for a fantasy team
- * 
+ *
  * @param playerIds - Array of player IDs in the fantasy team
  * @param captainId - ID of the team captain (gets double points)
  * @param allPlayerStats - Array of all player statistics
  * @returns Total fantasy team score
  */
-export function calculateFantasyTeamScore(
-	playerIds: number[],
-	captainId: number | null,
-	allPlayerStats: SeasonPlayerFullStats[]
-): number {
+export function calculateFantasyTeamScore(playerIds: number[], captainId: number | null, allPlayerStats: SeasonPlayerFullStats[]): number {
 	return playerIds.reduce((acc, playerId) => {
 		const playerStat = allPlayerStats.find((ps) => ps.id === playerId);
 

@@ -28,11 +28,14 @@
 	onclick={handleClick}
 	class={cn('px-2 py-2 text-sm font-semibold select-none md:px-6 md:py-4', isSortable && 'cursor-pointer hover:bg-muted/50')}
 >
-	<div class={cn('flex items-center gap-1',
-		align === 'center' && 'justify-center',
-		align === 'right' && 'justify-end',
-		align === 'left' && 'justify-start'
-	)}>
+	<div
+		class={cn(
+			'flex items-center gap-1',
+			align === 'center' && 'justify-center',
+			align === 'right' && 'justify-end',
+			align === 'left' && 'justify-start'
+		)}
+	>
 		{#if children}
 			{@render children()}
 		{/if}

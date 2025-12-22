@@ -24,7 +24,7 @@ export async function supabaseQuery<T>(
 
 /**
  * Defers a data loading operation for SvelteKit streaming.
- * 
+ *
  * In SvelteKit, to enable streaming you simply return a Promise from your load function
  * without awaiting it. This function is a semantic wrapper that makes the intent clear
  * and provides a consistent pattern for deferred data loading.
@@ -43,7 +43,7 @@ export async function supabaseQuery<T>(
  *   };
  * };
  * ```
- * 
+ *
  * @param fn - An async function that returns the data to be loaded
  * @returns A promise that will stream to the client
  */
@@ -55,7 +55,7 @@ export function defer<T>(fn: () => Promise<T>): Promise<T> {
 
 /**
  * Defers multiple data loading operations for SvelteKit streaming.
- * 
+ *
  * Each promise starts executing immediately but won't block the initial page render.
  * This is syntactic sugar for returning multiple deferred promises.
  *
@@ -74,7 +74,7 @@ export function defer<T>(fn: () => Promise<T>): Promise<T> {
  *   };
  * };
  * ```
- * 
+ *
  * @param deferredFns - Object mapping keys to async functions
  * @returns Object with the same keys, each mapped to a streaming promise
  */
