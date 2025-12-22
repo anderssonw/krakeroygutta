@@ -65,11 +65,17 @@ const locals: Handle = async ({ event, resolve }) => {
 			return currentSeason;
 		}
 
-		const upcomingSeasons = seasons
+		const upcomingSeason = seasons
 			.filter((season) => season.start_time > now)
-			.sort((a, b) => a.start_time.getTime() - b.start_time.getTime());
+			.sort((a, b) => a.start_time.getTime() - b.start_time.getTime())[0];
 
-		return upcomingSeasons[0] || null;
+		if (upcomingSeason) {
+			return upcomingSeason;
+		}
+
+		const pastSeason = seasons.filter((season) => season.end_time < now).sort((a, b) => b.end_time.getTime() - a.end_time.getTime())[0];
+
+		return pastSeason || null;
 	};
 
 	return resolve(event, {
