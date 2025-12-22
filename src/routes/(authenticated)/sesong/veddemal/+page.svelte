@@ -71,7 +71,7 @@
 					<div class="flex w-full max-w-sm flex-col bg-white p-6 text-black shadow-2xl">
 						<!-- Logo Section -->
 						<div class="mb-8 flex flex-col items-center">
-							<img class="w-[40%]" src={betLogo} alt="bet_logo" />
+							<enhanced:img class="w-[40%]" src={betLogo} alt="bet_logo" />
 							<p class="text-xs text-muted-foreground">Stolt sponsor av Fantasy Futsal</p>
 						</div>
 

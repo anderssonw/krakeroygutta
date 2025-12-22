@@ -23,8 +23,14 @@ export async function supabaseQuery<T>(
 }
 
 /**
- * Defers a data loading operation for streaming.
- * Use this in load functions to return promises that resolve after initial page render.
+ * Defers a data loading operation for SvelteKit streaming.
+ * 
+ * In SvelteKit, to enable streaming you simply return a Promise from your load function
+ * without awaiting it. This function is a semantic wrapper that makes the intent clear
+ * and provides a consistent pattern for deferred data loading.
+ *
+ * The promise will start executing immediately but won't block the initial page render.
+ * Use the {#await} block in Svelte components to handle loading states.
  *
  * @example
  * ```ts
@@ -33,22 +39,25 @@ export async function supabaseQuery<T>(
  *
  *   return {
  *     season,
- *     players: defer(async () => {
- *       // Heavy queries - will stream in
- *       const data = await fetchPlayers(season.id);
- *       return processPlayers(data);
- *     })
+ *     players: defer(() => fetchPlayers(season.id)) // Streams in after initial render
  *   };
  * };
  * ```
+ * 
+ * @param fn - An async function that returns the data to be loaded
+ * @returns A promise that will stream to the client
  */
 export function defer<T>(fn: () => Promise<T>): Promise<T> {
+	// SvelteKit handles streaming automatically when you return an unawaited promise
+	// This function exists to make the intent explicit and provide a consistent API
 	return fn();
 }
 
 /**
- * Defers multiple data loading operations and returns them as a single promise.
- * Useful when you want to wait for multiple deferred operations together.
+ * Defers multiple data loading operations for SvelteKit streaming.
+ * 
+ * Each promise starts executing immediately but won't block the initial page render.
+ * This is syntactic sugar for returning multiple deferred promises.
  *
  * @example
  * ```ts
@@ -58,13 +67,16 @@ export function defer<T>(fn: () => Promise<T>): Promise<T> {
  *   return {
  *     season,
  *     ...deferAll({
- *       players: async () => fetchPlayers(season.id),
- *       matches: async () => fetchMatches(season.id),
- *       teams: async () => fetchTeams(season.id)
+ *       players: () => fetchPlayers(season.id),
+ *       matches: () => fetchMatches(season.id),
+ *       teams: () => fetchTeams(season.id)
  *     })
  *   };
  * };
  * ```
+ * 
+ * @param deferredFns - Object mapping keys to async functions
+ * @returns Object with the same keys, each mapped to a streaming promise
  */
 export function deferAll<T extends Record<string, () => Promise<any>>>(
 	deferredFns: T

@@ -9,7 +9,7 @@
 	import IconDelete from '~icons/lucide/trash-2';
 	import IconSave from '~icons/lucide/save';
 	import IconX from '~icons/lucide/x';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import { toasts } from '$lib/stores/toast';
 	import { onMount } from 'svelte';
 
@@ -103,7 +103,7 @@
 		{#each seasons as season}
 			{@const isEditing = editingSeasonId === season.id}
 			<Accordion.Item class="border-0" value={season.id.toString()}>
-				<Card class={clsx('gap-2 py-2 shadow-none', currentSeason?.id === season.id && !isEditing && 'bg-green-50 dark:bg-green-950/20')}>
+				<Card class={cn('gap-2 py-2 shadow-none', currentSeason?.id === season.id && !isEditing && 'bg-green-50 dark:bg-green-950/20')}>
 					<CardHeader>
 						<Accordion.Trigger class="w-full items-center hover:no-underline">
 							<div class="flex w-full items-center justify-between gap-4">

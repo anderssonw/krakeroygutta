@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { clsx } from 'clsx';
+	import { cn } from '$lib/utils';
 	import headerLargeDisco from '$lib/assets/headerLargeDiscoDone.gif';
 	import ruleScroll from '$lib/assets/ruleScroll.png';
 	import { Button } from '$lib/components/ui/button';
@@ -35,7 +35,7 @@
 </script>
 
 <div class="container mx-auto my-8 flex flex-col items-center gap-8 px-4 md:px-16">
-	<img src={headerLargeDisco} alt="Header Large Disco" />
+	<enhanced:img src={headerLargeDisco} alt="Header Large Disco" />
 	{#if season}
 		<div class="relative flex w-full justify-center sm:w-sm">
 			<KrakeroyKommune className="fill-secondary"></KrakeroyKommune>
@@ -58,7 +58,7 @@
 		</div>
 		<div class="flex justify-center">
 			<div class="relative inline-block font-serif text-xs text-amber-700 italic text-shadow-black/10 text-shadow-xs">
-				<img src={ruleScroll} alt="Rule Scroll" />
+				<enhanced:img src={ruleScroll} alt="Rule Scroll" />
 
 				<div class="absolute inset-0 overflow-hidden p-8 sm:pt-24">
 					<h2 class="text-center text-xl font-bold sm:mb-4">Regler</h2>
@@ -93,10 +93,10 @@
 {@render squadImage(squadRight, 'Squad Right', 'right')}
 
 {#snippet squadImage(src: string, alt: string, side: 'left' | 'right')}
-	<img
+	<enhanced:img
 		{src}
 		{alt}
-		class={clsx(
+		class={cn(
 			'fixed bottom-0',
 			side === 'left' ? 'left-0' : 'right-0',
 			'w-32 sm:w-48 md:w-64 lg:w-80',

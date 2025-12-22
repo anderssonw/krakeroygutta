@@ -1,5 +1,5 @@
 <script lang="ts" generics="TSortKey extends string">
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -26,9 +26,9 @@
 
 <th
 	onclick={handleClick}
-	class={clsx('px-2 py-2 text-sm font-semibold select-none md:px-6 md:py-4', isSortable && 'cursor-pointer hover:bg-muted/50')}
+	class={cn('px-2 py-2 text-sm font-semibold select-none md:px-6 md:py-4', isSortable && 'cursor-pointer hover:bg-muted/50')}
 >
-	<div class={clsx('flex items-center gap-1',
+	<div class={cn('flex items-center gap-1',
 		align === 'center' && 'justify-center',
 		align === 'right' && 'justify-end',
 		align === 'left' && 'justify-start'

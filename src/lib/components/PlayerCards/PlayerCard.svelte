@@ -1,5 +1,5 @@
 <script lang="ts">
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import currency from '$lib/assets/currency.png';
 	import TeamKit from '../TeamKit.svelte';
 	import { getLastName } from '$lib/names';
@@ -49,29 +49,29 @@
 </script>
 
 <!-- TODO Fonter er det samme overalt, må mekke noen nye fonter også -->
-<div class={clsx('player-card', cardVariant, sizing.width, sizing.height, player.inform_image ? 'text-primary' : 'text-secondary')}>
+<div class={cn('player-card', cardVariant, sizing.width, sizing.height, player.inform_image ? 'text-primary' : 'text-secondary')}>
 	<div class="relative h-[53.2%] w-full">
 		<div class="absolute top-[20%] left-[10%] flex w-1/4 flex-col items-center gap-2">
-			<p class={clsx('font-semibold', sizing.avg_stats)}>{playerStatAverage}</p>
+			<p class={cn('font-semibold', sizing.avg_stats)}>{playerStatAverage}</p>
 			<TeamKit color={player.team.color} />
 		</div>
-		<div class={clsx('absolute right-1 bottom-px', sizing.image_width)}>
+		<div class={cn('absolute right-1 bottom-px', sizing.image_width)}>
 			<img src={playerImage()} alt={player.name} />
 		</div>
 	</div>
-	<div class={clsx('flex h-[47.8%] w-full flex-col items-center', sizing.stats_gap)}>
-		<p class={clsx('font-semibold', sizing.name)}>{getLastName(player.name)}</p>
-		<div class={clsx('flex flex-row', sizing.stats_gap)}>
+	<div class={cn('flex h-[47.8%] w-full flex-col items-center', sizing.stats_gap)}>
+		<p class={cn('font-semibold', sizing.name)}>{getLastName(player.name)}</p>
+		<div class={cn('flex flex-row', sizing.stats_gap)}>
 			{#each stats() as stat}
 				<div class="flex flex-col items-center">
-					<p class={clsx('leading-none font-light -tracking-widest', sizing.stats_text)}>{stat.label}</p>
-					<p class={clsx('leading-none font-semibold -tracking-widest', sizing.stats_value)}>{stat.value}</p>
+					<p class={cn('leading-none font-light -tracking-widest', sizing.stats_text)}>{stat.label}</p>
+					<p class={cn('leading-none font-semibold -tracking-widest', sizing.stats_value)}>{stat.value}</p>
 				</div>
 			{/each}
 		</div>
-		<div class={clsx('inline-flex items-center', sizing.stats_gap)}>
-			<p class={clsx(sizing.stats_text, 'font-semibold')}>{player.price}</p>
-			<img src={currency} alt="Currency" class={clsx(sizing.currency_size, sizing.currency_size)} />
+		<div class={cn('inline-flex items-center', sizing.stats_gap)}>
+			<p class={cn(sizing.stats_text, 'font-semibold')}>{player.price}</p>
+			<enhanced:img src={currency} alt="Currency" class={cn(sizing.currency_size, sizing.currency_size)} />
 			<p></p>
 		</div>
 	</div>

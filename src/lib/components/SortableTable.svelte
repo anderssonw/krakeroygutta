@@ -4,7 +4,7 @@
 	import TableSkeleton from './TableSkeleton.svelte';
 	import type { TableHeader, SortFunctions } from '$lib/types/table';
 	import { createTableSort } from '$lib/utils/tableSort.svelte';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 
 	interface Props {
 		data: Promise<TData[]> | TData[];
@@ -60,7 +60,7 @@
 							{@render header.headerRender()}
 						{:else if header.isIcon}
 							<span
-								class={clsx(
+								class={cn(
 									'inline-flex h-5 w-5 items-center justify-center rounded-full md:h-8 md:w-8',
 									`bg-${header.color}-500/30`,
 									'sm:text-medium text-xs font-bold md:text-base'
@@ -89,7 +89,7 @@
 					{:else}
 						{@const sortedData = sortManager.getSortedData(resolvedData)}
 						{#each sortedData as row, index}
-							<tr class={clsx('border-b last:border-b-0 hover:bg-muted/30', getRowClass?.(row, index))}>
+							<tr class={cn('border-b last:border-b-0 hover:bg-muted/30', getRowClass?.(row, index))}>
 								{#if includePositionColumn}
 									<td class="px-2 py-2 text-xs font-medium md:px-6 md:py-4 md:text-base">{index + 1}</td>
 								{/if}
@@ -115,7 +115,7 @@
 			{:else}
 				{@const sortedData = sortManager.getSortedData(data)}
 				{#each sortedData as row, index}
-					<tr class={clsx('border-b last:border-b-0 hover:bg-muted/30', getRowClass?.(row, index))}>
+					<tr class={cn('border-b last:border-b-0 hover:bg-muted/30', getRowClass?.(row, index))}>
 						{#if includePositionColumn}
 							<td class="px-2 py-2 text-xs font-medium md:px-6 md:py-4 md:text-base">{index + 1}</td>
 						{/if}

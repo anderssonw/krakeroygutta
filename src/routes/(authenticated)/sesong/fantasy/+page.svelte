@@ -9,7 +9,7 @@
 	import { enhance } from '$app/forms';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { toasts } from '$lib/stores/toast';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import { Button } from '$lib/components/ui/button';
 
 	let { data, form }: PageProps = $props();
@@ -180,7 +180,7 @@
 			<div class="fantasy-field large relative mb-8 hidden h-192 md:block">
 				{#each teamSlots as playerId, index}
 					<div
-						class={clsx(
+						class={cn(
 							'absolute',
 							index === 0 && 'top-12 left-1/2 -translate-x-1/2',
 							index === 1 && 'top-1/2 left-16 -translate-y-1/3',

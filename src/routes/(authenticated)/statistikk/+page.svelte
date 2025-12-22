@@ -3,7 +3,7 @@
 	import PlayerImageAvatar from '$lib/components/PlayerImageAvatar.svelte';
 	import SortableTable from '$lib/components/SortableTable.svelte';
 	import type { PageProps } from './$types';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import { getInitials, getLastName, getNamesExceptFirst } from '$lib/names';
 	import type { SeasonPlayerFullStats } from '$lib/types/player';
 	import type { StatsSortKey, StatsTableHeader } from './types';
@@ -95,13 +95,13 @@
 				{sortFunctions}
 				defaultSortKey="points"
 				getRowClass={(player) =>
-					clsx(
+					cn(
 						data.profile?.player_id === player.id &&
 							'animate-pulse-subtle relative bg-primary/10 shadow-[inset_0_0_20px_oklch(var(--primary),0.15)]'
 					)}
 			>
 				{#snippet renderCell(player, header)}
-					<td class={clsx('px-2 py-2 md:px-6 md:py-4', header.isIcon && 'text-center', header.sortKey === 'points' && 'text-center')}>
+				<td class={cn('px-2 py-2 md:px-6 md:py-4', header.isIcon && 'text-center', header.sortKey === 'points' && 'text-center')}>
 						{#if header.sortKey === 'name'}
 							<div class="flex items-center gap-2 sm:gap-3">
 								<PlayerImageAvatar src={player.image} alt={player.name} size={'sm'} class="sm:h-10 sm:w-10" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import { getCurrentBreakpoint, type BreakPoint } from '$lib/breakpoints';
 	import { cardSizing } from './cardSizing';
 
@@ -21,7 +21,7 @@
 
 <div class="flex flex-col items-center">
 	<button
-		class={clsx('player-card empty text-secondary', sizing.width, sizing.height, 'transition-opacity hover:opacity-80')}
+		class={cn('player-card empty text-secondary', sizing.width, sizing.height, 'transition-opacity hover:opacity-80')}
 		{onclick}
 		disabled={!onclick}
 		aria-label="Legg til spiller"
