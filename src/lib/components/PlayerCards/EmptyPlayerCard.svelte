@@ -7,9 +7,10 @@
 	interface Props {
 		size?: PlayerCardSize;
 		onclick?: () => void;
+		disabled?: boolean;
 	}
 
-	let { size, onclick }: Props = $props();
+	let { size, onclick, disabled = false }: Props = $props();
 
 	const breakpoint = getCurrentBreakpoint();
 
@@ -23,7 +24,7 @@
 	<button
 		class={cn('player-card empty text-secondary', sizing.width, sizing.height, 'transition-opacity hover:opacity-80')}
 		{onclick}
-		disabled={!onclick}
+		disabled={!onclick || disabled}
 		aria-label="Legg til spiller"
 	>
 	</button>

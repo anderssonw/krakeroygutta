@@ -326,7 +326,7 @@
 {/snippet}
 
 <Dialog.Root bind:open={goalDialogOpen} onOpenChange={(open) => !open && resetGoalForm()}>
-	<Dialog.Content class="sm:max-w-lg">
+	<Dialog.Content class="max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Legg til nytt mål</Dialog.Title>
 		</Dialog.Header>

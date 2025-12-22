@@ -48,7 +48,6 @@
 	});
 </script>
 
-<!-- TODO Fonter er det samme overalt, må mekke noen nye fonter også -->
 <div class={cn('player-card', cardVariant, sizing.width, sizing.height, player.inform_image ? 'text-primary' : 'text-secondary')}>
 	<div class="relative h-[53.2%] w-full">
 		<div class="absolute top-[20%] left-[10%] flex w-1/4 flex-col items-center gap-2">
@@ -64,8 +63,8 @@
 		<div class={cn('flex flex-row', sizing.stats_gap)}>
 			{#each stats() as stat}
 				<div class="flex flex-col items-center">
-					<p class={cn('leading-none font-light -tracking-widest', sizing.stats_text)}>{stat.label}</p>
-					<p class={cn('leading-none font-semibold -tracking-widest', sizing.stats_value)}>{stat.value}</p>
+					<p class={cn('leading-none! font-light -tracking-widest ', sizing.stats_text)}>{stat.label}</p>
+					<p class={cn('leading-none! font-semibold -tracking-widest ', sizing.stats_value)}>{stat.value}</p>
 				</div>
 			{/each}
 		</div>

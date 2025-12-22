@@ -11,24 +11,20 @@
 	import IconX from '~icons/lucide/x';
 	import { cn } from '$lib/utils';
 	import { toasts } from '$lib/stores/toast';
-	import { onMount } from 'svelte';
+	import IconPlus from '~icons/lucide/plus';
+	import { isSeasonFinished } from '$lib/season';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { enhance } from '$app/forms';
+	import { confirmationDialog } from '$lib/stores/confirmationDialog';
 
 	let { data, form }: PageProps = $props();
 
 	let { season: currentSeason, seasons } = $derived(data);
 
+	let dialogOpen = $state(false);
+
 	// Track which season is being edited
 	let editingSeasonId = $state<number | null>(null);
-
-	// Show toast notifications for form results
-	$effect(() => {
-		if (form?.error) {
-			toasts.add(`${form.error}: ${form.message}`, 'error', 5000);
-		} else if (form?.success) {
-			toasts.add(form.message, 'success');
-			editingSeasonId = null; // Close edit mode on success
-		}
-	});
 
 	function formatDate(date: Date | string): string {
 		const d = typeof date === 'string' ? new Date(date) : date;
@@ -95,21 +91,29 @@
 
 <div class="container mx-auto px-4 py-8">
 	<div class="mb-6">
-		<h1 class="text-3xl font-bold">Administrer Sesonger</h1>
-		<p class="mt-2 text-muted-foreground">Rediger eller slett eksisterende sesonger</p>
+		<div class="flex items-center justify-between">
+			<div>
+				<h1 class="text-3xl font-bold">Administrer Sesonger</h1>
+				<p class="mt-2 text-muted-foreground">Rediger, slett eller lag ny sesong</p>
+			</div>
+			<Button onclick={() => (dialogOpen = true)}>
+				<IconPlus class="mr-2 h-4 w-4" />
+				Ny sesong
+			</Button>
+		</div>
 	</div>
 
 	<Accordion.Root type="single" class="space-y-2">
 		{#each seasons as season}
 			{@const isEditing = editingSeasonId === season.id}
 			<Accordion.Item class="border-0" value={season.id.toString()}>
-				<Card class={cn('gap-2 py-2 shadow-none', currentSeason?.id === season.id && !isEditing && 'bg-green-50 dark:bg-green-950/20')}>
+				<Card class={cn('gap-2 py-2 shadow-none')}>
 					<CardHeader>
 						<Accordion.Trigger class="w-full items-center hover:no-underline">
 							<div class="flex w-full items-center justify-between gap-4">
 								<div class="flex items-center gap-2">
 									<CardTitle class="text-lg">{season.name}</CardTitle>
-									{#if currentSeason?.id === season.id}
+									{#if currentSeason?.id === season.id && !isSeasonFinished(season)}
 										<span class="rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white"> Aktiv </span>
 									{/if}
 								</div>
@@ -119,8 +123,23 @@
 
 					<Accordion.Content>
 						<CardContent class="space-y-6">
-							<form class="space-y-4 pt-0" method="POST" action="?/update">
-								<input type="hidden" name="seasonId" value={season.id} />
+							<form
+								class="space-y-4 pt-0"
+								method="POST"
+								action="?/update"
+								use:enhance={async ({}) => {
+									return async ({ result, update }) => {
+										if (result.type === 'success') {
+											toasts.add('Sesong oppdatert!', 'success');
+										} else {
+											toasts.add('Noe gikk galt ved oppdatering av sesong.', 'error');
+										}
+										editingSeasonId = null;
+										await update();
+									};
+								}}
+							>
+								<input type="hidden" name="season_id" value={season.id} />
 
 								<div class="flex items-center justify-end gap-2">
 									{#if isEditing}
@@ -178,7 +197,29 @@
 									<p class="mb-2 text-xs text-muted-foreground">
 										Sletting av en sesong kan ikke angres. Vær sikker på at det ikke finnes relaterte data.
 									</p>
-									<form method="POST" action="?/delete">
+									<form
+										method="POST"
+										action="?/delete"
+										use:enhance={async ({ cancel }) => {
+											const confirmed = await confirmationDialog.confirm({
+												variant: 'destructive',
+												description: 'Er du sikker på at du vil slette denne sesongen? Denne handlingen kan ikke angres.'
+											});
+
+											if (!confirmed) {
+												cancel();
+												return;
+											}
+											return async ({ result, update }) => {
+												if (result.type === 'success') {
+													toasts.add('Sesong slettet!', 'success');
+												} else {
+													toasts.add('Noe gikk galt ved sletting av sesong.', 'error');
+												}
+												await update();
+											};
+										}}
+									>
 										<input type="hidden" name="seasonId" value={season.id} />
 										<Button type="submit" variant="destructive" size="sm">
 											<IconDelete class="mr-2 h-4 w-4" />
@@ -194,3 +235,43 @@
 		{/each}
 	</Accordion.Root>
 </div>
+
+<Dialog.Root bind:open={dialogOpen}>
+	<Dialog.Content class="max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
+		<Dialog.Header>
+			<Dialog.Title>Opprett ny sesong</Dialog.Title>
+		</Dialog.Header>
+		<form
+			action="?/create"
+			method="post"
+			class="grid grid-cols-[1fr] gap-4 py-4"
+			use:enhance={() => {
+				return async ({ result, update }) => {
+					if (result.type == 'success') {
+						toasts.add('Sesong opprettet!', 'success');
+					} else {
+						toasts.add('Noe gikk galt ved opprettelse av sesong.', 'error');
+					}
+					dialogOpen = false;
+					update();
+				};
+			}}
+		>
+			{@render fieldGroup('Navn', 'name', 'Julebord Futsalturnering 2025', 'text', true)}
+			{@render numberField('Startkapital', 'starting_currency', 20000, true)}
+			{@render dateField('Starttidspunkt', 'start_time', '', true)}
+			{@render dateField('Deadlinetidspunkt', 'deadline_time', '', true)}
+			{@render dateField('Sluttidspunkt', 'end_time', '', true)}
+			{@render numberField('Poeng per mål', 'points_per_goal', 6, true)}
+			{@render numberField('Poeng per assist', 'points_per_assist', 3, true)}
+			{@render numberField('Poeng per clutch', 'points_per_clutch', 3, true)}
+			{@render numberField('Poeng per seier', 'points_per_win', 2, true)}
+			{@render numberField('Poeng per clean sheet', 'points_per_clean_sheet', 1, true)}
+
+			<Dialog.Footer>
+				<Button variant="outline" onclick={() => (dialogOpen = false)}>Avbryt</Button>
+				<Button type="submit">Opprett sesong</Button>
+			</Dialog.Footer>
+		</form>
+	</Dialog.Content>
+</Dialog.Root>

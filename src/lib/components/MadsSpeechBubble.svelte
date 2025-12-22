@@ -5,8 +5,10 @@
 	import madsClassic from '$lib/assets/speechbubble/madsBubble4.png';
 	import type { Snippet } from 'svelte';
 
+	export type MadsVersion = 'fiesta' | 'pirate' | 'irish' | 'classic';
+
 	type Props = {
-		madsVersion: 'fiesta' | 'pirate' | 'irish' | 'classic';
+		madsVersion: MadsVersion;
 		class?: string;
 		children?: Snippet;
 	};

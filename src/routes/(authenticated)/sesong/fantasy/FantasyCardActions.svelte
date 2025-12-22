@@ -11,23 +11,24 @@
 		onDelete?: () => void;
 		onToggleCaptain?: () => void;
 		onSelect?: () => void;
+		disabled?: boolean;
 	};
 
-	let { isCaptain = false, hidden = false, onDelete, onToggleCaptain, onSelect }: Props = $props();
+	let { isCaptain = false, hidden = false, onDelete, onToggleCaptain, onSelect, disabled = false }: Props = $props();
 </script>
 
 <div class="flex gap-3" class:opacity-0={hidden} class:pointer-events-none={hidden} aria-hidden={hidden}>
-	<Button onclick={onToggleCaptain} disabled={!onToggleCaptain || hidden} size="icon">
+	<Button onclick={onToggleCaptain} disabled={!onToggleCaptain || hidden || disabled} size="icon">
 		{#if isCaptain}
 			<CaptainIcon class="h-6 w-6" />
 		{:else}
 			<NotCaptainIcon class="h-6 w-6" />
 		{/if}
 	</Button>
-	<Button onclick={onSelect} disabled={!onSelect || hidden} size="icon">
+	<Button onclick={onSelect} disabled={!onSelect || hidden || disabled} size="icon">
 		<SelectIcon class="h-6 w-6" />
 	</Button>
-	<Button onclick={onDelete} disabled={!onDelete || hidden} variant="destructive" size="icon">
+	<Button onclick={onDelete} disabled={!onDelete || hidden || disabled} variant="destructive" size="icon">
 		<DeleteIcon class="h-6 w-6" />
 	</Button>
 </div>

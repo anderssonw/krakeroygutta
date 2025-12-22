@@ -13,9 +13,7 @@ export const load = (async ({ locals: { supabase } }) => {
 	};
 }) satisfies PageServerLoad;
 
-// Zod schema for updating a season
-const updateSeasonSchema = zfd.formData({
-	seasonId: zfd.numeric(z.number().int().positive()),
+const baseSeasonFields = {
 	name: zfd.text(z.string().min(1, 'Sesongnavnet kan ikke være tomt').max(255).trim()),
 	starting_currency: zfd.numeric(z.number().int().positive('Startkapital må være et positivt tall')),
 	start_time: zfd.text(z.string().min(1, 'Starttidspunkt er påkrevd')),
@@ -26,6 +24,13 @@ const updateSeasonSchema = zfd.formData({
 	points_per_clutch: zfd.numeric(z.number().int().nonnegative('Poeng per clutch må være 0 eller høyere')),
 	points_per_win: zfd.numeric(z.number().int().nonnegative('Poeng per seier må være 0 eller høyere')),
 	points_per_clean_sheet: zfd.numeric(z.number().int().nonnegative('Poeng per hold nullen må være 0 eller høyere'))
+};
+
+const createSeasonSchema = zfd.formData(baseSeasonFields);
+
+const updateSeasonSchema = zfd.formData({
+	season_id: zfd.numeric(z.number().int().positive()),
+	...baseSeasonFields
 });
 
 // Zod schema for deleting a season
@@ -34,6 +39,80 @@ const deleteSeasonSchema = zfd.formData({
 });
 
 export const actions = {
+	create: async ({ request, locals: { supabase } }) => {
+		const result = createSeasonSchema.safeParse(await request.formData());
+
+		if (!result.success) {
+			return fail(400, {
+				error: 'Valideringsfeil',
+				message: result.error.message
+			});
+		}
+
+		const {
+			name,
+			starting_currency,
+			start_time,
+			deadline_time,
+			end_time,
+			points_per_goal,
+			points_per_assist,
+			points_per_clutch,
+			points_per_win,
+			points_per_clean_sheet
+		} = result.data;
+
+		// Validate that dates are in correct order
+		const startDate = new Date(start_time);
+		const deadlineDate = new Date(deadline_time);
+		const endDate = new Date(end_time);
+
+		if (startDate >= deadlineDate) {
+			return fail(400, {
+				error: 'Ugyldig datorekkefølge',
+				message: 'Starttidspunkt må være før deadline'
+			});
+		}
+
+		if (deadlineDate >= endDate) {
+			return fail(400, {
+				error: 'Ugyldig datorekkefølge',
+				message: 'Deadline må være før sluttidspunkt'
+			});
+		}
+
+		// Create the season
+		const createResult = await supabaseQuery(
+			supabase
+				.from('seasons')
+				.insert({
+					name,
+					starting_currency,
+					start_time,
+					deadline_time,
+					end_time,
+					points_per_goal,
+					points_per_assist,
+					points_per_clutch,
+					points_per_win,
+					points_per_clean_sheet
+				})
+				.select(),
+			'Kunne ikke opprette sesong'
+		);
+
+		if (!createResult) {
+			return fail(500, {
+				error: 'Database-feil',
+				message: 'Kunne ikke opprette sesongen. Prøv igjen senere.'
+			});
+		}
+
+		return {
+			success: true,
+			message: `Sesongen "${name}" ble opprettet`
+		};
+	},
 	update: async ({ request, locals: { supabase } }) => {
 		const result = updateSeasonSchema.safeParse(await request.formData());
 
@@ -44,7 +123,7 @@ export const actions = {
 			});
 		}
 
-		const { seasonId, start_time, deadline_time, end_time, ...updateData } = result.data;
+		const { season_id, start_time, deadline_time, end_time, ...updateData } = result.data;
 
 		// Validate that dates are in correct order
 		const startDate = new Date(start_time);
@@ -75,7 +154,7 @@ export const actions = {
 					deadline_time,
 					end_time
 				})
-				.eq('id', seasonId)
+				.eq('id', season_id)
 				.select(),
 			'Kunne ikke oppdatere sesong'
 		);
