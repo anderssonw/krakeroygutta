@@ -9,7 +9,7 @@
 	import { enhance } from '$app/forms';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { toasts } from '$lib/stores/toast';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import { Button } from '$lib/components/ui/button';
 
 	let { data, form }: PageProps = $props();
@@ -46,6 +46,8 @@
 
 	const budget = $derived(data.season ? data.season.starting_currency : 0);
 
+	const isDeadlinePassed = $derived(data.season ? new Date() > data.season.deadline_time : false);
+
 	const teamSlots = $derived(Array.from({ length: TEAM_SIZE }, (_, i) => fantasyForm.playerIds[i] ?? null));
 
 	let showPlayerModal = $state(false);
@@ -81,6 +83,10 @@
 			})}
 		</p>
 
+		{#if isDeadlinePassed}
+			<p class="mt-2 px-4 text-sm font-semibold text-destructive">Fristen har gått ut. Du kan ikke lenger gjøre endringer på laget ditt.</p>
+		{/if}
+
 		{#await data.players}
 			<div class="flex items-center justify-center py-8">
 				<p class="text-lg text-muted-foreground">Henter fantasylag...</p>
@@ -113,7 +119,7 @@
 					{budget}
 					teamName={fantasyForm.name}
 					onTeamNameChange={(name) => (fantasyForm.name = name)}
-					disabled={data.season === null}
+					disabled={data.season === null || isDeadlinePassed}
 				/>
 			</div>
 
@@ -141,7 +147,7 @@
 				{/each}
 				<input type="hidden" name="captainId" value={fantasyForm.captainPlayerId ?? ''} />
 
-				<Button type="submit" variant="outline" size="lg" disabled={validationError != null || isSubmitting}>
+				<Button type="submit" variant="outline" size="lg" disabled={validationError != null || isSubmitting || isDeadlinePassed}>
 					{#if isSubmitting}
 						<span class="flex justify-center">
 							<Spinner size="md" />
@@ -165,10 +171,11 @@
 							isCaptain={fantasyForm.captainPlayerId === player.id}
 							onDelete={() => handleDeletePlayer(player.id)}
 							onToggleCaptain={() => handleToggleCaptain(player.id)}
+							disabled={isDeadlinePassed}
 						/>
 					{/if}
 				{:else}
-					<EmptyPlayerCard onclick={() => (showPlayerModal = true)} />
+					<EmptyPlayerCard onclick={() => (showPlayerModal = true)} disabled={isDeadlinePassed} />
 				{/if}
 			{/snippet}
 
@@ -180,7 +187,7 @@
 			<div class="fantasy-field large relative mb-8 hidden h-192 md:block">
 				{#each teamSlots as playerId, index}
 					<div
-						class={clsx(
+						class={cn(
 							'absolute',
 							index === 0 && 'top-12 left-1/2 -translate-x-1/2',
 							index === 1 && 'top-1/2 left-16 -translate-y-1/3',

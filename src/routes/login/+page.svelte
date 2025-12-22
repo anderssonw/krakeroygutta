@@ -4,7 +4,7 @@
 </script>
 
 <div class="container mx-auto my-8 flex flex-col items-center gap-8 px-4 md:px-16">
-	<img src={headerLargeDisco} alt="Header Large Disco" />
+	<enhanced:img src={headerLargeDisco} alt="Header Large Disco" />
 	<form class="form" method="POST">
 		<!-- Google Knapp -->
 		<Button variant="outline" type="submit">

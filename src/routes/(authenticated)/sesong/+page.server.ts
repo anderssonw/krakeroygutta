@@ -1,6 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { fetchSeasonStatistics } from '$lib/queries';
 import { defer, supabaseQuery } from '$lib/supabaseClient';
+import { calculateFantasyTeamScore } from '$lib/scoring';
 
 export const load = (async ({ locals: { supabase }, parent }) => {
 	const { season } = await parent();
@@ -20,13 +21,8 @@ export const load = (async ({ locals: { supabase }, parent }) => {
 		}
 
 		const fantasyTeamStats: FantasyTeamStat[] = fantasyTeamsData.map((team) => {
-			const captain = team.captain_id;
-
-			const teamScore = team.fantasy_teams_players.reduce((acc, ftp) => {
-				const playerStat = fullPlayerStats.find((ps) => ps.id === ftp.player_id);
-
-				return acc + (playerStat ? (playerStat.id === captain ? playerStat.totalScore * 2 : playerStat.totalScore) : 0);
-			}, 0);
+			const playerIds = team.fantasy_teams_players.map((ftp) => ftp.player_id);
+			const teamScore = calculateFantasyTeamScore(playerIds, team.captain_id, fullPlayerStats);
 
 			return {
 				id: team.id,

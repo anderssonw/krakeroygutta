@@ -6,14 +6,14 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import betLogo from '$lib/assets/bets/bet_logo.png';
+	import { isSeasonPastDeadline } from '$lib/season';
+	import { enhance } from '$app/forms';
+	import { toasts } from '$lib/stores/toast';
+	import Spinner from '$lib/components/Spinner.svelte';
 
 	let { data }: PageProps = $props();
 
-	const isSeasonPastDeadline = $derived(() => {
-		if (!data.season) return true;
-		const deadline = new Date(data.season.deadline_time);
-		return new Date() > deadline;
-	});
+	let isSubmitting = $state(false);
 
 	const userHasBet = $derived(() => {
 		if (!data.profile || !data.bets) return false;
@@ -24,43 +24,70 @@
 		if (!data.profile) return false;
 		return bet.challengers.some((c) => c.id === data.profile.id);
 	};
-
-	// TODO Hele veddemål er reinspikka vibe coda, så det bør nok fikses opp
 </script>
 
 <div class="flex flex-col gap-8 p-4 md:p-8">
 	<h1 class="text-center text-4xl font-bold">Veddemål</h1>
 
 	<MadsSpeechBubble madsVersion="pirate">
-		<ul class="list-disc space-y-2 pl-5">
-			<li>Her kan hver bruker legge ut 1 veddemål relatert til årets sesong.</li>
-			<li>De andre brukerne kan velge å vedde imot, og valget låses dagen fantasy sesongen starter.</li>
-			<li>Betalingen skjer 1-til-1 og er bundet av kjærlighet til hverandre.</li>
-		</ul>
+		<div class="flex flex-col gap-2">
+			<span>Her kan hver bruker legge ut 1 veddemål relatert til årets sesong.</span>
+
+			<span>De andre brukerne kan velge å vedde imot, og valget låses dagen fantasy sesongen starter.</span>
+
+			<span>Betalingen skjer 1-til-1 og er bundet av kjærlighet til hverandre.</span>
+		</div>
 	</MadsSpeechBubble>
 
-	{#if !userHasBet() && !isSeasonPastDeadline()}
+	{#if !userHasBet() && !isSeasonPastDeadline(data.season)}
 		<Card class="mx-auto w-full max-w-2xl">
 			<CardHeader>
 				<CardTitle>Opprett ett veddemål</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<form method="POST" action="?/createBet" class="flex flex-col gap-4">
+				<form
+					method="POST"
+					action="?/createBet"
+					class="flex flex-col gap-4"
+					use:enhance={() => {
+						isSubmitting = true;
+						return async ({ result, update }) => {
+							isSubmitting = false;
+							if (result.type === 'success') {
+								toasts.add('Veddemål opprettet!', 'success');
+							} else {
+								toasts.add('Noe gikk galt ved opprettelse av veddemål.', 'error');
+							}
+							await update();
+						};
+					}}
+				>
 					<div class="flex flex-col gap-2">
 						<Label for="bet">Veddemål</Label>
-						<Input id="bet" name="bet" type="text" placeholder="Jeg vedder at..." required />
+						<Input id="bet" name="bet" type="text" placeholder="Jeg vedder at..." required disabled={isSubmitting} />
 					</div>
 					<div class="flex flex-col gap-2">
 						<Label for="value">Sats (kr)</Label>
-						<Input id="value" name="value" type="number" min="1" placeholder="50" required />
+						<Input id="value" name="value" type="number" min="1" placeholder="50" required disabled={isSubmitting} />
 					</div>
-					<Button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90">Send inn</Button>
+					<Button type="submit" class="w-full bg-primary text-primary-foreground hover:bg-primary/90" disabled={isSubmitting}>
+						{#if isSubmitting}
+							<span class="flex justify-center">
+								<Spinner size="md" />
+							</span>
+						{:else}
+							Send inn
+						{/if}
+					</Button>
 				</form>
 			</CardContent>
 		</Card>
 	{/if}
 
 	<div class="flex flex-col gap-4">
+		{#if isSeasonPastDeadline(data.season)}
+			<p class="text-center text-sm font-semibold text-destructive">Fristen for å opprette eller utfordre veddemål har gått ut.</p>
+		{/if}
 		<h2 class="text-center text-2xl font-bold">Eksisterende veddemål</h2>
 
 		{#if data.bets.length === 0}
@@ -69,28 +96,24 @@
 			<div class="grid grid-cols-1 place-items-center gap-6 md:grid-cols-2 lg:grid-cols-3">
 				{#each data.bets as bet}
 					<div class="flex w-full max-w-sm flex-col bg-white p-6 text-black shadow-2xl">
-						<!-- Logo Section -->
 						<div class="mb-8 flex flex-col items-center">
-							<img class="w-[40%]" src={betLogo} alt="bet_logo" />
+							<enhanced:img class="w-[40%]" src={betLogo} alt="bet_logo" />
 							<p class="text-xs text-muted-foreground">Stolt sponsor av Fantasy Futsal</p>
 						</div>
 
-						<!-- Bet Description -->
 						<div class="border-b-2 border-primary p-4">
 							<p class="text-center">{bet.bet}</p>
 						</div>
 
-						<!-- Stake -->
 						<div class="flex justify-between border-b-2 border-primary p-4">
 							<p>Sats</p>
 							<p class="font-bold">{bet.value} kr</p>
 						</div>
 
-						<!-- Owner and Challengers -->
 						<div class="grid grid-cols-2 gap-4 py-4">
 							<div class="flex flex-col justify-end">
 								<div class="border-b-2 border-primary">
-									<p class="text-center italic">{bet.better?.name ?? 'Ukjent'}</p>
+									<p class="text-center italic">{bet.better.name}</p>
 								</div>
 								<p class="text-center text-sm font-bold">Eier</p>
 							</div>
@@ -109,28 +132,67 @@
 						</div>
 
 						<!-- Action Button -->
-						{#if !isSeasonPastDeadline()}
-							<form method="POST" class="flex justify-center">
+						{#if !isSeasonPastDeadline(data.season)}
+							<form
+								method="POST"
+								class="flex justify-center"
+								use:enhance={() => {
+									isSubmitting = true;
+									return async ({ result, update }) => {
+										isSubmitting = false;
+										if (result.type === 'success') {
+											toasts.add((result.data?.message as string) || 'Handling fullført!', 'success');
+										} else {
+											toasts.add('Noe gikk galt.', 'error');
+										}
+										await update();
+									};
+								}}
+							>
 								<input type="hidden" name="bet_id" value={bet.id} />
 
-								{#if bet.better?.id === data.profile?.id}
-									<Button type="submit" formaction="?/removeBet" variant="destructive" class="w-full bg-red-600 text-white hover:bg-red-700"
-										>Fjern veddemål</Button
+								{#if bet.better.id === data.profile.id}
+									<Button
+										type="submit"
+										formaction="?/removeBet"
+										variant="destructive"
+										class="w-full bg-red-600 text-white hover:bg-red-700"
+										disabled={isSubmitting}
 									>
+										{#if isSubmitting}
+											<Spinner size="sm" />
+										{:else}
+											Fjern veddemål
+										{/if}
+									</Button>
 								{:else if userHasPlacedBet(bet)}
 									<Button
 										type="submit"
 										formaction="?/removeBetAgainst"
 										variant="destructive"
-										class="w-full  bg-red-600 text-white hover:bg-red-700">Fjern utfordring</Button
+										class="w-full  bg-red-600 text-white hover:bg-red-700"
+										disabled={isSubmitting}
 									>
+										{#if isSubmitting}
+											<Spinner size="sm" />
+										{:else}
+											Fjern utfordring
+										{/if}
+									</Button>
 								{:else}
 									<Button
 										type="submit"
 										formaction="?/addBetAgainst"
 										variant="default"
-										class="w-full bg-green-600 text-white hover:bg-green-700">Utfordre</Button
+										class="w-full bg-green-600 text-white hover:bg-green-700"
+										disabled={isSubmitting}
 									>
+										{#if isSubmitting}
+											<Spinner size="sm" />
+										{:else}
+											Utfordre
+										{/if}
+									</Button>
 								{/if}
 							</form>
 						{/if}

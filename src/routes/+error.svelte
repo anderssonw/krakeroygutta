@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import MadsSpeechBubble from '$lib/components/MadsSpeechBubble.svelte';
+	import MadsSpeechBubble, { type MadsVersion } from '$lib/components/MadsSpeechBubble.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 
-	const errorMessages: Record<number, { title: string; message: string; mads: 'fiesta' | 'pirate' | 'irish' | 'classic' }> = {
+	const errorMessages: Record<number, { title: string; message: string; mads: MadsVersion }> = {
 		404: {
 			title: 'Siden finnes ikke',
 			message: 'Oi! Denne siden har visst tatt seg en pause. Kanskje den er på treningstur?',
@@ -26,7 +26,7 @@
 		errorMessages[statusCode] || {
 			title: 'Ups, noe gikk galt!',
 			message: 'Vi har desverre støtt på et problem. Prøv igjen senere!',
-			mads: 'fiesta' as const
+			mads: 'fiesta'
 		}
 	);
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import Spinner from '~icons/nrk/spinner';
 
 	type Props = {
@@ -23,4 +23,4 @@
 	});
 </script>
 
-<Spinner class={clsx(`animate-spin text-primary-foreground `, sizeClasses(), className)} />
+<Spinner class={cn(`animate-spin text-primary-foreground `, sizeClasses(), className)} />

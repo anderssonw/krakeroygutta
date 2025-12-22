@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { clsx } from 'clsx';
+	import { cn } from '$lib/utils';
 	import { Card, CardDescription, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import { getFullRoute, type RouteLink } from '$lib/routing';
 
@@ -12,7 +12,7 @@
 	const Icon = $derived(route.icon);
 </script>
 
-<Card class={clsx('group cursor-pointer overflow-hidden transition-all hover:scale-[102%] hover:shadow-lg', route.color)}>
+<Card class={cn('group cursor-pointer overflow-hidden transition-all hover:scale-[102%] hover:shadow-lg', route.color)}>
 	<a href={getFullRoute(route)} class="block">
 		<CardHeader class={'space-y-2 py-2 lg:py-4'}>
 			<div class="flex items-center gap-2">

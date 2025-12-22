@@ -5,3 +5,5 @@
 # Supabase
 .branches
 .temp
+
+seed.sql
