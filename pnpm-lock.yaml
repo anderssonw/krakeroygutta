@@ -15,11 +15,11 @@ importers:
         specifier: ^2.86.2
         version: 2.86.2
       zod:
-        specifier: ^4.1.13
-        version: 4.1.13
+        specifier: ^4.2.1
+        version: 4.2.1
       zod-form-data:
         specifier: ^3.0.1
-        version: 3.0.1(zod@4.1.13)
+        version: 3.0.1(zod@4.2.1)
     devDependencies:
       '@iconify/json':
         specifier: ^2.2.417
@@ -1424,8 +1424,8 @@ packages:
     peerDependencies:
       zod: '>= 3.25.0'
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.2.1:
+    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
 
 snapshots:
 
@@ -2525,9 +2525,9 @@ snapshots:
 
   zimmerframe@1.1.4: {}
 
-  zod-form-data@3.0.1(zod@4.1.13):
+  zod-form-data@3.0.1(zod@4.2.1):
     dependencies:
       '@rvf/set-get': 7.0.1
-      zod: 4.1.13
+      zod: 4.2.1
 
-  zod@4.1.13: {}
+  zod@4.2.1: {}
