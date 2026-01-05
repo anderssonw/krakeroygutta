@@ -142,4 +142,14 @@
 	.player-card.empty {
 		background-image: url('$lib/assets/cards/empty.png');
 	}
+
+	.hide-number-spinners {
+		appearance: textfield;
+	}
+
+	.hide-number-spinners::-webkit-outer-spin-button,
+	.hide-number-spinners::-webkit-inner-spin-button {
+		appearance: none;
+		margin: 0;
+	}
 }

@@ -1,4 +1,4 @@
-interface BasePlayer {
+export interface BasePlayer {
 	id: number;
 	name: string;
 	image: string;
@@ -33,5 +33,5 @@ export interface SeasonAndTeamPlayer extends SeasonPlayer {
 		id: number;
 		name: string;
 		color: string;
-	};
+	} | null;
 }
