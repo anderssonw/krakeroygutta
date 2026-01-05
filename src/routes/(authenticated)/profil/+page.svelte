@@ -19,23 +19,18 @@
 		</Card.Header>
 		<Card.Content>
 			<div class="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-				<div class="rounded-lg border bg-card p-4">
-					<p class="text-sm text-muted-foreground">Kallenavn</p>
-					<p class="text-md font-semibold">{profile.nickname}</p>
-				</div>
-				{#if profile.is_admin || profile.is_superadmin}
+				{#snippet profileInfo(label: string, text: string | number)}
 					<div class="rounded-lg border bg-card p-4">
-						<p class="text-sm text-muted-foreground">Rolle</p>
-						<p class="text-md font-semibold">
-							{profile.is_superadmin ? 'Superadmin' : 'Admin'}
-						</p>
+						<p class="text-sm text-muted-foreground">{label}</p>
+						<p class="text-md font-semibold">{text}</p>
 					</div>
+				{/snippet}
+				{@render profileInfo('Kallenavn', profile.nickname)}
+				{#if profile.is_admin || profile.is_superadmin}
+					{@render profileInfo('Rolle', profile.is_superadmin ? 'Superadmin' : 'Admin')}
 				{/if}
 				{#if profile.player_id}
-					<div class="rounded-lg border bg-card p-4">
-						<p class="text-sm text-muted-foreground">Spiller ID</p>
-						<p class="text-md font-semibold">{profile.player_id}</p>
-					</div>
+					{@render profileInfo('Spiller ID', profile.player_id)}
 				{/if}
 			</div>
 		</Card.Content>

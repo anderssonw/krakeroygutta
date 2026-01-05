@@ -5,8 +5,10 @@
 	import madsClassic from '$lib/assets/speechbubble/madsBubble4.png';
 	import type { Snippet } from 'svelte';
 
+	export type MadsVersion = 'fiesta' | 'pirate' | 'irish' | 'classic';
+
 	type Props = {
-		madsVersion: 'fiesta' | 'pirate' | 'irish' | 'classic';
+		madsVersion: MadsVersion;
 		class?: string;
 		children?: Snippet;
 	};
@@ -29,7 +31,7 @@
 
 <div class="relative flex flex-row items-center justify-center gap-4 {className}">
 	<div class="h-32 w-32 shrink-0">
-		<img src={madsBubble} alt="Mads" class="h-full w-full object-contain" />
+		<enhanced:img src={madsBubble} alt="Mads" class="h-full w-full object-contain" />
 	</div>
 	<div class="relative max-w-lg rounded-xl bg-slate-600 p-4 shadow-2xl">
 		<div

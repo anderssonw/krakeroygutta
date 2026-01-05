@@ -5,6 +5,7 @@ import type { SeasonAndTeamPlayer, SeasonPlayerFullStats, SeasonPlayerStats } fr
 import { defer, supabaseQuery } from './supabaseClient';
 import type { MatchDetails } from './types/match';
 import type { TeamStatistics, TeamWithPlayers } from './types/team';
+import { calculateFullPlayerStats } from './scoring';
 
 /**
  * Fetch all players for a given season with their team information
@@ -322,33 +323,7 @@ export function fetchSeasonStatistics(supabase: SupabaseClient<Database>, season
 			};
 		});
 
-		const fullPlayerStats: SeasonPlayerFullStats[] = cleanedPlayerStats.map((ps) => {
-			let victories = 0;
-			let cleanSheets = 0;
-
-			teamStats.forEach((ts) => {
-				if (ts.playersIds.includes(ps.id)) {
-					victories += ts.wins;
-					cleanSheets += ts.cleanSheets;
-				}
-			});
-
-			const { points_per_goal, points_per_assist, points_per_clutch, points_per_win, points_per_clean_sheet } = season;
-
-			const totalScore =
-				ps.goals * points_per_goal +
-				ps.assists * points_per_assist +
-				ps.clutches * points_per_clutch +
-				cleanSheets * points_per_clean_sheet +
-				victories * points_per_win;
-
-			return {
-				...ps,
-				victories,
-				cleanSheets,
-				totalScore
-			};
-		});
+		const fullPlayerStats = calculateFullPlayerStats(cleanedPlayerStats, teamStats, season);
 
 		return { fullPlayerStats, teamStats };
 	});

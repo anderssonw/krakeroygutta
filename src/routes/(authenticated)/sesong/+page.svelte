@@ -6,7 +6,7 @@
 	import SortableTable from '$lib/components/SortableTable.svelte';
 	import type { TeamStatistics } from '$lib/types/team';
 	import type { TableHeader, SortFunctions } from '$lib/types/table';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 
 	let { data }: PageProps = $props();
 
@@ -83,7 +83,7 @@
 		>
 			{#snippet renderCell(team, header)}
 				<td
-					class={clsx(
+					class={cn(
 						'px-2 py-2 text-xs md:py-4 md:text-base',
 						header.align === 'center' ? 'text-center font-semibold md:px-4' : 'font-medium md:px-6',
 						header.sortKey === 'points' && 'font-bold'
@@ -117,7 +117,7 @@
 		>
 			{#snippet renderCell(team, header)}
 				<td
-					class={clsx(
+					class={cn(
 						'px-2 py-2 text-xs md:px-6 md:py-4 md:text-base',
 						header.sortKey === 'score' ? 'font-bold' : 'font-medium',
 						header.align === 'right' && 'text-right',

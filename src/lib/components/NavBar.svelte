@@ -5,7 +5,7 @@
 	import HamburgerMenuIcon from '~icons/mdi/hamburger-menu';
 	import CloseIcon from '~icons/mdi/close';
 	import { fly } from 'svelte/transition';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import headerSmallDisco from '$lib/assets/headerSmallDisco.png';
 	import { Button } from './ui/button';
@@ -39,7 +39,7 @@
 
 {#snippet logoButton()}
 	<Button variant="ghost" href={routesToUse[0]?.href || '/'} onclick={() => (showMobileNavBar = false)}>
-		<img src={headerSmallDisco} alt="Kråkerøy Gutta Logo" class="h-8 w-auto" />
+		<enhanced:img src={headerSmallDisco} alt="Kråkerøy Gutta Logo" class="h-8 w-auto" />
 	</Button>
 {/snippet}
 
@@ -50,7 +50,7 @@
 			{#each routesToUse.slice(1) as route}
 				{@const RouteIcon = route.icon}
 				{#if route.subRoutes && route.subRoutes.length > 0}
-					<NavigationMenu.Item class={clsx('hidden md:block', isActiveRoute(route.href) && 'border-b-2 border-primary text-primary')}>
+					<NavigationMenu.Item class={cn('hidden md:block', isActiveRoute(route.href) && 'border-b-2 border-primary text-primary')}>
 						<NavigationMenu.Trigger class="rounded-none bg-accent">
 							<NavigationMenu.Link href={route.href} class="flex-row items-center gap-2 rounded-none">
 								<RouteIcon class="h-5 w-5" />
@@ -64,7 +64,7 @@
 									<li>
 										<NavigationMenu.Link
 											href={getFullRoute(subRoute)}
-											class={clsx(
+											class={cn(
 												'flex-row items-center gap-2 p-4',
 												isActiveRoute(getFullRoute(subRoute)) ? 'bg-primary/10 text-primary' : 'text-foreground/70'
 											)}
@@ -78,7 +78,7 @@
 						</NavigationMenu.Content>
 					</NavigationMenu.Item>
 				{:else}
-					<NavigationMenu.Item class={clsx(isActiveRoute(route.href) && 'border-b-2 border-primary text-primary')}>
+					<NavigationMenu.Item class={cn(isActiveRoute(route.href) && 'border-b-2 border-primary text-primary')}>
 						<NavigationMenu.Link href={route.href} class="flex-row items-center gap-2 rounded-none p-4">
 							<RouteIcon class="h-5 w-5" />
 							{route.label}
@@ -119,7 +119,7 @@
 				{@const Icon = icon}
 				<a
 					{href}
-					class={clsx(
+					class={cn(
 						'flex items-center gap-3 text-sm transition-colors',
 						'active:border-r-4 active:border-primary active:bg-primary/10 active:text-primary',
 						isSubRoute ? 'py-2.5 pr-6 pl-12' : 'px-6 py-3 font-medium',

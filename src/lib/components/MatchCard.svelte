@@ -10,7 +10,7 @@
 	import CardTitle from '$lib/components/ui/card/card-title.svelte';
 	import { confirmationDialog } from '$lib/stores/confirmationDialog';
 	import { type Component } from 'svelte';
-	import clsx from 'clsx';
+	import { cn } from '$lib/utils';
 	import type { MatchDetails, MatchPlayer, MatchTeam } from '$lib/types/match';
 	import { Label } from './ui/label';
 	import { getLastName } from '$lib/names';
@@ -270,13 +270,13 @@
 								</div>
 								<div class="grid grid-cols-2 gap-4 text-sm">
 									{#snippet teamColumn(players: PlayerCount[], emptyText: string, align: 'left' | 'right' = 'left')}
-										<ul class={clsx('space-y-1', align === 'left' ? 'text-left' : 'text-right')}>
+										<ul class={cn('space-y-1', align === 'left' ? 'text-left' : 'text-right')}>
 											{#each players as player}
-												<li class={clsx('text-muted-foreground')}>
+												<li class={cn('text-muted-foreground')}>
 													{getLastName(player.name)}{player.count > 1 ? ` (${player.count})` : ''}
 												</li>
 											{:else}
-												<li class={clsx('text-xs text-muted-foreground italic')}>
+												<li class={cn('text-xs text-muted-foreground italic')}>
 													{emptyText}
 												</li>
 											{/each}
@@ -305,7 +305,7 @@
 		{#each players as player}
 			<label
 				for={prefix + '-player-' + player.player_id}
-				class={clsx(
+				class={cn(
 					'flex cursor-pointer items-center gap-2 rounded-md border-2 px-3 py-2 transition-colors has-checked:bg-secondary  has-disabled:cursor-not-allowed has-disabled:opacity-50'
 				)}
 			>
@@ -326,7 +326,7 @@
 {/snippet}
 
 <Dialog.Root bind:open={goalDialogOpen} onOpenChange={(open) => !open && resetGoalForm()}>
-	<Dialog.Content class="sm:max-w-lg">
+	<Dialog.Content class="max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>Legg til nytt mål</Dialog.Title>
 		</Dialog.Header>

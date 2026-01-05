@@ -5,6 +5,7 @@ import type { PageServerLoad } from './$types';
 import type { Season } from '$lib/types/database-helpers';
 import { fetchSeasonPlayersWithTeams } from '$lib/queries';
 import { fantasyTeamFormSchema } from './validation';
+import { isSeasonPastDeadline } from '$lib/season.js';
 
 type FantasyLoadData = {
 	season: Season | null;
@@ -69,6 +70,11 @@ export const actions = {
 		if (!season) {
 			return fail(500, { errors: 'Ingen aktiv sesong, dette skal ikke skje' });
 		}
+
+		if (isSeasonPastDeadline(season)) {
+			return fail(400, { errors: 'Fristen for å lagre laget ditt har gått ut' });
+		}
+
 		const { profile } = await safeGetSession();
 		if (!profile) {
 			return fail(401, { errors: 'Du må være logget inn for å lagre laget ditt' });
