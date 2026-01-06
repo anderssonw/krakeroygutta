@@ -1,0 +1,1 @@
+alter table "public"."clutches" add column "is_negative" boolean not null default false;
