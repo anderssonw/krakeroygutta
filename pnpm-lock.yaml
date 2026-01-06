@@ -22,8 +22,8 @@ importers:
         version: 3.0.1(zod@4.3.5)
     devDependencies:
       '@iconify/json':
-        specifier: ^2.2.417
-        version: 2.2.417
+        specifier: ^2.2.425
+        version: 2.2.425
       '@internationalized/date':
         specifier: ^3.10.0
         version: 3.10.0
@@ -264,8 +264,8 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@iconify/json@2.2.417':
-    resolution: {integrity: sha512-/MzthgckJ4vEwdHmAbAn6Bph5WnR4tzVcHMs/nZl3v5hOVRw80SK28UPnG7jjsCB41WWjWPnWdMEdOZfUMZS5w==}
+  '@iconify/json@2.2.425':
+    resolution: {integrity: sha512-RJcJeoLFAmKPr7e7bP7gw33ASBSONuFsiCg35cEvrf/s8DDG5+C9eSqOvIiggNwZwwjYeGNKIJ7RduJTWgN0IQ==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -1531,7 +1531,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@iconify/json@2.2.417':
+  '@iconify/json@2.2.425':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 2.0.3

@@ -14,7 +14,7 @@
 		"lint": "prettier --check ."
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.417",
+		"@iconify/json": "^2.2.425",
 		"@internationalized/date": "^3.10.0",
 		"@lucide/svelte": "^0.561.0",
 		"@sveltejs/adapter-vercel": "^6.1.1",
