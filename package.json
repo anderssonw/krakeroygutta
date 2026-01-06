@@ -14,10 +14,10 @@
 		"lint": "prettier --check ."
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.417",
-		"@internationalized/date": "^3.10.0",
-		"@lucide/svelte": "^0.561.0",
-		"@sveltejs/adapter-vercel": "^6.1.1",
+		"@iconify/json": "^2.2.425",
+		"@internationalized/date": "^3.10.1",
+		"@lucide/svelte": "^0.562.0",
+		"@sveltejs/adapter-vercel": "^6.3.0",
 		"@sveltejs/enhanced-img": "^0.9.2",
 		"@sveltejs/kit": "^2.48.5",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
@@ -36,7 +36,7 @@
 		"tw-animate-css": "^1.4.0",
 		"typescript": "^5.9.3",
 		"unplugin-icons": "^22.5.0",
-		"vite": "^7.2.2"
+		"vite": "^7.3.0"
 	},
 	"dependencies": {
 		"@supabase/ssr": "^0.8.0",
