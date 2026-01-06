@@ -110,16 +110,19 @@ export type Database = {
 			clutches: {
 				Row: {
 					id: number;
+					is_negative: boolean;
 					match_id: number;
 					player_id: number;
 				};
 				Insert: {
 					id?: number;
+					is_negative?: boolean;
 					match_id: number;
 					player_id: number;
 				};
 				Update: {
 					id?: number;
+					is_negative?: boolean;
 					match_id?: number;
 					player_id?: number;
 				};

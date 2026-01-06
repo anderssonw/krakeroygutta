@@ -96,7 +96,8 @@ export const actions = {
 
 		const createClutchSchema = zfd.formData({
 			matchId: zfd.numeric(z.number().int().positive()),
-			clutchPlayerId: zfd.numeric(z.number().int().positive())
+			clutchPlayerId: zfd.numeric(z.number().int().positive()),
+			isNegative: zfd.checkbox()
 		});
 
 		const result = createClutchSchema.safeParse(formData);
@@ -105,11 +106,12 @@ export const actions = {
 			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
 
-		const { matchId, clutchPlayerId } = result.data;
+		const { matchId, clutchPlayerId, isNegative } = result.data;
 
 		const { error } = await supabase.from('clutches').insert({
 			match_id: matchId,
-			player_id: clutchPlayerId
+			player_id: clutchPlayerId,
+			is_negative: isNegative
 		});
 
 		if (error) {

@@ -296,7 +296,8 @@ export function fetchAllMatchesForSeason(supabase: SupabaseClient<Database>, sea
         ),
         clutches(
           id,
-          player:players(*)
+          player:players(*),
+					is_negative
         )
       `
 				)
@@ -328,7 +329,8 @@ export function fetchAllMatchesForSeason(supabase: SupabaseClient<Database>, sea
 			})),
 			clutches: match.clutches.map((clutch) => ({
 				id: clutch.id,
-				clutch_player_id: clutch.player.id
+				clutch_player_id: clutch.player.id,
+				is_negative: clutch.is_negative
 			}))
 		}));
 

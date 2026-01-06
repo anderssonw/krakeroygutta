@@ -3,7 +3,10 @@
 	import * as Accordion from '$lib/components/ui/accordion';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
-	import IconTrophy from '~icons/lucide/trophy';
+	import IconTrophy from '~icons/mdi/trophy';
+	import IconTrophyBroken from '~icons/mdi/trophy-broken';
+	import IconPlus from '~icons/ic/baseline-plus';
+	import IconMinus from '~icons/ic/baseline-minus';
 	import IconTarget from '~icons/fluent/target-20-regular';
 	import IconTargetPlus from '~icons/fluent/target-add-20-regular';
 	import IconTrash from '~icons/lucide/trash-2';
@@ -84,13 +87,19 @@
 	let awayGoalPlayers = $derived(getTeamPlayerStats(match.goals, match.away_team, (g) => g.goal_player_id));
 	let homeAssistPlayers = $derived(getTeamPlayerStats(match.goals, match.home_team, (g) => g.assist_player_id));
 	let awayAssistPlayers = $derived(getTeamPlayerStats(match.goals, match.away_team, (g) => g.assist_player_id));
-	let homeClutchPlayers = $derived(getTeamPlayerStats(match.clutches, match.home_team, (c) => c.clutch_player_id));
-	let awayClutchPlayers = $derived(getTeamPlayerStats(match.clutches, match.away_team, (c) => c.clutch_player_id));
+	let homeClutchPlayers = $derived(getTeamPlayerStats(match.clutches, match.home_team, (c) => (c.is_negative ? null : c.clutch_player_id)));
+	let awayClutchPlayers = $derived(getTeamPlayerStats(match.clutches, match.away_team, (c) => (c.is_negative ? null : c.clutch_player_id)));
+	let homeNegativeClutchPlayers = $derived(
+		getTeamPlayerStats(match.clutches, match.home_team, (c) => (c.is_negative ? c.clutch_player_id : null))
+	);
+	let awayNegativeClutchPlayers = $derived(
+		getTeamPlayerStats(match.clutches, match.away_team, (c) => (c.is_negative ? c.clutch_player_id : null))
+	);
 </script>
 
-<Card class="mx-auto max-w-md">
-	<CardHeader>
-		<CardTitle class="mb-2 text-center text-xs text-muted-foreground">
+<Card class="mx-auto max-w-md gap-3">
+	<CardHeader class="gap-3">
+		<CardTitle class="text-center text-xs text-muted-foreground">
 			Kamp {matchNumber}
 		</CardTitle>
 
@@ -113,8 +122,8 @@
 		<Accordion.Root type="single">
 			<Accordion.Item value="details">
 				<Accordion.Trigger class="justify-center py-0" />
-				<Accordion.Content>
-					<div class="space-y-4 pt-2">
+				<Accordion.Content class="pb-0">
+					<div class="space-y-8 pt-3">
 						{#if isAdmin}
 							<div class="grid grid-cols-[1fr_1fr] gap-2">
 								<Button variant="outline" size="sm" onclick={() => (goalDialogOpen = true)}>
@@ -189,7 +198,14 @@
 										<div
 											class="group flex items-center justify-between rounded-md border bg-card px-3 py-2 text-sm transition-colors hover:bg-accent"
 										>
-											<span class="font-medium">{getPlayerName(clutch.clutch_player_id)}</span>
+											<span class="flex items-center font-medium">
+												{getPlayerName(clutch.clutch_player_id)}
+												{#if clutch.is_negative}
+													<IconMinus class="ml-2 inline h-4 w-4 text-red-500" />
+												{:else}
+													<IconPlus class="ml-2 inline h-4 w-4 text-green-500" />
+												{/if}
+											</span>
 											<form
 												action="?/deleteClutch"
 												method="post"
@@ -291,6 +307,13 @@
 							{@render statsSection('Mål', IconTarget, homeGoalPlayers, awayGoalPlayers, 'Ingen mål')}
 							{@render statsSection('Assists', IconTargetPlus, homeAssistPlayers, awayAssistPlayers, 'Ingen assists')}
 							{@render statsSection('C-momenter', IconTrophy, homeClutchPlayers, awayClutchPlayers, 'Ingen c-momenter')}
+							{@render statsSection(
+								'Negative C-momenter',
+								IconTrophyBroken,
+								homeNegativeClutchPlayers,
+								awayNegativeClutchPlayers,
+								'Ingen negative c-momenter'
+							)}
 						{/if}
 					</div>
 				</Accordion.Content>
@@ -299,12 +322,21 @@
 	</CardContent>
 </Card>
 
-{#snippet teamRadioColumn(players: MatchPlayer[], prefix: string, radioName: string, currentValue: string | undefined, onValueChange: (value: string) => void, teamLabel: string, isDisabled?: (value: string) => boolean)}
+{#snippet teamRadioColumn(
+	players: MatchPlayer[],
+	prefix: string,
+	radioName: string,
+	currentValue: string | undefined,
+	onValueChange: (value: string) => void,
+	teamLabel: string,
+	isDisabled?: (value: string) => boolean
+)}
 	<div class="space-y-2">
 		<Label class="text-xs font-medium text-muted-foreground">{teamLabel}</Label>
 		{#each players as player}
+			{@const labelId = prefix + '-player-' + player.player_id}
 			<label
-				for={prefix + '-player-' + player.player_id}
+				for={labelId}
 				class={cn(
 					'flex cursor-pointer items-center gap-2 rounded-md border-2 px-3 py-2 transition-colors has-checked:bg-secondary  has-disabled:cursor-not-allowed has-disabled:opacity-50'
 				)}
@@ -314,7 +346,7 @@
 					name={radioName}
 					value={player.player_id}
 					disabled={isDisabled?.(String(player.player_id))}
-					id={prefix + '-player-' + player.player_id}
+					id={labelId}
 					checked={currentValue === String(player.player_id)}
 					onchange={() => onValueChange(String(player.player_id))}
 					class="sr-only"
@@ -450,6 +482,10 @@
 					(v) => (clutchPlayerId = v),
 					'Bortelag'
 				)}
+			</div>
+			<div class="mb-4 flex justify-between">
+				<Label class="text-xs font-medium text-muted-foreground" for="isNegative">Negativt C-moment?</Label>
+				<input type="checkbox" name="isNegative" id="isNegative" />
 			</div>
 			<Dialog.Footer>
 				<Button variant="outline" onclick={() => (clutchDialogOpen = false)}>Avbryt</Button>
