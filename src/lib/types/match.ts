@@ -19,6 +19,7 @@ export type MatchGoal = {
 export type MatchClutch = {
 	id: number;
 	clutch_player_id: number;
+	is_negative: boolean;
 };
 
 export type MatchDetails = {
