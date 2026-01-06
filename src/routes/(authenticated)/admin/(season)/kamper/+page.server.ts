@@ -3,6 +3,9 @@ import { supabaseQuery } from '$lib/supabaseClient';
 import type { Team } from '$lib/types/database-helpers';
 import type { MatchDetails } from '$lib/types/match';
 import type { PageServerLoad } from './$types';
+import { fail } from '@sveltejs/kit';
+import { zfd } from 'zod-form-data';
+import { z } from 'zod';
 
 type AdminMatchesLoad = {
 	matches: MatchDetails[];
@@ -30,13 +33,20 @@ export const load = (async ({ locals: { supabase }, url }): Promise<AdminMatches
 export const actions = {
 	createMatch: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		const homeTeamId = Number(formData.get('homeTeamId'));
-		const awayTeamId = Number(formData.get('awayTeamId'));
-		const seasonId = Number(formData.get('seasonId'));
 
-		if (!homeTeamId || !awayTeamId) {
-			return { success: false, message: 'Missing required fields' };
+		const createMatchSchema = zfd.formData({
+			homeTeamId: zfd.numeric(z.number().int().positive()),
+			awayTeamId: zfd.numeric(z.number().int().positive()),
+			seasonId: zfd.numeric(z.number().int().positive())
+		});
+
+		const result = createMatchSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
+
+		const { homeTeamId, awayTeamId, seasonId } = result.data;
 
 		const { error } = await supabase.from('matches').insert({
 			team_home_id: homeTeamId,
@@ -45,7 +55,7 @@ export const actions = {
 		});
 
 		if (error) {
-			return { success: false, message: error.message };
+			return fail(400, { message: error.message });
 		}
 
 		return { success: true };
@@ -53,23 +63,29 @@ export const actions = {
 
 	createGoal: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		const matchId = Number(formData.get('matchId'));
-		const goalPlayerId = Number(formData.get('goalPlayerId'));
-		const assistPlayerId = formData.get('assistPlayerId');
-		const assistId = assistPlayerId ? Number(assistPlayerId) : null;
 
-		if (!matchId || !goalPlayerId) {
-			return { success: false, message: 'Missing required fields' };
+		const createGoalSchema = zfd.formData({
+			matchId: zfd.numeric(z.number().int().positive()),
+			goalPlayerId: zfd.numeric(z.number().int().positive()),
+			assistPlayerId: zfd.numeric(z.number().int().positive().optional())
+		});
+
+		const result = createGoalSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
+
+		const { matchId, goalPlayerId, assistPlayerId } = result.data;
 
 		const { error } = await supabase.from('goals').insert({
 			match_id: matchId,
 			goal_player_id: goalPlayerId,
-			assist_player_id: assistId
+			assist_player_id: assistPlayerId ?? null
 		});
 
 		if (error) {
-			return { success: false, message: error.message };
+			return fail(400, { message: error.message });
 		}
 
 		return { success: true, message: 'Mål lagt til' };
@@ -77,12 +93,19 @@ export const actions = {
 
 	createClutch: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		const matchId = Number(formData.get('matchId'));
-		const clutchPlayerId = Number(formData.get('clutchPlayerId'));
 
-		if (!matchId || !clutchPlayerId) {
-			return { success: false, message: 'Missing required fields' };
+		const createClutchSchema = zfd.formData({
+			matchId: zfd.numeric(z.number().int().positive()),
+			clutchPlayerId: zfd.numeric(z.number().int().positive())
+		});
+
+		const result = createClutchSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
+
+		const { matchId, clutchPlayerId } = result.data;
 
 		const { error } = await supabase.from('clutches').insert({
 			match_id: matchId,
@@ -90,7 +113,7 @@ export const actions = {
 		});
 
 		if (error) {
-			return { success: false, message: error.message };
+			return fail(400, { message: error.message });
 		}
 
 		return { success: true, message: 'C-moment lagt til' };
@@ -98,16 +121,23 @@ export const actions = {
 
 	deleteGoal: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		const goalId = Number(formData.get('goalId'));
 
-		if (!goalId) {
-			return { success: false, message: 'Missing required fields' };
+		const deleteGoalSchema = zfd.formData({
+			goalId: zfd.numeric(z.number().int().positive())
+		});
+
+		const result = deleteGoalSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
+
+		const { goalId } = result.data;
 
 		const { error } = await supabase.from('goals').delete().eq('id', goalId);
 
 		if (error) {
-			return { success: false, message: error.message };
+			return fail(400, { message: error.message });
 		}
 
 		return { success: true, message: 'Mål slettet' };
@@ -115,16 +145,23 @@ export const actions = {
 
 	deleteClutch: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		const clutchId = Number(formData.get('clutchId'));
 
-		if (!clutchId) {
-			return { success: false, message: 'Missing required fields' };
+		const deleteClutchSchema = zfd.formData({
+			clutchId: zfd.numeric(z.number().int().positive())
+		});
+
+		const result = deleteClutchSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
+
+		const { clutchId } = result.data;
 
 		const { error } = await supabase.from('clutches').delete().eq('id', clutchId);
 
 		if (error) {
-			return { success: false, message: error.message };
+			return fail(400, { message: error.message });
 		}
 
 		return { success: true, message: 'C-moment slettet' };
@@ -132,18 +169,25 @@ export const actions = {
 
 	deleteMatch: async ({ request, locals: { supabase } }) => {
 		const formData = await request.formData();
-		const matchId = Number(formData.get('matchId'));
 
-		if (!matchId) {
-			return { success: false, message: 'Missing required fields' };
+		const deleteMatchSchema = zfd.formData({
+			matchId: zfd.numeric(z.number().int().positive())
+		});
+
+		const result = deleteMatchSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(400, { message: 'Invalid form data', errors: z.treeifyError(result.error) });
 		}
+
+		const { matchId } = result.data;
 
 		const { error } = await supabase.from('matches').delete().eq('id', matchId);
 
 		const data = await supabaseQuery(supabase.from('goals').delete().eq('match_id', matchId), 'Deleting associated goals');
 
 		if (error) {
-			return { success: false, message: error.message };
+			return fail(400, { message: error.message });
 		}
 
 		return { success: true, message: 'Kamp slettet' };

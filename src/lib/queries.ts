@@ -55,7 +55,7 @@ export function fetchSeasonPlayersWithTeams(supabase: SupabaseClient<Database>, 
 }
 
 /**
- * Fetch a player for a given season with their team information
+ * Fetch a player for all seasons with their team information
  */
 export function fetchAllSeasonsPlayerWithTeam(supabase: SupabaseClient<Database>, playerId: number): Promise<SeasonAndTeamPlayer[]> {
 	return defer<SeasonAndTeamPlayer[]>(async () => {
@@ -71,9 +71,6 @@ export function fetchAllSeasonsPlayerWithTeam(supabase: SupabaseClient<Database>
 		return players.map((ps): SeasonAndTeamPlayer => {
 			const team = ps.team.find((t) => t.season_id === ps.season_id);
 
-			if (!team) {
-				throw new Error(`No team found for player season with season_id ${ps.season_id}`);
-			}
 			return {
 				id: ps.id,
 				name: ps.name,
@@ -86,11 +83,55 @@ export function fetchAllSeasonsPlayerWithTeam(supabase: SupabaseClient<Database>
 				skill: ps.skill,
 				morale: ps.morale,
 				price: ps.price,
-				team: {
-					id: team.id,
-					name: team.name,
-					color: team.color
-				},
+				team: team
+					? {
+							id: team.id,
+							name: team.name,
+							color: team.color
+						}
+					: null,
+				season_id: ps.season_id
+			};
+		});
+	});
+}
+
+/**
+ * Fetch all players every season with their team information
+ */
+export function fetchAllSeasonsPlayersWithTeam(supabase: SupabaseClient<Database>): Promise<SeasonAndTeamPlayer[]> {
+	return defer<SeasonAndTeamPlayer[]>(async () => {
+		const players = await supabaseQuery(
+			supabase.from('players_seasons').select('*, ...players(*, team:teams_players(...teams(*)))'),
+			'Error fetching player'
+		);
+
+		if (!players) {
+			return [];
+		}
+
+		return players.map((ps): SeasonAndTeamPlayer => {
+			const team = ps.team.find((t) => t.season_id === ps.season_id);
+
+			return {
+				id: ps.id,
+				name: ps.name,
+				image: ps.image,
+				inform_image: ps.inform_image,
+				outofform_image: ps.outofform_image,
+				attack: ps.attack,
+				defence: ps.defence,
+				physical: ps.physical,
+				skill: ps.skill,
+				morale: ps.morale,
+				price: ps.price,
+				team: team
+					? {
+							id: team.id,
+							name: team.name,
+							color: team.color
+						}
+					: null,
 				season_id: ps.season_id
 			};
 		});
