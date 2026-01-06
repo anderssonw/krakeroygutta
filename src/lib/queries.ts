@@ -8,6 +8,127 @@ import type { TeamStatistics, TeamWithPlayers } from './types/team';
 import { calculateFullPlayerStats } from './scoring';
 
 /**
+ * Helper types for internal processing
+ */
+type ProcessedMatch = {
+	id: number;
+	homeTeam: {
+		id: number;
+		players: number[];
+		goals: number;
+	};
+	awayTeam: {
+		id: number;
+		players: number[];
+		goals: number;
+	};
+};
+
+type RawMatch = {
+	id: number;
+	team_home_id: number;
+	team_away_id: number;
+	home_team?: {
+		teams_players?: { player_id: number }[];
+	};
+	away_team?: {
+		teams_players?: { player_id: number }[];
+	};
+	goals?: { goal_player_id: number }[];
+};
+
+type RawTeam = {
+	id: number;
+	name: string;
+	color: string;
+	season_id: number;
+	teams_players?: { player_id: number }[];
+};
+
+/**
+ * Helper function to process matches data
+ */
+function processMatches(matches: RawMatch[] | null): ProcessedMatch[] {
+	return (
+		matches?.map((match) => {
+			const homeTeamPlayers = match.home_team?.teams_players?.map((tp) => tp.player_id) || [];
+			const awayTeamPlayers = match.away_team?.teams_players?.map((tp) => tp.player_id) || [];
+
+			return {
+				id: match.id,
+				homeTeam: {
+					id: match.team_home_id,
+					players: homeTeamPlayers,
+					goals: match.goals?.filter((g) => homeTeamPlayers.includes(g.goal_player_id)).length || 0
+				},
+				awayTeam: {
+					id: match.team_away_id,
+					players: awayTeamPlayers,
+					goals: match.goals?.filter((g) => awayTeamPlayers.includes(g.goal_player_id)).length || 0
+				}
+			};
+		}) || []
+	);
+}
+
+/**
+ * Helper function to process teams data
+ */
+function processTeams(teams: RawTeam[] | null): TeamWithPlayers[] {
+	return (
+		teams?.map((team) => ({
+			id: team.id,
+			name: team.name,
+			color: team.color,
+			season_id: team.season_id,
+			playersIds: team.teams_players?.map((tp) => tp.player_id) || []
+		})) || []
+	);
+}
+
+/**
+ * Helper function to calculate team statistics
+ */
+function calculateTeamStatistics(cleanedTeams: TeamWithPlayers[], cleanedMatches: ProcessedMatch[]): TeamStatistics[] {
+	return cleanedTeams.map((team) => {
+		let wins = 0;
+		let cleanSheets = 0;
+		let losses = 0;
+		let ties = 0;
+
+		cleanedMatches.forEach((match) => {
+			const isHomeTeam = match.homeTeam.id === team.id;
+			const isAwayTeam = match.awayTeam.id === team.id;
+
+			if (isHomeTeam || isAwayTeam) {
+				const teamGoals = isHomeTeam ? match.homeTeam.goals : match.awayTeam.goals;
+				const opponentGoals = isHomeTeam ? match.awayTeam.goals : match.homeTeam.goals;
+
+				if (teamGoals > opponentGoals) {
+					wins += 1;
+				} else if (teamGoals < opponentGoals) {
+					losses += 1;
+				} else {
+					ties += 1;
+				}
+
+				if (opponentGoals === 0) {
+					cleanSheets += 1;
+				}
+			}
+		});
+
+		return {
+			...team,
+			wins,
+			cleanSheets,
+			losses,
+			ties
+		};
+	});
+}
+
+/**
  * Fetch all players for a given season with their team information
  */
 export function fetchSeasonPlayersWithTeams(supabase: SupabaseClient<Database>, season: Season): Promise<SeasonAndTeamPlayer[]> {
@@ -239,7 +360,7 @@ export function fetchSeasonStatistics(supabase: SupabaseClient<Database>, season
 	return defer(async () => {
 		const [allPlayers, goalsData, clutchesData, matches, teams] = await Promise.all([
 			supabaseQuery(
-				supabase.from('players').select('id, name, image, players_seasons!inner(season_id)').eq('players_seasons.season_id', season.id),
+				supabase.from('players').select('id, name, image, players_seasons!inner(*)').eq('players_seasons.season_id', season.id),
 				'Error fetching players'
 			),
 			supabaseQuery(
@@ -288,84 +409,169 @@ export function fetchSeasonStatistics(supabase: SupabaseClient<Database>, season
 				const assists = goalsData?.filter((g) => g.assist_player_id === player.id).length || 0;
 				const clutches = clutchesData?.filter((c) => c.player_id === player.id).length || 0;
 
+				const playerSeasonData = player.players_seasons.find((ps) => ps.season_id === season.id);
+
+				if (!playerSeasonData) {
+					throw new Error(`No season data found for player ${player.id} in season ${season.id}`);
+				}
+
 				return {
+					...player,
+					...playerSeasonData,
 					id: player.id,
 					name: player.name,
 					image: player.image,
+					season_id: season.id,
 					goals,
 					assists,
 					clutches
 				};
 			}) || [];
 
-		const cleanedMatches =
-			matches?.map((match) => {
-				const homeTeamPlayers = match.home_team?.teams_players?.map((tp) => tp.player_id) || [];
-				const awayTeamPlayers = match.away_team?.teams_players?.map((tp) => tp.player_id) || [];
-
-				return {
-					id: match.id,
-					homeTeam: {
-						id: match.team_home_id,
-						players: homeTeamPlayers,
-						goals: match.goals?.filter((g) => homeTeamPlayers.includes(g.goal_player_id)).length
-					},
-					awayTeam: {
-						id: match.team_away_id,
-						players: awayTeamPlayers,
-						goals: match.goals?.filter((g) => awayTeamPlayers.includes(g.goal_player_id)).length
-					}
-				};
-			}) || [];
-
-		const cleanedTeams: TeamWithPlayers[] =
-			teams?.map((team) => ({
-				id: team.id,
-				name: team.name,
-				color: team.color,
-				season_id: team.season_id,
-				playersIds: team.teams_players?.map((tp) => tp.player_id) || []
-			})) || [];
-
-		const teamStats: TeamStatistics[] = cleanedTeams.map((team) => {
-			let wins = 0;
-			let cleanSheets = 0;
-			let losses = 0;
-			let ties = 0;
-
-			cleanedMatches.forEach((match) => {
-				const isHomeTeam = match.homeTeam.id === team.id;
-				const isAwayTeam = match.awayTeam.id === team.id;
-
-				if (isHomeTeam || isAwayTeam) {
-					const teamGoals = isHomeTeam ? match.homeTeam.goals : match.awayTeam.goals;
-					const opponentGoals = isHomeTeam ? match.awayTeam.goals : match.homeTeam.goals;
-
-					if (teamGoals > opponentGoals) {
-						wins += 1;
-					} else if (teamGoals < opponentGoals) {
-						losses += 1;
-					} else {
-						ties += 1;
-					}
-
-					if (opponentGoals === 0) {
-						cleanSheets += 1;
-					}
-				}
-			});
-
-			return {
-				...team,
-				wins,
-				cleanSheets,
-				losses,
-				ties
-			};
-		});
-
+		const cleanedMatches = processMatches(matches);
+		const cleanedTeams = processTeams(teams);
+		const teamStats = calculateTeamStatistics(cleanedTeams, cleanedMatches);
 		const fullPlayerStats = calculateFullPlayerStats(cleanedPlayerStats, teamStats, season);
 
 		return { fullPlayerStats, teamStats };
+	});
+}
+
+export function fetchPlayerStatistics(supabase: SupabaseClient<Database>, playerId: number) {
+	return defer(async () => {
+		// First, get the seasons where this player participated
+		const playerSeasonsData = await supabaseQuery(
+			supabase.from('players_seasons').select('season_id').eq('player_id', playerId),
+			'Error fetching player seasons'
+		);
+
+		if (!playerSeasonsData || playerSeasonsData.length === 0) {
+			return { fullPlayerStats: [], teamStats: [] };
+		}
+
+		const seasonIds = playerSeasonsData.map((ps) => ps.season_id);
+
+		// Fetch all data for all seasons the player participated in
+		const [allPlayers, goalsData, clutchesData, matches, teams, seasonsData] = await Promise.all([
+			supabaseQuery(
+				supabase.from('players').select('id, name, image, players_seasons!inner(*)').in('players_seasons.season_id', seasonIds),
+				'Error fetching players'
+			),
+			supabaseQuery(
+				supabase.from('goals').select('goal_player_id, assist_player_id, matches!inner(season_id)').in('matches.season_id', seasonIds),
+				'Error fetching goals'
+			),
+			supabaseQuery(
+				supabase.from('clutches').select('player_id, matches!inner(season_id)').in('matches.season_id', seasonIds),
+				'Error fetching clutches'
+			),
+			supabaseQuery(
+				supabase
+					.from('matches')
+					.select(
+						`
+						*,
+						home_team:teams!team_home_id (
+								teams_players(player_id)
+						),
+						away_team:teams!team_away_id (
+								teams_players(player_id)
+						),
+						goals(*)
+					`
+					)
+					.in('season_id', seasonIds),
+				'Error fetching matches'
+			),
+			supabaseQuery(
+				supabase
+					.from('teams')
+					.select(
+						`
+						*,
+						teams_players(player_id)
+					`
+					)
+					.in('season_id', seasonIds),
+				'Error fetching teams'
+			),
+			supabaseQuery(
+				supabase.from('seasons').select('*').in('id', seasonIds).order('start_time', { ascending: false }),
+				'Error fetching seasons'
+			)
+		]);
+
+		if (
+			!seasonsData ||
+			seasonsData.length === 0 ||
+			!allPlayers ||
+			allPlayers.length === 0 ||
+			!matches ||
+			matches.length === 0 ||
+			!teams ||
+			teams.length === 0 ||
+			!goalsData ||
+			!clutchesData
+		) {
+			return { fullPlayerStats: [], teamStats: [] };
+		}
+
+		const seasons = seasonsData?.map((s) => ({
+			...s,
+			start_time: new Date(s.start_time),
+			end_time: new Date(s.end_time),
+			deadline_time: new Date(s.deadline_time)
+		}));
+
+		const allFullPlayerStats: SeasonPlayerFullStats[] = [];
+		const allTeamStats: TeamStatistics[] = [];
+
+		// Process each season
+		const result = seasons.map((season) => {
+			const seasonId = season.id;
+
+			const seasonGoalsData = goalsData?.filter((g) => g.matches?.season_id === seasonId) || [];
+			const seasonClutchesData = clutchesData?.filter((c) => c.matches?.season_id === seasonId) || [];
+			const seasonMatches = matches?.filter((m) => m.season_id === seasonId) || [];
+			const seasonTeams = teams?.filter((t) => t.season_id === seasonId) || [];
+
+			// Get only the specific player's data
+			const player = allPlayers.find((p) => p.id === playerId);
+			if (!player) return;
+
+			const goals = seasonGoalsData.filter((g) => g.goal_player_id === playerId).length || 0;
+			const assists = seasonGoalsData.filter((g) => g.assist_player_id === playerId).length || 0;
+			const clutches = seasonClutchesData.filter((c) => c.player_id === playerId).length || 0;
+
+			const playerSeasonData = player.players_seasons.find((ps) => ps.season_id === seasonId);
+
+			if (!playerSeasonData) {
+				return;
+			}
+
+			const cleanedPlayerStats: SeasonPlayerStats = {
+				...player,
+				...playerSeasonData,
+				id: player.id,
+				name: player.name,
+				image: player.image,
+				season_id: seasonId,
+				goals,
+				assists,
+				clutches
+			};
+
+			const cleanedMatches = processMatches(seasonMatches);
+			const cleanedTeams = processTeams(seasonTeams);
+			const teamStats = calculateTeamStatistics(cleanedTeams, cleanedMatches);
+			const fullPlayerStats = calculateFullPlayerStats([cleanedPlayerStats], teamStats, season);
+
+			// allFullPlayerStats.push(...fullPlayerStats);
+			// allTeamStats.push(...teamStats);
+
+			return { fullPlayerStats };
+		});
+
+		return { fullPlayerStats: allFullPlayerStats, teamStats: allTeamStats };
 	});
 }

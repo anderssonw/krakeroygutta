@@ -24,7 +24,7 @@
 		{#await data.players then players}
 			{@const sortedPlayers = [...players].sort((a, b) => getPlayerAverage(b) - getPlayerAverage(a))}
 			{#each sortedPlayers as player}
-				<PlayerCard {player} size="md" />
+				<PlayerCard isLink {player} size="md" />
 			{/each}
 		{/await}
 	</div>

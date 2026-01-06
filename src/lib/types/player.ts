@@ -16,7 +16,7 @@ interface SeasonPlayer extends BasePlayer {
 	season_id: number;
 }
 
-export interface SeasonPlayerStats extends BasePlayer {
+export interface SeasonPlayerStats extends SeasonPlayer {
 	goals: number;
 	assists: number;
 	clutches: number;
@@ -35,3 +35,5 @@ export interface SeasonAndTeamPlayer extends SeasonPlayer {
 		color: string;
 	} | null;
 }
+
+export interface SeasonAndTeamPlayerFull extends SeasonAndTeamPlayer, SeasonPlayerFullStats {}

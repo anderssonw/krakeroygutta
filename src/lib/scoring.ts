@@ -1,5 +1,5 @@
 import type { Season } from './types/database-helpers';
-import type { SeasonPlayerStats, SeasonPlayerFullStats } from './types/player';
+import type { SeasonPlayerStats, SeasonPlayerFullStats, SeasonAndTeamPlayerFull } from './types/player';
 import type { TeamStatistics } from './types/team';
 
 /**
@@ -43,7 +43,7 @@ export function calculateFullPlayerStats(
 	playerStats: SeasonPlayerStats[],
 	teamStats: TeamStatistics[],
 	season: Season
-): SeasonPlayerFullStats[] {
+): SeasonAndTeamPlayerFull[] {
 	return playerStats.map((ps) => {
 		let victories = 0;
 		let cleanSheets = 0;
@@ -67,8 +67,15 @@ export function calculateFullPlayerStats(
 			season
 		);
 
+		const playerTeam = teamStats.find((ts) => ts.playersIds.includes(ps.id));
+
 		return {
 			...ps,
+			team: playerTeam
+				? {
+						...playerTeam
+					}
+				: null,
 			victories,
 			cleanSheets,
 			totalScore
