@@ -1,7 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { fetchAllSeasonsPlayerWithTeam, fetchAllSeasons } from '$lib/queries.js';
-import { defer } from '$lib/supabaseClient';
+import { fetchAllSeasons, fetchPlayerStatisticsAllSeasons } from '$lib/queries.js';
 
 export const load = (async ({ parent, locals: { supabase } }) => {
 	const { profile, season } = await parent();
@@ -10,20 +9,19 @@ export const load = (async ({ parent, locals: { supabase } }) => {
 		throw redirect(303, '/login');
 	}
 
-	const seasons = defer(() => fetchAllSeasons(supabase));
-
+	// Return promises directly for streaming
 	if (!profile.player_id) {
 		return {
 			playerSeasons: null,
 			currentSeason: season,
-			seasons
+			seasons: fetchAllSeasons(supabase)
 		};
 	}
 
 	return {
-		playerSeasons: defer(() => fetchAllSeasonsPlayerWithTeam(supabase, profile.player_id!)), // Non-null assertion since we check for player_id above
+		playerSeasons: fetchPlayerStatisticsAllSeasons(supabase, profile.player_id),
 		currentSeason: season,
-		seasons
+		seasons: fetchAllSeasons(supabase)
 	};
 }) satisfies PageServerLoad;
 

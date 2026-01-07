@@ -1,10 +1,14 @@
-import type { SeasonPlayerFullStats } from '$lib/types/player';
+import { fetchAllSeasons, fetchPlayerStatisticsAllSeasons } from '$lib/queries';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ locals: { supabase }, params }): Promise<{ playerSeasons: SeasonPlayerFullStats[] }> => {
+export const load = (async ({ locals: { supabase }, params, parent }) => {
 	const playerId = params.id;
 
+	const { season } = await parent();
+
 	return {
-		playerSeasons: []
+		playerSeasons: fetchPlayerStatisticsAllSeasons(supabase, parseInt(playerId)),
+		seasons: fetchAllSeasons(supabase),
+		currentSeason: season
 	};
 }) satisfies PageServerLoad;

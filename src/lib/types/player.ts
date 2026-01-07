@@ -4,7 +4,7 @@ export interface BasePlayer {
 	image: string;
 }
 
-interface SeasonPlayer extends BasePlayer {
+export interface SeasonPlayer extends BasePlayer {
 	inform_image: string | null;
 	outofform_image: string | null;
 	attack: number;
@@ -14,6 +14,11 @@ interface SeasonPlayer extends BasePlayer {
 	morale: number;
 	price: number;
 	season_id: number;
+	team: {
+		id: number;
+		name: string;
+		color: string;
+	} | null;
 }
 
 export interface SeasonPlayerStats extends SeasonPlayer {
@@ -27,13 +32,3 @@ export interface SeasonPlayerFullStats extends SeasonPlayerStats {
 	victories: number;
 	totalScore: number;
 }
-
-export interface SeasonAndTeamPlayer extends SeasonPlayer {
-	team: {
-		id: number;
-		name: string;
-		color: string;
-	} | null;
-}
-
-export interface SeasonAndTeamPlayerFull extends SeasonAndTeamPlayer, SeasonPlayerFullStats {}

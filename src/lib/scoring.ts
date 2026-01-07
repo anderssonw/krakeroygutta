@@ -1,5 +1,5 @@
 import type { Season } from './types/database-helpers';
-import type { SeasonPlayerStats, SeasonPlayerFullStats, SeasonAndTeamPlayerFull } from './types/player';
+import type { SeasonPlayerStats, SeasonPlayerFullStats } from './types/player';
 import type { TeamStatistics } from './types/team';
 
 /**
@@ -43,7 +43,7 @@ export function calculateFullPlayerStats(
 	playerStats: SeasonPlayerStats[],
 	teamStats: TeamStatistics[],
 	season: Season
-): SeasonAndTeamPlayerFull[] {
+): SeasonPlayerFullStats[] {
 	return playerStats.map((ps) => {
 		let victories = 0;
 		let cleanSheets = 0;
@@ -56,6 +56,7 @@ export function calculateFullPlayerStats(
 			}
 		});
 
+		// TODO Needs to handle scoring of negative clutches properly.
 		const totalScore = calculatePlayerScore(
 			{
 				goals: ps.goals,

@@ -1,7 +1,7 @@
 import { fetchAllMatchesForSeason, fetchAllSeasonsPlayersWithTeam } from '$lib/queries';
 import { supabaseQuery } from '$lib/supabaseClient';
 import type { Season } from '$lib/types/database-helpers';
-import type { BasePlayer, SeasonAndTeamPlayer } from '$lib/types/player';
+import type { BasePlayer, SeasonPlayer } from '$lib/types/player';
 import type { PageServerLoad } from './$types';
 import { zfd } from 'zod-form-data';
 import { z } from 'zod';
@@ -9,8 +9,8 @@ import { form } from '$app/server';
 import { fail } from '@sveltejs/kit';
 
 interface PlayerWithPlayerSeason extends BasePlayer {
-	currentSeasonInfo: SeasonAndTeamPlayer | null;
-	previousSeasonInfo: SeasonAndTeamPlayer | null;
+	currentSeasonInfo: SeasonPlayer | null;
+	previousSeasonInfo: SeasonPlayer | null;
 }
 
 export const load = (async ({ locals: { supabase }, url }): Promise<{ players: PlayerWithPlayerSeason[] }> => {

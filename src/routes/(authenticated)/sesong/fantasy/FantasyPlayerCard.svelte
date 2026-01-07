@@ -3,10 +3,10 @@
 	import FantasyCardActions from './FantasyCardActions.svelte';
 
 	import { getCurrentBreakpoint } from '$lib/breakpoints';
-	import type { SeasonAndTeamPlayer } from '$lib/types/player';
+	import type { SeasonPlayerFullStats } from '$lib/types/player';
 
 	type Props = {
-		player: SeasonAndTeamPlayer;
+		player: SeasonPlayerFullStats;
 		isCaptain: boolean;
 		onSelect?: () => void;
 		onDelete: () => void;

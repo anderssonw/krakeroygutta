@@ -1,13 +1,13 @@
 import type { PageServerLoad } from './$types';
 import { fetchSeasonPlayersWithTeams } from '$lib/queries';
 import { defer } from '$lib/supabaseClient';
-import type { SeasonAndTeamPlayer } from '$lib/types/player';
+import type { SeasonPlayer } from '$lib/types/player';
 
 type TeamWithPlayers = {
 	id: number;
 	name: string;
 	color: string;
-	players: SeasonAndTeamPlayer[];
+	players: SeasonPlayer[];
 };
 
 export const load = (async ({ locals: { supabase }, parent }) => {

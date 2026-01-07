@@ -1,6 +1,4 @@
 <script lang="ts">
-	import PlayerCard from '$lib/components/PlayerCards/PlayerCard.svelte';
-	import * as Accordion from '$lib/components/ui/accordion';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import type { PageProps } from '../profil/$types';
@@ -39,7 +37,7 @@
 
 	{#await Promise.all([playerSeasons, seasons, currentSeason]) then [playerSeasons, seasons, currentSeason]}
 		{#if playerSeasons}
-			<PlayerSeasons {playerSeasons} {seasons} {currentSeason} />
+			<PlayerSeasons {playerSeasons} {seasons} {currentSeason} showStats={true} />
 		{:else}
 			<p class="text-center text-muted-foreground">Ingen spillerdata tilgjengelig.</p>
 		{/if}

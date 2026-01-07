@@ -4,7 +4,7 @@
 	import EmptyPlayerCard from '$lib/components/PlayerCards/EmptyPlayerCard.svelte';
 	import PlayerSelectionModal from './PlayerSelectionModal.svelte';
 	import FantasyTeamStats from './FantasyTeamStats.svelte';
-	import type { SeasonAndTeamPlayer } from '$lib/types/player';
+	import type { SeasonPlayer } from '$lib/types/player';
 	import { TEAM_SIZE, validateFantasyTeam } from './validation';
 	import { enhance } from '$app/forms';
 	import Spinner from '$lib/components/Spinner.svelte';
@@ -52,7 +52,7 @@
 
 	let showPlayerModal = $state(false);
 
-	function handlePlayerSelect(player: SeasonAndTeamPlayer) {
+	function handlePlayerSelect(player: SeasonPlayer) {
 		if (fantasyForm.playerIds.length < TEAM_SIZE) {
 			fantasyForm.playerIds = [...fantasyForm.playerIds, player.id];
 		}

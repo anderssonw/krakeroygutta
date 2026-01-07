@@ -1,5 +1,5 @@
 import { supabaseQuery } from '$lib/supabaseClient';
-import type { SeasonAndTeamPlayer } from '$lib/types/player';
+import type { SeasonPlayer } from '$lib/types/player';
 import { error, fail } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import type { Season } from '$lib/types/database-helpers';
@@ -10,7 +10,7 @@ import { isSeasonPastDeadline } from '$lib/season.js';
 type FantasyLoadData = {
 	season: Season | null;
 	fantasyTeam: FantasyTeam | null;
-	players: Promise<SeasonAndTeamPlayer[]>;
+	players: Promise<SeasonPlayer[]>;
 };
 
 // Forslag for at man alltid har riktig type return
@@ -21,7 +21,7 @@ export const load = (async ({ locals: { supabase }, parent }): Promise<FantasyLo
 		return {
 			season: null,
 			fantasyTeam: null,
-			players: Promise.resolve<SeasonAndTeamPlayer[]>([])
+			players: Promise.resolve<SeasonPlayer[]>([])
 		};
 	}
 

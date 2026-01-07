@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import type { SeasonAndTeamPlayer } from '$lib/types/player';
+	import type { SeasonPlayerFullStats } from '$lib/types/player';
 	import PlayerCard from '$lib/components/PlayerCards/PlayerCard.svelte';
 	import { getCurrentBreakpoint } from '$lib/breakpoints';
 	import CloseIcon from '~icons/mdi/close';
 	import { getPlayerAverage } from '$lib/player';
 
 	type Props = {
-		players: SeasonAndTeamPlayer[];
+		players: SeasonPlayerFullStats[];
 		excludePlayerIds?: number[];
-		onSelect: (player: SeasonAndTeamPlayer) => void;
+		onSelect: (player: SeasonPlayer) => void;
 		onClose: () => void;
 	};
 
@@ -27,7 +27,7 @@
 			.sort((a, b) => getPlayerAverage(b) - getPlayerAverage(a))
 	);
 
-	function handleSelect(player: SeasonAndTeamPlayer) {
+	function handleSelect(player: SeasonPlayer) {
 		onSelect(player);
 		onClose();
 	}

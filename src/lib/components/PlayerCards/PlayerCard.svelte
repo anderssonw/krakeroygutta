@@ -5,18 +5,19 @@
 	import { getLastName } from '$lib/names';
 	import { getPlayerAverage } from '$lib/player';
 	import type { BreakPoint } from '$lib/breakpoints';
-	import type { SeasonAndTeamPlayer } from '$lib/types/player';
+	import type { SeasonPlayerFullStats } from '$lib/types/player';
 	import { cardSizing } from './cardSizing';
 
 	type PlayerCardSize = BreakPoint;
 	interface Props {
-		player: SeasonAndTeamPlayer;
+		player: SeasonPlayerFullStats;
 		size: PlayerCardSize;
 		isEditable?: boolean;
 		isLink?: boolean;
+		showStats?: boolean;
 	}
 
-	let { player, size = 'md', isEditable = false, isLink = false }: Props = $props();
+	let { player, size = 'md', isEditable = false, isLink = false, showStats = false }: Props = $props();
 
 	// Separate stat values object for editing
 	let statValues = $state({
@@ -133,10 +134,31 @@
 	</div>
 {/snippet}
 
-{#if isLink}
-	<a href={`/sesong/spillere/${player.id}`} class="no-underline">
+<div class="flex flex-col items-center gap-4">
+	{#if isLink}
+		<a href={`/sesong/spillere/${player.id}`} class="no-underline">
+			{@render playerCard()}
+		</a>
+	{:else}
 		{@render playerCard()}
-	</a>
-{:else}
-	{@render playerCard()}
-{/if}
+	{/if}
+
+	{#if showStats}
+		{@const stats = [
+			{ label: 'Mål', value: player.goals, icon: '⚽' },
+			{ label: 'Assists', value: player.assists, icon: '🎯' },
+			{ label: 'Clutches', value: player.clutches, icon: '🔥' },
+			{ label: 'Clean Sheets', value: player.cleanSheets, icon: '🧤' },
+			{ label: 'Seire', value: player.victories, icon: '🏆' },
+			{ label: 'Total Poeng', value: player.totalScore, icon: '⭐' }
+		]}
+		<div class="flex flex-wrap items-center justify-center gap-3 text-sm">
+			{#each stats as stat}
+				<div class="flex items-center gap-1.5">
+					<span class="text-lg">{stat.icon}</span>
+					<span class="font-semibold">{stat.value}</span>
+				</div>
+			{/each}
+		</div>
+	{/if}
+</div>

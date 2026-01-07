@@ -1,17 +1,18 @@
 <script lang="ts">
 	import PlayerCard from '$lib/components/PlayerCards/PlayerCard.svelte';
-	import type { SeasonAndTeamPlayerFull } from '$lib/types/player';
+	import type { SeasonPlayerFullStats } from '$lib/types/player';
 	import * as Card from '$lib/components/ui/card';
 	import * as Accordion from '$lib/components/ui/accordion';
 	import type { Season } from '$lib/types/database-helpers';
 
 	interface Props {
-		playerSeasons: SeasonAndTeamPlayerFull[];
+		playerSeasons: SeasonPlayerFullStats[];
 		currentSeason: Season | null;
 		seasons: Season[];
+		showStats?: boolean;
 	}
 
-	let { playerSeasons, currentSeason, seasons }: Props = $props();
+	let { playerSeasons, currentSeason, seasons, showStats = false }: Props = $props();
 </script>
 
 {#if !playerSeasons || playerSeasons.length === 0}
@@ -28,7 +29,7 @@
 				<div class="mb-6 flex items-center justify-between">
 					<h2 class="text-2xl font-bold">{currentSeason.name}</h2>
 				</div>
-				<PlayerCard player={currentSeasonPlayer} size="sm" />
+				<PlayerCard player={currentSeasonPlayer} size="sm" {showStats} />
 			</div>
 		{/if}
 	{/if}
@@ -46,7 +47,7 @@
 								{season.name}
 							</Accordion.Trigger>
 							<Accordion.Content class="flex justify-center">
-								<PlayerCard player={seasonPlayer} size="sm" />
+								<PlayerCard player={seasonPlayer} size="sm" {showStats} />
 							</Accordion.Content>
 						</Accordion.Item>
 					{/if}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { SeasonAndTeamPlayer } from '$lib/types/player';
+	import type { SeasonPlayer } from '$lib/types/player';
 	import { getPlayerAverage } from '$lib/player';
 	import { TEAM_SIZE } from './validation';
 	import Input from '$lib/components/ui/input/input.svelte';
@@ -7,7 +7,7 @@
 	import * as Card from '$lib/components/ui/card';
 
 	type Props = {
-		players: SeasonAndTeamPlayer[];
+		players: SeasonPlayer[];
 		selectedPlayerIds: number[];
 		captainPlayerId: number | null;
 		budget: number;
