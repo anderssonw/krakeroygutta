@@ -98,7 +98,7 @@
 			<h2 class="mb-4 text-2xl font-bold md:mb-6 md:text-3xl">🏆 Spillerpoeng</h2>
 
 			<SortableTable
-				data={data.players}
+				data={data.players.filter((player) => !player.icon_image)}
 				{headers}
 				{sortFunctions}
 				defaultSortKey="points"

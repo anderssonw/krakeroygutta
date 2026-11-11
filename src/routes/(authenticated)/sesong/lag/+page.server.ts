@@ -28,6 +28,8 @@ export const load = (async ({ locals: { supabase }, parent }) => {
 		const teamMap = new Map<number, TeamWithPlayers>();
 
 		for (const player of players) {
+			if (player.icon_image) continue; // Skip players with icon_image
+
 			if (!teamMap.has(player.team.id)) {
 				teamMap.set(player.team.id, {
 					id: player.team.id,

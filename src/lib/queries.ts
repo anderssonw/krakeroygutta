@@ -37,6 +37,7 @@ export function fetchSeasonPlayersWithTeams(supabase: SupabaseClient<Database>, 
 				image: ps.image,
 				inform_image: ps.inform_image,
 				outofform_image: ps.outofform_image,
+				icon_image: ps.icon_image,
 				attack: ps.attack,
 				defence: ps.defence,
 				physical: ps.physical,
@@ -77,6 +78,7 @@ export function fetchAllSeasonsPlayerWithTeam(supabase: SupabaseClient<Database>
 				image: ps.image,
 				inform_image: ps.inform_image,
 				outofform_image: ps.outofform_image,
+				icon_image: ps.icon_image,
 				attack: ps.attack,
 				defence: ps.defence,
 				physical: ps.physical,
@@ -119,6 +121,7 @@ export function fetchAllSeasonsPlayersWithTeam(supabase: SupabaseClient<Database
 				image: ps.image,
 				inform_image: ps.inform_image,
 				outofform_image: ps.outofform_image,
+				icon_image: ps.icon_image,
 				attack: ps.attack,
 				defence: ps.defence,
 				physical: ps.physical,
@@ -241,7 +244,10 @@ export function fetchSeasonStatistics(supabase: SupabaseClient<Database>, season
 	return defer(async () => {
 		const [allPlayers, goalsData, clutchesData, matches, teams] = await Promise.all([
 			supabaseQuery(
-				supabase.from('players').select('id, name, image, players_seasons!inner(season_id)').eq('players_seasons.season_id', season.id),
+				supabase
+					.from('players')
+					.select('id, name, image, players_seasons!inner(season_id, icon_image)')
+					.eq('players_seasons.season_id', season.id),
 				'Error fetching players'
 			),
 			supabaseQuery(
@@ -294,6 +300,8 @@ export function fetchSeasonStatistics(supabase: SupabaseClient<Database>, season
 					id: player.id,
 					name: player.name,
 					image: player.image,
+					icon_image:
+						player.players_seasons.find((playerSeason) => playerSeason.season_id === season.id)?.icon_image ?? null,
 					goals,
 					assists,
 					clutches

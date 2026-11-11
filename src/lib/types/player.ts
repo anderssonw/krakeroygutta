@@ -7,6 +7,7 @@ export interface BasePlayer {
 interface SeasonPlayer extends BasePlayer {
 	inform_image: string | null;
 	outofform_image: string | null;
+	icon_image: string | null;
 	attack: number;
 	defence: number;
 	physical: number;
@@ -17,6 +18,7 @@ interface SeasonPlayer extends BasePlayer {
 }
 
 export interface SeasonPlayerStats extends BasePlayer {
+	icon_image: string | null;
 	goals: number;
 	assists: number;
 	clutches: number;

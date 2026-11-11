@@ -23,8 +23,14 @@
 	<div class="mt-4 flex flex-row flex-wrap justify-center gap-4 md:gap-6">
 		{#await data.players then players}
 			{@const sortedPlayers = [...players].sort((a, b) => getPlayerAverage(b) - getPlayerAverage(a))}
-			{#each sortedPlayers as player}
-				<PlayerCard {player} size="md" />
+			{#each sortedPlayers as player (player.id)}
+				<a
+					href={`/sesong/spillere/${player.id}`}
+					aria-label={`Se detaljer for ${player.name}`}
+					class="block rounded transition-transform duration-200 ease-out hover:scale-[1.03] focus-visible:outline-2 focus-visible:outline-offset-4 active:translate-y-1 active:scale-[0.98]"
+				>
+					<PlayerCard {player} size="md" />
+				</a>
 			{/each}
 		{/await}
 	</div>
