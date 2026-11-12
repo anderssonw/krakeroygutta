@@ -56,6 +56,7 @@
 	const cardVariant = $derived.by(() => {
 		if (player.inform_image) return 'inform';
 		if (player.outofform_image) return 'trash';
+		if (player.icon_image) return 'icon';
 
 		if (playerStatAverage >= 75) return 'gold';
 		if (playerStatAverage >= 65) return 'silver';
@@ -73,15 +74,23 @@
 	];
 
 	const playerImage = $derived(() => {
-		return player.inform_image ?? player.outofform_image ?? player.image;
+		return player.icon_image ?? player.inform_image ?? player.outofform_image ?? player.image;
 	});
 </script>
 
-<div class={cn('player-card', cardVariant, sizing.width, sizing.height, player.inform_image ? 'text-primary' : 'text-secondary')}>
+<div
+	class={cn(
+		'player-card',
+		cardVariant,
+		sizing.width,
+		sizing.height,
+		player.icon_image ? 'text-tertiary' : player.inform_image ? 'text-primary' : 'text-secondary'
+	)}
+>
 	<div class="relative h-[53.2%] w-full">
 		<div class="absolute top-[20%] left-[10%] flex w-1/4 flex-col items-center gap-2">
 			<p class={cn('font-semibold', sizing.avg_stats)}>{playerStatAverage}</p>
-			{#if player.team}
+			{#if player.team && !player.icon_image}
 				<TeamKit color={player.team.color} />
 			{:else}
 				<div class="h-6 w-6"></div>

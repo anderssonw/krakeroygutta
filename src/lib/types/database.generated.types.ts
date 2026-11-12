@@ -411,6 +411,7 @@ export type Database = {
 				Row: {
 					attack: number;
 					defence: number;
+					icon_image: string | null;
 					inform_image: string | null;
 					morale: number;
 					outofform_image: string | null;
@@ -423,6 +424,7 @@ export type Database = {
 				Insert: {
 					attack?: number;
 					defence?: number;
+					icon_image?: string | null;
 					inform_image?: string | null;
 					morale?: number;
 					outofform_image?: string | null;
@@ -435,6 +437,7 @@ export type Database = {
 				Update: {
 					attack?: number;
 					defence?: number;
+					icon_image?: string | null;
 					inform_image?: string | null;
 					morale?: number;
 					outofform_image?: string | null;

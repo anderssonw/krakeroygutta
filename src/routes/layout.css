@@ -14,6 +14,8 @@
 	--primary-foreground: oklch(0.208 0.042 265.755);
 	--secondary: oklch(0.279 0.041 260.031);
 	--secondary-foreground: oklch(0.984 0.003 247.858);
+	--tertiary: oklch(0.48 0.11 84);
+	--tertiary-foreground: oklch(0.984 0.003 247.858);
 	--muted: oklch(0.279 0.041 260.031);
 	--muted-foreground: oklch(0.704 0.04 256.788);
 	--accent: oklch(0.279 0.041 260.031);
@@ -52,6 +54,8 @@
 	--color-primary-foreground: var(--primary-foreground);
 	--color-secondary: var(--secondary);
 	--color-secondary-foreground: var(--secondary-foreground);
+	--color-tertiary: var(--tertiary);
+	--color-tertiary-foreground: var(--tertiary-foreground);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
 	--color-accent: var(--accent);
@@ -122,21 +126,43 @@
 	.player-card.bronze {
 		background-image: url('$lib/assets/cards/bronze.png');
 	}
+	.player-card.bronze-back {
+		background-image: url('$lib/assets/cards/bronzeback.png');
+	}
 
 	.player-card.silver {
 		background-image: url('$lib/assets/cards/silver.png');
+	}
+	.player-card.silver-back {
+		background-image: url('$lib/assets/cards/silverback.png');
 	}
 
 	.player-card.gold {
 		background-image: url('$lib/assets/cards/gold.png');
 	}
+	.player-card.gold-back {
+		background-image: url('$lib/assets/cards/goldback.png');
+	}
 
 	.player-card.inform {
 		background-image: url('$lib/assets/cards/inform.png');
 	}
+	.player-card.inform-back {
+		background-image: url('$lib/assets/cards/informback.png');
+	}
+
+	.player-card.icon {
+		background-image: url('$lib/assets/cards/icon.png');
+	}
+	.player-card.icon-back {
+		background-image: url('$lib/assets/cards/icon-back.png');
+	}
 
 	.player-card.trash {
 		background-image: url('$lib/assets/cards/trash_card.png');
+	}
+	.player-card.trash-back {
+		background-image: url('$lib/assets/cards/trash_back.png');
 	}
 
 	.player-card.empty {

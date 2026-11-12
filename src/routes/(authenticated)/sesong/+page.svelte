@@ -2,7 +2,7 @@
 	import type { PageProps } from './$types';
 	import { getVisibleRoutes } from '$lib/routing';
 	import SubRouteCards from '$lib/components/SubRouteCard.svelte';
-	import eirikVideo from '$lib/assets/eirikComp.mp4';
+	import magnusAnim from '$lib/assets/magnusAnim.mp4';
 	import SortableTable from '$lib/components/SortableTable.svelte';
 	import type { TeamStatistics } from '$lib/types/team';
 	import type { TableHeader, SortFunctions } from '$lib/types/table';
@@ -55,11 +55,12 @@
 
 <div class="container mx-auto max-w-7xl px-4 py-8 md:px-6">
 	<div class="w-full">
-		<video src={eirikVideo} autoplay controls>
+		<video src={magnusAnim} autoplay controls>
 			<track kind="captions" />
 		</video>
 	</div>
-	<div class="mb-8 space-y-2">
+
+	<div class="my-8 space-y-2">
 		<h1 class="text-3xl font-bold tracking-tight md:text-4xl">{season.name}</h1>
 		<p class="text-muted-foreground">Utforsk denne sesongen</p>
 	</div>
