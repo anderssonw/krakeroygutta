@@ -1,10 +1,14 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import headerLargeDisco from '$lib/assets/headerLargeDiscoDone.gif';
+	import headerShrek from '$lib/assets/Header2026.png';
+	import Sunlight from '$lib/components/Sunlight.svelte';
 </script>
 
+<Sunlight />
+
 <div class="container mx-auto my-8 flex flex-col items-center gap-8 px-4 md:px-16">
-	<enhanced:img src={headerLargeDisco} alt="Header Large Disco" />
+	<enhanced:img src={headerShrek} alt="Header Large Shrek" />
+
 	<form class="form" method="POST">
 		<!-- Google Knapp -->
 		<Button variant="outline" type="submit">

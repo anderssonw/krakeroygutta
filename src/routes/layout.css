@@ -178,4 +178,20 @@
 		appearance: none;
 		margin: 0;
 	}
+
+	.signature-dafoe {
+		font-family: 'Mr Dafoe', cursive;
+	}
+
+	.signature-allison {
+		font-family: 'Allison', cursive;
+		font-size: 40px;
+		line-height: 0.8;
+		transform: rotate(-5deg);
+		display: inline-block;
+	}
+
+	.signature-saint {
+		font-family: 'Mrs Saint Delafield', cursive;
+	}
 }

@@ -7,7 +7,7 @@
 	import { fly } from 'svelte/transition';
 	import { cn } from '$lib/utils';
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
-	import headerSmallDisco from '$lib/assets/headerSmallDisco.png';
+	import headerSmallDisco from '$lib/assets/HeaderSmall2026.png';
 	import { Button } from './ui/button';
 	import { sineInOut } from 'svelte/easing';
 	import { type Component } from 'svelte';

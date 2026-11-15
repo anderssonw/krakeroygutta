@@ -96,12 +96,12 @@
 				<div class="h-6 w-6"></div>
 			{/if}
 		</div>
-		<div class={cn('absolute right-1 bottom-px', sizing.image_width)}>
+		<div class={cn('absolute right-1 bottom-px', player.icon_image ? sizing.icon_image_width : sizing.image_width)}>
 			<img src={playerImage()} alt={player.name} />
 		</div>
 	</div>
 	<div class={cn('flex h-[47.8%] w-full flex-col items-center', sizing.stats_gap)}>
-		<p class={cn('font-semibold', sizing.name)}>{getLastName(player.name)}</p>
+		<p class={cn(player.icon_image ? 'signature-allison font-bold' : 'font-semibold', sizing.name)}>{getLastName(player.name)}</p>
 		<div class={cn('flex flex-row', sizing.stats_gap)}>
 			{#each stats as stat}
 				<div class="flex flex-col items-center">

@@ -10,6 +10,7 @@ type CardSizes = {
 	stats_gap: string;
 	currency_size: string;
 	image_width: string;
+	icon_image_width: string;
 };
 
 export const cardSizing: Record<BreakPoint, CardSizes> = {
@@ -22,7 +23,8 @@ export const cardSizing: Record<BreakPoint, CardSizes> = {
 		stats_value: 'text-2xl',
 		stats_gap: 'gap-2.5',
 		currency_size: 'w-4',
-		image_width: 'w-36'
+		image_width: 'w-36',
+		icon_image_width: 'w-44'
 	},
 	md: {
 		width: 'w-40',
@@ -33,7 +35,8 @@ export const cardSizing: Record<BreakPoint, CardSizes> = {
 		stats_value: 'text-lg',
 		stats_gap: 'gap-1',
 		currency_size: 'w-3',
-		image_width: 'w-24'
+		image_width: 'w-24',
+		icon_image_width: 'w-30'
 	},
 	sm: {
 		width: 'w-33',
@@ -44,6 +47,7 @@ export const cardSizing: Record<BreakPoint, CardSizes> = {
 		stats_value: 'text-sm',
 		stats_gap: 'gap-1',
 		currency_size: 'w-2',
-		image_width: 'w-20'
+		image_width: 'w-20',
+		icon_image_width: 'w-24'
 	}
 } as const;
