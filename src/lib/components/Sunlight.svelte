@@ -9,7 +9,7 @@
 
 	@keyframes sunlight-dim {
 		from {
-			opacity: 0.6;
+			opacity: 0.65;
 		}
 		to {
 			opacity: 1;
