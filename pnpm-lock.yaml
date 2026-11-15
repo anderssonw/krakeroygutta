@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@fontsource/allison':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/mr-dafoe':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fontsource/mrs-saint-delafield':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@supabase/ssr':
         specifier: ^0.8.0
         version: 0.8.0(@supabase/supabase-js@2.89.0)
@@ -419,6 +428,15 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@fontsource/allison@5.3.0':
+    resolution: {integrity: sha512-IlW57qT5AI4Hq6zAyC7gQ3AycTRq8RCjlKWW7/iVR8jnbiwj8e0RMhPWHqCnrbL7t8mxHTsUGVnOVlMNPLJhwg==}
+
+  '@fontsource/mr-dafoe@5.3.0':
+    resolution: {integrity: sha512-zYTNXnERIkYWqFDTOaw5Z5xL9H1twFhAhFwxFIEWA/Y+dt0E3XpySsFFxhiOElIZUAOMuVvxrd/s976G/3cEzg==}
+
+  '@fontsource/mrs-saint-delafield@5.3.0':
+    resolution: {integrity: sha512-OH6pmSgyh8CqpiFmAxthdrlhreJj2jt49kk+NpEZ4UMRrSOcF7qxF1AT0QNxuVVCQWy4h5TOIvep7Hglenrtig==}
 
   '@iconify/json@2.2.425':
     resolution: {integrity: sha512-RJcJeoLFAmKPr7e7bP7gw33ASBSONuFsiCg35cEvrf/s8DDG5+C9eSqOvIiggNwZwwjYeGNKIJ7RduJTWgN0IQ==}
@@ -1769,6 +1787,12 @@ snapshots:
       '@floating-ui/utils': 0.2.10
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@fontsource/allison@5.3.0': {}
+
+  '@fontsource/mr-dafoe@5.3.0': {}
+
+  '@fontsource/mrs-saint-delafield@5.3.0': {}
 
   '@iconify/json@2.2.425':
     dependencies:
