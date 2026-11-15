@@ -5,6 +5,10 @@
 	import { confirmationDialog } from '$lib/stores/confirmationDialog';
 	import './layout.css';
 
+	import '@fontsource/mr-dafoe';
+	import '@fontsource/allison';
+	import '@fontsource/mrs-saint-delafield';
+
 	let { children, data } = $props();
 
 	let dialogs = $derived($confirmationDialog);

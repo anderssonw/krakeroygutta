@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { cn } from '$lib/utils';
-	import headerLargeDisco from '$lib/assets/headerLargeDiscoDone.gif';
+	import headerShrek from '$lib/assets/Header2026.png';
 	import ruleScroll from '$lib/assets/ruleScroll.png';
 	import { Button } from '$lib/components/ui/button';
 	import squadLeft from '$lib/assets/SquadLeft.png';
 	import squadRight from '$lib/assets/SquadRight.png';
 	import KrakeroyKommune from '$lib/components/KrakeroyKommune.svelte';
 	import { isSeasonFinished } from '$lib/season.js';
+	import Sunlight from '$lib/components/Sunlight.svelte';
 
 	let { data } = $props();
 	let { season, profile } = $derived(data);
@@ -37,8 +38,11 @@
 	const seasonFinished = $derived(isSeasonFinished(season));
 </script>
 
+<Sunlight />
+
 <div class="container mx-auto my-8 flex flex-col items-center gap-8 px-4 md:px-16">
-	<enhanced:img src={headerLargeDisco} alt="Header Large Disco" />
+	<enhanced:img src={headerShrek} alt="Header Large Shrek" />
+
 	{#if season}
 		<div class="relative flex w-full justify-center sm:w-sm">
 			<KrakeroyKommune className="fill-secondary"></KrakeroyKommune>
